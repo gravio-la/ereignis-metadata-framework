@@ -1,1 +1,1 @@
-export * from "./importAllDocumentsFromDataset";
+export * from "./processAllDocumentsFromDataset";

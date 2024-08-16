@@ -26,12 +26,23 @@ export type FlatImportHandler = (option: {
   offset: number | undefined;
   dryRun: boolean;
 }) => Promise<void>;
+
+export type SemanticSeedHandler = (option: {
+  file: string;
+  schema: JSONSchema7;
+  onDocument: (
+    entityIRI: string,
+    typeIRI: string,
+    document: any,
+  ) => Promise<void>;
+}) => Promise<void>;
 export const makeEdbCli = (
   schema: JSONSchema7,
   dataStore: AbstractDatastore,
   importStores: Record<string, AbstractDatastore>,
   flatMappings?: AvailableFlatMappings,
   flatImportHandler?: FlatImportHandler,
+  semanticImportHandler?: SemanticSeedHandler,
 ) => {
   const types = Object.keys(defs(schema));
   const get = command({
@@ -208,5 +219,56 @@ export const makeEdbCli = (
     },
   });
 
-  return { list, get, flatImport, import: importCommand };
+  const seed = command({
+    name: "seed",
+    description: "Seed the database with data from a file",
+    args: {
+      file: positional({
+        type: File,
+        displayName: "File Path",
+        description:
+          "The path to the file to import (Turtle, N-Triples, JSON-LD)",
+      }),
+      dryRun: flag({
+        type: optional(boolean),
+        description: "Do not import the data, just show the mapped data",
+        long: "dry-run",
+        short: "d",
+      }),
+      pretty: flag({
+        type: boolean,
+        description: "Pretty print the output",
+        long: "pretty",
+        short: "p",
+      }),
+      noJsonld: flag({
+        type: boolean,
+        description: "Filter JSON-LD properties",
+        long: "no-jsonld",
+      }),
+    },
+
+    handler: async ({ file, dryRun, pretty, noJsonld }) => {
+      if (!semanticImportHandler) {
+        throw new Error("Semantic import not supported");
+      }
+      await semanticImportHandler({
+        file,
+        schema,
+        onDocument: async (entityIRI, typeIRI, document) => {
+          const result = !dryRun
+            ? await dataStore.upsertDocument(
+                dataStore.typeIRItoTypeName(typeIRI),
+                entityIRI,
+                document,
+              )
+            : document;
+          console.log(formatJSONResult(result, pretty, noJsonld));
+        },
+      });
+      process.exit(0);
+    },
+  });
+
+  return { list, get, flatImport, import: importCommand, seed };
 };
