@@ -4,6 +4,7 @@ import { flatImportHandler } from "./flatImportHandler";
 import { availableFlatMappings } from "@slub/exhibition-schema";
 import { makeEdbCli } from "@slub/edb-cli-creator";
 import { schema } from "@slub/exhibition-schema";
+import { seedHandler } from "./seedHandler";
 
 const cli = makeEdbCli(
   schema,
@@ -11,6 +12,7 @@ const cli = makeEdbCli(
   importStores,
   availableFlatMappings,
   flatImportHandler,
+  seedHandler,
 );
 
 run(

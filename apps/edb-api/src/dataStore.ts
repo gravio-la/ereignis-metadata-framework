@@ -16,5 +16,9 @@ export const dataStore = initSPARQLDataStoreFromConfig(
   getSPARQLFlavour(config.sparqlEndpoint),
 );
 
-const { typeIRItoTypeName, typeNameToTypeIRI } = dataStore;
-export { typeIRItoTypeName, typeNameToTypeIRI };
+export const typeNameToTypeIRI = (typeName: string) =>
+  config.namespace(typeName).value;
+
+export const typeIRItoTypeName = (iri: string) => {
+  return iri?.substring(config.BASE_IRI.length, iri.length);
+};

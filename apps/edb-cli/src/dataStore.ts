@@ -8,12 +8,14 @@ import { extendSchemaShortcut } from "@slub/json-schema-utils";
 import { primaryFields, schema } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";
 import { initPrismaStore } from "@slub/prisma-db-impl";
-import {
-  typeIRItoTypeName,
-  typeNameToTypeIRI,
-} from "@slub/edb-api/src/dataStore";
 import { PrismaClient } from "@prisma/edb-exhibition-client";
 
+export const typeNameToTypeIRI = (typeName: string) =>
+  config.namespace(typeName).value;
+
+export const typeIRItoTypeName = (iri: string) => {
+  return iri?.substring(config.BASE_IRI.length, iri.length);
+};
 const initPrisma = async () => {
   const rootSchema = extendSchemaShortcut(schema as JSONSchema7, "type", "id");
   const prisma = new PrismaClient();

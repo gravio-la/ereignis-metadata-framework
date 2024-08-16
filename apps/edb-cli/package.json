@@ -33,6 +33,7 @@
     "@slub/edb-authorities": "workspace:*",
     "@slub/edb-data-mapping": "workspace:*",
     "@slub/edb-cli-creator": "workspace:*",
+    "@slub/edb-file-import": "workspace:*",
     "@tpluscode/sparql-builder": "^0.3.31",
     "cmd-ts": "^0.13.0",
     "uuid": "^10.0.0",
