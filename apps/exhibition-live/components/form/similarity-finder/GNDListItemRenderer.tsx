@@ -18,15 +18,8 @@ import {
   LobidAllPropTable,
   WikidataAllPropTable,
 } from "@slub/edb-advanced-components";
+import { ListItemRendererProps } from "./types";
 
-export type ListItemRendererProps = {
-  data: BasicThingInformation;
-  idx: number;
-  typeIRI: string;
-  selected: boolean;
-  onSelect?: (id: string, index: number) => void;
-  onAccept?: (id: string, data: any) => void;
-};
 export const GNDListItemRenderer = ({
   data: initialData,
   idx,

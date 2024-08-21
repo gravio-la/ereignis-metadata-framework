@@ -1,5 +1,6 @@
 import { KnowledgeSources } from "@slub/edb-global-types";
 import * as React from "react";
+import { BasicThingInformation } from "@slub/edb-core-types";
 
 export type SelectedEntity = {
   id: string;
@@ -10,6 +11,15 @@ export type FindOptions = {
   page?: number;
   offset?: number;
   pageSize?: number;
+};
+
+export type ListItemRendererProps = {
+  data: BasicThingInformation;
+  idx: number;
+  typeIRI: string;
+  selected: boolean;
+  onSelect?: (id: string, index: number) => void;
+  onAccept?: (id: string, data: any) => void;
 };
 export type KnowledgeBaseDescription<T = any> = {
   id: KnowledgeSources;
