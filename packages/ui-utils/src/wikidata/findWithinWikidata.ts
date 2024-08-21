@@ -91,10 +91,10 @@ export type WikidataSearchResult = {
   searchinfo: { totalhits: number };
 };
 
-const findPersonWithinWikidata = async (
+const findWithinWikidata = async (
   searchString: string,
+  typeOf: string,
   limit?: number,
-  typeOf: string = "Q5",
 ) => {
   const result = await fetch(
     `${wikidataApiURL}?${buildWikidataFulltextSearchParams(
@@ -107,7 +107,7 @@ const findPersonWithinWikidata = async (
   return result.query as WikidataSearchResult;
 };
 
-type WikidataRESTResult = {
+export type WikidataRESTResult = {
   pages: {
     thumbnail: {
       duration: number | null;
@@ -126,10 +126,14 @@ type WikidataRESTResult = {
   }[];
 };
 
-export const findPersonWithinWikidataUsingREST = async (
+export const findWithinWikidataUsingREST: (
   searchString: string,
+  typeOf?: string,
   limit?: number,
+) => Promise<WikidataRESTResult["pages"]> = async (
+  searchString: string,
   typeOf: string = "Q5",
+  limit?: number,
 ) => {
   const result = await fetch(
     `${wikidataRestAPIURL}?${buildWikidataFulltextSearchRestParams(
@@ -142,4 +146,4 @@ export const findPersonWithinWikidataUsingREST = async (
   return (result as WikidataRESTResult).pages;
 };
 
-export default findPersonWithinWikidata;
+export default findWithinWikidata;
