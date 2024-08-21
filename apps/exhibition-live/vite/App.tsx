@@ -12,7 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { envToSparqlEndpoint } from "@slub/edb-ui-utils";
 import { EntityDetailModal } from "@slub/edb-advanced-components";
-import { SimilarityFinder } from "../components/form/SimilarityFinder";
+import { SimilarityFinder } from "../components/form/similarity-finder";
 import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import NiceModal from "@ebay/nice-modal-react";

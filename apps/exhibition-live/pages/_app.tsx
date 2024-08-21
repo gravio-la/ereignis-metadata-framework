@@ -34,12 +34,11 @@ import {
 } from "@slub/edb-state-hooks";
 import { EditEntityModal } from "../components/form/edit/EditEntityModal";
 import { useRouter } from "next/router";
-import SemanticJsonFormOperational from "../components/form/SemanticJsonFormOperational";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { envToSparqlEndpoint } from "@slub/edb-core-utils";
 import { EntityDetailModal } from "@slub/edb-advanced-components";
 import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
-import { SimilarityFinder } from "../components/form/SimilarityFinder";
+import { SimilarityFinder } from "../components/form/similarity-finder";
 import { useSearchParams } from "next/navigation";
 import { ModRouter } from "@slub/edb-global-types";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

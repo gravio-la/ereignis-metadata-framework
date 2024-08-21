@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
-import { SimilarityFinder } from "../components/form/SimilarityFinder";
+import { SimilarityFinder } from "../components/form/similarity-finder/SimilarityFinder";
 import { ThemeComponent } from "@slub/edb-default-theme";
 
 export const parameters = {
