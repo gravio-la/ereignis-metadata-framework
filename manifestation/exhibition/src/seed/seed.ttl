@@ -1,4 +1,4 @@
-   @prefix slent:  <http://ontologies.slub-dresden.de/exhibition/entity> .
+   @prefix slent:  <http://ontologies.slub-dresden.de/exhibition/entity#> .
    @prefix sladb: <http://ontologies.slub-dresden.de/exhibition#> .
    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
@@ -19,19 +19,19 @@
                        sladb:description "Eine umfassende Ausstellung, die einen breiten Überblick bietet." .
 
    slent:specialExhibition rdf:type sladb:ExhibitionCategory ;
-                        sladb:title "Sonderausstellung" ;
+                        sladb:name "Sonderausstellung" ;
                         sladb:description "Eine zeitlich begrenzte, oft thematisch spezialisierte Ausstellung." .
    slent:permanentExhibition rdf:type sladb:ExhibitionCategory ;
-                           sladb:title "Dauerausstellung" ;
+                           sladb:name "Dauerausstellung" ;
                            sladb:description "Eine langfristig angelegte Ausstellung eines Museums oder einer ähnlichen Einrichtung." .
    slent:travelingExhibition rdf:type sladb:ExhibitionCategory ;
-                          sladb:title "Wanderausstellung" ;
+                          sladb:name "Wanderausstellung" ;
                           sladb:description "Eine Ausstellung, die an verschiedenen Orten gezeigt wird." .
    slent:accrochage rdf:type sladb:ExhibitionCategory ;
-                 sladb:title "Accrochage" ;
+                 sladb:name "Accrochage" ;
                  sladb:description "Eine kleinere, oft spontane Ausstellung von Werken, die häufig wechselt." .
    slent:cabinetExhibition rdf:type sladb:ExhibitionCategory ;
-                        sladb:title "Kabinettausstellung" ;
+                        sladb:name "Kabinettausstellung" ;
                         sladb:description "Eine kleinformatige, intime Ausstellung." .
 
    slent:exhibitionSeries rdf:type sladb:SeriesType ;
