@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 import {
-  findPersonWithinWikidataUsingREST,
+  findWithinWikidataUsingREST,
   wikidataPrefixes,
 } from "@slub/edb-ui-utils";
 import WikidataHumanCard from "./WikidataHumanCard";
@@ -97,13 +97,7 @@ const WikidataAutocompleteInput: FunctionComponent<Props> = ({
         minSearchLength={3}
         load={async (searchString) =>
           searchString
-            ? (
-                await findPersonWithinWikidataUsingREST(
-                  searchString,
-                  10,
-                  classType,
-                )
-              )
+            ? (await findWithinWikidataUsingREST(searchString, classType, 10))
                 .map((d) => {
                   return d;
                 })
