@@ -1,0 +1,41 @@
+{
+  "name": "@slub/edb-kxp-components",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
+  },
+  "dependencies": {
+    "@slub/edb-state-hooks": "workspace:*",
+    "@slub/edb-graph-traversal": "workspace:*",
+    "@slub/edb-kxp-utils": "workspace:*",
+    "@slub/edb-marc-to-rdf": "workspace:*",
+    "@slub/edb-basic-components": "workspace:*",
+    "@mui/material": "^5.16.7",
+    "@rdfjs/types": "^1.1.0",
+    "@tpluscode/rdf-ns-builders": "^4.3.0",
+    "react": "^18.3.1",
+    "next-i18next": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.4"
+  },
+  "peerDependencies": {
+    "@ebay/nice-modal-react": ">=1.2",
+    "@mui/material": "^5",
+    "@mui/icons-material": "^5",
+    "react": "^18"
+  }
+}
