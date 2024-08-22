@@ -4,7 +4,7 @@ import { BasicThingInformation } from "@slub/edb-core-types";
 import { KBListItemRenderer } from "./KBListItemRenderer";
 
 export default {
-  title: "ui/components/similarity-finder/KBListItemRenderer",
+  title: "ui/similarity-finder/KBListItemRenderer",
   component: KBListItemRenderer,
 } as Meta<typeof KBListItemRenderer>;
 
