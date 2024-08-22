@@ -23,9 +23,9 @@ import { WikidataAllPropTable } from "@slub/edb-advanced-components";
 import { findEntityWithinLobid } from "@slub/edb-authorities";
 import { gndEntryFromSuggestion } from "../lobid/LobidSearchTable";
 import { GNDListItemRenderer } from "./GNDListItemRenderer";
-import { findEntityWithinK10Plus, KXPEntry } from "@slub/edb-kxp-utils";
+import { findEntityWithinK10Plus } from "@slub/edb-kxp-utils";
 import { dcterms } from "@tpluscode/rdf-ns-builders";
-import { findFirstInProps } from "@slub/edb-graph-traversal";
+import { findFirstInProps, RootNode } from "@slub/edb-graph-traversal";
 import { fabio } from "@slub/edb-marc-to-rdf";
 
 export const useKnowledgeBases = () => {
@@ -244,7 +244,7 @@ export const useKnowledgeBases = () => {
           onSelect,
           onAccept,
         ) => {
-          const data = entry as KXPEntry;
+          const data = entry as RootNode;
           return (
             <ClassicResultListItem
               key={data.id}
