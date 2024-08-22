@@ -11,7 +11,7 @@ export const specialDate2LocalDate = (date: number, locale: string) => {
     return dayjs(jsdate).format("YYYY.MM.") + "–-";
   }
   if (day && month && year) {
-    return dayjs(jsdate).locale(locale).format("l");
+    return dayjs(jsdate).format("l");
   }
   if (year && !month && !day) {
     return dayjs(jsdate).format("YYYY");
