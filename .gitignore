@@ -78,3 +78,5 @@ apps/edb-prisma-cli/schema.prisma
 .env
 /apps/exhibition-live/public/exhibition-corpus-riot.ttl
 /apps/edb-solr-cli/export
+.aider*
+venv
