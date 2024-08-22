@@ -1,13 +1,13 @@
-import { KXPEntry } from "./types";
 import datasetFactory from "@rdfjs/dataset";
 import clownface from "clownface";
 import {
   NodePropertyTree,
   nodeToPropertyTree,
+  RootNode,
 } from "@slub/edb-graph-traversal";
 import { kxp, mapDatafieldToQuads, RecordElement } from "@slub/edb-marc-to-rdf";
 
-export const marcRecord2KXPEntry: (record: RecordElement) => KXPEntry = (
+export const marcRecord2RootNode: (record: RecordElement) => RootNode = (
   record,
 ) => {
   //const mappedControlfields = record.recordData.record.controlfield.map(ds => mapControlfield(ds))

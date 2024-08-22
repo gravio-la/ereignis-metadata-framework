@@ -25,9 +25,13 @@ import React, {
 
 import { useLocalHistory } from "@slub/edb-state-hooks";
 import { useSettings } from "@slub/edb-state-hooks";
-import { findFirstInProps, NodePropertyTree } from "@slub/edb-graph-traversal";
+import {
+  findFirstInProps,
+  NodePropertyTree,
+  RootNode,
+} from "@slub/edb-graph-traversal";
 import { useTranslation } from "next-i18next";
-import { findEntityWithinK10Plus, KXPEntry } from "@slub/edb-kxp-utils";
+import { findEntityWithinK10Plus } from "@slub/edb-kxp-utils";
 import { fabio, geonames, radatana } from "@slub/edb-marc-to-rdf";
 import {
   ClassicEntityCard,
@@ -41,17 +45,17 @@ type Props = {
   onAcceptItem?: (id: string | undefined, data: any) => void;
 };
 
-const K10PlusSearchTable: FunctionComponent<Props> = ({
+export const K10PlusSearchTable: FunctionComponent<Props> = ({
   searchString,
   typeName = "Person",
   onSelect,
   onAcceptItem,
 }) => {
   const { t } = useTranslation();
-  const [resultTable, setResultTable] = useState<KXPEntry[] | undefined>();
+  const [resultTable, setResultTable] = useState<RootNode[] | undefined>();
   const { history, pushHistory, popHistory } = useLocalHistory();
   const [selectedId, setSelectedId] = useState<string | undefined>();
-  const [selectedEntry, setSelectedEntry] = useState<KXPEntry | undefined>();
+  const [selectedEntry, setSelectedEntry] = useState<RootNode | undefined>();
   const { externalAuthority } = useSettings();
   const k10PlusEndpointURL =
       externalAuthority.kxp?.endpoint || "https://sru.bsz-bw.de/swbtest",
@@ -164,7 +168,7 @@ const K10PlusSearchTable: FunctionComponent<Props> = ({
   );
 };
 
-const LabledLink = ({
+export const LabledLink = ({
   uri,
   label,
   onClick,
@@ -188,7 +192,7 @@ const LabledLink = ({
     </Link>
   );
 };
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+export const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
@@ -198,7 +202,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     fontSize: 11,
   },
 }));
-const LabeledBNode = ({
+export const LabeledBNode = ({
   bnode,
   properties,
 }: {
@@ -230,7 +234,7 @@ const LabeledBNode = ({
     </LightTooltip>
   );
 };
-export const KXPAllPropTable = ({ entry }: { entry: KXPEntry }) => {
+export const KXPAllPropTable = ({ entry }: { entry: RootNode }) => {
   return (
     <TableContainer component={Container}>
       <Table sx={{ minWidth: "100%" }} aria-label="custom table">

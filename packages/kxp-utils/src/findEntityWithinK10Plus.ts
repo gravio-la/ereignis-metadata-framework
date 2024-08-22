@@ -1,8 +1,8 @@
 import { XMLParser } from "fast-xml-parser";
 
-import { KXPEntry } from "./types";
-import { marcRecord2KXPEntry } from "./marcRecord2KXPEntry";
+import { marcRecord2RootNode } from "./marcRecord2RootNode";
 import { MarcResponseTypes } from "@slub/edb-marc-to-rdf";
+import { RootNode } from "@slub/edb-graph-traversal";
 
 export const findEntityWithinK10Plus = async (
   searchString: string,
@@ -10,7 +10,7 @@ export const findEntityWithinK10Plus = async (
   endpointURL: string,
   limit?: number,
   recordSchema?: string,
-): Promise<KXPEntry[] | undefined> => {
+): Promise<RootNode[] | undefined> => {
   let rawResponse;
   const recordSchemaString = recordSchema
     ? `&recordSchema=${encodeURIComponent(recordSchema)}`
@@ -33,7 +33,7 @@ export const findEntityWithinK10Plus = async (
   const result = parser.parse(res) as MarcResponseTypes;
   if (!result?.searchRetrieveResponse) return;
   const mappedFields = result.searchRetrieveResponse.records?.record?.map(
-    (record) => marcRecord2KXPEntry(record),
+    (record) => marcRecord2RootNode(record),
   );
   return mappedFields;
 };
