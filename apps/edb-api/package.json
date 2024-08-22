@@ -10,7 +10,8 @@
     "start:graphiql": "docker run --name graphiql --rm -p 4000:4000 -e API_URL=http://localhost:3001/graphql npalm/graphiql",
     "dev": "bun --watch src/index.ts",
     "dev:api": "bun run dev",
-    "start:debug": "bun --inspect 'src/index.ts'"
+    "start:debug": "bun --inspect 'src/index.ts'",
+    "build:swagger": "curl http://localhost:3001/swagger/json -o ./swagger.json"
   },
   "keywords": [],
   "author": "Sebastian Tilsch <sebastian.tilsch@slub-dresden.de>",

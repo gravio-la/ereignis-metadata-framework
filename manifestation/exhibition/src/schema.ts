@@ -6,7 +6,8 @@ export const schemaName = "exhibition";
 
 const rawSchema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "https://schema.adb.arthistoricum.net/exhibition",
+  $id: "https://schema.adb.arthistoricum.net/exhibition#v1",
+  title: "SLUB Ausstellungsdatenbank",
   $defs: {
     Tag: {
       type: "object",

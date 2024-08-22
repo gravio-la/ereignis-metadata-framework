@@ -23,6 +23,7 @@ import { initPrismaStore } from "@slub/prisma-db-impl";
 import { typeIRItoTypeName, typeNameToTypeIRI } from "./dataStore";
 
 console.log(process.env.DATABASE_PROVIDER);
+const schemaName = `${schema.title || schema.$id || "unnamed schema"}`;
 
 const exhibitionSchema = extendSchemaShortcut(
   schema as JSONSchema7,
@@ -189,6 +190,11 @@ const app = new Elysia()
       params: t.Object({
         typeName: typeNameOption,
       }),
+      detail: {
+        summary: "List documents of a certain type",
+        description:
+          "List documents of a certain type, specified by typeName, optionally limited by limit",
+      },
     },
   )
   .get(
@@ -370,9 +376,9 @@ const app = new Elysia()
     swagger({
       documentation: {
         info: {
-          title: "SLUb EDB API",
+          title: `EDB API (${schemaName})`,
           version: process.env.npm_package_version || "0.0.0.",
-          description: "API for SLUb EDB",
+          description: `API for ${schemaName}`,
         },
       },
     }),
@@ -380,5 +386,5 @@ const app = new Elysia()
   .listen(3001);
 
 console.log(
-  `🦊 Elysia powered SLUB EDB is running at ${app.server?.hostname}:${app.server?.port}`,
+  `🦊 Elysia powered EDB (${schemaName}) is running at ${app.server?.hostname}:${app.server?.port}`,
 );
