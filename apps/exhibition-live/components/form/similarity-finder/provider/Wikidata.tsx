@@ -1,9 +1,6 @@
 import { KnowledgeBaseDescription } from "../types";
 import { Img } from "../../../basic";
-import {
-  findWithinWikidataUsingREST,
-  WikidataRESTResult,
-} from "@slub/edb-ui-utils";
+import { WikidataRESTResult } from "@slub/edb-ui-utils";
 import { filterUndefOrNull } from "@slub/edb-core-utils";
 import { ClassicResultListItem } from "@slub/edb-basic-components";
 import { IconButton, Stack } from "@mui/material";
@@ -25,18 +22,16 @@ export const Wikidata: KnowledgeBaseDescription = {
     />
   ),
   find: async (searchString, typeIRI, typeName, findOptions) => {
-    const wikidataClass = wikidataTypeMap[typeName];
-    if (!wikidataClass) {
-      console.warn(`no wikidata class for ${typeName}`);
-      return [];
-    }
-    return filterUndefOrNull(
-      await findWithinWikidataUsingREST(
-        searchString,
-        wikidataClass,
-        findOptions?.limit,
-      ),
+    const response = await fetch(
+      `https://wikidata.reconci.link/en/suggest/entity?prefix=${encodeURIComponent(searchString)}`
     );
+    const data = await response.json();
+    return data.map((item: any) => ({
+      id: item.id,
+      title: item.name,
+      description: item.description,
+      thumbnail: { url: "" }, // Assuming no thumbnail is provided
+    }));
   },
   listItemRenderer: (entry, idx, typeIRI, selected, onSelect, onAccept) => {
     const data = entry as WikidataRESTResult["pages"][0];
