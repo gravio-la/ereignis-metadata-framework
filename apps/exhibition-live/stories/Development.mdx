@@ -59,3 +59,27 @@ npm install -g @bun/cli
 Node can be installed from the [official website](https://nodejs.org/en/).
 
 If you prefer to use `docker` for development, you can use the provided `docker-compose` file to start a development environment.
+
+
+## Creating a new package
+
+Different environments require different packages, with altering tsup, eslint and package.json configurations.
+
+To create a new package, that provides functionality to both targets - **server side nodejs and Browser** - run the following command:
+
+```bash
+hygen edb tsup-package
+```
+To create a react-js component package, run the following command:
+
+```bash
+hygen edb frontend-package
+```
+
+## Creating a new Manifestation (Data Model)
+
+To create a new manifestation, run the following command:
+
+```bash
+hygen edb manifestation
+```
