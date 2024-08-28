@@ -10,6 +10,7 @@ import { useRouterHook } from "./useRouterHook";
 import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
+import { kulinarikAppConfig } from "../components/config/kulinarikAppConfig";
 import { envToSparqlEndpoint } from "@slub/edb-ui-utils";
 import { EntityDetailModal } from "@slub/edb-advanced-components";
 import { SimilarityFinder } from "../components/form/similarity-finder";
@@ -24,6 +25,11 @@ export const queryClient = new QueryClient();
 const sparqlEndpoint = envToSparqlEndpoint(import.meta.env, "VITE");
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
+const appConfig =
+  import.meta.env.VITE_APP_MANIFESTATION === "kulinarik"
+    ? kulinarikAppConfig
+    : exhibitionConfig;
+
 export const App = ({ children }: { children?: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
@@ -32,7 +38,7 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
           <ThemeComponent>
             <SnackbarProvider>
               <AdbProvider
-                {...exhibitionConfig}
+                {...appConfig}
                 lockedSPARQLEndpoint={sparqlEndpoint}
                 env={{
                   publicBasePath: PUBLIC_BASE_PATH,
