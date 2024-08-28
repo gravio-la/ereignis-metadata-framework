@@ -21,7 +21,7 @@ export const Primary: Story = {
     search: "Otto Dix",
     jsonSchema: {},
     hideFooter: false,
-    additionalKnowledgeSources: [],
+    additionalKnowledgeSources: ["wikidata"],
     searchOnDataPath: "path.to.search",
   },
 };

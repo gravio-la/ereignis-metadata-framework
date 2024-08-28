@@ -23,11 +23,13 @@ export const Wikidata: KnowledgeBaseDescription = {
   ),
   find: async (searchString, typeIRI, typeName, findOptions) => {
     const response = await fetch(
-      `https://wikidata.reconci.link/en/suggest/entity?prefix=${encodeURIComponent(searchString)}`
+      `https://wikidata.reconci.link/en/suggest/entity?prefix=${encodeURIComponent(searchString)}`,
     );
     const data = await response.json();
-    return data.map((item: any) => ({
+    console.log({ data });
+    return data.result.map((item: any) => ({
       id: item.id,
+      key: item.id,
       title: item.name,
       description: item.description,
       thumbnail: { url: "" }, // Assuming no thumbnail is provided
