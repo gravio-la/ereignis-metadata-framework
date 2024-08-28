@@ -1,3 +1,6 @@
+---
+to: apps/exhibition-live/src/components/config/<%= name %>AppConfig.ts
+---
 import {
   makeStubSchema,
   primaryFields,
