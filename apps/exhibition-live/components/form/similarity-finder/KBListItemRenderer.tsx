@@ -1,4 +1,4 @@
-import { ListItemRendererProps } from "./GNDListItemRenderer";
+import { ListItemRendererProps } from "./types";
 import {
   useAdbContext,
   useCRUDWithQueryClient,
