@@ -1,5 +1,5 @@
 ---
-to: <%= h.inflection.pluralize(name) %>/src/index.ts
+to: manifestation/<%= h.inflection.pluralize(name) %>/src/index.ts
 ---
 export * from "./schema";
 export * from "./primaryFields";

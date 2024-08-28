@@ -1,5 +1,5 @@
 ---
-to: <%= h.inflection.pluralize(name) %>/package.json
+to: manifestation/<%= h.inflection.pluralize(name) %>/package.json
 ---
 {
   "name": "@slub/<%= h.changeCase.paramCase(name) %>-schema",

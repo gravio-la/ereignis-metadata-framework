@@ -1,5 +1,5 @@
 ---
-to: <%= h.inflection.pluralize(name) %>/src/primaryFields.ts
+to: manifestation/<%= h.inflection.pluralize(name) %>/src/primaryFields.ts
 ---
 import {
   PrimaryField,

@@ -1,5 +1,5 @@
 ---
-to: <%= h.inflection.pluralize(name) %>/src/schema.ts
+to: manifestation/<%= h.inflection.pluralize(name) %>/src/schema.ts
 ---
 import { JSONSchema7 } from "json-schema";
 import { extendDefinitionsWithProperties } from "@slub/json-schema-utils";

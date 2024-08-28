@@ -1,5 +1,5 @@
 ---
-to: <%= h.inflection.pluralize(name) %>/src/makeStubSchema.ts
+to: manifestation/<%= h.inflection.pluralize(name) %>/src/makeStubSchema.ts
 ---
 import { JSONSchema7 } from "json-schema";
 import {
