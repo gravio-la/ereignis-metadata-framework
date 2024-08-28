@@ -1,7 +1,6 @@
 ---
-to: manifestation/<%= h.inflection.pluralize(name) %>/src/index.ts
+to: manifestation/<%= name %>/src/index.ts
 ---
 export * from "./schema";
 export * from "./primaryFields";
-export * from "./mappings";
 export * from "./makeStubSchema";

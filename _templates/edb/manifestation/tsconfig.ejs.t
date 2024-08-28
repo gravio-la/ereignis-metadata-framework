@@ -1,5 +1,5 @@
 ---
-to: manifestation/<%= h.inflection.pluralize(name) %>/tsconfig.json
+to: manifestation/<%= name %>/tsconfig.json
 ---
 {
   "extends": "@slub/edb-tsconfig/base.json",

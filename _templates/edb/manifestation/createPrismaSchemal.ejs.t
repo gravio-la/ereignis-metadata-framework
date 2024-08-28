@@ -1,5 +1,5 @@
 ---
-to: manifestation/<%= h.inflection.pluralize(name) %>/src/createPrismaSchemal.ts
+to: manifestation/<%= name %>/src/createPrismaSchemal.ts
 ---
 import { logPrismaSchemaWithPreamble } from "@slub/json-schema-prisma-utils";
 import { extendSchemaShortcut } from "@slub/json-schema-utils";

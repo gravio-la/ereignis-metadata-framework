@@ -1,5 +1,5 @@
 ---
-to: manifestation/<%= h.inflection.pluralize(name) %>/src/makeStubSchema.ts
+to: manifestation/<%= name %>/src/makeStubSchema.ts
 ---
 import { JSONSchema7 } from "json-schema";
 import {
@@ -28,7 +28,7 @@ export const schemaExpander: SchemaExpander = {
     },
   },
   options: {
-    excludeType: ["InvolvedPerson", "InvolvedCorporation", "AuthorityEntry"],
+    excludeType: [],
     excludeSemanticPropertiesForType: ["AuthorityEntry"],
   },
 };

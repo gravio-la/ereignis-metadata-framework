@@ -1,5 +1,5 @@
 ---
-to: apps/exhibition-live/src/components/config/<%= name %>AppConfig.ts
+to: apps/exhibition-live/components/config/<%= name %>AppConfig.ts
 ---
 import {
   makeStubSchema,
