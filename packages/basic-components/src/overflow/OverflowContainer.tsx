@@ -42,12 +42,13 @@ export const OverflowContainer = ({
       onClose={() => setTooltipEnabled(false)}
     >
       <Box
+        {...props}
         sx={{
+          ...(props.sx || {}),
           overflow: "hidden",
-          maxHeight: "10rem",
+          maxHeight: "4em",
         }}
         onMouseEnter={handleShouldShow}
-        {...props}
       >
         {children}
       </Box>
