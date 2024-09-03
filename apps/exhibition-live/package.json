@@ -165,6 +165,7 @@
     "@storybook/react": "^8.1.5",
     "@storybook/storybook-deployer": "^2.8.16",
     "@storybook/testing-react": "^2.0.1",
+    "@testing-library/cypress": "^10.0.2",
     "@types/dot": "^1.1.6",
     "@types/gapi": "^0.0.47",
     "@types/json-schema": "^7.0.14",
