@@ -13,7 +13,25 @@ interface SparnaturalEvent extends Event {
 }
 
 console.log({ config })
-export const EdbSparnatural: React.FC = () => {
+interface EdbSparnaturalProps {
+  src: string;
+  lang: string;
+  endpoint: string;
+  distinct: string;
+  limit: string;
+  prefix: string;
+  debug: string;
+}
+
+export const EdbSparnatural: React.FC<EdbSparnaturalProps> = ({
+  src,
+  lang,
+  endpoint,
+  distinct,
+  limit,
+  prefix,
+  debug,
+}) => {
   const sparnaturalRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -43,13 +61,13 @@ export const EdbSparnatural: React.FC = () => {
       <div id="ui-search" style={{ width: "auto" }}>
         <spar-natural
           ref={sparnaturalRef}
-          src={'https://sparnatural.eu/demos/demo-dbpedia-v2/sparnatural-config.ttl'}
-          lang="en"
-          endpoint="https://fr.dbpedia.org/sparql"
-          distinct="true"
-          limit="100"
-          prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
-          debug="true"
+          src={src}
+          lang={lang}
+          endpoint={endpoint}
+          distinct={distinct}
+          limit={limit}
+          prefix={prefix}
+          debug={debug}
         />
       </div>
     </div>
