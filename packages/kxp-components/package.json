@@ -14,8 +14,8 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
+    "build": "tsup src/index.tsx",
+    "dev": "tsup src/index.tsx --watch"
   },
   "dependencies": {
     "@slub/edb-state-hooks": "workspace:*",
@@ -26,6 +26,7 @@
     "@tpluscode/rdf-ns-builders": "^4.3.0"
   },
   "devDependencies": {
+    "@slub/edb-tsup-config": "workspace:*",
     "@types/react": "^18.3.4",
     "@rdfjs/types": "^1.1.0"
   },
