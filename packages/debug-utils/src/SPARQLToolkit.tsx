@@ -4,7 +4,8 @@ import React, { FunctionComponent, useState } from "react";
 
 import { YasguiSPARQLEditorNoSSR } from "./YasguiSPARQLEditorNoSSR";
 import { useAdbContext } from "@slub/edb-state-hooks";
-import type { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditor";
+
+import { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditorProps";
 
 interface OwnProps {
   onSendClicked?: () => void;

@@ -1,14 +1,8 @@
-import Yasgui from "@triply/yasgui";
+import type Yasgui from "@triply/yasgui";
 import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { Prefixes } from "@slub/edb-core-types";
-
-interface OwnProps {
-  onInit?: (yasgu: Yasgui) => void;
-  prefixes?: Prefixes;
-}
-
-export type YasguiSPARQLEditorProps = OwnProps;
+import { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditorProps";
 
 const withPrefixes = (yg: Yasgui, prefixes?: Prefixes) => {
   const yasqe = yg.getTab(yg.persistentConfig.currentId())?.getYasqe();
@@ -25,19 +19,21 @@ const YasguiSPARQLEditor: FunctionComponent<YasguiSPARQLEditorProps> = ({
   const [yasgui, setYasgui] = useState<Yasgui | null>(null);
 
   useEffect(() => {
-    setYasgui((yg) => {
-      const el = document.getElementById("yasgui");
-      return !el || yg
-        ? yg
-        : withPrefixes(
-            new Yasgui(el, {
-              yasqe: {
-                queryingDisabled: undefined,
-                showQueryButton: true,
-              },
-            }),
-            prefixes,
-          );
+    import("@triply/yasgui").then(({ default: YasguiCls }) => {
+      setYasgui((yg) => {
+        const el = document.getElementById("yasgui");
+        return !el || yg
+          ? yg
+          : withPrefixes(
+              new YasguiCls(el, {
+                yasqe: {
+                  queryingDisabled: undefined,
+                  showQueryButton: true,
+                },
+              }),
+              prefixes,
+            );
+      });
     });
   }, [setYasgui]);
   useEffect(() => {

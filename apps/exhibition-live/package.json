@@ -7,7 +7,7 @@
     "dev:vite": "vite --host",
     "build": "next build",
     "demo": "bun run dev:vite",
-    "start": "next start",
+    "start": "next start || bunx serve@latest -p 3000 ./out",
     "lint": "next lint",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest -w",
     "test:jsonSchema2Construct": "NODE_OPTIONS=--experimental-vm-modules jest --watch --runTestsByPath components/utils/sparql/jsonSchema2construct.test.ts ",

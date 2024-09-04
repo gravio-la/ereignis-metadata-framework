@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import type { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditor";
+import { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditorProps";
 
 const DynamicComponentWithNoSSR = dynamic(
   () => import("./YasguiSPARQLEditor"),
