@@ -11,25 +11,12 @@ type Story = StoryObj<typeof EdbSparnatural>;
 
 export const Default: Story = {
   args: {
+    src: 'https://sparnatural.eu/demos/demo-dbpedia-v2/sparnatural-config.ttl',
+    lang: 'en',
+    endpoint: 'https://fr.dbpedia.org/sparql',
+    distinct: 'true',
+    limit: '100',
+    prefix: 'skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#',
+    debug: 'true',
   },
-};
-import React from 'react';
-import { EdbSparnatural } from './EdbSparnatural';
-
-export default {
-  title: 'EdbSparnatural',
-  component: EdbSparnatural,
-};
-
-const Template = (args) => <EdbSparnatural {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  src: 'https://sparnatural.eu/demos/demo-dbpedia-v2/sparnatural-config.ttl',
-  lang: 'en',
-  endpoint: 'https://fr.dbpedia.org/sparql',
-  distinct: 'true',
-  limit: '100',
-  prefix: 'skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#',
-  debug: 'true',
 };

@@ -70,7 +70,6 @@ export const EdbSparnatural: React.FC<EdbSparnaturalProps> = ({
           debug={debug}
         />
       </div>
-    </div>
   );
 };
 
