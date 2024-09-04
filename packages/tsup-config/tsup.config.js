@@ -1,6 +1,6 @@
 import { defineConfig } from "tsup";
 
-export default defineConfig({
+const config = defineConfig({
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
   external: [
@@ -16,3 +16,14 @@ export default defineConfig({
   // Consider enabling dts if you want to generate declaration files
   dts: true,
 });
+export const makeConfigWithExternals = (pkg) => {
+  return {
+    ...config,
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ],
+  };
+};
+
+export default config;
