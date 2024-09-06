@@ -61,7 +61,7 @@
     sh:property :title,
         :description,
         :image,
-        :parent ;
+        :tag_parent ;
 .
 :title a sh:PropertyShape ;
     rdfs:label "Titel"@de, "Titre"@fr, "Title"@en ;
@@ -82,7 +82,7 @@
     sh:datatype xsd:anyURI ;
     sh:maxCount 1 ;
 .
-:parent a sh:PropertyShape ;
+:tag_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :Tag ;
@@ -94,7 +94,7 @@
     volipi:iconName "fas fa-briefcase" ;
     sh:property :title,
         :description,
-        :parent ;
+        :occupation_parent ;
 .
 :title a sh:PropertyShape ;
     rdfs:label "Titel"@de, "Titre"@fr, "Title"@en ;
@@ -109,7 +109,7 @@
     sh:datatype xsd:string ;
     sh:maxCount 1 ;
 .
-:parent a sh:PropertyShape ;
+:occupation_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :Occupation ;
@@ -141,7 +141,7 @@
     volipi:iconName "fas fa-film" ;
     sh:property :title,
         :description,
-        :parent,
+        :exhibitionSeries_parent,
         :seriesType,
         :timeSeries,
         :location,
@@ -160,7 +160,7 @@
     sh:datatype xsd:string ;
     sh:maxCount 1 ;
 .
-:parent a sh:PropertyShape ;
+:exhibitionSeries_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :ExhibitionSeries ;
@@ -309,7 +309,7 @@
         :titleVariants,
         :description,
         :image,
-        :parent ;
+        :location_parent ;
 .
 :title a sh:PropertyShape ;
     rdfs:label "Titel"@de, "Titre"@fr, "Title"@en ;
@@ -337,7 +337,7 @@
     sh:datatype xsd:anyURI ;
     sh:maxCount 1 ;
 .
-:parent a sh:PropertyShape ;
+:location_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :Location ;
@@ -392,7 +392,7 @@
         :description,
         :titleVariants,
         :location,
-        :parent,
+        :place_parent,
         :image ;
 .
 :title a sh:PropertyShape ;
@@ -421,7 +421,7 @@
     sh:class :Location ;
     sh:maxCount 1 ;
 .
-:parent a sh:PropertyShape ;
+:place_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :Place ;
@@ -460,7 +460,7 @@
     sh:property :name,
         :description,
         :nameVariant,
-        :parent,
+        :corporation_parent,
         :location,
         :image ;
 .
@@ -483,7 +483,7 @@
     sh:path :nameVariant ;
     sh:datatype xsd:string ;
 .
-:parent a sh:PropertyShape ;
+:corporation_parent a sh:PropertyShape ;
     rdfs:label "Übergeordnetes Element"@de, "Élément parent"@fr, "Parent element"@en ;
     sh:path :parent ;
     sh:class :Corporation ;
@@ -842,7 +842,7 @@
         :exhibitionSeries,
         :exhibitionCategory,
         :exhibitionGenre,
-        :parent,
+        :exhibition_parent,
         :externalId,
         :exhibitionType,
         :published,
@@ -945,7 +945,7 @@
     sh:class :Genre ;
     dash:searchWidget sparco:ListProperty ;
 .
-:parent a sh:PropertyShape ;
+:exhibition_parent a sh:PropertyShape ;
     sh:path :parent ;
     sh:class :Exhibition ;
     sh:maxCount 1 ;
