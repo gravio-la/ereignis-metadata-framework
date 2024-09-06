@@ -4,12 +4,21 @@ to: packages/<%= name.split("/")[1] %>/package.json
 {
   "name": "<%= name %>",
   "version": "1.0.0",
-  "private": true,
-  "main": "src/index.tsx",
-  "types": "src/index.tsx",
-  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "typecheck": "tsc -b",
+    "build": "tsup src/index.tsx",
+    "dev": "tsup src/index.tsx",
     "lint": "eslint \"**/*.ts*\"",
     "lint-fix": "eslint --fix \"**/*.ts*\""
   },
@@ -22,7 +31,8 @@ to: packages/<%= name.split("/")[1] %>/package.json
   },
   "devDependencies": {
     "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*"
+    "@slub/edb-tsconfig": "workspace:*",
+    "@slub/edb-tsup-config": "workspace:*"
   }
 }
 
