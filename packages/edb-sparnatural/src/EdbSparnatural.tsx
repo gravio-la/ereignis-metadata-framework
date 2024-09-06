@@ -1,19 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from "react";
 import "sparnatural/src/assets/stylesheets/sparnatural.scss";
-
-// import the JSON-LD config file
-import config from "./config.json"
-
-interface SparnaturalEvent extends Event {
+import "leaflet/dist/leaflet.css";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+export interface SparnaturalEvent extends Event {
   detail?: {
-    queryString: string,
-    queryJson: string,
-    querySparqlJs: string
-  }
+    queryString: string;
+    queryJson: string;
+    querySparqlJs: string;
+  };
 }
-
-console.log({ config })
-interface EdbSparnaturalProps {
+export type EdbSparnaturalProps = {
   src: string;
   lang: string;
   endpoint: string;
@@ -21,7 +18,8 @@ interface EdbSparnaturalProps {
   limit: string;
   prefix: string;
   debug: string;
-}
+  onQueryUpdated?: (event: SparnaturalEvent) => void;
+};
 
 export const EdbSparnatural: React.FC<EdbSparnaturalProps> = ({
   src,
@@ -31,45 +29,47 @@ export const EdbSparnatural: React.FC<EdbSparnaturalProps> = ({
   limit,
   prefix,
   debug,
+  onQueryUpdated,
 }) => {
   const sparnaturalRef = useRef<HTMLElement>(null);
 
+  const handleQueryUpdated = useCallback(
+    (event: SparnaturalEvent) => {
+      try {
+        onQueryUpdated?.(event);
+      } catch (e) {}
+    },
+    [onQueryUpdated],
+  );
+
   useEffect(() => {
-
-    //import "sparnatural";
-    //
     import("sparnatural").then(() => {
-      const handleQueryUpdated = (event: SparnaturalEvent) => {
-        console.log(event?.detail?.queryString);
-        console.log(event?.detail?.queryJson);
-        console.log(event?.detail?.querySparqlJs);
-        // here : don't forget to call expandSparql so that core:sparqlString annotation is taken into account
-      };
+      sparnaturalRef.current?.addEventListener(
+        "queryUpdated",
+        handleQueryUpdated,
+      );
 
-      sparnaturalRef.current?.addEventListener("queryUpdated", handleQueryUpdated);
-
-      // Cleanup the event listener on component unmount
       return () => {
-        sparnaturalRef.current?.removeEventListener("queryUpdated", handleQueryUpdated);
+        sparnaturalRef.current?.removeEventListener(
+          "queryUpdated",
+          handleQueryUpdated,
+        );
       };
     });
-  }, []);
+  }, [handleQueryUpdated]);
 
   return (
-    <div className="App">
-      {/*FontAwesome is only needed when the fontawesome features is used to display icons*/}
-      <div id="ui-search" style={{ width: "auto" }}>
-        <spar-natural
-          ref={sparnaturalRef}
-          src={src}
-          lang={lang}
-          endpoint={endpoint}
-          distinct={distinct}
-          limit={limit}
-          prefix={prefix}
-          debug={debug}
-        />
-      </div>
+    <div id="ui-search" style={{ width: "auto" }}>
+      <spar-natural
+        ref={sparnaturalRef}
+        src={src}
+        lang={lang}
+        endpoint={endpoint}
+        distinct={distinct}
+        limit={limit}
+        prefix={prefix}
+        debug={debug}
+      />
+    </div>
   );
 };
-
