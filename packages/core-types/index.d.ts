@@ -162,10 +162,15 @@ export type PermissionDeclaration<T extends string> = {
   [typeName in T]: Permission;
 };
 
+export type SameAsTypeMap = Record<string, string | string[]>;
+
 export type NormDataMapping = {
+  label: string;
   mapping: DeclarativeMapping;
-  typeToTypeMap: Record<string, string | string[]>;
+  sameAsTypeMap: SameAsTypeMap;
 };
+
+export type NormDataMappings = Record<string, NormDataMapping>;
 
 export type AutocompleteSuggestion = {
   label: string;
