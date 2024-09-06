@@ -8,7 +8,7 @@ import { extendSchemaShortcut } from "@slub/json-schema-utils";
 import { primaryFields, schema } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";
 import { initPrismaStore } from "@slub/prisma-db-impl";
-import { PrismaClient } from "@prisma/edb-exhibition-client";
+//import { PrismaClient } from "@prisma/edb-exhibition-client";
 
 export const typeNameToTypeIRI = (typeName: string) =>
   config.namespace(typeName).value;
@@ -18,6 +18,10 @@ export const typeIRItoTypeName = (iri: string) => {
 };
 const initPrisma = async () => {
   const rootSchema = extendSchemaShortcut(schema as JSONSchema7, "type", "id");
+  // @ts-ignore
+  const PrismaClient = await import("@prisma/edb-exhibition-client").then(
+    ({ PrismaClient }) => PrismaClient,
+  );
   const prisma = new PrismaClient();
   //bun only runs if we call it here: why??
   //find first object that can be counted:
