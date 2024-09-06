@@ -11,6 +11,7 @@ import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder/SimilarityFinder";
 import { ThemeComponent } from "@slub/edb-default-theme";
+import NiceModal from "@ebay/nice-modal-react";
 
 export const parameters = {
   nextRouter: {
@@ -46,6 +47,12 @@ export const withMuiTheme = (Story) => {
     <Provider store={store}>
       <AdbProvider
         {...exhibitionConfig}
+        lockedSPARQLEndpoint={{
+          endpoint: "https://ausstellungsdatenbank.kuenste.live/query",
+          //endpoint: "http://localhost:7878/query",
+          label: "Remote",
+          provider: "oxigraph",
+        }}
         env={{
           publicBasePath: PUBLIC_BASE_PATH,
           baseIRI: BASE_IRI,
@@ -60,8 +67,10 @@ export const withMuiTheme = (Story) => {
       >
         <ThemeComponent>
           <QueryClientProvider client={queryClient}>
-            <CssBaseline />
-            <Story />
+            <NiceModal.Provider>
+              <CssBaseline />
+              <Story />
+            </NiceModal.Provider>
           </QueryClientProvider>
         </ThemeComponent>
       </AdbProvider>
