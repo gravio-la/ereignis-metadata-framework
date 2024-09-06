@@ -75,6 +75,7 @@
     "@slub/edb-authorities": "workspace:*",
     "@slub/edb-data-mapping": "workspace:*",
     "@slub/edb-default-theme": "workspace:*",
+    "@slub/edb-sparnatural": "workspace:*",
     "@slub/exhibition-schema": "workspace:*",
     "@slub/kulinarik-schema": "workspace:*",
     "@tanstack/table-core": "^8.16.0",

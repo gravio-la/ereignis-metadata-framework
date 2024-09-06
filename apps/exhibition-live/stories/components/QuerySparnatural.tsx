@@ -1,9 +1,5 @@
 import { EdbSparnatural } from "@slub/edb-sparnatural";
-import {
-  useAdbContext,
-  useGlobalCRUDOptions,
-  useQuery,
-} from "@slub/edb-state-hooks";
+import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
 import { useCallback, useState } from "react";
 import df from "@rdfjs/data-model";
 import { fixSparqlOrder, withDefaultPrefix } from "@slub/sparql-schema";
@@ -14,8 +10,9 @@ import {
   GenericVirtualizedList,
 } from "@slub/edb-virtualized-components";
 import { IRIToStringFn, PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { debounce, isString } from "lodash";
 import get from "lodash/get";
+import debounce from "lodash/debounce";
+import isString from "lodash/isString";
 import * as React from "react";
 import { ParentSize } from "@visx/responsive";
 import NiceModal from "@ebay/nice-modal-react";
