@@ -7,6 +7,7 @@
 @prefix sparco: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
 @prefix dash: <http://datashapes.org/dash#> .
 @prefix this: <http://ontologies.slub-dresden.de/sparnatural-config#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
 
 :Tag a rdfs:Class ;
 .
@@ -56,6 +57,7 @@
 :Tag a sh:NodeShape ;
     rdfs:label "Tag"@de, "Étiquette"@fr, "Tag"@en ;
     sh:targetClass :Tag ;
+    volipi:iconName "fas fa-tag" ;
     sh:property :title,
         :description,
         :image,
@@ -89,6 +91,7 @@
 :Occupation a sh:NodeShape ;
     rdfs:label "Beruf"@de, "Profession"@fr, "Occupation"@en ;
     sh:targetClass :Occupation ;
+    volipi:iconName "fas fa-briefcase" ;
     sh:property :title,
         :description,
         :parent ;
@@ -115,6 +118,7 @@
 :SeriesType a sh:NodeShape ;
     rdfs:label "Serientyp"@de, "Type de série"@fr, "Series type"@en ;
     sh:targetClass :SeriesType ;
+    volipi:iconName "fas fa-list-ol" ;
     sh:property :title,
         :description ;
 .
@@ -134,6 +138,7 @@
 :ExhibitionSeries a sh:NodeShape ;
     rdfs:label "Ausstellungsserie"@de, "Série d'expositions"@fr, "Exhibition series"@en ;
     sh:targetClass :ExhibitionSeries ;
+    volipi:iconName "fas fa-film" ;
     sh:property :title,
         :description,
         :parent,
@@ -183,6 +188,7 @@
 :Person a sh:NodeShape ;
     rdfs:label "Person"@de, "Personne"@fr, "Person"@en ;
     sh:targetClass :Person ;
+    volipi:iconName "fas fa-user" ;
     sh:property :name,
         :description,
         :birthDate,
@@ -271,6 +277,7 @@
 :Workplace a sh:NodeShape ;
     rdfs:label "Arbeitsplatz"@de, "Lieu de travail"@fr, "Workplace"@en ;
     sh:targetClass :Workplace ;
+    volipi:iconName "fas fa-building" ;
     sh:property :location,
         :fromDate,
         :toDate ;
@@ -297,6 +304,7 @@
 :Location a sh:NodeShape ;
     rdfs:label "Ort"@de, "Lieu"@fr, "Location"@en ;
     sh:targetClass :Location ;
+    volipi:iconName "fas fa-map-marker-alt" ;
     sh:property :title,
         :titleVariants,
         :description,
@@ -338,6 +346,7 @@
 :PersonRole a sh:NodeShape ;
     rdfs:label "Person Rolle"@de, "Rôle de la personne"@fr, "Person role"@en ;
     sh:targetClass :PersonRole ;
+    volipi:iconName "fas fa-user-tag" ;
     sh:property :title,
         :description ;
 .
@@ -358,6 +367,7 @@
 :CorporationRole a sh:NodeShape ;
     rdfs:label "Körperschaft Rolle"@de, "Rôle de la société"@fr, "Corporation role"@en ;
     sh:targetClass :CorporationRole ;
+    volipi:iconName "fas fa-building-user" ;
     sh:property :title,
         :description ;
 .
@@ -377,6 +387,7 @@
 :Place a sh:NodeShape ;
     rdfs:label "Stätte"@de, "Lieu"@fr, "Place"@en ;
     sh:targetClass :Place ;
+    volipi:iconName "fas fa-landmark" ;
     sh:property :title,
         :description,
         :titleVariants,
@@ -425,6 +436,7 @@
 :EventType a sh:NodeShape ;
     rdfs:label "Veranstaltungstyp"@de, "Type d'événement"@fr, "Event type"@en ;
     sh:targetClass :EventType ;
+    volipi:iconName "fas fa-calendar-alt" ;
     sh:property :title,
         :description ;
 .
@@ -444,6 +456,7 @@
 :Corporation a sh:NodeShape ;
     rdfs:label "Körperschaft"@de, "Société"@fr, "Corporation"@en ;
     sh:targetClass :Corporation ;
+    volipi:iconName "fas fa-building" ;
     sh:property :name,
         :description,
         :nameVariant,
@@ -491,6 +504,7 @@
 :ResourceType a sh:NodeShape ;
     rdfs:label "Ressourcentyp"@de, "Type de ressource"@fr, "Resource type"@en ;
     sh:targetClass :ResourceType ;
+    volipi:iconName "fas fa-cube" ;
     sh:property :title,
         :description ;
 .
@@ -510,6 +524,7 @@
 :Resource a sh:NodeShape ;
     rdfs:label "Ressource"@de, "Ressource"@fr, "Resource"@en ;
     sh:targetClass :Resource ;
+    volipi:iconName "fas fa-file-alt" ;
     sh:property :title,
         :description,
         :ppn,
@@ -573,6 +588,7 @@
 :ExponatsAndPersons a sh:NodeShape ;
     rdfs:label "Exponate und Personen"@de, "Exponats et personnes"@fr, "Exponats and persons"@en ;
     sh:targetClass :ExponatsAndPersons ;
+    volipi:iconName "fas fa-user-circle" ;
     sh:property :person,
         :personRole ;
 .
@@ -592,6 +608,7 @@
 :ExponatsAndCorporations a sh:NodeShape ;
     rdfs:label "Exponate und Körperschaften"@de, "Exponats et sociétés"@fr, "Exponats and corporations"@en ;
     sh:targetClass :ExponatsAndCorporations ;
+    volipi:iconName "fas fa-building-circle-check" ;
     sh:property :corporation,
         :corporationRole ;
 .
@@ -611,6 +628,7 @@
 :ExhibitionExponat a sh:NodeShape ;
     rdfs:label "Ausstellungsexponat"@de, "Exponat d'exposition"@fr, "Exhibition exponat"@en ;
     sh:targetClass :ExhibitionExponat ;
+    volipi:iconName "fas fa-palette" ;
     sh:property :title,
         :titleVariants,
         :description,
@@ -738,6 +756,7 @@
 :ExhibitionCategory a sh:NodeShape ;
     rdfs:label "Ausstellungskategorie"@de, "Catégorie d'exposition"@fr, "Exhibition category"@en ;
     sh:targetClass :ExhibitionCategory ;
+    volipi:iconName "fas fa-folder" ;
     sh:property :name,
         :description ;
 .
@@ -757,6 +776,7 @@
 :InvolvedPerson a sh:NodeShape ;
                 rdfs:label "Beteiligte Person"@de, "Personne impliquée"@fr, "Involved person"@en ;
                 sh:targetClass :InvolvedPerson ;
+                volipi:iconName "fas fa-user-check" ;
                 sh:property :person,
         :personRole ;
 .
@@ -771,6 +791,7 @@
 :InvolvedCorporation a sh:NodeShape ;
     rdfs:label "Beteiligte Körperschaft"@de, "Société impliquée"@fr, "Involved corporation"@en ;
     sh:targetClass :InvolvedCorporation ;
+    volipi:iconName "fas fa-building-flag" ;
     sh:property :corporation,
         :corporationRole ;
 .
@@ -784,6 +805,7 @@
 :Genre a sh:NodeShape ;
     rdfs:label "Genre"@de, "Genre"@fr, "Genre"@en ;
     sh:targetClass :Genre ;
+    volipi:iconName "fas fa-theater-masks" ;
     sh:property :title,
         :description,
         :image ;
@@ -810,6 +832,7 @@
 :Exhibition a sh:NodeShape ;
     rdfs:label "Ausstellung"@de, "Exposition"@fr, "Exhibition"@en ;
     sh:targetClass :Exhibition ;
+    volipi:iconName "fas fa-museum" ;
     sh:property :title,
         :description,
         :startDate,
