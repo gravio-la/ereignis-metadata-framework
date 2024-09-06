@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import "select2/src/scss/core.scss";
 import "sparnatural/src/assets/stylesheets/sparnatural.scss";
 import "leaflet/dist/leaflet.css";
 import "@fortawesome/fontawesome-free/css/all.css";
