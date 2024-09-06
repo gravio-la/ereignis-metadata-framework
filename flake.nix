@@ -17,6 +17,8 @@
             nodePackages_latest.prisma
             prisma-engines
             #jetbrains.idea-ultimate
+            apache-jena
+            librdf_raptor2
             bun
             openssl
             appimage-run
