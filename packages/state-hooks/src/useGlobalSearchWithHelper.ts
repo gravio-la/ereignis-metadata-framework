@@ -46,6 +46,8 @@ export const useGlobalSearchWithHelper = (
         "@id": newIRI,
         "@type": typeIRI,
       };
+      console.log("will save", finalData);
+
       saveMutation.mutate(finalData);
       const labelField = primaryFields[typeName]?.label;
       const label = labelField ? get(newData, labelField) : "";

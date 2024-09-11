@@ -8,7 +8,7 @@ import { useTranslation } from "next-i18next";
 import { CircularProgress, List } from "@mui/material";
 import { TypedListItem } from "@slub/edb-advanced-components";
 import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
-import { declarativeMappings } from "@slub/exhibition-schema";
+import { availableAuthorityMappings } from "@slub/exhibition-schema";
 
 export type MappedItemProps<CellType extends CellTypeLike> = {
   path: string;
@@ -57,7 +57,7 @@ export const MappedItem = <CellType extends CellTypeLike>({
           createEntityIRI,
           typeIRIToTypeName,
           primaryFields,
-          declarativeMappings,
+          availableAuthorityMappings,
         ),
       );
       return mappedData;

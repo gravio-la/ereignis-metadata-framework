@@ -218,9 +218,11 @@ export type SimilarityFinderProps = {
   onEntityIRIChange?: (entityIRI: string | undefined) => void;
   onMappedDataAccepted?: (data: any) => void;
   onExistingEntityAccepted?: (entityIRI: string, data: any) => void;
+  onSelectedEntityChange?: (id: string, authorityIRI: string) => void;
   searchOnDataPath?: string;
   search?: string;
   hideFooter?: boolean;
+  knowledgeSources?: KnowledgeSources[];
   additionalKnowledgeSources?: KnowledgeSources[];
 };
 

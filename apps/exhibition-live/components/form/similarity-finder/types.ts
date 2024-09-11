@@ -33,6 +33,7 @@ export type KnowledgeBaseDescription<T = any> = {
     typeName: string,
     findOptions?: FindOptions,
   ) => Promise<T[]>;
+  getEntity?: (id: string, typeIRI?: string) => Promise<any>;
   detailRenderer?: (id: string) => React.ReactNode;
   listItemRenderer?: (
     entry: any,

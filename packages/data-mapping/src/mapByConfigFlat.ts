@@ -61,6 +61,7 @@ export const mapByConfigFlat = async (
             strategyContext.createDeeperContext(
               strategyContext,
               `${mapping.strategy.id}_${targetPath}`,
+              mappingConfig,
             ),
           );
         } else {
@@ -71,6 +72,7 @@ export const mapByConfigFlat = async (
             strategyContext.createDeeperContext(
               strategyContext,
               `${mapping.strategy.id}_${targetPath}`,
+              mappingConfig,
             ),
           );
           if (Array.isArray(value)) value = filterUndefOrNull(value);

@@ -338,28 +338,27 @@ export const exhibitionDeclarativeMapping: DeclarativeMappings = [
       },
     },
   },
-];
-
-exhibitionDeclarativeMapping.push({
-  source: {
-    path: "hierarchicalSuperiorOfTheConferenceOrEvent.0",
-  },
-  target: {
-    path: "parent",
-  },
-  mapping: {
-    strategy: {
-      id: "createEntity",
-      options: {
-        typeIRI: sladb("Exhibition").value,
-        typeName: "Exhibition",
-        subFieldMapping: {
-          fromEntity: exhibitionDeclarativeMapping,
+  {
+    source: {
+      path: "hierarchicalSuperiorOfTheConferenceOrEvent.0",
+    },
+    target: {
+      path: "parent",
+    },
+    mapping: {
+      strategy: {
+        id: "createEntity",
+        options: {
+          typeIRI: sladb("Exhibition").value,
+          typeName: "Exhibition",
+          subFieldMapping: {
+            fromEntity: "self",
+          },
         },
       },
     },
   },
-});
+];
 
 export const event2exhibitionSeriesDeclarativeMapping: DeclarativeMappings = [
   {
@@ -646,7 +645,7 @@ export const lobidTypemap: Record<string, string | string[]> = {
   Tag: "SubjectHeading",
   Genre: "SubjectHeading",
 };
-export const declarativeMappings: DeclarativeMapping = {
+export const lobidMappings: DeclarativeMapping = {
   Exhibition: exhibitionDeclarativeMapping,
   Person: personDeclarativeMapping,
   Corporation: corporateBodyDeclarativeMapping,

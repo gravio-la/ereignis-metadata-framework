@@ -20,6 +20,8 @@ import NiceModal from "@ebay/nice-modal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeComponent } from "@slub/edb-default-theme";
 
+import "react-json-view-lite/dist/index.css";
+
 export const queryClient = new QueryClient();
 
 const sparqlEndpoint = envToSparqlEndpoint(import.meta.env, "VITE");

@@ -20,7 +20,7 @@ import {
 } from "@slub/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { debounce } from "lodash";
+import { debounce, map, uniq } from "lodash";
 import { PrimaryField } from "@slub/edb-core-types";
 import { NumberInput } from "../NumberInput";
 import { ClassicResultListWrapper } from "@slub/edb-basic-components";
@@ -33,6 +33,8 @@ import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
 import { FindOptions, KnowledgeBaseDescription } from "./types";
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 import { useKnowledgeBases } from "./useKnowledgeBases";
+import { on } from "events";
+import { useDeclarativeMapper } from "./useDeclarativeMapper";
 
 const performSearch = (
   searchString: string,
@@ -71,16 +73,25 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   onEntityIRIChange,
   onExistingEntityAccepted,
   onMappedDataAccepted,
+  onSelectedEntityChange,
   searchOnDataPath,
   search,
   jsonSchema,
   hideFooter,
+  knowledgeSources,
   additionalKnowledgeSources,
 }) => {
-  const selectedKnowledgeSources = useMemo(
-    () => ["kb", "gnd", ...(additionalKnowledgeSources || [])],
-    [additionalKnowledgeSources],
-  );
+  const selectedKnowledgeSources = useMemo(() => {
+    console.log(
+      "update knowledge sources",
+      knowledgeSources,
+      additionalKnowledgeSources,
+    );
+    return uniq([
+      ...(knowledgeSources || ["kb", "gnd", "wikidata"]),
+      ...(additionalKnowledgeSources || []),
+    ]);
+  }, [additionalKnowledgeSources, knowledgeSources]);
 
   const {
     schema,
@@ -169,6 +180,7 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
         setElementCount,
       ),
     [
+      knowledgeBases,
       preselectedClassIRI,
       limit,
       knowledgeBases,
@@ -209,137 +221,30 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     typeNameToTypeIRI,
     queryBuildOptions,
   });
+  const { mapData } = useDeclarativeMapper();
   const handleManuallyMapData = useCallback(
     async (
       id: string | undefined,
       entryData: any,
       source: KnowledgeSources,
     ) => {
+      console.log("manually map data", id, entryData, source);
       if (!id || !entryData?.allProps) return;
-      const knowledgeBaseDescription = knowledgeBases.find(
-        (kb) => kb.id === source,
-      );
-      const declarativeMapping = normDataMapping[source];
-      if (!declarativeMapping) {
-        console.warn(`no mapping declaration config for ${source}`);
-        return;
-      }
-      const mappingConfig = declarativeMapping.mapping[typeName];
-      if (!mappingConfig) {
-        console.warn(`no mapping config for ${typeName}`);
-        return;
-      }
       try {
-        const defaultMappingContext = makeDefaultMappingStrategyContext(
-          crudOptions?.selectFetch,
-          {
-            defaultPrefix,
-            prefixes,
-          },
-          createEntityIRI,
-          typeNameToTypeIRI,
-          primaryFields,
-          declarativeMapping.mapping,
-        );
-        const mappingContext = {
-          ...defaultMappingContext,
-          onNewDocument: async ({ _draft, ...doc }: any) => {
-            const entityIRI = doc["@id"];
-            const typeName_ = typeIRIToTypeName(doc["@type"]);
-            //return dataStore.createDocument(typeName_, doc);
-            try {
-              const newDoc = await dataStore.upsertDocument(
-                typeName_,
-                entityIRI,
-                doc,
-              );
-              console.log("new doc", newDoc);
-              return newDoc;
-            } catch (e) {
-              console.error("could not create document", e);
-            }
-            return null;
-          },
-          getPrimaryIRIBySecondaryIRI: async (
-            secondaryIRI: string,
-            authorityIRI: string,
-            typeIRI: string,
-          ) => {
-            const typeName_ = typeIRIToTypeName(typeIRI);
-            const ids = await dataStore.findDocumentsByAuthorityIRI(
-              typeName_,
-              secondaryIRI,
-              authorityIRI,
-              limit,
-            );
-            if (ids.length > 0) {
-              console.warn("found more then one entity");
-            }
-            return ids[0] || null;
-          },
-          searchEntityByLabel: async (label: string, typeIRI: string) => {
-            const typeName_ = typeIRIToTypeName(typeIRI);
-            const ids = await dataStore.findDocumentsByLabel(
-              typeName_,
-              label,
-              limit,
-            );
-            if (ids.length > 0) {
-              console.warn("found more then one entity");
-            }
-            return ids[0] || null;
-          },
-        };
-        const authorityIRI =
-          knowledgeBaseDescription?.authorityIRI || "urn:local";
-        const existingEntry = await mappingContext.getPrimaryIRIBySecondaryIRI(
+        const knowledgeBase = knowledgeBases.find((kb) => kb.id === source);
+        const finalData = await mapData(
           id,
-          authorityIRI,
           classIRI,
+          entryData,
+          knowledgeBase.authorityIRI,
         );
-        const dataFromGND = await mapByConfig(
-          entryData.allProps,
-          {},
-          mappingConfig,
-          mappingContext,
-        );
-        if (existingEntry) {
-          onEntityIRIChange && onEntityIRIChange(existingEntry);
-          onExistingEntityAccepted &&
-            onExistingEntityAccepted(existingEntry, dataFromGND);
-          return;
-        }
-
-        const inject = {
-          "@type": classIRI,
-          idAuthority: {
-            authority: authorityIRI,
-            id: id,
-          },
-          lastNormUpdate: new Date().toISOString(),
-        };
-        onMappedDataAccepted &&
-          onMappedDataAccepted({ ...dataFromGND, ...inject });
+        console.log("finalData", finalData);
+        onMappedDataAccepted && onMappedDataAccepted(finalData);
       } catch (e) {
         console.error("could not map from authority", e);
       }
     },
-    [
-      classIRI,
-      typeName,
-      typeIRIToTypeName,
-      dataStore.upsertDocument,
-      onMappedDataAccepted,
-      onExistingEntityAccepted,
-      onEntityIRIChange,
-      crudOptions?.selectFetch,
-      knowledgeBases,
-      createEntityIRI,
-      defaultPrefix,
-      normDataMapping,
-      prefixes,
-      primaryFields,
-    ],
+    [mapData, classIRI, onMappedDataAccepted, knowledgeBases],
   );
 
   const handleEntityChange = useCallback(
@@ -391,7 +296,6 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   );
 
   const showEditDialog = useCallback(() => {
-    const preselectedTypeName = typeIRIToTypeName(preselectedClassIRI);
     const defaultLabelKey = getDefaultLabelKey(preselectedClassIRI);
     const newItem = {
       "@id": createEntityIRI(preselectedClassIRI),
@@ -405,7 +309,7 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
       typeIRI: newItem["@type"],
       data: newItem,
       disableLoad: true,
-    }).then(({ entityIRI, data }) => {
+    }).then(({ entityIRI, data }: { entityIRI: string; data: any }) => {
       handleEntityChange(entityIRI, data);
     });
   }, [
@@ -448,6 +352,16 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
       activeFinderIds.includes(finderId) &&
       activeFinderIds[activeFinderIds.length - 1] === finderId,
     [activeFinderIds, finderId],
+  );
+
+  const handleSelectEntity = useCallback(
+    (id: string, index: number, kb: KnowledgeBaseDescription) => {
+      setElementIndex(index);
+      if (onSelectedEntityChange) {
+        onSelectedEntityChange(id, kb.authorityIRI);
+      }
+    },
+    [setElementIndex, onSelectedEntityChange],
   );
 
   return (
@@ -507,7 +421,7 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
                           idx,
                           classIRI,
                           elementIndex === idx,
-                          () => setElementIndex(idx),
+                          (id, index) => handleSelectEntity(id, index, kb),
                           (id, data) => handleAccept(id, data, kb.id),
                         ),
                       )}

@@ -7,6 +7,7 @@ import {
 } from "./formConfigs";
 import { BASE_IRI } from "./paths";
 import {
+  availableAuthorityMappings,
   declarativeMappings,
   lobidTypemap,
   makeStubSchema,
@@ -34,12 +35,7 @@ export const exhibitionConfig = {
     jsonldContext: defaultJsonldContext,
     allowUnsafeSourceIRIs: false,
   },
-  normDataMapping: {
-    gnd: {
-      mapping: declarativeMappings,
-      typeToTypeMap: lobidTypemap,
-    },
-  },
+  normDataMapping: availableAuthorityMappings,
   schema: schema as JSONSchema7,
   makeStubSchema: makeStubSchema,
   uiSchemaDefaultRegistry: makeDefaultUiSchemaForAllDefinitions(

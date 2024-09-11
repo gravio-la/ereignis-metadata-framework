@@ -25,6 +25,9 @@ export const GND: KnowledgeBaseDescription = {
       ),
     )?.map((allProps: any) => gndEntryFromSuggestion(allProps));
   },
+  getEntity: async (id, typeIRI) => {
+    return await findEntityWithinLobid(id, typeIRI, lobidTypemap, 1, "json");
+  },
   listItemRenderer: (data, idx, typeIRI, selected, onSelect, onAccept) => (
     <GNDListItemRenderer
       data={data}

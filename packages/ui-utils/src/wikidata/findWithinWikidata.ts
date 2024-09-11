@@ -1,3 +1,9 @@
+import { get } from "lodash";
+import {
+  CommonPropertyValues,
+  getCommonPropsFromWikidata,
+} from "./getCommonPropsFromWikidata";
+
 export type WikidataSearchOptions = {
   srsearch: {
     searchString: string;
@@ -144,6 +150,69 @@ export const findWithinWikidataUsingREST: (
   ).then((res) => res.json());
 
   return (result as WikidataRESTResult).pages;
+};
+
+export const getWDIDFromIRI = (iri: string) => {
+  return iri.replace("http://www.wikidata.org/entity/", "");
+};
+
+const stripWikidataPrefixFromProps = (allProps: CommonPropertyValues) => {
+  return Object.fromEntries(
+    Object.entries(allProps).map(([key, value]) => {
+      const strippedKey = getWDIDFromIRI(key);
+      return [strippedKey, value];
+    }),
+  ) as CommonPropertyValues;
+};
+
+export const filterRank = (entity: any, rank: "preferred" | "normal") => {
+  return {
+    ...entity,
+    claims: Object.fromEntries(
+      Object.entries(entity.claims).map(([key, claims]) => {
+        const filtered = (claims as any[]).filter(
+          (claim) => claim?.rank === rank,
+        );
+        return [key, filtered.length > 0 ? filtered : claims];
+      }),
+    ),
+  };
+};
+
+export const getEntityFromWikidataByIRI: (
+  iri: string,
+  options: { rank?: "preferred" | "normal" },
+) => Promise<any> = (iri: string, options) => {
+  const url = new URL(wikidataApiURL);
+  const id = getWDIDFromIRI(iri);
+  url.search = new URLSearchParams({
+    action: "wbgetentities",
+    format: "json",
+    ids: id,
+    origin: "*",
+  }).toString();
+  return fetch(url.toString())
+    .then((res) => res.json())
+    .then((res) =>
+      options?.rank
+        ? filterRank(res.entities[id], options.rank)
+        : res.entities[id],
+    );
+};
+
+export const findEntitiesCommonPropsWithinWikidataByIRI = async (
+  iri: string,
+) => {
+  console.log("findEntitiesCommonPropsWithinWikidataByIRI", iri);
+
+  return getCommonPropsFromWikidata(
+    iri,
+    ["https://query.wikidata.org/sparql"],
+    true,
+  ).then((allProps_) => {
+    const allProps = stripWikidataPrefixFromProps(allProps_);
+    return allProps;
+  });
 };
 
 export default findWithinWikidata;

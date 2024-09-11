@@ -12,6 +12,7 @@ import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder/SimilarityFinder";
 import { ThemeComponent } from "@slub/edb-default-theme";
 import NiceModal from "@ebay/nice-modal-react";
+import "react-json-view-lite/dist/index.css";
 
 export const parameters = {
   nextRouter: {

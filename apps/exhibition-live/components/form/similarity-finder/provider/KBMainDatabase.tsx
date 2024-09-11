@@ -4,6 +4,7 @@ import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
 import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
 import { KBListItemRenderer } from "../KBListItemRenderer";
 import { AbstractDatastore } from "@slub/edb-global-types";
+import { typeIRItoTypeName } from "../../../config";
 
 export const KBMainDatabase: (
   dataStore: AbstractDatastore,
@@ -32,6 +33,9 @@ export const KBMainDatabase: (
         secondary: description,
       };
     });
+  },
+  getEntity(id, typeIRI) {
+    return dataStore.loadDocument(typeIRItoTypeName(typeIRI), id);
   },
   listItemRenderer: (entry, idx, typeIRI, selected, onSelect, onAccept) => (
     <KBListItemRenderer

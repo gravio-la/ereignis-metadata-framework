@@ -36,6 +36,7 @@ export const SemanticJsonFormNoOps: FunctionComponent<
   const {
     queryBuildOptions: { primaryFields },
     typeIRIToTypeName,
+    createEntityIRI,
     uiSchemaDefaultRegistry,
     rendererRegistry,
     cellRendererRegistry,
@@ -85,21 +86,21 @@ export const SemanticJsonFormNoOps: FunctionComponent<
           if (decision === "replace") {
             return {
               ...newData,
-              "@id": data["@id"],
-              "@type": data["@type"],
+              "@id": data["@id"] || createEntityIRI(typeIRI),
+              "@type": typeIRI,
             };
           } else {
             const computedData = merge(data, {
               ...newData,
-              "@id": data["@id"],
-              "@type": data["@type"],
+              "@id": data["@id"] || createEntityIRI(typeIRI),
+              "@type": typeIRI,
             });
             return computedData;
           }
         }, "mapping");
       });
     },
-    [onChange, closeDrawer, t],
+    [onChange, closeDrawer, t, createEntityIRI, typeIRI],
   );
 
   const handleEntityIRIChange = useCallback(

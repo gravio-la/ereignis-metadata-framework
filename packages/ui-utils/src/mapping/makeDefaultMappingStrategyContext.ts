@@ -1,5 +1,7 @@
 import {
   IRIToStringFn,
+  NormDataMapping,
+  NormDataMappings,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
 } from "@slub/edb-core-types";
@@ -13,6 +15,10 @@ import {
   createLogger,
   makeCreateDeeperContextFn,
 } from "@slub/edb-data-mapping/src/makeCreateDeeperContextFn";
+import {
+  findEntitiesCommonPropsWithinWikidataByIRI,
+  getEntityFromWikidataByIRI,
+} from "../wikidata";
 
 /**
  * Creating a context for the mapping requires a lot of boilerplate code. Thus, this function is provided
@@ -34,7 +40,7 @@ export const makeDefaultMappingStrategyContext: (
   createEntityIRI: (typeIRI: string) => string,
   typeIRIToTypeName: IRIToStringFn,
   primaryFields: PrimaryFieldDeclaration,
-  declarativeMappings?: DeclarativeMapping,
+  normDataMappings?: NormDataMappings,
   disableLogging?: boolean,
 ) => StrategyContext = (
   doQuery,
@@ -42,7 +48,7 @@ export const makeDefaultMappingStrategyContext: (
   createEntityIRI,
   typeIRItoTypeName,
   primaryFields,
-  declarativeMappings,
+  normDataMappings,
   disableLogging = false,
 ) => ({
   getPrimaryIRIBySecondaryIRI: async (
@@ -83,12 +89,17 @@ export const makeDefaultMappingStrategyContext: (
       authorityIRI: "http://d-nb.info/gnd",
       getEntityByIRI: findEntityWithinLobidByIRI,
     },
+    "http://www.wikidata.org": {
+      authorityIRI: "http://www.wikidata.org",
+      getEntityByIRI: async (id) =>
+        await getEntityFromWikidataByIRI(id, { rank: "preferred" }),
+    },
   },
   authorityIRI: "http://d-nb.info/gnd",
   newIRI: createEntityIRI,
   typeIRItoTypeName: typeIRItoTypeName,
   primaryFields: primaryFields,
-  declarativeMappings,
+  normDataMappings,
   path: [],
   logger: createLogger([], disableLogging),
   createDeeperContext: makeCreateDeeperContextFn(disableLogging),

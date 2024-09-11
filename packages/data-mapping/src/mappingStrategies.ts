@@ -6,7 +6,11 @@ import isNil from "lodash-es/isNil";
 import set from "lodash-es/set";
 import get from "lodash-es/get";
 import { getPaddedDate } from "@slub/edb-core-utils";
-import { IRIToStringFn, PrimaryFieldDeclaration } from "@slub/edb-core-types";
+import {
+  IRIToStringFn,
+  NormDataMappings,
+  PrimaryFieldDeclaration,
+} from "@slub/edb-core-types";
 import { JSONSchema7 } from "json-schema";
 
 dayjs.extend(customParseFormat);
@@ -29,6 +33,7 @@ export type Logger = {
 export type CreateDeeperContextFn = (
   strategy: StrategyContext,
   pathElement: string,
+  currentMapping?: DeclarativeMappings | DeclarativeFlatMappings,
 ) => StrategyContext;
 
 export type StrategyContext = {
@@ -50,9 +55,10 @@ export type StrategyContext = {
     strictCheckTargetData?: boolean;
   };
   mappingTable?: DeclarativeMapping;
+  currentMapping?: DeclarativeMappings;
   primaryFields: PrimaryFieldDeclaration;
   typeIRItoTypeName: IRIToStringFn;
-  declarativeMappings: DeclarativeMapping;
+  normDataMappings: NormDataMappings;
   path: string[];
   logger: Logger;
   createDeeperContext: CreateDeeperContextFn;
@@ -101,6 +107,29 @@ type TakeFirstStrategy = Strategy & {
 export const takeFirst = (sourceData: any[], _targetData: any): any =>
   sourceData[0];
 
+type WithDotTemplateStrategy = Strategy & {
+  id: "withDotTemplate";
+  options?: {
+    single?: boolean;
+    template: string;
+  };
+};
+
+export const withDotTemplate = (
+  sourceData: any | any[],
+  _targetData: any,
+  options?: WithDotTemplateStrategy["options"],
+): any => {
+  const sourceD = Array.isArray(sourceData) ? sourceData : [sourceData];
+  const { template } = options || {};
+  let result = [];
+  for (const s of sourceD) {
+    result.push(template.replace("{{value}}", s));
+    if (options?.single) return result[0];
+  }
+  return result;
+};
+
 type AppendStrategy = Strategy & {
   id: "append";
   options?: {
@@ -146,6 +175,7 @@ type AuthorityFieldInformation = {
 type CreateEntityWithAuthoritativeLink = Strategy & {
   id: "createEntityWithAuthoritativeLink";
   options?: {
+    single?: boolean;
     typeIRI?: string;
     typeName?: string;
     mainProperty: {
@@ -177,13 +207,13 @@ export const createEntityWithAuthoritativeLink = async (
     newIRI,
     primaryFields,
     typeIRItoTypeName,
-    declarativeMappings,
+    normDataMappings,
     authorityAccess,
     createDeeperContext,
     logger,
     onNewDocument,
   } = context;
-  const { typeIRI, mainProperty, authorityFields } = options || {};
+  const { typeIRI, mainProperty, authorityFields, single } = options || {};
   if (!Array.isArray(sourceData))
     throw new Error("Source data is not an array");
 
@@ -210,7 +240,7 @@ export const createEntityWithAuthoritativeLink = async (
     const authIRI = authorityOptions.authorityIRI || authorityIRI;
     const authLinkPrefix = authorityOptions.authorityLinkPrefix || "";
     const authAccess = authorityAccess?.[authIRI];
-    const sourceDataAuthority = sourceDataGroupElement[1];
+    const sourceDataAuthority = sourceDataGroupElement[authorityOptions.offset];
     const typeName = typeIRItoTypeName(typeIRI);
     const secondaryIRI =
       typeof sourceDataAuthority === "string" &&
@@ -263,11 +293,13 @@ export const createEntityWithAuthoritativeLink = async (
         logger.warn(`no data found for ${secondaryIRI}`);
         continue;
       }
-      const mappingConfig = declarativeMappings[typeName];
+      const mappingConfig = normDataMappings[authIRI]?.mapping[typeName];
+      console.log({ typeName, mappingConfig, authIRI });
       if (!mappingConfig) {
         logger.warn(
-          `no mapping config for ${typeName}, cannot convert to local data model`,
+          `no mapping config for ${typeName} in ${authIRI}, cannot convert to local data model`,
         );
+        console.log({ normDataMappings });
       } else {
         logger.log("mapping authority entry to local data model");
         try {
@@ -278,6 +310,7 @@ export const createEntityWithAuthoritativeLink = async (
             createDeeperContext(
               context,
               `createEntityWithAuthoritativeLink_${typeName}`,
+              mappingConfig,
             ),
           );
           const inject = {
@@ -306,6 +339,8 @@ export const createEntityWithAuthoritativeLink = async (
         onNewDocument ? await onNewDocument(targetData) : targetData,
       );
     }
+
+    if (single) return newDataElements[0];
   }
   return newDataElements;
 };
@@ -436,16 +471,22 @@ type CreateEntityFromStringStrategy = Strategy & {
   };
 };
 
-type CreateEntityStrategy = Strategy & {
+export type MappingID = string;
+
+export type FromEntity = DeclarativeMappings | MappingID | "self";
+
+export type SubFieldMappingConnection = {
+  fromSelf?: DeclarativeMappings;
+  fromEntity?: FromEntity;
+};
+
+export type CreateEntityStrategy = Strategy & {
   id: "createEntity";
   options?: {
     typeIRI?: string;
     typeName?: string;
     single?: boolean;
-    subFieldMapping: {
-      fromSelf?: DeclarativeMappings;
-      fromEntity?: DeclarativeMappings;
-    };
+    subFieldMapping: SubFieldMappingConnection;
   };
 };
 
@@ -536,7 +577,7 @@ export const createEntity = async (
       };
       const typeName: string | undefined = options?.typeName;
       if (typeName && context.mappingTable?.[typeName] && authAccess) {
-        const mapping = context.mappingTable[typeName];
+        const mappingConfig = context.mappingTable[typeName];
         const fullData = await authAccess.getEntityByIRI(sourceDataElement.id);
         if (fullData) {
           logger.log(
@@ -545,8 +586,12 @@ export const createEntity = async (
           const mappedData = await mapByConfig(
             fullData,
             targetData,
-            mapping,
-            createDeeperContext(context, `createEntity_${typeName}`),
+            mappingConfig,
+            createDeeperContext(
+              context,
+              `createEntity_${typeName}`,
+              mappingConfig,
+            ),
           );
           newDataElements.push(mappedData);
         }
@@ -554,15 +599,33 @@ export const createEntity = async (
         logger.log(
           `mapping authority entry (${sourceDataElement.id}) to local data model of type ${typeName} with the given subfield mapping`,
         );
-        const newEntity = await mapByConfig(
-          sourceDataElement,
-          targetData,
-          subFieldMapping.fromEntity || [],
-          createDeeperContext(context, `createEntity_${typeName}`),
-        );
-        newDataElements.push(
-          onNewDocument ? await onNewDocument(newEntity) : newEntity,
-        );
+        let subFieldMappingDeclaration = subFieldMapping.fromEntity;
+        if (subFieldMapping.fromEntity === "self") {
+          subFieldMappingDeclaration = context.currentMapping;
+        } else if (typeof subFieldMapping.fromEntity === "string") {
+          subFieldMappingDeclaration =
+            context.mappingTable?.[subFieldMapping.fromEntity];
+        }
+
+        if (!Array.isArray(subFieldMappingDeclaration)) {
+          logger.error(
+            "subFieldMappingDeclaration is not an array, either the mapping id does not exist or the mapping is not an array",
+          );
+        } else {
+          const newEntity = await mapByConfig(
+            sourceDataElement,
+            targetData,
+            subFieldMappingDeclaration,
+            createDeeperContext(
+              context,
+              `createEntity_${typeName}`,
+              subFieldMappingDeclaration,
+            ),
+          );
+          newDataElements.push(
+            onNewDocument ? await onNewDocument(newEntity) : newEntity,
+          );
+        }
       }
     } else {
       newDataElements.push({
@@ -715,11 +778,13 @@ export type AnyStrategy =
   | CreateEntityStrategy
   | CreateEntityFromStringStrategy
   | CreateEntityWithReificationFromString
+  | CreateEntityWithAuthoritativeLink
   | DateRangeStringToSpecialInt
   | DateStringToSpecialInt
   | ExistsStrategy
   | ConstantStrategy
-  | SplitStrategy;
+  | SplitStrategy
+  | WithDotTemplateStrategy;
 
 export type AnyFlatStrategy =
   | ConcatenateStrategy
@@ -729,7 +794,8 @@ export type AnyFlatStrategy =
   | CreateEntityWithReificationFromString
   | CreateEntityWithAuthoritativeLink
   | DateArrayToSpecialInt
-  | SplitStrategy;
+  | SplitStrategy
+  | WithDotTemplateStrategy;
 
 type SourceElement = {
   path: string;
@@ -786,4 +852,5 @@ export const strategyFunctionMap: { [strategyId: string]: StrategyFunction } = {
   constant: constantStrategy,
   split: splitStrategy,
   dateArrayToSpecialInt,
+  withDotTemplate,
 };

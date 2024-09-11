@@ -17,7 +17,6 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { OwnColumnDesc } from "./types";
-import { mappingsAvailable } from "./mappingsAvailable";
 import {
   DeclarativeFlatMappings,
   DeclarativeMatchBasedFlatMappings,
@@ -41,7 +40,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ColumnChip } from "./ColumnChip";
 import { filterUndefOrNull, index2letter } from "@slub/edb-core-utils";
 import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
-import { declarativeMappings } from "@slub/exhibition-schema";
+import { availableAuthorityMappings } from "@slub/exhibition-schema";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,
@@ -272,7 +271,7 @@ export const SpreadSheetWorkSheetView = <
             createEntityIRI,
             typeIRIToTypeName,
             primaryFields,
-            declarativeMappings,
+            availableAuthorityMappings,
           ),
         );
       } catch (e) {
@@ -370,7 +369,7 @@ export const SpreadSheetWorkSheetView = <
               createEntityIRI,
               typeNameToTypeIRI,
               primaryFields,
-              declarativeMappings,
+              availableAuthorityMappings,
             ),
           );
           allMappedData.push(mappedData);

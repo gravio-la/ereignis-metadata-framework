@@ -8,6 +8,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@triply/yasgui/build/yasgui.min.css";
 import "leaflet/dist/leaflet.css";
+import "react-json-view-lite/dist/index.css";
 
 import type { AppProps } from "next/app";
 
