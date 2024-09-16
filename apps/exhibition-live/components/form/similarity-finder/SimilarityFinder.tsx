@@ -20,7 +20,7 @@ import {
 } from "@slub/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { debounce, map, uniq } from "lodash";
+import { debounce, uniq } from "lodash";
 import { PrimaryField } from "@slub/edb-core-types";
 import { NumberInput } from "../NumberInput";
 import { ClassicResultListWrapper } from "@slub/edb-basic-components";
@@ -28,12 +28,9 @@ import {
   KnowledgeSources,
   SimilarityFinderProps,
 } from "@slub/edb-global-types";
-import { mapByConfig } from "@slub/edb-data-mapping";
-import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
 import { FindOptions, KnowledgeBaseDescription } from "./types";
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 import { useKnowledgeBases } from "./useKnowledgeBases";
-import { on } from "events";
 import { useDeclarativeMapper } from "./useDeclarativeMapper";
 
 const performSearch = (

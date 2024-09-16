@@ -40,7 +40,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ColumnChip } from "./ColumnChip";
 import { filterUndefOrNull, index2letter } from "@slub/edb-core-utils";
 import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
-import { availableAuthorityMappings } from "@slub/exhibition-schema";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,
@@ -62,6 +61,7 @@ export const SpreadSheetWorkSheetView = <
     typeIRIToTypeName,
     createEntityIRI,
     jsonLDConfig: { defaultPrefix },
+    normDataMapping,
   } = useAdbContext();
   const workSheet = useCashedWorkSheet<CellType, RemoteWorksheet>({
     workSheet: workSheetOriginal,
@@ -271,7 +271,7 @@ export const SpreadSheetWorkSheetView = <
             createEntityIRI,
             typeIRIToTypeName,
             primaryFields,
-            availableAuthorityMappings,
+            normDataMapping,
           ),
         );
       } catch (e) {
@@ -335,6 +335,7 @@ export const SpreadSheetWorkSheetView = <
     prefixes,
     typeIRIToTypeName,
     primaryFields,
+    normDataMapping,
   ]);
 
   const handleMapping = useCallback(async () => {
@@ -369,7 +370,7 @@ export const SpreadSheetWorkSheetView = <
               createEntityIRI,
               typeNameToTypeIRI,
               primaryFields,
-              availableAuthorityMappings,
+              normDataMapping,
             ),
           );
           allMappedData.push(mappedData);
@@ -392,6 +393,7 @@ export const SpreadSheetWorkSheetView = <
     defaultPrefix,
     prefixes,
     primaryFields,
+    normDataMapping,
   ]);
 
   return loaded ? (

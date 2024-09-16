@@ -8,7 +8,6 @@ import { useTranslation } from "next-i18next";
 import { CircularProgress, List } from "@mui/material";
 import { TypedListItem } from "@slub/edb-advanced-components";
 import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
-import { availableAuthorityMappings } from "@slub/exhibition-schema";
 
 export type MappedItemProps<CellType extends CellTypeLike> = {
   path: string;
@@ -31,6 +30,7 @@ export const MappedItem = <CellType extends CellTypeLike>({
     typeIRIToTypeName,
     jsonLDConfig: { defaultPrefix },
     components: { EntityDetailModal },
+    normDataMapping,
   } = useAdbContext();
   const mapData = useCallback(async () => {
     console.log("will map row", index);
@@ -57,7 +57,7 @@ export const MappedItem = <CellType extends CellTypeLike>({
           createEntityIRI,
           typeIRIToTypeName,
           primaryFields,
-          availableAuthorityMappings,
+          normDataMapping,
         ),
       );
       return mappedData;
@@ -75,6 +75,7 @@ export const MappedItem = <CellType extends CellTypeLike>({
     defaultPrefix,
     prefixes,
     typeIRIToTypeName,
+    normDataMapping,
   ]);
 
   const { data, isLoading } = useQuery(["mappedData", path], mapData, {
