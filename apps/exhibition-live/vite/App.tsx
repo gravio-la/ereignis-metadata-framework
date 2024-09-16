@@ -21,6 +21,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeComponent } from "@slub/edb-default-theme";
 
 import "react-json-view-lite/dist/index.css";
+import { availableAuthorityMappings } from "@slub/exhibition-schema";
 
 export const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
                   SimilarityFinder: SimilarityFinder,
                 }}
                 useRouterHook={useRouterHook}
+                normDataMapping={availableAuthorityMappings}
               >
                 <GoogleOAuthProvider clientId={googleClientId}>
                   <NiceModal.Provider>{children}</NiceModal.Provider>

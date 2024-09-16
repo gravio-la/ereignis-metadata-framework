@@ -8,8 +8,6 @@ import {
 import { BASE_IRI } from "./paths";
 import {
   availableAuthorityMappings,
-  declarativeMappings,
-  lobidTypemap,
   makeStubSchema,
   schema,
 } from "@slub/exhibition-schema";
