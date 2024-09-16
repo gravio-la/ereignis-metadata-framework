@@ -59,6 +59,7 @@ export const mapByConfig = async (
   for (const { source, target, mapping } of mappingConfig) {
     const { path: sourcePath, expectedSchema } = source;
     const { path: targetPath } = target;
+    const { logger } = strategyContext;
     const hasSourcePath = source?.path && source.path.length > 0;
     const sourceValue = hasSourcePath
       ? getViaSourcePath(sourceData, sourcePath)
@@ -71,7 +72,7 @@ export const mapByConfig = async (
             expectedSchema,
           )}`,
         );
-      console.warn(
+      logger.warn(
         `Value does not match expected schema ${JSON.stringify(
           expectedSchema,
         )}`,

@@ -284,22 +284,20 @@ export const createEntityWithAuthoritativeLink = async (
       try {
         normData = await authAccess.getEntityByIRI(secondaryIRI);
       } catch (e) {
-        console.error(
-          `error while fetching ${secondaryIRI} from external database - maybe the entry does not exist?`,
-          e,
+        logger.error(
+          `error while fetching ${secondaryIRI} from external database - maybe the entry does not exist? \n ${e}`,
         );
       }
       if (!normData) {
         logger.warn(`no data found for ${secondaryIRI}`);
         continue;
       }
-      const mappingConfig = normDataMappings[authIRI]?.mapping[typeName];
-      console.log({ typeName, mappingConfig, authIRI });
+      console.log({ normDataMappings });
+      const mappingConfig = normDataMappings?.[authIRI]?.mapping?.[typeName];
       if (!mappingConfig) {
         logger.warn(
           `no mapping config for ${typeName} in ${authIRI}, cannot convert to local data model`,
         );
-        console.log({ normDataMappings });
       } else {
         logger.log("mapping authority entry to local data model");
         try {
@@ -317,10 +315,16 @@ export const createEntityWithAuthoritativeLink = async (
             "@id": newIRI(typeIRI || ""),
             "@type": typeIRI,
             lastNormUpdate: new Date().toISOString(),
+            idAuthority: {
+              authority: authIRI,
+              id: secondaryIRI,
+            },
           };
           targetData = { ...data, ...inject };
         } catch (e) {
-          console.error("error mapping authority entry to local data model", e);
+          logger.error(
+            `error mapping authority entry to local data model \n ${e}`,
+          );
         }
       }
       if (!targetData) {

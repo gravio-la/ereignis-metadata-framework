@@ -27,6 +27,7 @@ export const mapByConfigFlat = async (
   options: MappingOptions = {},
 ): Promise<any> => {
   const newData = cloneDeep(seedData); //clone targetData to not mutate it accidentally
+  const { logger } = strategyContext;
   for (const { source, target, mapping } of mappingConfig) {
     try {
       const { path: targetPath } = target;
@@ -81,9 +82,8 @@ export const mapByConfigFlat = async (
       }
     } catch (e) {
       if (options.throwOnAttributeError) throw e;
-      console.error(
-        `Error while mapping source.columns: ${JSON.stringify(source.columns)} to target.path ${target.path}`,
-        e,
+      logger.error(
+        `Error while mapping source.columns: ${JSON.stringify(source.columns)} to target.path ${target.path} \n ${e}`,
       );
     }
   }

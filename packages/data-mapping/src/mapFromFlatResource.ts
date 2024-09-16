@@ -35,6 +35,7 @@ export const mapFromFlatResource = async (
   offset?: number,
 ) => {
   let flatMappings: DeclarativeFlatMappings | null = null;
+  const { logger } = strategyContext;
   await processFlatResourceFn(
     async (header) => {
       const columnDesc = makeColumnDesc(header);
@@ -61,7 +62,7 @@ export const mapFromFlatResource = async (
         );
         await onMappedData(mappedData["@id"], mappedData, record, index);
       } catch (e) {
-        console.error(e);
+        logger.error(`Error while mapping record ${index} \n ${e}`);
       }
     },
     amount,

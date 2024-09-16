@@ -17,6 +17,7 @@ import {
 import { JSONSchema7 } from "json-schema";
 import { defs } from "@slub/json-schema-utils";
 import { File } from "cmd-ts/batteries/fs";
+import { AuthorityConfiguration } from "@slub/edb-data-mapping";
 
 export type FlatImportHandler = (option: {
   file: string;
@@ -36,6 +37,15 @@ export type SemanticSeedHandler = (option: {
     document: any,
   ) => Promise<void>;
 }) => Promise<void>;
+
+export type MapFromAuthorityHandler = (
+  id: string | undefined,
+  classIRI: string,
+  entryData: any,
+  authorityIRI: string,
+  limit: number,
+) => Promise<any>;
+
 export const makeEdbCli = (
   schema: JSONSchema7,
   dataStore: AbstractDatastore,
@@ -43,6 +53,8 @@ export const makeEdbCli = (
   flatMappings?: AvailableFlatMappings,
   flatImportHandler?: FlatImportHandler,
   semanticImportHandler?: SemanticSeedHandler,
+  mapFromAuthority?: MapFromAuthorityHandler,
+  authorityConfigurations?: Record<string, AuthorityConfiguration>,
 ) => {
   const types = Object.keys(defs(schema));
   const get = command({
@@ -175,6 +187,74 @@ export const makeEdbCli = (
       handler: flatImportHandler,
     });
 
+  const importFromAuthority =
+    authorityConfigurations &&
+    mapFromAuthority &&
+    command({
+      name: "import-from-authority",
+      description: "Import data from an authority source",
+      args: {
+        id: positional({
+          type: string,
+          description: "The ID of the entity in the authority source",
+        }),
+        type: option({
+          type: string,
+          description: "The Type of the document, that should be imported",
+          long: "type",
+          short: "t",
+        }),
+        authorityIRI: option({
+          type: string,
+          description: "The IRI of the authority source",
+          long: "authority-iri",
+          short: "au",
+        }),
+        limit: option({
+          type: optional(number),
+          description: "The maximum number of results to return",
+          long: "limit",
+          defaultValue: () => 1,
+        }),
+        pretty: flag({
+          type: boolean,
+          description: "Pretty print the output",
+          long: "pretty",
+          short: "p",
+        }),
+        noJsonld: flag({
+          type: boolean,
+          description: "Filter JSON-LD properties",
+          long: "no-jsonld",
+        }),
+      },
+      handler: async ({ id, type, authorityIRI, limit, pretty, noJsonld }) => {
+        try {
+          const authConfig = authorityConfigurations[authorityIRI];
+          if (!authConfig)
+            throw new Error(
+              `no authority configuration found for ${authorityIRI}`,
+            );
+          const entryData = await authConfig.getEntityByIRI(id);
+          if (!entryData) throw new Error(`no entry data found for ${id}`);
+          const result = await mapFromAuthority(
+            id,
+            dataStore.typeNameToTypeIRI(type),
+            {
+              allProps: entryData,
+            },
+            authorityIRI,
+            limit || 1,
+          );
+          console.log(formatJSONResult(result, pretty, noJsonld));
+        } catch (error) {
+          console.error("Error importing from authority:", error);
+          process.exit(1);
+        }
+        process.exit(0);
+      },
+    });
+
   const importCommand = command({
     name: "import",
     description: "Recursively import data from another data store",
@@ -270,5 +350,12 @@ export const makeEdbCli = (
     },
   });
 
-  return { list, get, flatImport, import: importCommand, seed };
+  return {
+    list,
+    get,
+    flatImport,
+    import: importCommand,
+    importFromAuthority,
+    seed,
+  };
 };

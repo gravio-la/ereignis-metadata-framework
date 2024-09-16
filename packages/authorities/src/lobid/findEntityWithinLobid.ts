@@ -29,7 +29,14 @@ const mapTypeName = (
 const makeTypeFilter = (gndTypes: string[]) => {
   return gndTypes.map((gndType) => `type:${gndType}`).join(" OR ");
 };
-const gndIRIToID = (iri: string) => iri.substring(gndBaseIRI.length);
+const gndIRIToID = (iri: string) => {
+  const searchString = "d-nb.info/gnd/";
+  const index = iri.indexOf(searchString);
+  if (index === -1) {
+    throw new Error(`invalid IRI: ${iri}`);
+  }
+  return iri.slice(index + searchString.length);
+};
 export const findEntityWithinLobid = async (
   searchString: string,
   typeName: string,
@@ -82,7 +89,14 @@ export const findEntityWithinLobidWithCertainProperty: (
 };
 
 export const findEntityWithinLobidByID = async (id: string) => {
+  console.log("fetching", `${lobidURL}${id}.json`);
   const res = await fetch(`${lobidURL}${id}.json`);
+  try {
+    const result = await res.json();
+    return result;
+  } catch (e) {
+    throw new Error(`cannot convert response to json: ${e}`);
+  }
   return await res.json();
 };
 
