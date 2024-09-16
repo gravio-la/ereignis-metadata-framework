@@ -5,6 +5,8 @@ import { availableFlatMappings } from "@slub/exhibition-schema";
 import { makeEdbCli } from "@slub/edb-cli-creator";
 import { schema } from "@slub/exhibition-schema";
 import { seedHandler } from "./seedHandler";
+import { mapFromAuthority } from "./mapFromAuthority";
+import { authorityAccess } from "./auhtorityAccess";
 
 const cli = makeEdbCli(
   schema,
@@ -13,6 +15,8 @@ const cli = makeEdbCli(
   availableFlatMappings,
   flatImportHandler,
   seedHandler,
+  mapFromAuthority,
+  authorityAccess,
 );
 
 run(

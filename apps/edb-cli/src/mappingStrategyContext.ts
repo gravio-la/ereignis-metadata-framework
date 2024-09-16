@@ -1,5 +1,7 @@
 import {
   IRIToStringFn,
+  NormDataMapping,
+  NormDataMappings,
   Prefixes,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
@@ -12,12 +14,17 @@ import {
 import { findEntityWithinLobidByIRI } from "@slub/edb-authorities";
 import config, { slent } from "@slub/exhibition-sparql-config";
 import { v4 as uuidv4 } from "uuid";
-import { declarativeMappings, primaryFields } from "@slub/exhibition-schema";
+import {
+  availableAuthorityMappings,
+  primaryFields,
+} from "@slub/exhibition-schema";
 import {
   createLogger,
   makeCreateDeeperContextFn,
 } from "@slub/edb-data-mapping";
 import { dataStore, crudFunctions } from "./dataStore";
+import { getEntityFromWikidataByIRI } from "@slub/edb-ui-utils";
+import { authorityAccess } from "./auhtorityAccess";
 
 export const makeMappingStrategyContext: (
   doQuery: (query: string) => Promise<any>,
@@ -25,7 +32,6 @@ export const makeMappingStrategyContext: (
   createEntityIRI: (typeIRI: string) => string,
   typeIRIToTypeName: IRIToStringFn,
   primaryFields: PrimaryFieldDeclaration,
-  declarativeMappings: DeclarativeMapping,
   disableLogging?: boolean,
 ) => StrategyContext = (
   doQuery,
@@ -33,7 +39,6 @@ export const makeMappingStrategyContext: (
   createEntityIRI,
   typeIRItoTypeName,
   primaryFields,
-  declarativeMappings,
   disableLogging = false,
 ) => ({
   getPrimaryIRIBySecondaryIRI: async (
@@ -73,17 +78,12 @@ export const makeMappingStrategyContext: (
     }
     return ids[0] || null;
   },
-  authorityAccess: {
-    "http://d-nb.info/gnd": {
-      authorityIRI: "http://d-nb.info/gnd",
-      getEntityByIRI: findEntityWithinLobidByIRI,
-    },
-  },
+  authorityAccess,
   authorityIRI: "http://d-nb.info/gnd",
   newIRI: createEntityIRI,
   typeIRItoTypeName: typeIRItoTypeName,
   primaryFields: primaryFields,
-  declarativeMappings,
+  normDataMappings: availableAuthorityMappings,
   path: [],
   logger: createLogger([], disableLogging),
   createDeeperContext: makeCreateDeeperContextFn(disableLogging),
@@ -102,7 +102,7 @@ export const mappingStrategyContext = {
     createNewIRI,
     dataStore.typeIRItoTypeName,
     primaryFields,
-    declarativeMappings,
+    true,
   ),
   getPrimaryIRIBySecondaryIRI: async (
     secondaryIRI: string,
@@ -110,6 +110,7 @@ export const mappingStrategyContext = {
     typeIRI: string,
   ) => {
     const typeName = dataStore.typeIRItoTypeName(typeIRI);
+    if (!dataStore.findDocumentsByAuthorityIRI) return;
     const doc = await dataStore
       .findDocumentsByAuthorityIRI(typeName, secondaryIRI, authorityIRI)
       .then((res) => res[0] as string);
@@ -121,6 +122,8 @@ export const mappingStrategyContext = {
     typeIRI: string,
   ): Promise<string> => {
     const typeName = dataStore.typeIRItoTypeName(typeIRI);
+    if (!dataStore.findDocumentsByLabel)
+      return Promise.reject("datastore does not support find");
     const doc = await dataStore
       .findDocumentsByLabel(typeName, label)
       .then((res) => res[0] as string);
@@ -130,4 +133,5 @@ export const mappingStrategyContext = {
     const typeName = dataStore.typeIRItoTypeName(document["@type"]);
     await dataStore.upsertDocument(typeName, document["@id"], document);
   },
+  logger: createLogger([], true),
 };

@@ -46,6 +46,8 @@ if (!provider) {
 }
 export const crudFunctions = provider(config.sparqlEndpoint);
 
+console.log("env", process.env.DATABASE_PROVIDER);
+
 export const dataStore =
   process.env.DATABASE_PROVIDER === "sparql"
     ? initSPARQLDataStoreFromConfig(
