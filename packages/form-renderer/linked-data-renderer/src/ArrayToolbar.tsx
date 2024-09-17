@@ -30,6 +30,8 @@ export interface ArrayLayoutToolbarProps {
   errors: string;
   path: string;
 
+  enabled?: boolean;
+
   labelAsHeadline?: boolean;
 
   addItem(path: string, data: any): () => void;
@@ -55,6 +57,7 @@ export const ArrayLayoutToolbar = ({
   labelAsHeadline,
   errors,
   addItem,
+  enabled,
   path,
   schema,
   readonly,
@@ -159,7 +162,7 @@ export const ArrayLayoutToolbar = ({
         {(keepMounted || sidebarOpen) && !isReifiedStatement ? (
           <TextField
             fullWidth
-            disabled={Boolean(readonly)}
+            disabled={Boolean(readonly) || enabled === false}
             label={labelAsHeadline ? typeName : label}
             variant="standard"
             onChange={(ev) => handleSearchStringChange(ev.target.value)}
@@ -194,6 +197,7 @@ export const ArrayLayoutToolbar = ({
                     }}
                   >
                     <DiscoverAutocompleteInput
+                      disabled={Boolean(readonly || enabled === false)}
                       typeIRI={typeIRI}
                       typeName={typeName}
                       title={label || ""}

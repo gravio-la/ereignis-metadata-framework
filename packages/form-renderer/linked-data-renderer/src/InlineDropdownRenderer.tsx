@@ -1,4 +1,4 @@
-import { ControlProps, Resolve } from "@jsonforms/core";
+import { ControlProps, OwnPropsOfControl, Resolve } from "@jsonforms/core";
 import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
 import { FormControl, Hidden } from "@mui/material";
 import merge from "lodash/merge";
@@ -60,8 +60,12 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
 
   const handleSelectedChange = useCallback(
     (v: AutocompleteSuggestion) => {
-      if (!v) {
-        handleChange(path, undefined);
+      if (!v || v.value === null) {
+        let p = path;
+        if (path.endsWith("@id")) {
+          p = path.substring(0, path.length - ".@id".length);
+        }
+        handleChange(p, undefined);
         return;
       }
       if (v.value !== data) handleChange(path, v.value);
@@ -109,8 +113,9 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
   const { t } = useTranslation();
 
   const { crudOptions } = useGlobalCRUDOptions();
+
   const { dataStore, ready } = useDataStore({
-    schema: schema as JSONSchema7,
+    schema: rootSchema as JSONSchema7,
     crudOptionsPartial: crudOptions,
     typeNameToTypeIRI,
     queryBuildOptions,
@@ -118,31 +123,25 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
   const load = useCallback(
     async (searchString?: string) =>
       typeName && ready && dataStore
-        ? (
-            await dataStore.findDocuments(
-              typeName,
-              {
-                search: searchString || null,
-              },
-              limit,
-            )
-          ).map((item) => {
-            const primaryField = primaryFields[typeName];
-            console.log(
-              "primaryField",
-              primaryField,
-              item,
-              primaryFields,
-              typeName,
-            );
-            const primary = primaryField
-              ? get(item, primaryField.label)
-              : JSON.stringify(item);
-            return {
-              label: primary,
-              value: item["@id"],
-            };
-          })
+        ? await Promise.all(
+            (
+              await dataStore.findDocuments(
+                typeName,
+                {
+                  ...(searchString ? { search: searchString } : {}),
+                },
+                limit,
+              )
+            ).map(async (item) => {
+              const primaryField = primaryFields[typeName];
+              const primary = primaryField ? get(item, primaryField.label) : "";
+
+              return {
+                label: primary,
+                value: item["@id"],
+              };
+            }),
+          )
         : [],
     [primaryFields, typeName, ready, dataStore, limit],
   );
@@ -172,6 +171,8 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
   );
 };
 
-export const InlineDropdownRenderer = withJsonFormsControlProps(
+export const InlineDropdownRenderer:
+  | React.ComponentClass<OwnPropsOfControl>
+  | React.FunctionComponent<OwnPropsOfControl> = withJsonFormsControlProps(
   InlineDropdownRendererComponent,
 );

@@ -95,6 +95,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     config,
     removeItems,
     uischema,
+    enabled,
   } = props;
   const { readonly, core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
@@ -252,6 +253,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
   return (
     <div>
       <ArrayLayoutToolbar
+        enabled={enabled}
         labelAsHeadline={labelAsHeadline}
         label={computeLabel(
           label,
