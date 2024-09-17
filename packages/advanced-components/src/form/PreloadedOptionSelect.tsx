@@ -1,14 +1,24 @@
 import {
   CircularProgress,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import React, { FunctionComponent, useCallback, useId } from "react";
+import React, {
+  FunctionComponent,
+  use,
+  useCallback,
+  useId,
+  useMemo,
+} from "react";
 
 import { useQuery } from "@slub/edb-state-hooks";
 import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { ClearSharp } from "@mui/icons-material";
+import { useTranslation } from "next-i18next";
 
 export type PreloadedOptionSelect = {
   title: string;
@@ -42,6 +52,10 @@ export const PreloadedOptionSelect: FunctionComponent<
   const handleOnChange = useCallback(
     (e: SelectChangeEvent<string>): void => {
       const value = e.target.value;
+      if (value === null) {
+        onChange && onChange(e as React.SyntheticEvent, null);
+        return;
+      }
       const selected = suggestions?.find(
         (suggestion) => suggestion.value === value,
       );
@@ -53,6 +67,8 @@ export const PreloadedOptionSelect: FunctionComponent<
   );
 
   const selectID = useId();
+  const { t } = useTranslation();
+  const v = useMemo(() => value?.value ?? null, [value]);
 
   return (
     <>
@@ -60,16 +76,29 @@ export const PreloadedOptionSelect: FunctionComponent<
       <InputLabel id={selectID}>{title}</InputLabel>
       <Select
         labelId={selectID}
-        value={value?.value || ""}
+        value={v}
         label={title}
         disabled={readOnly}
         onChange={handleOnChange}
       >
-        {[...(suggestions || []), ...emptySuggestions].map((suggestion) => (
+        {(suggestions || []).map((suggestion) => (
           <MenuItem key={suggestion.value} value={suggestion.value}>
             {suggestion.label}
           </MenuItem>
         ))}
+        <MenuItem
+          disabled={!v}
+          key="empty"
+          value={null}
+          sx={{ fontStyle: "italic" }}
+        >
+          <ListItemIcon>
+            <ClearSharp fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>
+            {!v ? t("no selection") : t("remove selection")}
+          </ListItemText>
+        </MenuItem>
       </Select>
     </>
   );

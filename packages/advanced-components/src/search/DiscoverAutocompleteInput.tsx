@@ -25,6 +25,7 @@ interface OwnProps {
   onSearchValueChange?: (value: string | undefined) => void;
   searchString?: string;
   autocompleteDisabled?: boolean;
+  disabled?: boolean;
 }
 
 export type DiscoverAutocompleteInputProps = OwnProps;
@@ -48,6 +49,7 @@ export const DiscoverAutocompleteInput: FunctionComponent<
   onSearchValueChange,
   searchString: searchStringProp,
   autocompleteDisabled,
+  disabled,
 }) => {
   const {
     typeNameToTypeIRI,
@@ -155,6 +157,7 @@ export const DiscoverAutocompleteInput: FunctionComponent<
 
   return (
     <DebouncedAutocomplete
+      disabled={disabled}
       title={title}
       readOnly={readonly}
       loadOnStart={true}

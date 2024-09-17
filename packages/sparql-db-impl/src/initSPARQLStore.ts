@@ -37,15 +37,13 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
     },
     defaultLimit,
     makeStubSchema,
+    schema: rootSchema,
   } = dataStoreConfig;
 
   const typeIRItoTypeName = queryBuildOptions.typeIRItoTypeName;
   const loadDocument = async (typeName: string, entityIRI: string) => {
     const typeIRI = typeNameToTypeIRI(typeName);
-    const schema = bringDefinitionToTop(
-      dataStoreConfig.schema,
-      typeName,
-    ) as JSONSchema7;
+    const schema = bringDefinitionToTop(rootSchema, typeName) as JSONSchema7;
     const res = await load(entityIRI, typeIRI, schema, constructFetch, {
       defaultPrefix,
       queryBuildOptions,
@@ -68,7 +66,7 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       { queryBuildOptions, defaultPrefix },
       limit || defaultLimit,
     );
-    return await Promise.all(
+    return Promise.all(
       items.map(async ({ value }: { value: string }) => {
         const doc = await loadDocument(typeName, value);
         if (cb) {
@@ -132,7 +130,7 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       return await remove(
         entityIRI,
         typeNameToTypeIRI(typeName),
-        dataStoreConfig.schema,
+        rootSchema,
         updateFetch,
         {
           defaultPrefix,
@@ -142,9 +140,7 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
     },
     upsertDocument: async (typeName, entityIRI, document) => {
       const schema = bringDefinitionToTop(
-        makeStubSchema
-          ? makeStubSchema(dataStoreConfig.schema)
-          : dataStoreConfig.schema,
+        makeStubSchema ? makeStubSchema(rootSchema) : rootSchema,
         typeName,
       );
       const doc = {
@@ -163,9 +159,9 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       });
       return doc;
     },
-    listDocuments: async (typeName, limit, cb) =>
+    listDocuments: (typeName, limit, cb) =>
       findDocuments(typeName, limit, null, cb),
-    findDocuments: async (typeName, query, limit, cb) =>
+    findDocuments: (typeName, query, limit, cb) =>
       findDocuments(typeName, limit, query.search, cb),
     findDocumentsByLabel: async (typeName, label, limit = 10) => {
       const typeIRI = typeNameToTypeIRI(typeName);
@@ -205,13 +201,10 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
     },
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
       const typeIRI = typeNameToTypeIRI(typeName);
-      const loadedSchema = bringDefinitionToTop(
-        dataStoreConfig.schema,
-        typeName,
-      );
+      const loadedSchema = bringDefinitionToTop(rootSchema, typeName);
       const { sorting } = query;
       const queryString = withDefaultPrefix(
-        dataStoreConfig.defaultPrefix,
+        defaultPrefix,
         jsonSchema2Select(
           loadedSchema,
           typeIRI,
