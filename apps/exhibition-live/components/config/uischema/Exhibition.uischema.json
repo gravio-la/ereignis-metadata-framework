@@ -111,11 +111,11 @@
           "label": "Ausstellungsstätten (Institutionen und Räume)",
           "scope": "#/properties/places",
           "rule": {
-            "effect": "SHOW",
+            "effect": "DISABLE",
             "condition": {
               "scope": "#/properties/placesUnknown",
               "schema": {
-                "const": false
+                "const": true
               }
             }
           },
@@ -127,15 +127,6 @@
           "type": "Control",
           "label": "Ausstellungsorte (Städte und Länder)",
           "scope": "#/properties/locations",
-          "rule": {
-            "effect": "DISABLE",
-            "condition": {
-              "scope": "#/properties/placesUnknown",
-              "schema": {
-                "const": true
-              }
-            }
-          },
           "options": {
             "detail": "GENERATED"
           }
