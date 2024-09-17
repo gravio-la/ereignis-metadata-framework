@@ -13,6 +13,9 @@ type MappingTestComponentProps = {
     | "Location"
     | "Person"
     | "Organization"
+    | "Event"
+    | "Performance"
+    | "Occupation"
     | "Exhibition"
     | "ExhibitionSeries";
 };

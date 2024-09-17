@@ -160,8 +160,6 @@ export const SemanticTable = ({
       [],
       queryBuildOptions.primaryFields,
     );
-    //const entries = Object.fromEntries(cols.map(c => [c.header, ""]))
-    //console.log(JSON.stringify(entries, null, 2))
     return cols;
   }, [
     loadedSchema,
