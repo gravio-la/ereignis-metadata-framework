@@ -50,6 +50,7 @@
     "n3": "^1.17.3",
     "jsonld-context-parser": "^2.4.0",
     "@slub/remote-query-implementations": "workspace:*",
+    "@slub/sparql-db-impl": "workspace:*",
     "@slub/edb-graph-traversal": "workspace:*",
     "@slub/edb-core-utils": "workspace:*",
     "@slub/edb-ui-utils": "workspace:*",
