@@ -97,5 +97,7 @@
   "unknown": "unbekannt",
   "successfully saved": "erfolgreich gespeichert",
   "error while saving": "Fehler beim Speichern",
-  "saved": "gespeichert"
+  "saved": "gespeichert",
+  "remove selection": "Auswahl entfernen",
+  "no selection": "keine Auswahl getroffen"
 }

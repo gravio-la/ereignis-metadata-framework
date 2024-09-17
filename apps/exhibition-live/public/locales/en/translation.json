@@ -97,5 +97,7 @@
   "unknown": "unknown",
   "successfully saved": "successfully saved",
   "error while saving": "error while saving",
-  "saved": "saved"
+  "saved": "saved",
+  "remove selection": "remove selection",
+  "no selection": "no selection made"
 }

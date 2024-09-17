@@ -37,11 +37,13 @@ export const tableConfig: TableConfigRegistry = {
     columnVisibility: {
       IRI: false,
       externalId_single: false,
+      idAuthority_IRI: false,
     },
   },
   Exhibition: {
     columnVisibility: {
       IRI: false,
+      idAuthority_IRI: false,
       externalId_single: false,
       subtitle_single: false,
       originalTitle_single: false,
@@ -63,6 +65,7 @@ export const tableConfig: TableConfigRegistry = {
       involvedCorporations_label_group: false,
       exponats_label_group: false,
       resources_label_group: false,
+      placesUnknown_single: false,
     },
     matcher: (key, schemaDef, typeName, t, path) => {
       if (key === "dateValue") {
