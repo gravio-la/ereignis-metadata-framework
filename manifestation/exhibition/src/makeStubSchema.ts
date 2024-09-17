@@ -25,8 +25,17 @@ export const schemaExpander: SchemaExpander = {
     },
   },
   options: {
-    excludeType: ["InvolvedPerson", "InvolvedCorporation", "AuthorityEntry"],
-    excludeSemanticPropertiesForType: ["AuthorityEntry"],
+    excludeType: ["InvolvedPerson", "InvolvedCorporation", "Workplace"],
+    excludeSemanticPropertiesForType: [
+      "InvolvedPerson",
+      "InvolvedCorporation",
+      "AuthorityEntry",
+      "AuthorityEntry",
+      "EventType",
+      "ExhibitionCategory",
+      "SeriesType",
+      "Workplace",
+    ],
   },
 };
 const makeGenSlubJSONLDSemanticProperties: (
