@@ -2,19 +2,19 @@
    @prefix sladb: <http://ontologies.slub-dresden.de/exhibition#> .
    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-   slent:retrospective rdf:type sladb:ExhibitionType ;
+   slent:retrospective rdf:type sladb:EventType ;
                     sladb:title "Retrospektive" ;
                     sladb:description "Eine Ausstellung, die Werke aus einem längeren Zeitraum eines Künstlers oder einer Thematik zeigt." .
-   slent:soloExhibition rdf:type sladb:ExhibitionType ;
+   slent:soloExhibition rdf:type sladb:EventType ;
                      sladb:title "Einzelausstellung" ;
                      sladb:description "Eine Ausstellung gewidmet einem einzigen Künstler." .
-   slent:groupExhibition rdf:type sladb:ExhibitionType ;
+   slent:groupExhibition rdf:type sladb:EventType ;
                       sladb:title "Gruppenausstellung" ;
                       sladb:description "Eine Ausstellung, die Werke von mehreren Künstlern umfasst." .
-   slent:thematicExhibition rdf:type sladb:ExhibitionType ;
+   slent:thematicExhibition rdf:type sladb:EventType ;
                          sladb:title "Themenausstellung" ;
                          sladb:description "Eine Ausstellung basierend auf einem spezifischen Thema oder Konzept." .
-   slent:surveyExhibition rdf:type sladb:ExhibitionType ;
+   slent:surveyExhibition rdf:type sladb:EventType ;
                        sladb:title "Übersichtsausstellung" ;
                        sladb:description "Eine umfassende Ausstellung, die einen breiten Überblick bietet." .
 
