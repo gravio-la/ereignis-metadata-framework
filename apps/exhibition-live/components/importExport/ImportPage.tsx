@@ -7,7 +7,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { GoogleDrivePickerModal } from "../google/GoogleDrivePicker";
 import { useModifiedRouter } from "@slub/edb-state-hooks";
 import { GoogleSpreadSheetContainer } from "../google/GoogleSpreadSheetContainer";
-import { hasGrantedAnyScopeGoogle } from "@react-oauth/google";
+import { hasGrantedAnyScopeGoogle, useGoogleOAuth } from "@react-oauth/google";
 
 const scopes: [string, string, string] = [
   "https://www.googleapis.com/auth/drive.readonly.metadata",
@@ -16,6 +16,7 @@ const scopes: [string, string, string] = [
 ];
 export const ImportPage: FunctionComponent = () => {
   const { credentials } = useGoogleToken();
+  const { clientId } = useGoogleOAuth();
   const router = useModifiedRouter();
   const documentId = useMemo(
     () => router.searchParams.get("documentId"),
@@ -34,11 +35,14 @@ export const ImportPage: FunctionComponent = () => {
   );
 
   const hasAccess = useMemo(() => {
+    if (!clientId) {
+      return false;
+    }
     const granted =
       typeof window !== "undefined" &&
       hasGrantedAnyScopeGoogle(credentials, ...scopes);
     return Boolean(credentials) && granted;
-  }, [credentials]);
+  }, [credentials, clientId]);
   const openDrivePicker = useCallback(() => {
     NiceModal.show(GoogleDrivePickerModal, {}).then(
       ({
@@ -69,10 +73,14 @@ export const ImportPage: FunctionComponent = () => {
         spacing={3}
         sx={{ p: { md: 10 } }}
       >
-        <Grid2 lg={12}>
-          <Login scopes={scopes} />
-          {hasAccess && <Button onClick={openDrivePicker}>choose file</Button>}
-        </Grid2>
+        {clientId && (
+          <Grid2 lg={12}>
+            <Login scopes={scopes} />
+            {hasAccess && (
+              <Button onClick={openDrivePicker}>choose file</Button>
+            )}
+          </Grid2>
+        )}
         <Grid2 lg={12}>
           {hasAccess &&
             typeof documentId === "string" &&

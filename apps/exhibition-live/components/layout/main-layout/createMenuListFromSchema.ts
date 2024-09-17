@@ -24,6 +24,7 @@ const disabledTypes = [
   "InvolvedCorporation",
   "ExponatsAndPersons",
   "ExponatsAndCorporations",
+  "Workplace",
 ];
 
 const iconFromType = (type: string) => {
@@ -41,18 +42,7 @@ export const createMenuListFromSchema: (
   t: TFunction,
 ) => MenuGroup = (exhibitionSchema, getPermission, t) => ({
   id: "lists",
-  // title: "Explorieren",
   type: "group",
-  /*children: Object.entries(
-    exhibitionSchema.definitions || exhibitionSchema["$defs"] || {},
-  )
-    .map(([key, value]) => ({
-      id: `list_${key}`,
-      title: (value as any).title || key,
-      type: "item",
-      url: `/list/${key}`,
-      typeName: key,
-  })),*/
   children: [
     ...topLevel.map(
       (key) =>

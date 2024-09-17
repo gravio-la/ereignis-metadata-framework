@@ -99,7 +99,6 @@ export const Sidebar = ({ open, onClose }: SidebarProps) => {
     >
       <Toolbar />
       <Navigation open={open} />
-      <ImportSection open={open} />
       <Options open={open} />
       <Divider />
     </Drawer>
