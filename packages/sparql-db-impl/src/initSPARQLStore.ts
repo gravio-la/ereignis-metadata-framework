@@ -66,15 +66,16 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       { queryBuildOptions, defaultPrefix },
       limit || defaultLimit,
     );
-    return Promise.all(
-      items.map(async ({ value }: { value: string }) => {
-        const doc = await loadDocument(typeName, value);
-        if (cb) {
-          return await cb(doc);
-        }
-        return doc;
-      }),
-    );
+    const results: any[] = [];
+    for (const { value } of items) {
+      const doc = await loadDocument(typeName, value);
+      if (cb) {
+        results.push(await cb(doc));
+      } else {
+        results.push(doc);
+      }
+    }
+    return results;
   };
   const findDocumentsIterable: (
     typeName: string,
