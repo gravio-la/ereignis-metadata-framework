@@ -123,25 +123,28 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
   const load = useCallback(
     async (searchString?: string) =>
       typeName && ready && dataStore
-        ? await Promise.all(
-            (
-              await dataStore.findDocuments(
-                typeName,
-                {
-                  ...(searchString ? { search: searchString } : {}),
-                },
-                limit,
-              )
-            ).map(async (item) => {
+        ? (async () => {
+            const documents = await dataStore.findDocuments(
+              typeName,
+              {
+                ...(searchString ? { search: searchString } : {}),
+              },
+              limit,
+            );
+
+            const results = [];
+            for (const item of documents) {
               const primaryField = primaryFields[typeName];
               const primary = primaryField ? get(item, primaryField.label) : "";
 
-              return {
+              results.push({
                 label: primary,
                 value: item["@id"],
-              };
-            }),
-          )
+              });
+            }
+
+            return results;
+          })()
         : [],
     [primaryFields, typeName, ready, dataStore, limit],
   );

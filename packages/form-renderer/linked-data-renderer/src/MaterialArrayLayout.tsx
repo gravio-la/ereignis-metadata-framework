@@ -99,17 +99,32 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
   } = props;
   const { readonly, core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
-  const typeIRI = schema.properties?.["@type"]?.const;
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const {
     createEntityIRI,
     typeIRIToTypeName,
+    typeNameToTypeIRI,
     queryBuildOptions: { primaryFields, primaryFieldExtracts },
   } = useAdbContext();
+  const typeIRI = useMemo(() => {
+    const lastScopeSegement = path.split("/").pop();
+    let iri = schema.properties?.["@type"]?.const;
+    try {
+      if (!iri) {
+        const type =
+          rootSchema.properties?.[lastScopeSegement]?.items?.["$ref"];
+        const lastSegment = type?.split("/").pop();
+        iri = lastSegment ? typeNameToTypeIRI(lastSegment) : "";
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return iri;
+  }, [schema, rootSchema, path, typeNameToTypeIRI]);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
   );
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const { t } = useTranslation();
 
