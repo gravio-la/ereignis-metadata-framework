@@ -11,7 +11,6 @@ import {
   findEntityByAuthorityIRI,
   searchEntityByLabel,
 } from "@slub/sparql-schema";
-import { findEntityWithinLobidByIRI } from "@slub/edb-authorities";
 import config, { slent } from "@slub/exhibition-sparql-config";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -23,7 +22,6 @@ import {
   makeCreateDeeperContextFn,
 } from "@slub/edb-data-mapping";
 import { dataStore, crudFunctions } from "./dataStore";
-import { getEntityFromWikidataByIRI } from "@slub/edb-ui-utils";
 import { authorityAccess } from "./auhtorityAccess";
 
 export const makeMappingStrategyContext: (
@@ -133,5 +131,5 @@ export const mappingStrategyContext = {
     const typeName = dataStore.typeIRItoTypeName(document["@type"]);
     await dataStore.upsertDocument(typeName, document["@id"], document);
   },
-  logger: createLogger([], true),
+  logger: createLogger([], false),
 };
