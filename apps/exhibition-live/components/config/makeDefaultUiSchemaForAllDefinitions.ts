@@ -31,6 +31,9 @@ const additionalOptions: Record<string, any> = {
   ResourceType: {
     dropdown: true,
   },
+  SeriesType: {
+    dropdown: true,
+  },
 };
 export const createStubLayout = (
   defs: string,
