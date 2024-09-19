@@ -418,7 +418,7 @@ export const SemanticTable = ({
     columnFilterDisplayMode: "popover",
     initialState: {
       columnVisibility: conf.columnVisibility,
-      pagination: { pageIndex: 0, pageSize: 100 },
+      pagination: { pageIndex: 0, pageSize: 25 },
     },
     localization,
     rowCount: resultList.length,
