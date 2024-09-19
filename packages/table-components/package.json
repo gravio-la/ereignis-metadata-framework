@@ -14,6 +14,7 @@
     "@mui/material": "^5",
     "@mui/icons-material": "^5",
     "material-react-table": "^2.0.0",
+    "@jsonforms/core": "^3",
     "react": "^18"
   },
   "dependencies": {
@@ -27,7 +28,6 @@
     "@slub/edb-data-mapping": "workspace:*",
     "export-to-csv": "^1.2.1",
     "@ebay/nice-modal-react": "^1.2",
-    "@jsonforms/core": "3.1.0",
     "next-i18next": "^15",
     "lodash-es": "^4.17.21",
     "notistack": "^3",
