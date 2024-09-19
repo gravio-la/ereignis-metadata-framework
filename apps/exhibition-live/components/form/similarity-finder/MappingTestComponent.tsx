@@ -11,6 +11,7 @@ import { JsonView } from "react-json-view-lite";
 type MappingTestComponentProps = {
   typeName:
     | "Location"
+    | "Place"
     | "Person"
     | "Organization"
     | "Event"
