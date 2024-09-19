@@ -12,8 +12,11 @@ export const defaultPrefix = sladb[""].value;
 export const defaultJsonldContext = {
   "@vocab": defaultPrefix,
   xs: "http://www.w3.org/2001/XMLSchema#",
+  id: {
+    "@type": "@id",
+  },
   image: {
-    "@type": "xs:anyURI",
+    "@type": "@id",
   },
 };
 
