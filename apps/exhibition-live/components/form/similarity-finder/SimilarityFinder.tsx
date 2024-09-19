@@ -78,18 +78,6 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   knowledgeSources,
   additionalKnowledgeSources,
 }) => {
-  const selectedKnowledgeSources = useMemo(() => {
-    console.log(
-      "update knowledge sources",
-      knowledgeSources,
-      additionalKnowledgeSources,
-    );
-    return uniq([
-      ...(knowledgeSources || ["kb", "gnd", "wikidata"]),
-      ...(additionalKnowledgeSources || []),
-    ]);
-  }, [additionalKnowledgeSources, knowledgeSources]);
-
   const {
     schema,
     queryBuildOptions,
@@ -100,6 +88,30 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     jsonLDConfig: { defaultPrefix },
     components: { EditEntityModal },
   } = useAdbContext();
+  const [typeName, setTypeName] = useState(
+    typeIRIToTypeName(preselectedClassIRI),
+  );
+  const allKnowledgeBases: KnowledgeBaseDescription[] = useKnowledgeBases();
+  const selectedKnowledgeSources = useMemo(() => {
+    const preselectedKnowledgeSources =
+      knowledgeSources ||
+      allKnowledgeBases
+        .filter((kb) => normDataMapping[kb.authorityIRI]?.mapping?.[typeName])
+        .map((kb) => kb.id);
+
+    return uniq([
+      "kb",
+      ...preselectedKnowledgeSources,
+      ...(additionalKnowledgeSources || []),
+    ]);
+  }, [
+    additionalKnowledgeSources,
+    knowledgeSources,
+    normDataMapping,
+    allKnowledgeBases,
+    typeName,
+  ]);
+
   const { prefixes, primaryFields } = queryBuildOptions;
   const {
     search: globalSearch,
@@ -145,7 +157,6 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     () => dataPathSearch || globalSearch || search || null,
     [dataPathSearch, search, globalSearch],
   );
-  const allKnowledgeBases: KnowledgeBaseDescription[] = useKnowledgeBases();
   const knowledgeBases = useMemo(
     () =>
       allKnowledgeBases.filter(({ id }) =>
@@ -195,10 +206,6 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     if (!searchString || searchString.length < 1) return;
     doSearch(searchString);
   }, [searchString, doSearch, debouncedSearch]);
-
-  const [typeName, setTypeName] = useState(
-    typeIRIToTypeName(preselectedClassIRI),
-  );
 
   useEffect(() => {
     if (globalTypeName) setTypeName(globalTypeName);
