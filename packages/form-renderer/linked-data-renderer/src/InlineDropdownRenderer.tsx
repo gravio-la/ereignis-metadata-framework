@@ -154,9 +154,8 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
-        variant={"standard"}
         sx={{
-          marginTop: (theme) => theme.spacing(1),
+          marginTop: (theme) => theme.spacing(2),
           marginBottom: (theme) => theme.spacing(1),
         }}
       >

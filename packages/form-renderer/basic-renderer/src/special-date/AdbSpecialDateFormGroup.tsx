@@ -67,25 +67,22 @@ export const AdbSpecialDateFormGroup = ({
   return (
     <FormGroup row={true} {...props}>
       <TextField
-        variant={"standard"}
         disabled={disabled}
-        sx={{ width: "4em" }}
+        sx={{ width: "5em" }}
         label={"Tag"}
         value={getDatePartAsString(data ?? 0, "day")}
         onChange={(e) => handleTextFieldChange(e, "day")}
       />
       <TextField
-        variant={"standard"}
         disabled={disabled}
-        sx={{ width: "4em" }}
+        sx={{ width: "5em" }}
         onChange={(e) => handleTextFieldChange(e, "month")}
         label={"Monat"}
         value={getDatePartAsString(data ?? 0, "month")}
       />
       <TextField
-        variant={"standard"}
         disabled={disabled}
-        sx={{ width: "6em" }}
+        sx={{ width: "8em" }}
         onChange={(e) => handleTextFieldChange(e, "year")}
         label={"Jahr"}
         value={getDatePartAsString(data ?? 0, "year")}

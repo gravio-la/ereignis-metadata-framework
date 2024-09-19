@@ -214,15 +214,10 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
       </Box>
       <Box>
         {!hasValue ? (
-          <FormControl
-            fullWidth={!appliedUiSchemaOptions.trim}
-            id={id}
-            variant={"standard"}
-          >
+          <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
             <TextField
               fullWidth
               disabled={Boolean(ctx.readonly)}
-              variant="standard"
               onChange={(ev) => handleSearchStringChange(ev.target.value)}
               value={searchString || ""}
               label={label}

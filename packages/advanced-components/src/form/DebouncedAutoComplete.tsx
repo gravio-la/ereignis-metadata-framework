@@ -122,7 +122,6 @@ export const DebouncedAutocomplete: FunctionComponent<
         <TextField
           {...params}
           label={condensed ? undefined : title}
-          variant={"standard"}
           placeholder={condensed ? title : props.placeholder}
           onChange={handleOnChange}
           InputProps={{

@@ -45,7 +45,6 @@ const AutoIdentifierRendererComponent = (props: ControlProps) => {
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
-        variant={"standard"}
         sx={(theme) => ({ marginBottom: theme.spacing(2) })}
       >
         <Grid container alignItems="baseline">

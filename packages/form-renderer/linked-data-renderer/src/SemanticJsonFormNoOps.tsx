@@ -116,7 +116,7 @@ export const SemanticJsonFormNoOps: FunctionComponent<
     () =>
       ({ children }: { children: React.ReactNode }) =>
         wrapWithinCard ? (
-          <Card>
+          <Card sx={{ padding: (theme) => theme.spacing(2) }}>
             <CardContent>{children}</CardContent>
           </Card>
         ) : (

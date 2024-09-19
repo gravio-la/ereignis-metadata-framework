@@ -43,7 +43,6 @@ const ImageRendererComponent = (props: ControlProps) => {
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
-        variant={"standard"}
         sx={(theme) => ({ marginBottom: theme.spacing(2) })}
       >
         <Grid container direction={"column"} alignItems="center">
@@ -58,7 +57,6 @@ const ImageRendererComponent = (props: ControlProps) => {
             <Grid item>
               <TextField
                 label={schema.title || t("image url")}
-                variant={"standard"}
                 onChange={(e) => handleChange_(e.target.value)}
                 value={data}
                 fullWidth={true}

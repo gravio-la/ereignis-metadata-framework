@@ -164,7 +164,6 @@ export const ArrayLayoutToolbar = ({
             fullWidth
             disabled={Boolean(readonly) || enabled === false}
             label={labelAsHeadline ? typeName : label}
-            variant="standard"
             onChange={(ev) => handleSearchStringChange(ev.target.value)}
             value={searchString || ""}
             sx={(theme) => ({

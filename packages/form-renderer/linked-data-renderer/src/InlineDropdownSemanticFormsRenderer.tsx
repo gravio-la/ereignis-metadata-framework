@@ -219,11 +219,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
       </Box>
       <Box>
         {!hasValue ? (
-          <FormControl
-            fullWidth={!appliedUiSchemaOptions.trim}
-            id={id}
-            variant={"standard"}
-          >
+          <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
             <DiscoverAutocompleteInput
               loadOnStart={true}
               readonly={Boolean(ctx.readonly)}
