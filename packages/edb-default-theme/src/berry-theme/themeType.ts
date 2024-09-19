@@ -46,6 +46,7 @@ export interface ThemeExtended {
   heading: string;
   backgroundDefault: string;
   background: string;
+  variant?: "outlined" | "standard" | "filled";
   customization?: {
     fontFamily: string;
     borderRadius: number;

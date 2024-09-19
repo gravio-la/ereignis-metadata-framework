@@ -1,4 +1,4 @@
-import { ThemeOptions } from "@mui/material";
+import { TextFieldProps, ThemeOptions } from "@mui/material";
 import { createTheme, Theme } from "@mui/material/styles";
 
 // assets
@@ -10,6 +10,7 @@ import themePalette from "./palette";
 import { ThemeExtended } from "./themeType";
 import themeTypography from "./typography";
 
+let variant: "outlined" | "standard" | "filled" = "outlined";
 export const theme = (customization: ThemeExtended["customization"]) => {
   const color = colors;
 
@@ -25,6 +26,7 @@ export const theme = (customization: ThemeExtended["customization"]) => {
     menuSelected: color.secondaryDark,
     menuSelectedBack: color.secondaryLight,
     divider: color.grey200,
+    variant,
     customization,
   };
 

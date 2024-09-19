@@ -1,8 +1,32 @@
+import { Padding } from "@mui/icons-material";
 import { ThemeExtended } from "./themeType";
 
 export default function componentStyleOverrides(theme: ThemeExtended) {
   const bgColor = theme.colors?.grey50;
+  const variant = theme.variant || "outlined";
   return {
+    MuiTextField: {
+      defaultProps: {
+        variant,
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant,
+      },
+    },
+    // avoid jammed look of input fields when variant is not 'standard'
+    ...(variant !== "standard"
+      ? {
+          MuiFormControl: {
+            styleOverrides: {
+              root: {
+                marginTop: "8px",
+              },
+            },
+          },
+        }
+      : {}),
     MuiAppBar: {
       styleOverrides: {
         root: {
@@ -43,21 +67,28 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
         },
       },
     },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          paddingTop: "8px",
+        },
+      },
+    },
     MuiCardHeader: {
       styleOverrides: {
         root: {
           color: theme.colors?.textDark,
-          padding: "24px",
+          padding: "0",
         },
         title: {
-          fontSize: "1.125rem",
+          fontSize: "1.5rem",
         },
       },
     },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: "24px",
+          padding: "0",
         },
       },
     },
