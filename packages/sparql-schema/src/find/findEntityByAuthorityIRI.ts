@@ -33,12 +33,6 @@ export const findEntityByAuthorityIRI = async (
 
   query = `PREFIX : <${defaultPrefix}>
   ${query}`;
-
-  try {
-    const bindings = await doQuery(query);
-    return bindings.map((binding: any) => binding.subject.value);
-  } catch (e) {
-    console.error("Error finding entity by authority IRI", e);
-    return [];
-  }
+  const bindings = await doQuery(query);
+  return bindings.map((binding: any) => binding.subject.value);
 };
