@@ -21,7 +21,6 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
   uischemas,
   addItem,
   removeItems,
-  translations,
 }: ArrayLayoutProps) => {
   const addItemCb = useCallback(
     (p: string, value: any) => addItem(p, value),
@@ -30,7 +29,6 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
   return (
     <Hidden xsUp={!visible}>
       <MaterialArrayChipsLayout
-        translations={translations}
         label={label}
         uischema={uischema}
         schema={schema}
