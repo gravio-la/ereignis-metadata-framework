@@ -1,6 +1,6 @@
 import { Resolve } from "@jsonforms/core";
 import { NoteAdd } from "@mui/icons-material";
-import { Button, Grid, Hidden, List } from "@mui/material";
+import { Button, CircularProgress, Grid, Hidden, List } from "@mui/material";
 import * as React from "react";
 import {
   FunctionComponent,
@@ -200,6 +200,7 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   );
 
   //const typeName = useMemo(() =>  typeIRIToTypeName(preselectedClassIRI), [typeIRIToTypeName, preselectedClassIRI])
+  const [mappingInProgress, setMappingInProgress] = useState(false);
 
   useEffect(() => {
     debouncedSearch.cancel();
@@ -233,6 +234,7 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
       source: KnowledgeSources,
     ) => {
       console.log("manually map data", id, entryData, source);
+      setMappingInProgress(true);
       if (!id || !entryData?.allProps) return;
       try {
         const knowledgeBase = knowledgeBases.find((kb) => kb.id === source);
@@ -247,8 +249,15 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
       } catch (e) {
         console.error("could not map from authority", e);
       }
+      setMappingInProgress(false);
     },
-    [mapData, classIRI, onMappedDataAccepted, knowledgeBases],
+    [
+      mapData,
+      classIRI,
+      onMappedDataAccepted,
+      knowledgeBases,
+      setMappingInProgress,
+    ],
   );
 
   const handleEntityChange = useCallback(
@@ -370,100 +379,125 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
 
   return (
     finderIsActive && (
-      <div style={{ overflow: "hidden" }}>
-        <Grid
-          container
-          alignItems="center"
-          direction={"column"}
-          spacing={2}
-          style={{ overflowY: "auto", marginBottom: margin }}
-        >
-          <Grid item sx={{ width: "100%" }}>
-            <SearchFieldWithBadges
-              disabled={Boolean(dataPathSearch)}
-              searchString={searchString || ""}
-              typeIRI={classIRI}
-              onSearchStringChange={handleSearchStringChange}
-              selectedKnowledgeSources={selectedKnowledgeSources}
-              knowledgeBases={knowledgeBases}
-              onKeyUp={handleKeyUp}
-              advancedConfigChildren={
-                <NumberInput
-                  style={{ maxWidth: "4em" }}
-                  value={limit}
-                  onChange={handleLimitChange}
-                  min={1}
-                  max={100}
-                  step={1}
-                  title={t("limit")}
-                />
-              }
-            />
-          </Grid>
-          <Grid
-            item
-            sx={{
-              width: "100%",
-              height: `calc(100vh - 150px)`,
+      <div style={{ overflow: "hidden", position: "relative" }}>
+        {mappingInProgress ? (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               display: "flex",
-              flexDirection: "column" /* flexWrap: 'wrap'*/,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 1,
             }}
           >
-            {knowledgeBases.map((kb) => {
-              const entries = resultsWithIndex[kb.id] || [];
-              return (
-                <ClassicResultListWrapper
-                  key={kb.id}
-                  label={kb.label}
-                  hitCount={entries.length}
-                >
-                  {searchString && (
-                    <List>
-                      {entries.map(({ entry, idx }) =>
-                        kb.listItemRenderer(
-                          entry,
-                          idx,
-                          classIRI,
-                          elementIndex === idx,
-                          (id, index) => handleSelectEntity(id, index, kb),
-                          (id, data) => handleAccept(id, data, kb.id),
-                        ),
-                      )}
-                    </List>
-                  )}
-                </ClassicResultListWrapper>
-              );
-            })}
-            {Array.from(modalRegistry)
-              .map((modal) => modal)
-              .join(",")}
-          </Grid>
-        </Grid>
-        <Hidden xsUp={hideFooter}>
+            <CircularProgress />
+          </div>
+        ) : null}
+        <div
+          style={{
+            filter: mappingInProgress ? "grayscale(100%)" : "none",
+            pointerEvents: mappingInProgress ? "none" : "auto",
+          }}
+        >
           <Grid
             container
-            ref={setRef}
             alignItems="center"
-            justifyContent="center"
             direction={"column"}
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              left: 0,
-              backgroundColor: "white",
-            }}
+            spacing={2}
+            style={{ overflowY: "auto", marginBottom: margin }}
           >
-            <Button
-              variant="contained"
-              color={"primary"}
-              startIcon={<NoteAdd />}
-              onClick={showEditDialog}
+            <Grid item sx={{ width: "100%" }}>
+              <SearchFieldWithBadges
+                disabled={Boolean(dataPathSearch)}
+                searchString={searchString || ""}
+                typeIRI={classIRI}
+                onSearchStringChange={handleSearchStringChange}
+                selectedKnowledgeSources={selectedKnowledgeSources}
+                knowledgeBases={knowledgeBases}
+                onKeyUp={handleKeyUp}
+                advancedConfigChildren={
+                  <NumberInput
+                    style={{ maxWidth: "4em" }}
+                    value={limit}
+                    onChange={handleLimitChange}
+                    min={1}
+                    max={100}
+                    step={1}
+                    title={t("limit")}
+                  />
+                }
+              />
+            </Grid>
+            <Grid
+              item
+              sx={{
+                width: "100%",
+                height: `calc(100vh - 150px)`,
+                display: "flex",
+                flexDirection: "column" /* flexWrap: 'wrap'*/,
+              }}
             >
-              {t("create new", { item: t(typeName) })}
-            </Button>
+              {knowledgeBases.map((kb) => {
+                const entries = resultsWithIndex[kb.id] || [];
+                return (
+                  <ClassicResultListWrapper
+                    key={kb.id}
+                    label={kb.label}
+                    hitCount={entries.length}
+                  >
+                    {searchString && (
+                      <List>
+                        {entries.map(({ entry, idx }) =>
+                          kb.listItemRenderer(
+                            entry,
+                            idx,
+                            classIRI,
+                            elementIndex === idx,
+                            (id, index) => handleSelectEntity(id, index, kb),
+                            (id, data) => handleAccept(id, data, kb.id),
+                          ),
+                        )}
+                      </List>
+                    )}
+                  </ClassicResultListWrapper>
+                );
+              })}
+              {Array.from(modalRegistry)
+                .map((modal) => modal)
+                .join(",")}
+            </Grid>
           </Grid>
-        </Hidden>
+          <Hidden xsUp={hideFooter}>
+            <Grid
+              container
+              ref={setRef}
+              alignItems="center"
+              justifyContent="center"
+              direction={"column"}
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                left: 0,
+                backgroundColor: "white",
+              }}
+            >
+              <Button
+                variant="contained"
+                color={"primary"}
+                startIcon={<NoteAdd />}
+                onClick={showEditDialog}
+              >
+                {t("create new", { item: t(typeName) })}
+              </Button>
+            </Grid>
+          </Hidden>
+        </div>
       </div>
     )
   );
