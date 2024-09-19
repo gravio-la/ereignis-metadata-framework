@@ -154,21 +154,37 @@
                   "elements": [
                     {
                       "type": "Group",
+                      "label": "Beginn",
                       "elements": [
                         {
                           "type": "Control",
-                          "label": "Beginn",
-                          "scope": "#/properties/startDate"
+                          "scope": "#/properties/startDate/properties/dateModifier",
+                          "options": {
+                            "trim": true
+                          }
+                        },
+                        {
+                          "type": "Control",
+                          "label": "",
+                          "scope": "#/properties/startDate/properties/dateValue"
                         }
                       ]
                     },
                     {
                       "type": "Group",
+                      "label": "Ende",
                       "elements": [
                         {
                           "type": "Control",
-                          "label": "Ende",
-                          "scope": "#/properties/endDate"
+                          "scope": "#/properties/endDate/properties/dateModifier",
+                          "options": {
+                            "trim": true
+                          }
+                        },
+                        {
+                          "type": "Control",
+                          "label": "",
+                          "scope": "#/properties/endDate/properties/dateValue"
                         }
                       ]
                     }
@@ -302,7 +318,9 @@
               "label": "Ausstellungskataloge",
               "scope": "#/properties/catalogs",
               "options": {
-                "additionalKnowledgeSources": ["k10plus"],
+                "additionalKnowledgeSources": [
+                  "k10plus"
+                ],
                 "elementLabelProp": "title",
                 "detail": "GENERATED"
               }
@@ -312,7 +330,9 @@
               "label": "weitere Quellen",
               "scope": "#/properties/resources",
               "options": {
-                "additionalKnowledgeSources": ["k10plus"],
+                "additionalKnowledgeSources": [
+                  "k10plus"
+                ],
                 "elementLabelProp": "title",
                 "detail": "GENERATED"
               }
