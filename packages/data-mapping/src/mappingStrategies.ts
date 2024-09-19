@@ -883,6 +883,41 @@ export const dateRangeStringToSpecialInt = (
   );
 };
 
+type ArrayToAdbDateStrategy = Strategy & {
+  id: "arrayToAdbDate";
+  options?: {
+    offset?: number;
+  };
+};
+
+export const arrayToAdbDate = (
+  sourceData: any[],
+  _targetData: any,
+  options?: ArrayToAdbDateStrategy["options"],
+  context?: StrategyContext,
+): {
+  dateValue: number;
+  dateModifier: number;
+} => {
+  const { offset = 0 } = options || {};
+  if (sourceData.length < offset + 3)
+    throw new Error(
+      `Not enough data (${sourceData.length}) to convert to date`,
+    );
+  const day = sourceData[offset];
+  const month = sourceData[offset + 1];
+  const year = sourceData[offset + 2];
+  if (!year) return null;
+  const date = dayjs();
+  date.year(year);
+  if (month) date.month(month - 1);
+  if (day) date.date(day);
+  return {
+    dateValue: dayJsDateToSpecialInt(date),
+    dateModifier: 0,
+  };
+};
+
 export type AnyStrategy =
   | ConcatenateStrategy
   | TakeFirstStrategy
@@ -896,7 +931,8 @@ export type AnyStrategy =
   | ExistsStrategy
   | ConstantStrategy
   | SplitStrategy
-  | WithDotTemplateStrategy;
+  | WithDotTemplateStrategy
+  | ArrayToAdbDateStrategy;
 
 export type AnyFlatStrategy =
   | ConcatenateStrategy
@@ -907,7 +943,8 @@ export type AnyFlatStrategy =
   | CreateEntityWithAuthoritativeLink
   | DateArrayToSpecialInt
   | SplitStrategy
-  | WithDotTemplateStrategy;
+  | WithDotTemplateStrategy
+  | ArrayToAdbDateStrategy;
 
 type SourceElement = {
   path: string;
@@ -965,4 +1002,5 @@ export const strategyFunctionMap: { [strategyId: string]: StrategyFunction } = {
   split: splitStrategy,
   dateArrayToSpecialInt,
   withDotTemplate,
+  arrayToAdbDate,
 };

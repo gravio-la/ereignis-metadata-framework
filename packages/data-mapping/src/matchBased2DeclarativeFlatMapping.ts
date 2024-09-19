@@ -31,6 +31,7 @@ const indexFromTitle = (title: string, fields: OwnColumnDesc[]): number => {
 };
 type MatchByTitle = {
   title: string[];
+  includeRightNeighbours?: number;
 };
 type MatchNColumnsByTitlePattern = {
   titlePattern: string;
@@ -50,6 +51,20 @@ const resolveTitlePattern = (pattern: string, data: any): string => {
   return template(data);
 };
 
+const includeRightNeighbours = (
+  firstIndex: number,
+  count?: number,
+): number[] => {
+  if (typeof count === "number") {
+    if (count <= 0) {
+      throw new Error("includeRightNeighbours must be greater than 0");
+    }
+    return [...Array(count + 1)].map((_, i) => firstIndex + i);
+  } else {
+    return [firstIndex];
+  }
+};
+
 const columnMatcherImplementation = (
   fields: OwnColumnDesc[],
   definition: FlexibleColumnMatchingDefinition,
@@ -61,21 +76,18 @@ const columnMatcherImplementation = (
           const title = resolveTitlePattern(definition.titlePattern, { i });
           return indexFromTitle(title, fields);
         })
-        .map((firstIndex) => {
-          if (typeof definition.includeRightNeighbours === "number") {
-            if (definition.includeRightNeighbours <= 0) {
-              throw new Error("includeRightNeighbours must be greater than 0");
-            }
-            return [...Array(definition.includeRightNeighbours + 1)].map(
-              (_, i) => firstIndex + i,
-            );
-          } else {
-            return [firstIndex];
-          }
-        }),
+        .map((firstIndex) =>
+          includeRightNeighbours(firstIndex, definition.includeRightNeighbours),
+        ),
     );
   } else {
-    return definition.title.map((title) => indexFromTitle(title, fields));
+    return flatten(
+      definition.title
+        .map((title) => indexFromTitle(title, fields))
+        .map((firstIndex) =>
+          includeRightNeighbours(firstIndex, definition.includeRightNeighbours),
+        ),
+    );
   }
 };
 /**
