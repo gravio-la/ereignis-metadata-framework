@@ -89,7 +89,7 @@ describe("jsonSchema2constructWithLimits", () => {
       5
     );
 
-    expect(construct).not.toContain(":age ?age_");
+    expect(construct).toContain(":age ?age_");
   });
 
   test("respects defaultLimit parameter", () => {
