@@ -26,6 +26,7 @@ export type FlatImportHandler = (option: {
   amount: number | undefined;
   offset: number | undefined;
   dryRun: boolean;
+  debug: boolean;
 }) => Promise<void>;
 
 export type SemanticSeedHandler = (option: {
@@ -37,13 +38,16 @@ export type SemanticSeedHandler = (option: {
     document: any,
   ) => Promise<void>;
 }) => Promise<void>;
-
+export type MapFromAuthorityHandlerOptions = {
+  enableLogging?: string;
+};
 export type MapFromAuthorityHandler = (
   id: string | undefined,
   classIRI: string,
   entryData: any,
   authorityIRI: string,
   limit: number,
+  options?: MapFromAuthorityHandlerOptions,
 ) => Promise<any>;
 
 export const makeEdbCli = (
@@ -183,6 +187,11 @@ export const makeEdbCli = (
           long: "dry-run",
           short: "d",
         }),
+        debug: flag({
+          type: boolean,
+          description: "Enable debug logging",
+          long: "debug",
+        }),
       },
       handler: flatImportHandler,
     });
@@ -227,8 +236,21 @@ export const makeEdbCli = (
           description: "Filter JSON-LD properties",
           long: "no-jsonld",
         }),
+        debug: flag({
+          type: boolean,
+          description: "Enable debug logging",
+          long: "debug",
+        }),
       },
-      handler: async ({ id, type, authorityIRI, limit, pretty, noJsonld }) => {
+      handler: async ({
+        id,
+        type,
+        authorityIRI,
+        limit,
+        pretty,
+        noJsonld,
+        debug,
+      }) => {
         try {
           const authConfig = authorityConfigurations[authorityIRI];
           if (!authConfig)
@@ -245,6 +267,7 @@ export const makeEdbCli = (
             },
             authorityIRI,
             limit || 1,
+            debug ? { enableLogging: "debug" } : undefined,
           );
           console.log(formatJSONResult(result, pretty, noJsonld));
         } catch (error) {

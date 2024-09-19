@@ -89,7 +89,6 @@ export const useDeclarativeMapper = () => {
                 entityIRI,
                 doc,
               );
-              console.log("new doc", newDoc);
               return newDoc;
             } catch (e) {
               console.error("could not create document", e);

@@ -51,7 +51,10 @@ export const MappingTestComponent: React.FC<MappingTestComponentProps> = ({
         console.log({ knowledgeBase });
         return;
       }
-      const entryData = await knowledgeBase.getEntity(id);
+      if (id.startsWith("https://d-nb.info")) {
+        id = id.replace("https://d-nb.info/gnd/", "");
+      }
+      const entryData = await knowledgeBase.getEntity(id, typeName);
       setOriginalData(entryData);
       const mappedData = await mapData(
         id,
@@ -63,7 +66,7 @@ export const MappingTestComponent: React.FC<MappingTestComponentProps> = ({
       setMappedData(mappedData);
       setLoading(false);
     },
-    [knowledgeBases, setMappedData, setOriginalData, typeIRI],
+    [knowledgeBases, setMappedData, setOriginalData, typeIRI, typeName],
   );
 
   return (

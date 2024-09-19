@@ -3,7 +3,7 @@ import { NormDataMapping } from "@slub/edb-core-types";
 import { mapByConfig } from "@slub/edb-data-mapping";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";
 import { dataStore } from "src/dataStore";
-import { mappingStrategyContext } from "src/mappingStrategyContext";
+import { getDefaultMappingStrategyContext } from "./mappingStrategyContext";
 
 const getMappingConfig = (
   normDataMapping: Record<string, NormDataMapping>,
@@ -27,7 +27,9 @@ export const mapFromAuthority: MapFromAuthorityHandler = async (
   entryData: any,
   authorityIRI: string,
   limit: number = 1,
+  options,
 ) => {
+  const disableLogging = !options?.enableLogging;
   const mappingConfig = getMappingConfig(
     availableAuthorityMappings,
     authorityIRI,
@@ -37,8 +39,8 @@ export const mapFromAuthority: MapFromAuthorityHandler = async (
     entryData.allProps,
     {},
     mappingConfig,
-    /* @ts-ignore */
-    mappingStrategyContext,
+    // @ts-ignore
+    getDefaultMappingStrategyContext(disableLogging),
   );
   return dataFromAuthority;
 };

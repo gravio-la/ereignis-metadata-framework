@@ -1,12 +1,14 @@
 import {
   IRIToStringFn,
-  NormDataMapping,
-  NormDataMappings,
   Prefixes,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
 } from "@slub/edb-core-types";
-import { DeclarativeMapping, StrategyContext } from "@slub/edb-data-mapping";
+import {
+  createLogger,
+  makeCreateDeeperContextFn,
+  StrategyContext,
+} from "@slub/edb-data-mapping";
 import {
   findEntityByAuthorityIRI,
   searchEntityByLabel,
@@ -17,11 +19,7 @@ import {
   availableAuthorityMappings,
   primaryFields,
 } from "@slub/exhibition-schema";
-import {
-  createLogger,
-  makeCreateDeeperContextFn,
-} from "@slub/edb-data-mapping";
-import { dataStore, crudFunctions } from "./dataStore";
+import { crudFunctions, dataStore } from "./dataStore";
 import { authorityAccess } from "./auhtorityAccess";
 
 export const makeMappingStrategyContext: (
@@ -90,7 +88,7 @@ export const makeMappingStrategyContext: (
 const { defaultPrefix, defaultQueryBuilderOptions } = config;
 
 export const createNewIRI = () => slent(uuidv4()).value;
-export const mappingStrategyContext = {
+export const getDefaultMappingStrategyContext = (disableLogging?: boolean) => ({
   ...makeMappingStrategyContext(
     crudFunctions.selectFetch,
     {
@@ -100,7 +98,7 @@ export const mappingStrategyContext = {
     createNewIRI,
     dataStore.typeIRItoTypeName,
     primaryFields,
-    true,
+    disableLogging,
   ),
   getPrimaryIRIBySecondaryIRI: async (
     secondaryIRI: string,
@@ -108,11 +106,12 @@ export const mappingStrategyContext = {
     typeIRI: string,
   ) => {
     const typeName = dataStore.typeIRItoTypeName(typeIRI);
-    if (!dataStore.findDocumentsByAuthorityIRI) return;
-    const doc = await dataStore
+    if (!dataStore.findDocumentsByAuthorityIRI) {
+      return Promise.reject("datastore does not support find");
+    }
+    return await dataStore
       .findDocumentsByAuthorityIRI(typeName, secondaryIRI, authorityIRI)
       .then((res) => res[0] as string);
-    return doc;
   },
 
   searchEntityByLabel: async (
@@ -130,6 +129,10 @@ export const mappingStrategyContext = {
   onNewDocument: async (document: any) => {
     const typeName = dataStore.typeIRItoTypeName(document["@type"]);
     await dataStore.upsertDocument(typeName, document["@id"], document);
+    return {
+      "@id": document["@id"],
+      "@type": document["@type"],
+    };
   },
-  logger: createLogger([], false),
-};
+  logger: createLogger([], !!disableLogging),
+});

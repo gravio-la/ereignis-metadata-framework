@@ -227,7 +227,6 @@ export const createEntityWithAuthoritativeLink = async (
     groupedSourceData.push(sourceData.slice(i, i + amount));
   }
 
-  const sourceDataArray = sourceData;
   const newDataElements = [];
   for (const sourceDataGroupElement of groupedSourceData) {
     const sourceDataElement = sourceDataGroupElement[0];
@@ -242,7 +241,7 @@ export const createEntityWithAuthoritativeLink = async (
     const authAccess = authorityAccess?.[authIRI];
     const sourceDataAuthority = sourceDataGroupElement[authorityOptions.offset];
     const typeName = typeIRItoTypeName(typeIRI);
-    const secondaryIRI =
+    let secondaryIRI =
       typeof sourceDataAuthority === "string" &&
       sourceDataAuthority.trim().length > 0
         ? `${authLinkPrefix}${sourceDataAuthority}`
@@ -292,12 +291,55 @@ export const createEntityWithAuthoritativeLink = async (
         logger.warn(`no data found for ${secondaryIRI}`);
         continue;
       }
-      console.log({ normDataMappings });
-      const mappingConfig = normDataMappings?.[authIRI]?.mapping?.[typeName];
-      if (!mappingConfig) {
-        logger.warn(
-          `no mapping config for ${typeName} in ${authIRI}, cannot convert to local data model`,
+
+      let mappingConfig = normDataMappings?.[authIRI]?.mapping?.[typeName];
+      let authorityIRI = authIRI;
+
+      //JUst a quick and dirty hack to use wikidata instead of the default authority
+      if (Array.isArray(normData?.sameAs)) {
+        const wikidataEntry = normData.sameAs.find(({ id }: { id: string }) =>
+          id.startsWith("http://www.wikidata.org/entity/"),
         );
+        const wikidataMappingConfig =
+          normDataMappings?.["http://www.wikidata.org"]?.mapping?.[typeName];
+        if (wikidataEntry && wikidataMappingConfig) {
+          const wikidataIRI = wikidataEntry.id;
+          const wdAuthAccess = authorityAccess?.["http://www.wikidata.org"];
+          if (wdAuthAccess) {
+            try {
+              normData = await wdAuthAccess.getEntityByIRI(wikidataIRI);
+              mappingConfig = wikidataMappingConfig;
+              authorityIRI = "http://www.wikidata.org";
+              logger.log(
+                `found wikidata entry for ${secondaryIRI} at ${wikidataIRI}, will map this entry`,
+              );
+              secondaryIRI = wikidataIRI;
+
+              primaryIRI = await getPrimaryIRIBySecondaryIRI(
+                secondaryIRI,
+                authorityIRI,
+                typeIRI,
+              );
+            } catch (e) {
+              logger.error(
+                `error while fetching ${wikidataIRI} from external database - maybe the entry does not exist? \n ${e}`,
+              );
+            }
+          }
+        }
+      }
+      if ((!mappingConfig || !normData) && !primaryIRI) {
+        logger.warn(
+          `no mapping config for ${typeName} or no normData in ${authIRI}, cannot convert to local data model`,
+        );
+      } else if (primaryIRI) {
+        logger.log(
+          `found ${secondaryIRI} as ${primaryIRI} within internal database`,
+        );
+        newDataElements.push({
+          "@id": primaryIRI,
+        });
+        continue;
       } else {
         logger.log("mapping authority entry to local data model");
         try {
@@ -306,7 +348,10 @@ export const createEntityWithAuthoritativeLink = async (
             {},
             mappingConfig,
             createDeeperContext(
-              context,
+              {
+                ...context,
+                authorityIRI,
+              },
               `createEntityWithAuthoritativeLink_${typeName}`,
               mappingConfig,
             ),
@@ -316,7 +361,7 @@ export const createEntityWithAuthoritativeLink = async (
             "@type": typeIRI,
             lastNormUpdate: new Date().toISOString(),
             idAuthority: {
-              authority: authIRI,
+              authority: authorityIRI,
               id: secondaryIRI,
             },
           };
@@ -339,9 +384,11 @@ export const createEntityWithAuthoritativeLink = async (
         };
       }
 
-      newDataElements.push(
-        onNewDocument ? await onNewDocument(targetData) : targetData,
-      );
+      const newEntity = onNewDocument
+        ? await onNewDocument(targetData)
+        : targetData;
+
+      newDataElements.push(newEntity);
     }
 
     if (single) return newDataElements[0];
@@ -559,16 +606,20 @@ export const createEntity = async (
   const {
     getPrimaryIRIBySecondaryIRI,
     newIRI,
-    authorityIRI,
     logger,
     createDeeperContext,
     onNewDocument,
+    normDataMappings,
+    authorityAccess,
   } = context;
-  const authAccess = context.authorityAccess?.[authorityIRI];
+  let authorityIRI = context.authorityIRI;
+  const authAccess = authorityAccess?.[authorityIRI];
+  const mappingTable = normDataMappings?.[authorityIRI]?.mapping;
   const newDataElements = [];
+
   for (const sourceDataElement of sourceDataArray) {
     const authorityEntryIRI = sourceDataElement.id;
-    const primaryIRI = await getPrimaryIRIBySecondaryIRI(
+    let primaryIRI = await getPrimaryIRIBySecondaryIRI(
       authorityEntryIRI,
       authorityIRI,
       typeIRI,
@@ -579,25 +630,77 @@ export const createEntity = async (
         "@type": typeIRI,
         __draft: true,
       };
+      let secondaryIRI = authorityEntryIRI;
+
       const typeName: string | undefined = options?.typeName;
-      if (typeName && context.mappingTable?.[typeName] && authAccess) {
-        const mappingConfig = context.mappingTable[typeName];
-        const fullData = await authAccess.getEntityByIRI(sourceDataElement.id);
-        if (fullData) {
+      if (typeName && mappingTable?.[typeName] && authAccess) {
+        let mappingConfig = mappingTable[typeName];
+        let normData = await authAccess.getEntityByIRI(secondaryIRI);
+        //Just a quick and dirty hack to use wikidata instead of the default authority
+        if (Array.isArray(normData?.sameAs)) {
+          const wikidataEntry = normData.sameAs.find(({ id }: { id: string }) =>
+            id.startsWith("http://www.wikidata.org/entity/"),
+          );
+          const wikidataMappingConfig =
+            normDataMappings?.["http://www.wikidata.org"]?.mapping?.[typeName];
+          if (wikidataEntry && wikidataMappingConfig) {
+            const wikidataIRI = wikidataEntry.id;
+            const wdAuthAccess = authorityAccess?.["http://www.wikidata.org"];
+            if (wdAuthAccess) {
+              try {
+                normData = await wdAuthAccess.getEntityByIRI(wikidataIRI);
+                mappingConfig = wikidataMappingConfig;
+                authorityIRI = "http://www.wikidata.org";
+                logger.log(
+                  `found wikidata entry for ${secondaryIRI} at ${wikidataIRI}, will map this entry`,
+                );
+                secondaryIRI = wikidataIRI;
+                primaryIRI = await getPrimaryIRIBySecondaryIRI(
+                  secondaryIRI,
+                  authorityIRI,
+                  typeIRI,
+                );
+              } catch (e) {
+                logger.error(
+                  `error while fetching ${wikidataIRI} from external database - maybe the entry does not exist? \n ${e}`,
+                );
+              }
+            }
+          }
+        }
+
+        if (normData && !primaryIRI) {
           logger.log(
-            `mapping authority entry (${sourceDataElement.id}) to local data model of type ${typeName}`,
+            `mapping authority entry (${secondaryIRI}) to local data model of type ${typeName} (${authorityIRI})`,
           );
           const mappedData = await mapByConfig(
-            fullData,
+            normData,
             targetData,
             mappingConfig,
             createDeeperContext(
-              context,
+              {
+                ...context,
+                authorityIRI,
+              },
               `createEntity_${typeName}`,
               mappingConfig,
             ),
           );
-          newDataElements.push(mappedData);
+
+          const result = onNewDocument
+            ? await onNewDocument(mappedData)
+            : mappedData;
+          if (!isArray || single) {
+            return result;
+          }
+          newDataElements.push(result);
+        } else if (primaryIRI) {
+          logger.log(
+            `found ${secondaryIRI} as ${primaryIRI} within internal database`,
+          );
+          newDataElements.push({
+            "@id": primaryIRI,
+          });
         }
       } else if (subFieldMapping) {
         logger.log(
@@ -626,9 +729,13 @@ export const createEntity = async (
               subFieldMappingDeclaration,
             ),
           );
-          newDataElements.push(
-            onNewDocument ? await onNewDocument(newEntity) : newEntity,
-          );
+          const result = onNewDocument
+            ? await onNewDocument(newEntity)
+            : newEntity;
+          if (!isArray || single) {
+            return result;
+          }
+          newDataElements.push(result);
         }
       }
     } else {
@@ -637,6 +744,7 @@ export const createEntity = async (
       });
     }
   }
+
   return isArray && !single ? newDataElements : newDataElements[0];
 };
 

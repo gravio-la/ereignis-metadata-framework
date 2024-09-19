@@ -40,6 +40,22 @@ export const locationDeclarativeMapping: DeclarativeMappings = [
   },
   {
     source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
+      },
+    },
+  },
+  {
+    source: {
       path: "id",
     },
     target: {
@@ -70,6 +86,22 @@ export const corporateBodyDeclarativeMapping: DeclarativeMappings = [
     mapping: {
       strategy: {
         id: "append",
+      },
+    },
+  },
+  {
+    source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
       },
     },
   },
@@ -114,6 +146,22 @@ export const tagMapping: DeclarativeMappings = [
   },
   {
     source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
+      },
+    },
+  },
+  {
+    source: {
       path: "id",
     },
     target: {
@@ -132,6 +180,22 @@ export const exhibitionDeclarativeMapping: DeclarativeMappings = [
     },
     target: {
       path: "title",
+    },
+  },
+  {
+    source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
+      },
     },
   },
   {
@@ -371,6 +435,22 @@ export const event2exhibitionSeriesDeclarativeMapping: DeclarativeMappings = [
   },
   {
     source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
+      },
+    },
+  },
+  {
+    source: {
       path: "id",
     },
     target: {
@@ -423,6 +503,22 @@ export const occupationDeclarativeMapping: DeclarativeMappings = [
     },
     target: {
       path: "title",
+    },
+  },
+  {
+    source: {
+      path: "",
+    },
+    target: {
+      path: "idAuthority.authority",
+    },
+    mapping: {
+      strategy: {
+        id: "constant",
+        options: {
+          value: "http://d-nb.info/gnd",
+        },
+      },
     },
   },
   {

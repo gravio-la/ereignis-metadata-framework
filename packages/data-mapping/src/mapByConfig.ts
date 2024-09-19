@@ -61,6 +61,9 @@ export const mapByConfig = async (
     const { path: targetPath } = target;
     const { logger } = strategyContext;
     const hasSourcePath = source?.path && source.path.length > 0;
+    logger.log(
+      `Mapping ${sourcePath} to ${targetPath} using ${mapping?.strategy?.id || "default strategy"}`,
+    );
     const sourceValue = hasSourcePath
       ? getViaSourcePath(sourceData, sourcePath)
       : sourceData;
@@ -97,7 +100,13 @@ export const mapByConfig = async (
             mappingConfig,
           ),
         );
-        if (!isNil(value)) set(newData, targetPath, value);
+        if (!isNil(value)) {
+          set(newData, targetPath, value);
+        } else {
+          logger.warn(
+            `Strategy ${mapping.strategy.id} returned undefined for ${sourceValue}`,
+          );
+        }
       }
     }
   }
