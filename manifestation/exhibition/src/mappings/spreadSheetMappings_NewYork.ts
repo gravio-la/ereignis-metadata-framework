@@ -256,4 +256,44 @@ export const matchBasedSpreadsheetMappings_NewYork = [
       },
     },
   },
+  {
+    id: "Ausstellungsenddatum",
+    source: {
+      columns: {
+        title: ["Ausstellungsdatum (...bis) 1"],
+        includeRightNeighbours: 3,
+      },
+    },
+    target: {
+      path: "endDate",
+    },
+    mapping: {
+      strategy: {
+        id: "arrayToAdbDate",
+        options: {
+          offset: 1,
+        },
+      },
+    },
+  },
+  {
+    id: "Ausstellungsstartdatum",
+    source: {
+      columns: {
+        title: ["Ausstellungsdatum (von...) 1"],
+        includeRightNeighbours: 3,
+      },
+    },
+    target: {
+      path: "startDate",
+    },
+    mapping: {
+      strategy: {
+        id: "arrayToAdbDate",
+        options: {
+          offset: 1,
+        },
+      },
+    },
+  },
 ] as DeclarativeMatchBasedFlatMappings;
