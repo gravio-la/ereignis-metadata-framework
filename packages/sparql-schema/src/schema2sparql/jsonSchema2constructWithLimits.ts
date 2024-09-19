@@ -104,15 +104,17 @@ export const jsonSchema2constructWithLimits = (
           construct += `${sP} ${p} ${o} .\n`;
         }
 
-        if (schema.$ref || schema.properties || (schema.items && isJSONSchema(schema.items))) {
+        if (schema.$ref || schema.properties || (schema.items && isJSONSchemaDefinition(schema.items) && isJSONSchema(schema.items))) {
           const nextSchema = schema.$ref
             ? resolveSchema(schema as JsonSchema, "", rootSchema as JsonSchema)
             : schema.properties
             ? schema
-            : schema.items;
+            : isJSONSchemaDefinition(schema.items) && isJSONSchema(schema.items)
+            ? schema.items
+            : null;
 
-          if (nextSchema && isJSONSchema(nextSchema) && !propertiesContainStopSymbol(nextSchema.properties || {}, stopSymbols)) {
-            propertiesToSPARQLPatterns(o, nextSchema as JSONSchema7, level + 1);
+          if (nextSchema && isJSONSchema(nextSchema) && nextSchema.properties && !propertiesContainStopSymbol(nextSchema.properties, stopSymbols)) {
+            propertiesToSPARQLPatterns(o, nextSchema, level + 1);
           }
         }
 

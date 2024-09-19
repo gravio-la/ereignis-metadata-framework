@@ -58,20 +58,50 @@ const buildConstructQuery = (subjectURI: string, schema: JSONSchema7) => {
 
 describe("jsonSchema2constructWithLimits", () => {
   test("can build construct query with limits from schema", () => {
-    const constructQuery = buildConstructQuery(subject, schema)
-      .build({
-        base: BASE_IRI,
-        prefixes: {
-          ...testPrefixes,
-        },
-      })
-      .toString();
-    
-    console.log(constructQuery);
-    
-    expect(constructQuery).toMatch(/CONSTRUCT {.*/);
-    expect(constructQuery).toMatch(/SELECT.*LIMIT 5/);
-    expect(constructQuery).toMatch(/COUNT\(\?friends_\d+\) AS \?friends_\d+_count/);
-    expect(constructQuery).toMatch(/COUNT\(\?hobbies_\d+\) AS \?hobbies_\d+_count/);
+    const { construct, whereRequired, whereOptionals, countQueries } = jsonSchema2constructWithLimits(
+      subject,
+      schema,
+      [],
+      [],
+      4,
+      5
+    );
+
+    expect(construct).toContain(`<${subject}> :name ?name_`);
+    expect(construct).toContain(`<${subject}> :friends ?friends_`);
+    expect(construct).toContain(`<${subject}> :hobbies ?hobbies_`);
+
+    expect(whereOptionals).toContain(`SELECT <${subject}> :friends (GROUP_CONCAT(?friends_`);
+    expect(whereOptionals).toContain(`SELECT <${subject}> :hobbies (GROUP_CONCAT(?hobbies_`);
+    expect(whereOptionals).toMatch(/LIMIT 5/);
+
+    expect(countQueries).toContain(`SELECT <${subject}> :friends (COUNT(?friends_`);
+    expect(countQueries).toContain(`SELECT <${subject}> :hobbies (COUNT(?hobbies_`);
+  });
+
+  test("respects maxRecursion parameter", () => {
+    const { construct } = jsonSchema2constructWithLimits(
+      subject,
+      schema,
+      [],
+      [],
+      1,
+      5
+    );
+
+    expect(construct).not.toContain(":age ?age_");
+  });
+
+  test("respects defaultLimit parameter", () => {
+    const { whereOptionals } = jsonSchema2constructWithLimits(
+      subject,
+      schema,
+      [],
+      [],
+      4,
+      10
+    );
+
+    expect(whereOptionals).toMatch(/LIMIT 10/);
   });
 });
