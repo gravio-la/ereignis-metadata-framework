@@ -76,7 +76,7 @@ export const jsonSchema2constructWithLimits = (
     subSchema: JSONSchema7,
     level: number
   ) => {
-    if (level > maxRecursion || (level > 0 && propertiesContainStopSymbol(subSchema.properties || {}, stopSymbols))) {
+    if (level >= maxRecursion || (level > 0 && propertiesContainStopSymbol(subSchema.properties || {}, stopSymbols))) {
       return;
     }
 
@@ -97,7 +97,7 @@ export const jsonSchema2constructWithLimits = (
         if (schema.type === "array") {
           const subSelect = createSubSelect(sP, p, o, defaultLimit);
           whereOptionals += subSelect;
-          construct += `${sP} ${p} ?${o}_list .\n`;
+          construct += `${sP} ${p} ${o} .\n`;
           countQueries += createCountQuery(sP, p, o);
         } else {
           whereOptionals += `${sP} ${p} ${o} .\n`;

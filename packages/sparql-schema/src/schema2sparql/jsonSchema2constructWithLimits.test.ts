@@ -70,6 +70,8 @@ describe("jsonSchema2constructWithLimits", () => {
     expect(construct).toContain(`<${subject}> :name ?name_`);
     expect(construct).toContain(`<${subject}> :friends ?friends_`);
     expect(construct).toContain(`<${subject}> :hobbies ?hobbies_`);
+    expect(construct).not.toContain(`?friends_`);
+    expect(construct).not.toContain(`?hobbies_`);
 
     expect(whereOptionals).toContain(`SELECT <${subject}> :friends (GROUP_CONCAT(?friends_`);
     expect(whereOptionals).toContain(`SELECT <${subject}> :hobbies (GROUP_CONCAT(?hobbies_`);
@@ -89,7 +91,7 @@ describe("jsonSchema2constructWithLimits", () => {
       5
     );
 
-    expect(construct).toContain(":age ?age_");
+    expect(construct).not.toContain(":age ?age_");
   });
 
   test("respects defaultLimit parameter", () => {
