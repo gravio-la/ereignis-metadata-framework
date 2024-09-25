@@ -27,7 +27,7 @@ export default {
       "@type": "@id",
     },
     image: {
-      "@type": "@id",
+      "@type": "xs:anyURI",
     },
   },
   defaultQueryBuilderOptions: {

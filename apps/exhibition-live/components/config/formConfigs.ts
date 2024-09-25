@@ -16,7 +16,7 @@ export const defaultJsonldContext = {
     "@type": "@id",
   },
   image: {
-    "@type": "@id",
+    "@type": "xs:anyURI",
   },
 };
 
