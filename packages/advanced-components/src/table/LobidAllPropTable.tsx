@@ -19,6 +19,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, {
+  Fragment,
   FunctionComponent,
   useCallback,
   useMemo,
@@ -74,6 +75,46 @@ const LabledLink = ({
       {label || urlSuffix}
     </Link>
   );
+};
+
+type ObjectGroup = {
+  groupKey: string;
+  properties: Record<string, any>;
+};
+
+type ObjectGroups = {
+  default: Record<string, any>;
+  groups: ObjectGroup[];
+};
+
+const emtyObjectGroups: ObjectGroups = {
+  default: {},
+  groups: [],
+};
+
+const obj2Groups = (obj: Record<string, any>): ObjectGroups => {
+  //each value, that is an object and has no @id is a group of properties
+  //filter all but objects without @id
+  const groups = Object.entries(obj)
+    .filter(
+      ([_, value]) =>
+        typeof value === "object" &&
+        !value["@id"] &&
+        !Array.isArray(value) &&
+        Object.keys(value).length > 0,
+    )
+    .map(([groupKey, properties]) => ({ groupKey, properties }));
+
+  const nonGroupedProperties = Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, value]) =>
+        typeof value !== "object" || value["@id"] || Array.isArray(value),
+    ),
+  );
+  return {
+    groups,
+    default: nonGroupedProperties,
+  };
 };
 
 const isImageUrl = (url: string) => {
@@ -244,7 +285,13 @@ const PropertyItem = ({
           </Stack>
         ) : typeof value === "string" || typeof value === "number" ? (
           property.toLowerCase().includes("date") ? (
-            specialDate2LocalDate(value as number, locale)
+            (() => {
+              try {
+                return specialDate2LocalDate(value as number, locale);
+              } catch (e) {
+                return String(e);
+              }
+            })()
           ) : isValidUrl(value as string) ? (
             isImageUrl(value as string) ? (
               <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -289,6 +336,16 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
     { enabled: !!gndIRI },
   );
 
+  const grouped = React.useMemo(
+    () => (allProps ? obj2Groups(allProps) : emtyObjectGroups),
+    [allProps],
+  );
+
+  const {
+    i18n: { exists },
+    t,
+  } = useTranslation();
+
   return (
     <>
       <TableContainer component={Container}>
@@ -297,8 +354,8 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
           aria-label="custom detail table"
         >
           <TableBody>
-            {allProps &&
-              Object.entries(allProps)
+            {grouped?.default &&
+              Object.entries(grouped.default)
                 .filter(
                   ([key, value]) =>
                     disabledProperties?.includes(key) !== true &&
@@ -318,6 +375,43 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
                     value={value}
                     disableContextMenu={disableContextMenu}
                   />
+                ))}
+            {grouped?.groups &&
+              grouped.groups
+                .filter(({ properties }) => Object.keys(properties).length > 0)
+                .map(({ groupKey, properties }) => (
+                  <Fragment key={groupKey}>
+                    <TableRow>
+                      <TableCell>
+                        <Typography>
+                          {typeof exists === "function" && exists(groupKey)
+                            ? t(groupKey)
+                            : camelCaseToTitleCase(groupKey)}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    {Object.entries(properties)
+                      .filter(
+                        ([key, value]) =>
+                          disabledProperties?.includes(key) !== true &&
+                          !key.startsWith("@") &&
+                          (typeof value === "string" ||
+                            typeof value === "number" ||
+                            typeof value === "boolean" ||
+                            (typeof value === "object" &&
+                              value["@id"] &&
+                              value["@type"]) ||
+                            (Array.isArray(value) && value.length > 0)),
+                      )
+                      .map(([key, value]) => (
+                        <PropertyItem
+                          key={key}
+                          property={key}
+                          value={value}
+                          disableContextMenu={disableContextMenu}
+                        />
+                      ))}
+                  </Fragment>
                 ))}
           </TableBody>
         </Table>
