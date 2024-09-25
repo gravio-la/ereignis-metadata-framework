@@ -3,6 +3,8 @@ import {
   PrimaryFieldDeclaration,
   PrimaryFieldExtractDeclaration,
 } from "@slub/edb-core-types";
+import { schema } from "./schema";
+import { defs } from "@slub/json-schema-utils";
 
 type ExhibitionPrimaryFieldDeclaration = PrimaryFieldDeclaration<string>;
 
@@ -23,6 +25,9 @@ const defaultMappingWithImg: PrimaryField = {
 };
 
 export const primaryFields: Partial<ExhibitionPrimaryFieldDeclaration> = {
+  ...Object.fromEntries(
+    Object.keys(defs(schema)).map((key) => [key, defaultMapping]),
+  ),
   Exhibition: defaultMappingWithImg,
   Tag: defaultMappingWithImg,
   Person: {
@@ -37,13 +42,7 @@ export const primaryFields: Partial<ExhibitionPrimaryFieldDeclaration> = {
   Genre: defaultMappingWithImg,
   Place: defaultMappingWithImg,
   Location: defaultMappingWithImg,
-  CorporationRole: defaultMapping,
-  PersonRole: defaultMapping,
   ExhibitionSeries: defaultMapping,
-  SeriesType: defaultMapping,
-  EventType: defaultMapping,
-  Resource: defaultMapping,
-  Occupation: defaultMapping,
   ExhibitionCategory: {
     ...defaultMapping,
     label: "name",
