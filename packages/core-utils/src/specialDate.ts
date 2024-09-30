@@ -93,3 +93,19 @@ export const getDatePartAsString = (
   const maxLength = part === "year" ? 4 : 2;
   return leftpad(value, maxLength);
 };
+
+/**
+ * convert year, month, day to a number
+ * @param year
+ * @param month
+ * @param day
+ * @returns
+ */
+export const makeSpecialDate = (
+  year: number,
+  month?: number | undefined,
+  day?: number | undefined,
+) => {
+  const specialDateString = `${year}${month ? leftpad(month, 2) : "00"}${day ? leftpad(day, 2) : "00"}`;
+  return Number(specialDateString);
+};

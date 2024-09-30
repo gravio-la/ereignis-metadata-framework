@@ -5,13 +5,19 @@ export const specialDate2LocalDate = (date: number, locale: string) => {
   const { year, month, day } = getDateParts(date);
   const jsdate = numeric2JSDate(date);
   if (!year && month && day) {
-    return dayjs(jsdate).format("MM.DD.");
+    return locale === "de"
+      ? dayjs(jsdate).format("DD.MM.")
+      : dayjs(jsdate).format("MM/DD");
   }
   if (!day && month && year) {
-    return dayjs(jsdate).format("YYYY.MM.") + "–-";
+    return locale === "de"
+      ? dayjs(jsdate).format("MMMM YYYY")
+      : dayjs(jsdate).format("MMMM/YYYY");
   }
   if (day && month && year) {
-    return dayjs(jsdate).format("l");
+    return locale === "de"
+      ? dayjs(jsdate).format("DD.MM.YYYY")
+      : dayjs(jsdate).format("MM/DD/YYYY");
   }
   if (year && !month && !day) {
     return dayjs(jsdate).format("YYYY");

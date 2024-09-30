@@ -5,13 +5,14 @@ import { mapByConfig } from "./mapByConfig";
 import isNil from "lodash-es/isNil";
 import set from "lodash-es/set";
 import get from "lodash-es/get";
-import { getPaddedDate } from "@slub/edb-core-utils";
+import { getPaddedDate, makeSpecialDate } from "@slub/edb-core-utils";
 import {
   IRIToStringFn,
   NormDataMappings,
   PrimaryFieldDeclaration,
 } from "@slub/edb-core-types";
 import { JSONSchema7 } from "json-schema";
+import { isNaN } from "lodash-es";
 
 dayjs.extend(customParseFormat);
 
@@ -899,21 +900,25 @@ export const arrayToAdbDate = (
   dateValue: number;
   dateModifier: number;
 } => {
+  const { logger } = context || {};
   const { offset = 0 } = options || {};
   if (sourceData.length < offset + 3)
     throw new Error(
       `Not enough data (${sourceData.length}) to convert to date`,
     );
-  const day = sourceData[offset];
-  const month = sourceData[offset + 1];
-  const year = sourceData[offset + 2];
-  if (!year) return null;
-  const date = dayjs();
-  date.year(year);
-  if (month) date.month(month - 1);
-  if (day) date.date(day);
+
+  const day = Number(sourceData[offset]);
+  const month = Number(sourceData[offset + 1] || "0");
+  const year = Number(sourceData[offset + 2] || "0");
+  const dateValue = makeSpecialDate(
+    isNaN(year) ? 0 : year,
+    isNaN(month) ? 0 : month,
+    isNaN(day) ? 0 : day,
+  );
+  logger.log(`Converted date ${dateValue} from ${sourceData}`);
+
   return {
-    dateValue: dayJsDateToSpecialInt(date),
+    dateValue: Number(dateValue),
     dateModifier: 0,
   };
 };

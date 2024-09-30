@@ -11,11 +11,17 @@ const dateColDef: (
   const columnDef: MRT_ColumnDef<any> = {
     header: t(p([...path, key])),
     id: p([...path, key, "single"]),
-    accessorFn: mkAccessor(`${p([...path, key, "single"])}.value`, "", (v) =>
-      typeof v === "string" || (typeof v === "number" && String(v).length === 8)
-        ? specialDate2LocalDate(Number(v), "de")
-        : String(v),
-    ),
+    accessorFn: mkAccessor(`${p([...path, key, "single"])}.value`, "", (v) => {
+      try {
+        return typeof v === "string" ||
+          (typeof v === "number" && String(v).length === 8)
+          ? specialDate2LocalDate(Number(v), "de")
+          : String(v);
+      } catch (error) {
+        console.error("Error processing date:", error);
+        return String(v);
+      }
+    }),
     filterVariant: "date",
     filterFn: "betweenInclusive",
     sortingFn: "datetime",
