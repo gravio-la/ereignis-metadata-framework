@@ -19,7 +19,7 @@ export const KXPAllPropTable = ({ entry }: { entry: RootNode }) => {
           {Object.entries(entry.properties).map(([key, value]) => {
             return (
               <TableRow key={key}>
-                <TableCell style={{ width: 100 }} component="th" scope="row">
+                <TableCell style={{ width: 100 }} scope="row">
                   <LabledLink uri={key} />
                 </TableCell>
                 <TableCell align="right">
