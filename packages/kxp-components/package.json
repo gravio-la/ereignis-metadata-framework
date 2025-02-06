@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-kxp-components",
+  "name": "@graviola/edb-kxp-components",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,15 +18,15 @@
     "dev": "tsup src/index.tsx --watch"
   },
   "dependencies": {
-    "@slub/edb-state-hooks": "workspace:*",
-    "@slub/edb-graph-traversal": "workspace:*",
-    "@slub/edb-kxp-utils": "workspace:*",
-    "@slub/edb-marc-to-rdf": "workspace:*",
-    "@slub/edb-basic-components": "workspace:*",
+    "@graviola/edb-state-hooks": "workspace:*",
+    "@graviola/edb-graph-traversal": "workspace:*",
+    "@graviola/edb-kxp-utils": "workspace:*",
+    "@graviola/edb-marc-to-rdf": "workspace:*",
+    "@graviola/edb-basic-components": "workspace:*",
     "@tpluscode/rdf-ns-builders": "^4.3.0"
   },
   "devDependencies": {
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/react": "^18.3.4",
     "@rdfjs/types": "^1.1.0"
   },

@@ -94,7 +94,7 @@ read on in at [that chapter](#jsonld-enhancement-and-schema-stubbing).
 Some parts of the framework use a transformed version of your schema, to add additional properties that are necessary
 or should be added implicitly, without the need to incorporate it within the schema in the first place.
 
-In the `@slub/edb-state-hooks` package you will find a hook called `useExtendedSchema`. It will look into  the current
+In the `@graviola/edb-state-hooks` package you will find a hook called `useExtendedSchema`. It will look into  the current
 global app context and return a schema, that is stubbed and enhanced with the necessary properties.
 
 after calling `const schema = useExtendedSchema({ typeName: 'Exhibition' });` you will get a schema that looks like this:
@@ -260,12 +260,12 @@ the `Exhibition`-definition will be at the top level and so on.
 
 Other implicit properties can be added to the schema by configuring the AdbContext. Looking at the `exhibitionAdbConfig` we
 see that a function called `makeStubSchema` is being passed to the `AdbContext`. This function will be called with the
-`useExtendedSchema` hook instead of the default one if provided. It uses the `prepareStubbedSchema` from `@slub/json-schema-utils`
+`useExtendedSchema` hook instead of the default one if provided. It uses the `prepareStubbedSchema` from `@graviola/json-schema-utils`
 and adds in addition to the already covered `@type` and `@id` properties, the `idAuthority` property, which is being used
 for this specific database as link to other norm databases a bit like the common `sameAs` property in RDF.
 
 ```typescript
-import {prepareStubbedSchema} from "@slub/json-schema-utils";
+import {prepareStubbedSchema} from "@graviola/json-schema-utils";
 import {JSONSchema7} from "json-schema";
 
 export const makeStubSchema = (

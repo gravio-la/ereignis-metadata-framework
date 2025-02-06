@@ -1,8 +1,8 @@
 import get from "lodash-es/get";
 import { isControl, Tester } from "@jsonforms/core";
-import { isPrimitive } from "@slub/json-schema-utils";
+import { isPrimitive } from "@graviola/json-schema-utils";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { FieldExtractDeclaration } from "@slub/edb-core-types";
+import { FieldExtractDeclaration } from "@graviola/edb-core-types";
 import { TFunction } from "i18next";
 import { MRT_ColumnDef } from "material-react-table";
 

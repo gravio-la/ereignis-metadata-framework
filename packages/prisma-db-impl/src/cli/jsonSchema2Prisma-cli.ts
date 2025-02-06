@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import fs from "fs";
-import { jsonSchema2Prisma } from "@slub/json-schema-prisma-utils";
+import { jsonSchema2Prisma } from "@graviola/json-schema-prisma-utils";
 
 const schemaPath = process.argv[2];
 

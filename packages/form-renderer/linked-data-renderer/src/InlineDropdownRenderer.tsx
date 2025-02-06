@@ -4,17 +4,17 @@ import { FormControl, Hidden } from "@mui/material";
 import merge from "lodash/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { extractFieldIfString } from "@slub/edb-data-mapping";
-import { makeFormsPath } from "@slub/edb-ui-utils";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { extractFieldIfString } from "@graviola/edb-data-mapping";
+import { makeFormsPath } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
 import {
   useAdbContext,
   useDataStore,
   useGlobalCRUDOptions,
-} from "@slub/edb-state-hooks";
-import { PrimaryField } from "@slub/edb-core-types";
-import { PreloadedOptionSelect } from "@slub/edb-advanced-components";
+} from "@graviola/edb-state-hooks";
+import { PrimaryField } from "@graviola/edb-core-types";
+import { PreloadedOptionSelect } from "@graviola/edb-advanced-components";
 import { JSONSchema7 } from "json-schema";
 import get from "lodash/get";
 

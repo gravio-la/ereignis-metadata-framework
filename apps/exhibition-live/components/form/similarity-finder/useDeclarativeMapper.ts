@@ -1,15 +1,15 @@
 import NiceModal from "@ebay/nice-modal-react";
-import { NormDataMapping, PrimaryField } from "@slub/edb-core-types";
-import { DeclarativeFlatMapping, mapByConfig } from "@slub/edb-data-mapping";
-import { KnowledgeSources } from "@slub/edb-global-types";
+import { NormDataMapping, PrimaryField } from "@graviola/edb-core-types";
+import { DeclarativeFlatMapping, mapByConfig } from "@graviola/edb-data-mapping";
+import { KnowledgeSources } from "@graviola/edb-global-types";
 import {
   useSimilarityFinderState,
   useModalRegistry,
   useGlobalCRUDOptions,
   useDataStore,
   useAdbContext,
-} from "@slub/edb-state-hooks";
-import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
+} from "@graviola/edb-state-hooks";
+import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
 import { primaryFields } from "@slub/exhibition-schema";
 import prefixes from "@zazuko/rdf-vocabularies/prefixes";
 import { useCallback, useState, useEffect } from "react";

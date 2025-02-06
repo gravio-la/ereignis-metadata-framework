@@ -3,7 +3,7 @@ import {
   FieldExtractDeclaration,
   PrimaryFieldExtract,
   PrimaryFieldResults,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 export const extractFieldAny = (
   entry: any | null,

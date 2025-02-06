@@ -1,7 +1,7 @@
 import { JSONSchema7 } from "json-schema";
 import { makeSPARQLWherePart, withDefaultPrefix } from "./makeSPARQLWherePart";
 import { DELETE } from "@tpluscode/sparql-builder";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 
 export const makeSPARQLRestoreFromTrashQuery = (
   entityIRI: string | string[],

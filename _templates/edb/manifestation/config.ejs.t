@@ -6,12 +6,12 @@ import {
   primaryFields,
   primaryFieldExtracts,
   schema,
-} from "@slub/<%= name %>-schema";
+} from "@graviola/<%= name %>-schema";
 import { JSONSchema7 } from "json-schema";
 import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
 import { rendererRegistry } from "./rendererRegistry";
 import { materialCells } from "@jsonforms/material-renderers";
-import { IRIToStringFn, SparqlBuildOptions } from "@slub/edb-core-types";
+import { IRIToStringFn, SparqlBuildOptions } from "@graviola/edb-core-types";
 import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
 import { primaryTextFieldControlTester, PrimaryTextFieldRenderer } from "../renderer";
 import namespace from "@rdfjs/namespace";

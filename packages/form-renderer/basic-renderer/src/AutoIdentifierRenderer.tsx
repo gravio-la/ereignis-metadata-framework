@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import merge from "lodash/merge";
 import React, { useCallback, useState } from "react";
-import { useSettings } from "@slub/edb-state-hooks";
+import { useSettings } from "@graviola/edb-state-hooks";
 
 const AutoIdentifierRendererComponent = (props: ControlProps) => {
   const {

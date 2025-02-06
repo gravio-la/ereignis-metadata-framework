@@ -4,13 +4,13 @@ import {
   useCRUDWithQueryClient,
   useExtendedSchema,
   useSimilarityFinderState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import * as React from "react";
 import { useCallback, useEffect, useMemo } from "react";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
 import { IconButton, Stack } from "@mui/material";
 import { Check } from "@mui/icons-material";
-import { EntityDetailElement } from "@slub/edb-advanced-components";
+import { EntityDetailElement } from "@graviola/edb-advanced-components";
 
 export const KBListItemRenderer = ({
   data,

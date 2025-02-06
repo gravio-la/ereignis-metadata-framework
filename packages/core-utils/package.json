@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-core-utils",
+  "name": "@graviola/edb-core-utils",
   "version": "1.1.0",
   "description": "Core utils for EDB",
   "type": "module",
@@ -25,10 +25,10 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
     "@types/jest": "^29.5.12",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5"

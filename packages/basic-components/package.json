@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-basic-components",
+  "name": "@graviola/edb-basic-components",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -20,7 +20,7 @@
     "lint-fix": "eslint --fix \"**/*.ts*\""
   },
   "dependencies": {
-    "@slub/edb-state-hooks": "workspace:*",
+    "@graviola/edb-state-hooks": "workspace:*",
     "@ebay/nice-modal-react": "^1.2",
     "next-i18next": "^15.3.0"
   },

@@ -8,12 +8,12 @@ import { useTranslation } from "next-i18next";
 import { getI18nProps, mixinStaticPathsParams } from "../../../components/i18n";
 import { Button, Hidden } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { decodeIRI } from "@slub/edb-core-utils";
+import { decodeIRI } from "@graviola/edb-core-utils";
 import {
   useAdbContext,
   useFormEditor,
   useSettings,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { schema } from "@slub/exhibition-schema";
 
 type Props = {

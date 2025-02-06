@@ -1,5 +1,5 @@
-import { SemanticSeedHandler } from "@slub/edb-cli-creator";
-import { processEachDocumentFromFile } from "@slub/edb-file-import";
+import { SemanticSeedHandler } from "@graviola/edb-cli-creator";
+import { processEachDocumentFromFile } from "@graviola/edb-file-import";
 import config from "@slub/exhibition-sparql-config";
 import { typeNameToTypeIRI } from "./dataStore";
 

@@ -1,6 +1,6 @@
 import { Bindings, DatasetCore, Quad, ResultStream } from "@rdfjs/types";
 import { NamespaceBuilder } from "@rdfjs/namespace";
-import { DeclarativeMapping } from "@slub/edb-ui-utils";
+import { DeclarativeMapping } from "@graviola/edb-ui-utils";
 export type * from "./settings";
 
 export type Prefixes = {

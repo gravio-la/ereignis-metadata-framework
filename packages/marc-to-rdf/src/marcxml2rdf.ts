@@ -8,9 +8,9 @@ import {
   mappingSkeleton,
   marcMappingPrefixes,
 } from "./marc2rdfMappingDeclaration";
-import { Prefixes } from "@slub/edb-core-types";
+import { Prefixes } from "@graviola/edb-core-types";
 import { Datafield, SubfieldElement } from "./marcResponseTypes";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 const findMappingForSubfield: (tag: string) => any | null = (tag: string) => {
   const tagMappingKey: string | undefined = Object.keys(

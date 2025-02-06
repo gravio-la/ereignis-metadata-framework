@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import { getI18nProps, mixinStaticPathsParams } from "../../../components/i18n";
 import { schema } from "@slub/exhibition-schema";
 import { tableConfig } from "../../../components/config/tableConfig";
-import { SemanticTable } from "@slub/edb-table-components";
+import { SemanticTable } from "@graviola/edb-table-components";
 
 type Props = {
   typeName: string;

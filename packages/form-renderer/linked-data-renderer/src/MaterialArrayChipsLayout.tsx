@@ -14,16 +14,16 @@ import { ArrayLayoutToolbar } from "./ArrayToolbar";
 import { useJsonForms } from "@jsonforms/react";
 import { uniqBy, orderBy } from "lodash";
 import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath } from "@slub/edb-ui-utils";
+import { irisToData, makeFormsPath } from "@graviola/edb-ui-utils";
 import { JSONSchema7 } from "json-schema";
 import { Box, Grid, IconButton, Stack } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
 import AddIcon from "@mui/icons-material/Add";
-import { useAdbContext } from "@slub/edb-state-hooks";
-import { useCRUDWithQueryClient } from "@slub/edb-state-hooks";
+import { useAdbContext } from "@graviola/edb-state-hooks";
+import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import { SimpleChipRenderer } from "./SimpleChipRenderer";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 
 type OwnProps = {
   removeItems(path: string, toDelete: number[]): () => void;

@@ -17,17 +17,17 @@ import {
   useGlobalSearch,
   useModalRegistry,
   useSimilarityFinderState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
 import { debounce, uniq } from "lodash";
-import { PrimaryField } from "@slub/edb-core-types";
+import { PrimaryField } from "@graviola/edb-core-types";
 import { NumberInput } from "../NumberInput";
-import { ClassicResultListWrapper } from "@slub/edb-basic-components";
+import { ClassicResultListWrapper } from "@graviola/edb-basic-components";
 import {
   KnowledgeSources,
   SimilarityFinderProps,
-} from "@slub/edb-global-types";
+} from "@graviola/edb-global-types";
 import { FindOptions, KnowledgeBaseDescription } from "./types";
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 import { useKnowledgeBases } from "./useKnowledgeBases";

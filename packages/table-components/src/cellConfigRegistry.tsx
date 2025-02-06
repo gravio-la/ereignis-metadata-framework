@@ -8,11 +8,11 @@ import {
   isStringControl,
   rankWith,
 } from "@jsonforms/core";
-import { OverflowChip, OverflowContainer } from "@slub/edb-basic-components";
+import { OverflowChip, OverflowContainer } from "@graviola/edb-basic-components";
 import { Checkbox, Grid, Link, Typography } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import isNil from "lodash-es/isNil";
-import { parseMarkdownLinks } from "@slub/edb-core-utils";
+import { parseMarkdownLinks } from "@graviola/edb-core-utils";
 import * as React from "react";
 import {
   MuiTableColumnDefinitionRegistryEntry,

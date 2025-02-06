@@ -1,4 +1,4 @@
-import { getDateParts, numeric2JSDate } from "@slub/edb-core-utils";
+import { getDateParts, numeric2JSDate } from "@graviola/edb-core-utils";
 import dayjs from "dayjs";
 
 export const specialDate2LocalDate = (date: number, locale: string) => {

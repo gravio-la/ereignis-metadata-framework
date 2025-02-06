@@ -1,4 +1,4 @@
-import { SparqlEndpoint } from "@slub/edb-core-types";
+import { SparqlEndpoint } from "@graviola/edb-core-types";
 
 const p = (key: string, prefix?: string) => (prefix ? `${prefix}_${key}` : key);
 

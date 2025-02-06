@@ -5,7 +5,7 @@ import {
   PrimaryField,
   PrimaryFieldDeclaration,
   PrimaryFieldExtractDeclaration,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 type <%= h.changeCase.pascalCase(name) %>PrimaryFieldDeclaration = PrimaryFieldDeclaration<string>;
 

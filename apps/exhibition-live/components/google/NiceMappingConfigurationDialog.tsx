@@ -18,10 +18,10 @@ import { useTranslation } from "next-i18next";
 import {
   DeclarativeMatchBasedFlatMapping,
   matchBased2DeclarativeFlatMapping,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 import { JsonView } from "react-json-view-lite";
-import { DeclarativeFlatMapping } from "@slub/edb-data-mapping";
-import { parseJSONObject } from "@slub/edb-ui-utils";
+import { DeclarativeFlatMapping } from "@graviola/edb-data-mapping";
+import { parseJSONObject } from "@graviola/edb-ui-utils";
 import { OwnColumnDesc } from "./types";
 import { CachedWorkSheet } from "./useCachedWorkSheet";
 

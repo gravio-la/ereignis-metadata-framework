@@ -21,7 +21,7 @@ import { useJsonForms } from "@jsonforms/react";
 import { uniqBy, orderBy } from "lodash";
 import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
 import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath, validate } from "@slub/edb-ui-utils";
+import { irisToData, makeFormsPath, validate } from "@graviola/edb-ui-utils";
 import { JSONSchema7 } from "json-schema";
 import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
@@ -30,14 +30,14 @@ import {
   useAdbContext,
   useCRUDWithQueryClient,
   useFormDataStore,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import { ErrorObject } from "ajv";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 import { JSONSchema } from "json-schema-to-ts";
 import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { Pulse } from "@slub/edb-basic-components";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { Pulse } from "@graviola/edb-basic-components";
 
 const uiSchemaOptionsSchema = {
   type: "object",

@@ -3,7 +3,7 @@ import { JSONSchema7 } from "json-schema";
 import { cors } from "@elysiajs/cors";
 import loadedSchema from "@slub/exhibition-schema/schemas/jsonschema/Exhibition.schema.json";
 import { swagger } from "@elysiajs/swagger";
-import { defs } from "@slub/json-schema-utils";
+import { defs } from "@graviola/json-schema-utils";
 import { database, surrealDatastore } from "./surrealDatastore";
 import { dataStore } from "./dataStore";
 

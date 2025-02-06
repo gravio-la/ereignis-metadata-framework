@@ -3,7 +3,7 @@ import { CONSTRUCT } from "@tpluscode/sparql-builder";
 import { JSONSchema7 } from "json-schema";
 
 import { jsonSchema2constructWithLimits } from "./jsonSchema2constructWithLimits";
-import { Prefixes } from "@slub/edb-core-types";
+import { Prefixes } from "@graviola/edb-core-types";
 
 const BASE_IRI = "http://ontologies.slub-dresden.de/exhibition#";
 export const testPrefixes: Prefixes = {

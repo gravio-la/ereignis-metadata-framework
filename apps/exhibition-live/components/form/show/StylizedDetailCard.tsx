@@ -3,7 +3,7 @@ import { Box, Fab, styled, Typography } from "@mui/material";
 import ColorThief from "color-thief-ts";
 import MarkdownContent from "./MarkdownContentNoSSR";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import { EntityDetailCardProps } from "@slub/edb-advanced-components";
+import { EntityDetailCardProps } from "@graviola/edb-advanced-components";
 
 type ColorArray = [number, number, number];
 

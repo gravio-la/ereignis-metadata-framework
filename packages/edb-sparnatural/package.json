@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-sparnatural",
+  "name": "@graviola/edb-sparnatural",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -32,8 +32,8 @@
     "@geoman-io/leaflet-geoman-free": "^2.17.0"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*"
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*"
   }
 }

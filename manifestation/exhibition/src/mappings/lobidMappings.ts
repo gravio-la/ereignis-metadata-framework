@@ -2,7 +2,7 @@ import namespace from "@rdfjs/namespace";
 import type {
   DeclarativeMapping,
   DeclarativeMappings,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 export const sladb = namespace("http://ontologies.slub-dresden.de/exhibition#");
 
 export const locationDeclarativeMapping: DeclarativeMappings = [

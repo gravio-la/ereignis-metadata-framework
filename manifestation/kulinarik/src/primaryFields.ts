@@ -2,7 +2,7 @@ import {
   PrimaryField,
   PrimaryFieldDeclaration,
   PrimaryFieldExtractDeclaration,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 type KulinarikPrimaryFieldDeclaration = PrimaryFieldDeclaration<string>;
 

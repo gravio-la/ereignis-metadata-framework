@@ -5,13 +5,13 @@ import {
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 
 import {
   PrimaryField,
   PrimaryFieldDeclaration,
   SPARQLFlavour,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 const makeWherePart = (queryClause: string, required: boolean) =>
   required ? queryClause : ` OPTIONAL { ${queryClause} } `;

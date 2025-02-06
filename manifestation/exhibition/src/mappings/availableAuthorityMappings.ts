@@ -1,6 +1,6 @@
 import { wikidataMappings, wikidataTypeMap } from "./wikidataMappings";
 import { lobidMappings, lobidTypemap } from "./lobidMappings";
-import { NormDataMappings } from "@slub/edb-core-types";
+import { NormDataMappings } from "@graviola/edb-core-types";
 
 export const availableAuthorityMappings: NormDataMappings = {
   "http://www.wikidata.org": {

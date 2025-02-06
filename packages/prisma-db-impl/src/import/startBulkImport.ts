@@ -1,4 +1,4 @@
-import { AbstractDatastore, CountAndIterable } from "@slub/edb-global-types";
+import { AbstractDatastore, CountAndIterable } from "@graviola/edb-global-types";
 import { PrismaClient } from "@prisma/client";
 import cliProgress from "cli-progress";
 import { importDocument } from "./importDocument";

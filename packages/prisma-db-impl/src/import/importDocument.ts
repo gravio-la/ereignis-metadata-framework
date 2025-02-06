@@ -1,4 +1,4 @@
-import { AbstractDatastore } from "@slub/edb-global-types";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import type { PrismaClient } from "@prisma/client";
 import { getPropertiesAndConnects } from "../helper";
 

@@ -32,18 +32,18 @@ import {
   QueryClient,
   QueryClientProvider,
   store,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { EditEntityModal } from "../components/form/edit/EditEntityModal";
 import { useRouter } from "next/router";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
-import { envToSparqlEndpoint } from "@slub/edb-core-utils";
-import { EntityDetailModal } from "@slub/edb-advanced-components";
-import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
+import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
+import { EntityDetailModal } from "@graviola/edb-advanced-components";
+import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder";
 import { useSearchParams } from "next/navigation";
-import { ModRouter } from "@slub/edb-global-types";
+import { ModRouter } from "@graviola/edb-global-types";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeComponent } from "@slub/edb-default-theme";
+import { ThemeComponent } from "@graviola/edb-default-theme";
 
 export const queryClient = new QueryClient();
 const QueryClientProviderWrapper = ({

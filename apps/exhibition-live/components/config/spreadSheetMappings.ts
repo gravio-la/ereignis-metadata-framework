@@ -7,7 +7,7 @@ import { OwnColumnDesc } from "../google/types";
 import {
   DeclarativeFlatMappings,
   DeclarativeMatchBasedFlatMappings,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 
 export type ConcreteSpreadSheetMapping = {
   raw?: DeclarativeMatchBasedFlatMappings;

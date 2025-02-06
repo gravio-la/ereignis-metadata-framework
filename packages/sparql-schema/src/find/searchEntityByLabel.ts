@@ -4,7 +4,7 @@ import {
   IRIToStringFn,
   PrimaryFieldExtractDeclaration,
   QueryBuilderOptions,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 type OwnOptions = {
   typeIRItoTypeName: IRIToStringFn;

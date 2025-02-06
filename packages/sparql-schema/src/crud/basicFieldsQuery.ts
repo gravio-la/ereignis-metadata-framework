@@ -2,7 +2,7 @@ import { makeSPARQLWherePart } from ".";
 import { SELECT } from "@tpluscode/sparql-builder";
 import { Variable } from "@rdfjs/types";
 import df from "@rdfjs/data-model";
-import { PrimaryField, SparqlBuildOptions } from "@slub/edb-core-types";
+import { PrimaryField, SparqlBuildOptions } from "@graviola/edb-core-types";
 
 type FieldIriWithVar = {
   predicate: string;

@@ -9,7 +9,7 @@ import {
   TextField,
   TextFieldProps,
 } from "@mui/material";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 
 export const SearchFieldWithBadges = ({

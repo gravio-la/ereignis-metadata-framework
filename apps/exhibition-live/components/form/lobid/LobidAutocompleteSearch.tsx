@@ -5,9 +5,9 @@ import React, {
   useState,
 } from "react";
 
-import { DebouncedAutocomplete } from "@slub/edb-advanced-components";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { findEntityWithinLobid } from "@slub/edb-authorities";
+import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { findEntityWithinLobid } from "@graviola/edb-authorities";
 import { lobidTypemap } from "@slub/exhibition-schema";
 
 interface OwnProps {

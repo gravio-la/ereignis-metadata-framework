@@ -4,7 +4,7 @@ import { Literal } from "@rdfjs/types";
 
 import { wikidataPrefixes } from "./prefixes";
 import isNil from "lodash-es/isNil";
-import { prefixes2sparqlPrefixDeclaration } from "@slub/sparql-schema";
+import { prefixes2sparqlPrefixDeclaration } from "@graviola/sparql-schema";
 
 const buildPropsQuery = (entity: string, withSubclassRelations?: boolean) => `
 SELECT ?property ?propLabel ?object ?objectLabel

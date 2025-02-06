@@ -10,13 +10,13 @@ import React, {
 import {
   findWithinWikidataUsingREST,
   wikidataPrefixes,
-} from "@slub/edb-ui-utils";
+} from "@graviola/edb-ui-utils";
 import WikidataHumanCard from "./WikidataHumanCard";
 import WikidataThingCard from "./WikidataThingCard";
-import { sparqlSelectViaFieldMappings } from "@slub/sparql-schema";
-import { remoteSparqlQuery } from "@slub/remote-query-implementations";
-import { DebouncedAutocomplete } from "@slub/edb-advanced-components";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
+import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
+import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;

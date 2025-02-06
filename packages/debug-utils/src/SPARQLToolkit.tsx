@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import React, { FunctionComponent, useState } from "react";
 
 import { YasguiSPARQLEditorNoSSR } from "./YasguiSPARQLEditorNoSSR";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 
 import { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditorProps";
 

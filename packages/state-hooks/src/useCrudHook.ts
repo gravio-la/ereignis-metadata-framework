@@ -4,8 +4,8 @@ import {
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-import { CRUDFunctions, SparqlBuildOptions } from "@slub/edb-core-types";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
+import { CRUDFunctions, SparqlBuildOptions } from "@graviola/edb-core-types";
+import { WalkerOptions } from "@graviola/edb-graph-traversal";
 
 export type CRUDOptions = CRUDFunctions & {
   defaultPrefix: string;

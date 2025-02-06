@@ -5,7 +5,7 @@ import {
 } from "./mappingStrategies";
 import { MappingOptions } from "./types";
 import cloneDeep from "lodash-es/cloneDeep";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import set from "lodash-es/set";
 import get from "lodash-es/get";
 import isNil from "lodash-es/isNil";

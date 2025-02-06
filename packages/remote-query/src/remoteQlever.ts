@@ -6,7 +6,7 @@ import {
   SelectFetchOptions,
   SelectFetchOverload,
   SparqlEndpoint,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 
 const fetchNTriples = (query: string, endpoint: string, token?: string) =>
   fetch(endpoint, {

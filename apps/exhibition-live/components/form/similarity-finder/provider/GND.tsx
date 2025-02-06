@@ -1,7 +1,7 @@
 import { KnowledgeBaseDescription } from "../types";
 import { Img } from "../../../basic";
-import { findEntityWithinLobid } from "@slub/edb-authorities";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { findEntityWithinLobid } from "@graviola/edb-authorities";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { gndEntryFromSuggestion } from "../../lobid/LobidSearchTable";
 import { GNDListItemRenderer } from "../GNDListItemRenderer";
 import { lobidTypemap } from "@slub/exhibition-schema";

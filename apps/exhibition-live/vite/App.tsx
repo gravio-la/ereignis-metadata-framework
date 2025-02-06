@@ -1,4 +1,4 @@
-import { AdbProvider, store } from "@slub/edb-state-hooks";
+import { AdbProvider, store } from "@graviola/edb-state-hooks";
 import { Provider } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/de";
@@ -11,14 +11,14 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { kulinarikAppConfig } from "../components/config/kulinarikAppConfig";
-import { envToSparqlEndpoint } from "@slub/edb-ui-utils";
-import { EntityDetailModal } from "@slub/edb-advanced-components";
+import { envToSparqlEndpoint } from "@graviola/edb-ui-utils";
+import { EntityDetailModal } from "@graviola/edb-advanced-components";
 import { SimilarityFinder } from "../components/form/similarity-finder";
-import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
+import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import NiceModal from "@ebay/nice-modal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeComponent } from "@slub/edb-default-theme";
+import { ThemeComponent } from "@graviola/edb-default-theme";
 
 import "react-json-view-lite/dist/index.css";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";

@@ -10,9 +10,9 @@ import React, {
 } from "react";
 
 import { TextField } from "./TextField";
-import { useQuery } from "@slub/edb-state-hooks";
+import { useQuery } from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 
 export type DebouncedAutocompleteProps = {
   load: (value?: string) => Promise<AutocompleteSuggestion[]>;

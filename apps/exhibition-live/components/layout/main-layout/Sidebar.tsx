@@ -7,12 +7,12 @@ import {
   useAdbContext,
   useLocalSettings,
   useModifiedRouter,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { Drawer } from "./menu";
 import { useTranslation } from "next-i18next";
 import { useGlobalAuth } from "../../state/useGlobalAuth";
 import { createMenuListFromSchema } from "./createMenuListFromSchema";
-import { MenuGroup, NavGroup, NavItem } from "@slub/edb-advanced-components";
+import { MenuGroup, NavGroup, NavItem } from "@graviola/edb-advanced-components";
 
 type SidebarProps = {
   open?: boolean;

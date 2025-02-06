@@ -8,7 +8,7 @@ import {
   Settings,
   SparqlEndpoint,
   UseLocalSettings,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import { useAdbContext } from "./provider";
 import { useLocalStorage } from "./useLocalStorage";
 

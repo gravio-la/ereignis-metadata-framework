@@ -8,7 +8,7 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { FunctionComponent, useCallback } from "react";
 
-import { useSettings } from "@slub/edb-state-hooks";
+import { useSettings } from "@graviola/edb-state-hooks";
 
 interface OwnProps {}
 

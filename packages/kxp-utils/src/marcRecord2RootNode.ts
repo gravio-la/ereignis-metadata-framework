@@ -4,8 +4,8 @@ import {
   NodePropertyTree,
   nodeToPropertyTree,
   RootNode,
-} from "@slub/edb-graph-traversal";
-import { kxp, mapDatafieldToQuads, RecordElement } from "@slub/edb-marc-to-rdf";
+} from "@graviola/edb-graph-traversal";
+import { kxp, mapDatafieldToQuads, RecordElement } from "@graviola/edb-marc-to-rdf";
 
 export const marcRecord2RootNode: (record: RecordElement) => RootNode = (
   record,

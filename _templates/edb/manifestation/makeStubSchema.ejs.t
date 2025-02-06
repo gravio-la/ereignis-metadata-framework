@@ -6,7 +6,7 @@ import {
   GeneratePropertiesFunction,
   prepareStubbedSchema,
   SchemaExpander,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 
 export const schemaExpander: SchemaExpander = {
   additionalProperties: {

@@ -1,6 +1,6 @@
-import { KnowledgeSources } from "@slub/edb-global-types";
+import { KnowledgeSources } from "@graviola/edb-global-types";
 import * as React from "react";
-import { BasicThingInformation } from "@slub/edb-core-types";
+import { BasicThingInformation } from "@graviola/edb-core-types";
 
 export type SelectedEntity = {
   id: string;

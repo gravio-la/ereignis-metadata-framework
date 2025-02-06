@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@slub/edb-state-hooks";
+import { QueryClient, QueryClientProvider } from "@graviola/edb-state-hooks";
 import { JSONSchema7 } from "json-schema";
 import { useMemo, useState } from "react";
 
@@ -9,7 +9,7 @@ import {
   slent,
 } from "../config/formConfigs";
 import NewSemanticJsonForm from "./SemanticJsonFormOperational";
-import { useExtendedSchema } from "@slub/edb-state-hooks";
+import { useExtendedSchema } from "@graviola/edb-state-hooks";
 import { uischemata } from "../config/uischemata";
 
 const queryClient = new QueryClient();

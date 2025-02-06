@@ -2,7 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import {
   GeneratePropertiesFunction,
   extendDefinitionsWithProperties,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 const makeTypeAndIDProperties: GeneratePropertiesFunction = (
   _modelName: string,
 ) => ({

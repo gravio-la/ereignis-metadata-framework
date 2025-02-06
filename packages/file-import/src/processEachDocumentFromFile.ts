@@ -2,7 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import {
   DSProcessingOptions,
   processAllDocumentsFromDataset,
-} from "@slub/edb-maintenance-utils";
+} from "@graviola/edb-maintenance-utils";
 import mime from "mime-types";
 import { DatasetCore, Quad } from "@rdfjs/types";
 import datasetFactory from "@rdfjs/dataset";

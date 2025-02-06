@@ -7,9 +7,9 @@ import {
   ModRouter,
   SemanticJsonFormNoOpsProps,
   SimilarityFinderProps,
-} from "@slub/edb-global-types";
+} from "@graviola/edb-global-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
-import { SparqlEndpoint } from "@slub/edb-core-types";
+import { SparqlEndpoint } from "@graviola/edb-core-types";
 
 export type JSONLDConfig = {
   defaultPrefix: string;

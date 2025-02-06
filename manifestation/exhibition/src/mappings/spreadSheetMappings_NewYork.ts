@@ -1,4 +1,4 @@
-import { DeclarativeMatchBasedFlatMappings } from "@slub/edb-data-mapping";
+import { DeclarativeMatchBasedFlatMappings } from "@graviola/edb-data-mapping";
 import namespace from "@rdfjs/namespace";
 
 const BASE_IRI = "http://ontologies.slub-dresden.de/exhibition#";

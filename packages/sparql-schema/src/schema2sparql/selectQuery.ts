@@ -2,7 +2,7 @@ import { BindingsStream } from "@comunica/types";
 import { Literal, NamedNode } from "@rdfjs/types";
 
 import { rdfLiteralToNative } from "./primitives";
-import { Prefixes } from "@slub/edb-core-types";
+import { Prefixes } from "@graviola/edb-core-types";
 import { prefixes2sparqlPrefixDeclaration } from "./prefixes2sparqlPrefixDeclaration";
 
 type TypeMapping = {

@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-data-mapping",
+  "name": "@graviola/edb-data-mapping",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
     "@types/jsonpath": "^0.2.4",
     "dayjs": "^1.11.11"
   },
@@ -24,9 +24,9 @@
     "dayjs": ">1"
   },
   "dependencies": {
-    "@slub/edb-core-utils": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-global-types": "workspace:*",
+    "@graviola/edb-core-utils": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "lodash-es": "^4.17.21",
     "jsonpath": "^1.1.1",
     "json-schema": "^0.4.0",

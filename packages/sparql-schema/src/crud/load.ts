@@ -5,8 +5,8 @@ import { Dataset, DatasetCore } from "@rdfjs/types";
 import {
   traverseGraphExtractBySchema,
   WalkerOptions,
-} from "@slub/edb-graph-traversal";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
+} from "@graviola/edb-graph-traversal";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 
 type LoadOptions = SPARQLCRUDOptions & {
   walkerOptions?: Partial<WalkerOptions>;

@@ -15,8 +15,8 @@ import React, {
   useMemo,
 } from "react";
 
-import { useQuery } from "@slub/edb-state-hooks";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import { ClearSharp } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
 

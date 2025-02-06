@@ -1,4 +1,4 @@
-import { SparqlEndpoint, SPARQLFlavour } from "@slub/edb-core-types";
+import { SparqlEndpoint, SPARQLFlavour } from "@graviola/edb-core-types";
 
 export const getSPARQLFlavour = (endpoint?: SparqlEndpoint): SPARQLFlavour => {
   switch (endpoint?.provider) {

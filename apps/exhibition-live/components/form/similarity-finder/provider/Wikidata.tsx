@@ -5,12 +5,12 @@ import {
   getCommonPropsFromWikidata,
   getEntityFromWikidataByIRI,
   WikidataRESTResult,
-} from "@slub/edb-ui-utils";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
+} from "@graviola/edb-ui-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
 import { IconButton, Stack } from "@mui/material";
 import { Check } from "@mui/icons-material";
-import { WikidataAllPropTable } from "@slub/edb-advanced-components";
+import { WikidataAllPropTable } from "@graviola/edb-advanced-components";
 import { wikidataTypeMap } from "@slub/exhibition-schema";
 import { use } from "chai";
 import { useCallback } from "react";

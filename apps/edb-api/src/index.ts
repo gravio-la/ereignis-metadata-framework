@@ -6,7 +6,7 @@ import {
   defs,
   extendSchemaShortcut,
   propertyExistsWithinSchema,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 import { getGraphQLWriter, getJsonSchemaReader, makeConverter } from "typeconv";
 import { cors } from "@elysiajs/cors";
 import { yoga } from "@elysiajs/graphql-yoga";
@@ -14,12 +14,12 @@ import { FieldNode, SelectionSetNode } from "graphql";
 import { IExecutableSchemaDefinition } from "@graphql-tools/schema";
 import { IFieldResolver } from "@graphql-tools/utils";
 import { primaryFields, schema } from "@slub/exhibition-schema";
-import { filterUndefOrNull, replaceJSONLD } from "@slub/edb-core-utils";
+import { filterUndefOrNull, replaceJSONLD } from "@graviola/edb-core-utils";
 import qs from "qs";
 import * as process from "process";
 import { PrismaClient } from "@prisma/edb-exhibition-client";
 import config from "@slub/exhibition-sparql-config";
-import { initPrismaStore } from "@slub/prisma-db-impl";
+import { initPrismaStore } from "@graviola/prisma-db-impl";
 import { typeIRItoTypeName, typeNameToTypeIRI } from "./dataStore";
 
 console.log(process.env.DATABASE_PROVIDER);

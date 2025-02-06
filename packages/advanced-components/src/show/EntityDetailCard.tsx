@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import { AllPropTableProps, LobidAllPropTable } from "../table";
-import { encodeIRI } from "@slub/edb-ui-utils";
+import { encodeIRI } from "@graviola/edb-ui-utils";
 
 import NiceModal from "@ebay/nice-modal-react";
 import {
@@ -21,11 +21,11 @@ import {
   useModalRegistry,
   useModifiedRouter,
   useSettings,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import isString from "lodash-es/isString";
 import { Edit } from "@mui/icons-material";
-import { PrimaryFieldResults } from "@slub/edb-core-types";
-import { ModRouter } from "@slub/edb-global-types";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { ModRouter } from "@graviola/edb-global-types";
 
 type OwnProps = {
   typeIRI: string;

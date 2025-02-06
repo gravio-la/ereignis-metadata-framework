@@ -5,7 +5,7 @@ import {
   useExtendedSchema,
   useGlobalCRUDOptions,
   useModifiedRouter,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import {
   CellTypeLike,
   LoadableWorkSheet,
@@ -21,7 +21,7 @@ import {
   DeclarativeFlatMappings,
   DeclarativeMatchBasedFlatMappings,
   mapByConfigFlat,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 import { spreadSheetMappings } from "../config/spreadSheetMappings";
 import { MappedItem } from "./MappedItem";
 import {
@@ -38,8 +38,8 @@ import {
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ColumnChip } from "./ColumnChip";
-import { filterUndefOrNull, index2letter } from "@slub/edb-core-utils";
-import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
+import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
+import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,

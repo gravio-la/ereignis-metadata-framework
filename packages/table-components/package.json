@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-table-components",
+  "name": "@graviola/edb-table-components",
   "version": "1.0.0",
   "private": true,
   "main": "src/index.tsx",
@@ -18,14 +18,14 @@
     "react": "^18"
   },
   "dependencies": {
-    "@slub/edb-state-hooks": "workspace:*",
-    "@slub/sparql-schema": "workspace:*",
-    "@slub/edb-core-utils": "workspace:*",
-    "@slub/edb-ui-utils": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-basic-components": "workspace:*",
-    "@slub/json-schema-utils": "workspace:*",
-    "@slub/edb-data-mapping": "workspace:*",
+    "@graviola/edb-state-hooks": "workspace:*",
+    "@graviola/sparql-schema": "workspace:*",
+    "@graviola/edb-core-utils": "workspace:*",
+    "@graviola/edb-ui-utils": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-basic-components": "workspace:*",
+    "@graviola/json-schema-utils": "workspace:*",
+    "@graviola/edb-data-mapping": "workspace:*",
     "export-to-csv": "^1.2.1",
     "@ebay/nice-modal-react": "^1.2",
     "next-i18next": "^15",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "i18next": "^23.7.7",
-    "@slub/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
     "@types/react": "^18.3.3",
     "@types/lodash-es": "^4.17.12",
     "@tanstack/table-core": "^8"

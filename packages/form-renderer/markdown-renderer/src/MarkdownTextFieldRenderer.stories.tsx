@@ -6,7 +6,7 @@ import {
 import { JsonForms } from "@jsonforms/react";
 import { useCallback, useState } from "react";
 
-import { materialCustomAnyOfControlTester } from "@slub/edb-layout-renderer";
+import { materialCustomAnyOfControlTester } from "@graviola/edb-layout-renderer";
 import { MarkdownTextFieldRenderer } from "./MarkdownTextFieldRenderer";
 
 export default {

@@ -1,15 +1,15 @@
-import { AbstractDatastore } from "@slub/edb-global-types";
-import { initSPARQLStore } from "@slub/sparql-db-impl";
-import { initRestfullStore } from "@slub/restfull-fetch-db-impl";
+import { AbstractDatastore } from "@graviola/edb-global-types";
+import { initSPARQLStore } from "@graviola/sparql-db-impl";
+import { initRestfullStore } from "@graviola/restfull-fetch-db-impl";
 import { JSONSchema7 } from "json-schema";
 import { useGlobalCRUDOptions } from "./useGlobalCRUDOptions";
 import {
   CRUDFunctions,
   SparqlBuildOptions,
   StringToIRIFn,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import { useMemo } from "react";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
+import { WalkerOptions } from "@graviola/edb-graph-traversal";
 import { useAdbContext } from "./provider";
 import { useSettings } from "./useLocalSettings";
 

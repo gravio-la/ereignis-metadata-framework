@@ -16,14 +16,14 @@ import {
   useGlobalSearchWithHelper,
   useKeyEventForSimilarityFinder,
   useRightDrawerState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { JSONSchema7 } from "json-schema";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import { NoteAdd } from "@mui/icons-material";
-import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { SearchbarWithFloatingButton } from "@slub/edb-basic-components";
-import { DiscoverAutocompleteInput } from "@slub/edb-advanced-components";
-import { KnowledgeSources } from "@slub/edb-global-types";
+import { PrimaryField, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
+import { KnowledgeSources } from "@graviola/edb-global-types";
 
 export interface ArrayLayoutToolbarProps {
   label: string;

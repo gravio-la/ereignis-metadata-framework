@@ -4,17 +4,17 @@ import {
   NormDataMappings,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import {
   findEntityByAuthorityIRI,
   searchEntityByLabel,
-} from "@slub/sparql-schema";
-import { findEntityWithinLobidByIRI } from "@slub/edb-authorities";
-import { DeclarativeMapping, StrategyContext } from "@slub/edb-data-mapping";
+} from "@graviola/sparql-schema";
+import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
+import { DeclarativeMapping, StrategyContext } from "@graviola/edb-data-mapping";
 import {
   createLogger,
   makeCreateDeeperContextFn,
-} from "@slub/edb-data-mapping/src/makeCreateDeeperContextFn";
+} from "@graviola/edb-data-mapping/src/makeCreateDeeperContextFn";
 import {
   findEntitiesCommonPropsWithinWikidataByIRI,
   getEntityFromWikidataByIRI,

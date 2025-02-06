@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "monorepo of the Ereignisdatenbank project",
   "main": "index.js",
-  "repository": "git@github.com:slub/exhibition-live",
   "author": "Sebastian Tilsch <sebastian.tilsch@slub-dresden.de>",
   "keywords": [
     "jsonforms",

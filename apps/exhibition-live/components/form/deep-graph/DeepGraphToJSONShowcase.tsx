@@ -11,13 +11,13 @@ import stringToStream from "string-to-stream";
 import {
   traverseGraphExtractBySchema,
   WalkerOptions,
-} from "@slub/edb-graph-traversal";
+} from "@graviola/edb-graph-traversal";
 
 import { addressSchema } from "../../../fixtures/schema";
 // @ts-ignore
 import tbbt from "tbbt-ld/dist/tbbt.nq";
 import { Grid, Typography } from "@mui/material";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 
 type EntityIRIs =
   | "http://localhost:8080/data/person/leonard-hofstadter"

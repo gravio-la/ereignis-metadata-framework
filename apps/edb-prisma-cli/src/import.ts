@@ -1,6 +1,6 @@
 import cliProgress from "cli-progress";
 import { PrismaClient } from "@prisma/edb-exhibition-client";
-import { AbstractDatastore, CountAndIterable } from "@slub/edb-global-types";
+import { AbstractDatastore, CountAndIterable } from "@graviola/edb-global-types";
 import { dataStore } from "./dataStore";
 
 const { typeNameToTypeIRI } = dataStore;

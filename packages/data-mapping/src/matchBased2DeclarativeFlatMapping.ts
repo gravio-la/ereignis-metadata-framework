@@ -7,7 +7,7 @@ import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
 import dot from "dot";
 import { JSONSchema7 } from "json-schema";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 type OwnColumnDesc = {
   index: number;

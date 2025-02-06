@@ -4,7 +4,7 @@ import { FormControl, FormLabel, Grid, Hidden } from "@mui/material";
 import merge from "lodash/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import WikidataAutocompleteInput from "../form/wikidata/WikidataAutocompleteInput";
 
 const AutocompleteURIFieldRenderer = (props: ControlProps) => {

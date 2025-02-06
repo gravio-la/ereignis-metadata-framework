@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { BasicThingInformation } from "@slub/edb-core-types";
+import { BasicThingInformation } from "@graviola/edb-core-types";
 import { KBListItemRenderer } from "./KBListItemRenderer";
 
 export default {

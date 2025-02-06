@@ -4,11 +4,11 @@ import { JSONSchema7 } from "json-schema";
 import {
   traverseGraphExtractBySchema,
   WalkerOptions,
-} from "@slub/edb-graph-traversal";
-import { NamedEntityData } from "@slub/edb-core-types";
+} from "@graviola/edb-graph-traversal";
+import { NamedEntityData } from "@graviola/edb-core-types";
 import { jsonld2DataSet } from "./jsonld2DataSet";
 import datasetFactory from "@rdfjs/dataset";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 type CleanJSONLDOptions = {
   walkerOptions?: Partial<WalkerOptions>;

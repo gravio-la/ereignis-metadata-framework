@@ -1,4 +1,4 @@
-import { AbstractDatastore, Config } from "@slub/edb-global-types";
+import { AbstractDatastore, Config } from "@graviola/edb-global-types";
 import {
   makeStubSchema,
   primaryFieldExtracts,
@@ -7,7 +7,7 @@ import {
 } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";
 import { initSPARQLStore } from "./initSPARQLStore";
-import { CRUDFunctions, SPARQLFlavour } from "@slub/edb-core-types";
+import { CRUDFunctions, SPARQLFlavour } from "@graviola/edb-core-types";
 
 export const initSPARQLDataStoreFromConfig: (
   config: Config,

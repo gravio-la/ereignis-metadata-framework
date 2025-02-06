@@ -1,15 +1,15 @@
-import { EdbSparnatural } from "@slub/edb-sparnatural";
-import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
+import { EdbSparnatural } from "@graviola/edb-sparnatural";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import { useCallback, useState } from "react";
 import df from "@rdfjs/data-model";
-import { fixSparqlOrder, withDefaultPrefix } from "@slub/sparql-schema";
+import { fixSparqlOrder, withDefaultPrefix } from "@graviola/sparql-schema";
 import { SELECT } from "@tpluscode/sparql-builder";
-import { filterUndefOrNull, isValidUrl } from "@slub/edb-core-utils";
+import { filterUndefOrNull, isValidUrl } from "@graviola/edb-core-utils";
 import {
   GenericListItem,
   GenericVirtualizedList,
-} from "@slub/edb-virtualized-components";
-import { IRIToStringFn, PrimaryFieldDeclaration } from "@slub/edb-core-types";
+} from "@graviola/edb-virtualized-components";
+import { IRIToStringFn, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import isString from "lodash/isString";

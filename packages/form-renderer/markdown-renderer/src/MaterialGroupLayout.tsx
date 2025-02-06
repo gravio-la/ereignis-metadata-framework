@@ -25,7 +25,7 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeSanitize from "rehype-sanitize";
 
 import { getI18nDescription, getI18nLabel } from "./i18nHelper";
-import { MDEditorMarkdown } from "@slub/edb-markdown-renderer";
+import { MDEditorMarkdown } from "@graviola/edb-markdown-renderer";
 
 const style: { [x: string]: any } = { marginBottom: "10px" };
 

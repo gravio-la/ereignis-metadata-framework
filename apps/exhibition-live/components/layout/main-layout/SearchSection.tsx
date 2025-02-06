@@ -12,9 +12,9 @@ import {
   useAdbContext,
   useGlobalSearch,
   useModifiedRouter,
-} from "@slub/edb-state-hooks";
-import { encodeIRI } from "@slub/edb-ui-utils";
-import { DiscoverAutocompleteInput } from "@slub/edb-advanced-components";
+} from "@graviola/edb-state-hooks";
+import { encodeIRI } from "@graviola/edb-ui-utils";
+import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
 
 // styles
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({

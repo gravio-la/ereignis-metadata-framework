@@ -1,4 +1,4 @@
-import { Permission } from "@slub/edb-core-types";
+import { Permission } from "@graviola/edb-core-types";
 
 export const fullPermission: Permission = {
   view: true,

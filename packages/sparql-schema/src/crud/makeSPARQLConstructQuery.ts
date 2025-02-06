@@ -1,6 +1,6 @@
 import { makeSPARQLWherePart, withDefaultPrefix } from "./makeSPARQLWherePart";
 import { JSONSchema7 } from "json-schema";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import { jsonSchema2construct } from "..";
 import { CONSTRUCT } from "@tpluscode/sparql-builder";
 import df from "@rdfjs/data-model";

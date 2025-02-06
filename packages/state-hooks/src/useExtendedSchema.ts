@@ -3,8 +3,8 @@ import { JSONSchema7 } from "json-schema";
 import {
   bringDefinitionToTop,
   prepareStubbedSchema,
-} from "@slub/json-schema-utils";
-import { StringToIRIFn } from "@slub/edb-core-types";
+} from "@graviola/json-schema-utils";
+import { StringToIRIFn } from "@graviola/edb-core-types";
 import { useAdbContext } from "./provider";
 
 type UseExtendedSchemaProps = {

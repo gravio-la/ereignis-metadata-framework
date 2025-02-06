@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 
 import { NavItem } from "./NavItem";
 import { MenuCollapse } from "./types";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
 
 type NavCollapseProps = {
   menu: MenuCollapse;

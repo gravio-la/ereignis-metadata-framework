@@ -1,16 +1,16 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryClient, QueryClientProvider } from "@slub/edb-state-hooks";
+import { QueryClient, QueryClientProvider } from "@graviola/edb-state-hooks";
 
 import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
-import { AdbProvider, store } from "@slub/edb-state-hooks";
+import { AdbProvider, store } from "@graviola/edb-state-hooks";
 import { EditEntityModal } from "../components/form/edit/EditEntityModal";
-import { EntityDetailModal } from "@slub/edb-advanced-components";
+import { EntityDetailModal } from "@graviola/edb-advanced-components";
 import { Provider } from "react-redux";
 import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
-import { SemanticJsonFormNoOps } from "@slub/edb-linked-data-renderer";
+import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder/SimilarityFinder";
-import { ThemeComponent } from "@slub/edb-default-theme";
+import { ThemeComponent } from "@graviola/edb-default-theme";
 import NiceModal from "@ebay/nice-modal-react";
 import "react-json-view-lite/dist/index.css";
 

@@ -2,12 +2,12 @@ import config from "@slub/exhibition-sparql-config";
 import {
   getProviderOrDefault,
   getSPARQLFlavour,
-} from "@slub/remote-query-implementations";
-import { initSPARQLDataStoreFromConfig } from "@slub/sparql-db-impl";
-import { extendSchemaShortcut } from "@slub/json-schema-utils";
+} from "@graviola/remote-query-implementations";
+import { initSPARQLDataStoreFromConfig } from "@graviola/sparql-db-impl";
+import { extendSchemaShortcut } from "@graviola/json-schema-utils";
 import { primaryFields, schema } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";
-import { initPrismaStore } from "@slub/prisma-db-impl";
+import { initPrismaStore } from "@graviola/prisma-db-impl";
 //import { PrismaClient } from "@prisma/edb-exhibition-client";
 
 export const typeNameToTypeIRI = (typeName: string) =>

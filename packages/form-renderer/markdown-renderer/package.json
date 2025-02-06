@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-markdown-renderer",
+  "name": "@graviola/edb-markdown-renderer",
   "version": "1.0.0",
   "description": "A markdown renderer for json forms",
   "type": "module",
@@ -25,8 +25,8 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
     "@tanstack/react-query": "=4.36.1",
     "eslint-config-edb": "workspace:*",

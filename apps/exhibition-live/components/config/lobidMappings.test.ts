@@ -3,7 +3,7 @@ import { describe, expect, test } from "@jest/globals";
 import exampleData from "../../fixtures/lobid/documeta-1257120557.json";
 import rendevousData from "../../fixtures/lobid/1256926108.json";
 import { typeIRItoTypeName } from "./typeIRIToTypeName";
-import { mapByConfig, StrategyContext } from "@slub/edb-data-mapping";
+import { mapByConfig, StrategyContext } from "@graviola/edb-data-mapping";
 import {
   declarativeMappings,
   exhibitionDeclarativeMapping,

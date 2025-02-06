@@ -10,6 +10,6 @@ module.exports = [
     type: 'input',
     name: 'message',
     message: "Name of the sub package"
-    initial: "@slub/edb-"
+    initial: "@graviola/edb-"
   }
 ]

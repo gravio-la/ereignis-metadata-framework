@@ -26,16 +26,16 @@ import React, {
   useState,
 } from "react";
 
-import { camelCaseToTitleCase } from "@slub/edb-ui-utils";
+import { camelCaseToTitleCase } from "@graviola/edb-ui-utils";
 import { WikidataAllPropTable } from "../wikidata";
-import { OverflowContainer } from "@slub/edb-basic-components";
-import { specialDate2LocalDate } from "@slub/edb-ui-utils";
+import { OverflowContainer } from "@graviola/edb-basic-components";
+import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
-import { isValidUrl } from "@slub/edb-ui-utils";
+import { isValidUrl } from "@graviola/edb-ui-utils";
 import { Image } from "mui-image";
 import { EntityChip } from "../show";
-import { useQuery } from "@slub/edb-state-hooks";
-import { findEntityWithinLobidByIRI, gndBaseIRI } from "@slub/edb-authorities";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { findEntityWithinLobidByIRI, gndBaseIRI } from "@graviola/edb-authorities";
 
 export interface AllPropTableProps {
   allProps?: any;

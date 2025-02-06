@@ -1,5 +1,5 @@
 import React from "react";
-import { LobidAllPropTable } from "@slub/edb-advanced-components";
+import { LobidAllPropTable } from "@graviola/edb-advanced-components";
 
 export default {
   title: "ui/view/LobidAllPropsTable",

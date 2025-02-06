@@ -1,4 +1,4 @@
-import { useSimilarityFinderState } from "@slub/edb-state-hooks";
+import { useSimilarityFinderState } from "@graviola/edb-state-hooks";
 import { SimilarityFinder } from "./SimilarityFinder";
 import { useKnowledgeBases } from "./useKnowledgeBases";
 import React, { useCallback, useMemo, useState } from "react";

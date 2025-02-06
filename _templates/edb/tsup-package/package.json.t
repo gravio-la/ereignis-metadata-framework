@@ -28,9 +28,9 @@ to: packages/<%= name.split("/")[1] %>/package.json
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "eslint-config-edb": "workspace:*",
     "@types/jest": "^29",
     "typescript": "^5"

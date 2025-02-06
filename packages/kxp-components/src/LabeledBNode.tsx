@@ -1,8 +1,8 @@
 import { BlankNode } from "@rdfjs/types";
-import { findFirstInProps, NodePropertyTree } from "@slub/edb-graph-traversal";
+import { findFirstInProps, NodePropertyTree } from "@graviola/edb-graph-traversal";
 import { useMemo } from "react";
 import { dcterms, foaf, rdfs, skos } from "@tpluscode/rdf-ns-builders";
-import { geonames, radatana } from "@slub/edb-marc-to-rdf";
+import { geonames, radatana } from "@graviola/edb-marc-to-rdf";
 import {
   Button,
   styled,

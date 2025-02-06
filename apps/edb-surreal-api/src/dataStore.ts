@@ -1,6 +1,6 @@
 import config from "@slub/exhibition-sparql-config";
-import { oxigraphCrudOptions } from "@slub/remote-query-implementations";
-import { initSPARQLStore } from "@slub/sparql-db-impl";
+import { oxigraphCrudOptions } from "@graviola/remote-query-implementations";
+import { initSPARQLStore } from "@graviola/sparql-db-impl";
 import schema from "@slub/exhibition-schema/schemas/jsonschema/Exhibition.schema.json";
 import { JSONSchema7 } from "json-schema";
 

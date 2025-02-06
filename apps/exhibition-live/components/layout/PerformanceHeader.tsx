@@ -3,7 +3,7 @@ import { Button, Grid } from "@mui/material";
 import React, { FunctionComponent } from "react";
 
 import SettingsModal from "../content/settings/SettingsModal";
-import { useLocalSettings } from "@slub/edb-state-hooks";
+import { useLocalSettings } from "@graviola/edb-state-hooks";
 import { Logo } from "./main-layout";
 
 interface OwnProps {}

@@ -1,18 +1,18 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import { MRT_ColumnDef } from "material-react-table";
-import { OverflowContainer } from "@slub/edb-basic-components";
+import { OverflowContainer } from "@graviola/edb-basic-components";
 import { Avatar, Box, Link } from "@mui/material";
 import maxBy from "lodash-es/maxBy";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { applyToEachField } from "@slub/edb-data-mapping";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { applyToEachField } from "@graviola/edb-data-mapping";
 import * as React from "react";
 import { MouseEvent, useCallback, useMemo } from "react";
 import { TFunction } from "i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
+import { PrimaryField, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
 import { JsonSchema, RankedTester, TesterContext } from "@jsonforms/core";
-import { isJSONSchema } from "@slub/json-schema-utils";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { isJSONSchema } from "@graviola/json-schema-utils";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 import { cellConfigRegistry } from "./cellConfigRegistry";
 import {
   extractSingleFieldIfString,

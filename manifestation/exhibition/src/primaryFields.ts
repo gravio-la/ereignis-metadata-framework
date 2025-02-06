@@ -2,9 +2,9 @@ import {
   PrimaryField,
   PrimaryFieldDeclaration,
   PrimaryFieldExtractDeclaration,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import { schema } from "./schema";
-import { defs } from "@slub/json-schema-utils";
+import { defs } from "@graviola/json-schema-utils";
 
 type ExhibitionPrimaryFieldDeclaration = PrimaryFieldDeclaration<string>;
 

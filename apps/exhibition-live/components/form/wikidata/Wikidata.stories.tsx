@@ -1,5 +1,5 @@
 import React from "react";
-import { WikidataAllPropTable } from "@slub/edb-advanced-components";
+import { WikidataAllPropTable } from "@graviola/edb-advanced-components";
 
 import WikidataThingCard from "./WikidataThingCard";
 import WikidataHumanCard from "./WikidataHumanCard";

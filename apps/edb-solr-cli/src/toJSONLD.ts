@@ -1,4 +1,4 @@
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import merge from "lodash/merge";
 
 export const splitUpLoDashConnectedEntry = (str: string, value: any) => {

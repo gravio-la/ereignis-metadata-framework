@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { ModRouter, Url } from "@slub/edb-global-types";
+import { ModRouter, Url } from "@graviola/edb-global-types";
 import { useAdbContext } from "./provider";
 
 type Options = {

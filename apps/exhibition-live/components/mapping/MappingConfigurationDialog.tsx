@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useCallback } from "react";
 
-import type { DeclarativeSimpleMapping } from "@slub/edb-data-mapping";
+import type { DeclarativeSimpleMapping } from "@graviola/edb-data-mapping";
 import { MappingConfiguration } from "./MappingConfiguration";
 
 type MappingConfigurationDialogProps = {

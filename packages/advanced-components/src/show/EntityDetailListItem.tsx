@@ -8,16 +8,16 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
-import { useAdbContext, useTypeIRIFromEntity } from "@slub/edb-state-hooks";
+import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
 import {
   useCRUDWithQueryClient,
   useExtendedSchema,
-} from "@slub/edb-state-hooks";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+} from "@graviola/edb-state-hooks";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 import NiceModal from "@ebay/nice-modal-react";
 import { Clear, HideImage } from "@mui/icons-material";
-import { ellipsis } from "@slub/edb-ui-utils";
-import { PrimaryFieldResults } from "@slub/edb-core-types";
+import { ellipsis } from "@graviola/edb-ui-utils";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
 
 export type EntityDetailListItemProps = {
   entityIRI: string;

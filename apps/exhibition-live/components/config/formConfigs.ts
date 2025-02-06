@@ -1,5 +1,5 @@
 import namespace from "@rdfjs/namespace";
-import { SparqlBuildOptions } from "@slub/edb-core-types";
+import { SparqlBuildOptions } from "@graviola/edb-core-types";
 import { v4 as uuidv4 } from "uuid";
 import { typeIRItoTypeName } from "./index";
 import { primaryFieldExtracts, primaryFields } from "@slub/exhibition-schema";

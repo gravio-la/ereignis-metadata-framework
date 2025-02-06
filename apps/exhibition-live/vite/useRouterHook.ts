@@ -1,4 +1,4 @@
-import { ModRouter } from "@slub/edb-global-types";
+import { ModRouter } from "@graviola/edb-global-types";
 import {
   Location,
   Params,

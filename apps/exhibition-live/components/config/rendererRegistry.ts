@@ -14,11 +14,11 @@ import {
 } from "@jsonforms/core";
 import { JSONSchema7 } from "json-schema";
 import { isEmpty } from "lodash";
-import { MarkdownTextFieldRenderer } from "@slub/edb-markdown-renderer";
+import { MarkdownTextFieldRenderer } from "@graviola/edb-markdown-renderer";
 import {
   materialCustomAnyOfControlTester,
   MaterialCustomAnyOfRenderer,
-} from "@slub/edb-layout-renderer";
+} from "@graviola/edb-layout-renderer";
 import {
   adbSpecialDateControlTester,
   AdbSpecialDateRenderer,
@@ -26,7 +26,7 @@ import {
   ImageRenderer,
   materialBooleanControlTester,
   TypeOfRenderer,
-} from "@slub/edb-basic-renderer";
+} from "@graviola/edb-basic-renderer";
 import {
   InlineCondensedSemanticFormsRenderer,
   InlineDropdownRenderer,
@@ -35,7 +35,7 @@ import {
   MaterialArrayOfLinkedItemRenderer,
   materialLinkedObjectControlTester,
   MaterialLinkedObjectRenderer,
-} from "@slub/edb-linked-data-renderer";
+} from "@graviola/edb-linked-data-renderer";
 
 export const rendererRegistry: JsonFormsRendererRegistryEntry[] = [
   ...materialRenderers,

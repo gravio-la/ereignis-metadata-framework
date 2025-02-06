@@ -2,11 +2,11 @@ import { TextFieldProps, useControlled } from "@mui/material";
 import parse from "html-react-parser";
 import React, { FunctionComponent, useCallback } from "react";
 
-import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
-import { useQuery } from "@slub/edb-state-hooks";
-import { findEntityByClass, loadEntityBasics } from "@slub/sparql-schema";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { DebouncedAutocomplete } from "@slub/edb-advanced-components";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { findEntityByClass, loadEntityBasics } from "@graviola/sparql-schema";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;

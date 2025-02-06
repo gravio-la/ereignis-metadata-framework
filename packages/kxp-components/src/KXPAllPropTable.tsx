@@ -1,4 +1,4 @@
-import { RootNode } from "@slub/edb-graph-traversal";
+import { RootNode } from "@graviola/edb-graph-traversal";
 import {
   Container,
   Table,

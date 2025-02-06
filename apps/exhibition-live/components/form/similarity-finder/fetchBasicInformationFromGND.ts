@@ -1,5 +1,5 @@
-import { BasicThingInformation } from "@slub/edb-core-types";
-import { findEntityWithinLobidByIRI } from "@slub/edb-authorities";
+import { BasicThingInformation } from "@graviola/edb-core-types";
+import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
 import { gndEntryWithMainInfo } from "../lobid/LobidSearchTable";
 
 export const fetchBasicInformationFromGND: (

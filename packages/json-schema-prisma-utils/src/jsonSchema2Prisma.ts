@@ -3,7 +3,7 @@ import {
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 import { JSONSchema7 } from "json-schema";
 import { schemaName } from "@slub/exhibition-schema/src";
 

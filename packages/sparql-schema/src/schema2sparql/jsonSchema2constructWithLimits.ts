@@ -1,6 +1,6 @@
 import { JsonSchema, resolveSchema } from "@jsonforms/core";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { isJSONSchema, isJSONSchemaDefinition } from "@slub/json-schema-utils";
+import { isJSONSchema, isJSONSchemaDefinition } from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
 
 const MAX_RECURSION = 4;

@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-resizable-drawer",
+  "name": "@graviola/edb-resizable-drawer",
   "version": "0.1.0",
   "description": "A mouse and touch resizable drawer",
   "type": "module",
@@ -25,9 +25,9 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3",

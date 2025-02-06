@@ -12,8 +12,8 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import {
   CommonPropertyValues,
   getCommonPropsFromWikidata,
-} from "@slub/edb-ui-utils";
-import { OverflowContainer } from "@slub/edb-basic-components";
+} from "@graviola/edb-ui-utils";
+import { OverflowContainer } from "@graviola/edb-basic-components";
 
 interface OwnProps {
   thingIRI?: string;

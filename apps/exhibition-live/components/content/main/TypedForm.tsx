@@ -9,13 +9,13 @@ import {
   useModifiedRouter,
   useRightDrawerState,
   useSettings,
-} from "@slub/edb-state-hooks";
-import { encodeIRI } from "@slub/edb-ui-utils";
+} from "@graviola/edb-state-hooks";
+import { encodeIRI } from "@graviola/edb-ui-utils";
 import NewSemanticJsonForm from "../../form/SemanticJsonFormOperational";
-import { useFormDataStore, useExtendedSchema } from "@slub/edb-state-hooks";
-import { useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import { EntityDetailElement } from "@slub/edb-advanced-components";
-import { materialCategorizationStepperLayoutWithPortal } from "@slub/edb-layout-renderer";
+import { useFormDataStore, useExtendedSchema } from "@graviola/edb-state-hooks";
+import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import { EntityDetailElement } from "@graviola/edb-advanced-components";
+import { materialCategorizationStepperLayoutWithPortal } from "@graviola/edb-layout-renderer";
 
 type Props = {
   children: React.ReactChild;

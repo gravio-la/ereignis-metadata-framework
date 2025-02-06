@@ -2,15 +2,15 @@ import { Button, List } from "@mui/material";
 import { dcterms } from "@tpluscode/rdf-ns-builders";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 
-import { useLocalHistory, useSettings } from "@slub/edb-state-hooks";
-import { findFirstInProps, RootNode } from "@slub/edb-graph-traversal";
+import { useLocalHistory, useSettings } from "@graviola/edb-state-hooks";
+import { findFirstInProps, RootNode } from "@graviola/edb-graph-traversal";
 import { useTranslation } from "next-i18next";
-import { findEntityWithinK10Plus } from "@slub/edb-kxp-utils";
-import { fabio } from "@slub/edb-marc-to-rdf";
+import { findEntityWithinK10Plus } from "@graviola/edb-kxp-utils";
+import { fabio } from "@graviola/edb-marc-to-rdf";
 import {
   ClassicEntityCard,
   ClassicResultListItem,
-} from "@slub/edb-basic-components";
+} from "@graviola/edb-basic-components";
 import { KXPAllPropTable } from "./KXPAllPropTable";
 
 type Props = {

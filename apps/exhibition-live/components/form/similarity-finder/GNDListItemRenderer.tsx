@@ -3,21 +3,21 @@ import {
   useQuery,
   useQueryClient,
   useSimilarityFinderState,
-} from "@slub/edb-state-hooks";
-import { BasicThingInformation } from "@slub/edb-core-types";
+} from "@graviola/edb-state-hooks";
+import { BasicThingInformation } from "@graviola/edb-core-types";
 import { fetchBasicInformationFromGND } from "./fetchBasicInformationFromGND";
 import * as React from "react";
 import { useCallback, useEffect } from "react";
 import {
   ClassicEntityCard,
   ClassicResultListItem,
-} from "@slub/edb-basic-components";
+} from "@graviola/edb-basic-components";
 import { Button, IconButton, Stack } from "@mui/material";
 import { Check } from "@mui/icons-material";
 import {
   LobidAllPropTable,
   WikidataAllPropTable,
-} from "@slub/edb-advanced-components";
+} from "@graviola/edb-advanced-components";
 import { ListItemRendererProps } from "./types";
 
 export const GNDListItemRenderer = ({

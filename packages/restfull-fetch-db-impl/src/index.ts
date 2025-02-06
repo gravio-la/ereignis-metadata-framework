@@ -1,11 +1,11 @@
 import fetch from "cross-fetch";
-import { StringToIRIFn } from "@slub/edb-core-types";
+import { StringToIRIFn } from "@graviola/edb-core-types";
 import {
   AbstractDatastore,
   CountAndIterable,
   DatastoreBaseConfig,
   InitDatastoreFunction,
-} from "@slub/edb-global-types";
+} from "@graviola/edb-global-types";
 import qs from "qs";
 
 export type RestfullDataStoreConfig = {

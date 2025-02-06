@@ -13,7 +13,7 @@ import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import {
   useKeyEventForSimilarityFinder,
   useSimilarityFinderState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { OverflowChip, OverflowContainer } from "../overflow";
 import { ClassicResultPopperItem } from "../entity";
 

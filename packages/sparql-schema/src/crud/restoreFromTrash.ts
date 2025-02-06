@@ -1,5 +1,5 @@
 import { JSONSchema7 } from "json-schema";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import { makeSPARQLRestoreFromTrashQuery } from "./makeSPARQLRestoreFromTrashQuery";
 
 export const restoreFromTrash = async (

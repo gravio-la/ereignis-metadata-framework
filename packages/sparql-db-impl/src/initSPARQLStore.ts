@@ -2,9 +2,9 @@ import {
   AbstractDatastore,
   CountAndIterable,
   InitDatastoreFunction,
-} from "@slub/edb-global-types";
+} from "@graviola/edb-global-types";
 import { SPARQLDataStoreConfig } from "./SPARQLDataStoreConfig";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JSONSchema7 } from "json-schema";
 import {
   cleanJSONLD,
@@ -18,7 +18,7 @@ import {
   save,
   searchEntityByLabel,
   withDefaultPrefix,
-} from "@slub/sparql-schema";
+} from "@graviola/sparql-schema";
 
 export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
   dataStoreConfig,

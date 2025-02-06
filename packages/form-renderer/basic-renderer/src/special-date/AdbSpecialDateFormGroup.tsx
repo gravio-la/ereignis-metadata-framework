@@ -5,7 +5,7 @@ import {
   getDatePartAsString,
   getPaddedDatePart,
   leftpad,
-} from "@slub/edb-core-utils";
+} from "@graviola/edb-core-utils";
 
 export type AdbSpecialDateFormGroupProps = {
   data?: number;

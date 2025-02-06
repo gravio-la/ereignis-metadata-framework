@@ -4,8 +4,8 @@ import React, { useCallback, useMemo } from "react";
 
 import { useControlled } from "@mui/material";
 import { ErrorObject } from "ajv";
-import { SemanticJsonFormProps } from "@slub/edb-global-types";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { SemanticJsonFormProps } from "@graviola/edb-global-types";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 
 type SemanticFormsInlineProps = {
   label?: string;

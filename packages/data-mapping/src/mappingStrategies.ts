@@ -5,12 +5,12 @@ import { mapByConfig } from "./mapByConfig";
 import isNil from "lodash-es/isNil";
 import set from "lodash-es/set";
 import get from "lodash-es/get";
-import { getPaddedDate, makeSpecialDate } from "@slub/edb-core-utils";
+import { getPaddedDate, makeSpecialDate } from "@graviola/edb-core-utils";
 import {
   IRIToStringFn,
   NormDataMappings,
   PrimaryFieldDeclaration,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import { JSONSchema7 } from "json-schema";
 import { isNaN } from "lodash-es";
 

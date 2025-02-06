@@ -1,5 +1,5 @@
 import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
-import { IRIToStringFn } from "@slub/edb-core-types";
+import { IRIToStringFn } from "@graviola/edb-core-types";
 import {
   primaryTextFieldControlTester,
   PrimaryTextFieldRenderer,

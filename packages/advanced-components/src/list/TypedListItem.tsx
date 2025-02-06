@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useMemo } from "react";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 import {
   Avatar,
   ListItem,
@@ -8,7 +8,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import NiceModal from "@ebay/nice-modal-react";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 import { EntityDetailModal } from "../show";
 
 interface OwnProps {

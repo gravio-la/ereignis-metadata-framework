@@ -99,10 +99,10 @@ glob(DIRECTORY_PATH, async (err, files) => {
     `@types/${name.replace(/^@([^\/]+)\/(.+)$/, "$1__$2").replace(/\/$/, "")}`;
 
   const filteredImports = Array.from(allImports).filter(
-    (imp) => !imp.startsWith("@slub"),
+    (imp) => !imp.startsWith("@graviola"),
   );
   const workspaceImports = Array.from(allImports).filter((imp) =>
-    imp.startsWith("@slub"),
+    imp.startsWith("@graviola"),
   );
 
   const dependenciesWithInfo = await Promise.all(

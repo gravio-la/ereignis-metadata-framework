@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-cli-creator",
+  "name": "@graviola/edb-cli-creator",
   "version": "1.1.0",
   "description": "CLI creator from the EDB framework",
   "type": "module",
@@ -25,18 +25,18 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
-    "@slub/edb-data-mapping": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-data-mapping": "workspace:*",
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@slub/edb-core-utils": "workspace:*",
+    "@graviola/edb-core-utils": "workspace:*",
     "cmd-ts": "^0.13.0"
   }
 }

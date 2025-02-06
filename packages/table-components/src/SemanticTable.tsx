@@ -10,7 +10,7 @@ import {
   useQuery,
   useQueryClient,
   useSettings,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import {
   Backdrop,
   Box,
@@ -49,11 +49,11 @@ import { useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
 import { useTranslation } from "next-i18next";
-import { moveToTrash } from "@slub/sparql-schema";
+import { moveToTrash } from "@graviola/sparql-schema";
 import { computeColumns } from "./listHelper";
-import { encodeIRI, filterUndefOrNull } from "@slub/edb-ui-utils";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { GenericModal } from "@slub/edb-basic-components";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-ui-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { GenericModal } from "@graviola/edb-basic-components";
 import { ExportMenuButton } from "./ExportMenuButton";
 import { TableConfigRegistry } from "./types";
 import { typeIRItoTypeName } from "adb-next/components/config";

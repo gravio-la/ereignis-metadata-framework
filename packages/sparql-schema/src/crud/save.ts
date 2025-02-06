@@ -2,7 +2,7 @@ import { INSERT } from "@tpluscode/sparql-builder";
 import { withDefaultPrefix } from "./makeSPARQLWherePart";
 import { JSONSchema7 } from "json-schema";
 import { makeSPARQLDeleteQuery } from "./makeSPARQLDeleteQuery";
-import { NamedAndTypedEntity, SPARQLCRUDOptions } from "@slub/edb-core-types";
+import { NamedAndTypedEntity, SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import { dataset2NTriples } from "./dataset2NTriples";
 import { jsonld2DataSet } from "./jsonld2DataSet";
 

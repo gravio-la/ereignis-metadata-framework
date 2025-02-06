@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-layout-renderer",
+  "name": "@graviola/edb-layout-renderer",
   "version": "1.0.0",
   "private": true,
   "main": "src/index.tsx",
@@ -19,7 +19,7 @@
     "react": "^18"
   },
   "dependencies": {
-    "@slub/edb-ui-utils": "workspace:*",
+    "@graviola/edb-ui-utils": "workspace:*",
     "next-i18next": "^15",
     "lodash-es": "^4.17",
     "mui-image": "^1.0.7"

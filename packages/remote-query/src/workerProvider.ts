@@ -1,4 +1,4 @@
-import { SparqlEndpoint, WorkerProvider } from "@slub/edb-core-types";
+import { SparqlEndpoint, WorkerProvider } from "@graviola/edb-core-types";
 import { oxigraphCrudOptions } from "./remoteOxigraph";
 import { allegroCrudOptions } from "./remoteAllegro";
 import { qleverCrudOptions } from "./remoteQlever";

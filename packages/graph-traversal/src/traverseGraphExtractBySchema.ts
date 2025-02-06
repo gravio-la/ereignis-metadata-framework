@@ -8,8 +8,8 @@ import {
   isJSONSchema,
   isJSONSchemaDefinition,
   resolveSchema,
-} from "@slub/json-schema-utils";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+} from "@graviola/json-schema-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { JsonSchema, WalkerOptions } from "./types";
 import DatasetCore from "@rdfjs/dataset/DatasetCore";
 

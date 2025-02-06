@@ -1,4 +1,4 @@
-import { makeColumnDesc } from "@slub/edb-core-utils";
+import { makeColumnDesc } from "@graviola/edb-core-utils";
 import {
   DeclarativeMatchBasedFlatMappings,
   matchBased2DeclarativeFlatMappings,

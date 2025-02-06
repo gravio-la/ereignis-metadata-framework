@@ -1,6 +1,6 @@
-import { MapFromAuthorityHandler } from "@slub/edb-cli-creator";
-import { NormDataMapping } from "@slub/edb-core-types";
-import { mapByConfig } from "@slub/edb-data-mapping";
+import { MapFromAuthorityHandler } from "@graviola/edb-cli-creator";
+import { NormDataMapping } from "@graviola/edb-core-types";
+import { mapByConfig } from "@graviola/edb-data-mapping";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";
 import { dataStore } from "src/dataStore";
 import { getDefaultMappingStrategyContext } from "./mappingStrategyContext";

@@ -1,4 +1,4 @@
-import { ProcessFlatResourceFn } from "@slub/edb-data-mapping";
+import { ProcessFlatResourceFn } from "@graviola/edb-data-mapping";
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse";

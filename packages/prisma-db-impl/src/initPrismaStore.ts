@@ -1,22 +1,22 @@
 import {
   jsonSchema2PrismaFlatSelect,
   jsonSchema2PrismaSelect,
-} from "@slub/json-schema-prisma-utils";
+} from "@graviola/json-schema-prisma-utils";
 import { JSONSchema7 } from "json-schema";
 import { toJSONLD } from "./helper";
-import { AbstractDatastore } from "@slub/edb-global-types";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import { importAllDocuments, importSingleDocument } from "./import";
 import {
   IRIToStringFn,
   PrimaryFieldDeclaration,
   StringToIRIFn,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import {
   bringDefinitionToTop,
   defs,
   prepareStubbedSchema,
-} from "@slub/json-schema-utils";
-import { cleanJSONLD } from "@slub/sparql-schema";
+} from "@graviola/json-schema-utils";
+import { cleanJSONLD } from "@graviola/sparql-schema";
 import { save } from "./save";
 import { bindings2RDFResultSet } from "./helper/bindings2RDFResultSet";
 

@@ -4,7 +4,7 @@ import {
   GoogleSpreadsheet,
   GoogleSpreadsheetWorksheet,
 } from "google-spreadsheet";
-import { useQuery } from "@slub/edb-state-hooks";
+import { useQuery } from "@graviola/edb-state-hooks";
 
 export const useGoogleSpreadSheet: (sheetId: string) => {
   loaded: boolean;

@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-authorities",
+  "name": "@graviola/edb-authorities",
   "description": "Methods and metadata to search and retrieve data from different authorities",
   "version": "0.1.0",
   "main": "./dist/index.js",
@@ -16,11 +16,11 @@
     "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*"
+    "@graviola/edb-build-helper": "workspace:*"
   },
   "dependencies": {
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-global-types": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "lodash-es": "^4.17.21",
     "cross-fetch": "^4.0.0"
   }

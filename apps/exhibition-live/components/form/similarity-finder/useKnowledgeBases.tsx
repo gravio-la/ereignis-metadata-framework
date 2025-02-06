@@ -2,7 +2,7 @@ import {
   useAdbContext,
   useDataStore,
   useGlobalCRUDOptions,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { useMemo } from "react";
 import { KBMainDatabase, Wikidata, GND, K10Plus } from "./provider";
 import { KnowledgeBaseDescription } from "./types";

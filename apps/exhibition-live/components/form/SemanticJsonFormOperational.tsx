@@ -9,19 +9,19 @@ import React, {
   useState,
 } from "react";
 
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
+import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import { SemanticJsonFormToolbar } from "./SemanticJsonFormToolbar";
-import { useSettings } from "@slub/edb-state-hooks";
-import { useQueryKeyResolver } from "@slub/edb-state-hooks";
+import { useSettings } from "@graviola/edb-state-hooks";
+import { useQueryKeyResolver } from "@graviola/edb-state-hooks";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
 import { create } from "zustand";
 import { useTranslation } from "next-i18next";
-import { cleanJSONLD, LoadResult } from "@slub/sparql-schema";
-import { FormDebuggingTools } from "@slub/edb-debug-utils";
-import { SemanticJsonFormProps } from "@slub/edb-global-types";
-import { GenericModal } from "@slub/edb-basic-components";
-import { ChangeCause } from "@slub/edb-linked-data-renderer";
+import { cleanJSONLD, LoadResult } from "@graviola/sparql-schema";
+import { FormDebuggingTools } from "@graviola/edb-debug-utils";
+import { SemanticJsonFormProps } from "@graviola/edb-global-types";
+import { GenericModal } from "@graviola/edb-basic-components";
+import { ChangeCause } from "@graviola/edb-linked-data-renderer";
 
 type SemanticJsonFormStateType = {
   isSaving: boolean;

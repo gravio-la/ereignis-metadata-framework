@@ -1,14 +1,14 @@
 import {
   jsonSchema2PrismaFlatSelect,
   jsonSchema2PrismaSelect,
-} from "@slub/json-schema-prisma-utils";
+} from "@graviola/json-schema-prisma-utils";
 import { JSONSchema7 } from "json-schema";
 import { toJSONLD } from "./toJSONLD";
-import { AbstractDatastore } from "@slub/edb-global-types";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import { importAllDocuments, importSingleDocument } from "./import";
 import { dataStore } from "./dataStore";
-import { PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { defs } from "@slub/json-schema-utils";
+import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import { defs } from "@graviola/json-schema-utils";
 
 const { typeNameToTypeIRI, typeIRItoTypeName } = dataStore;
 

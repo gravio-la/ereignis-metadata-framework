@@ -8,7 +8,7 @@ import { JSONSchema7 } from "json-schema";
 import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
 import { rendererRegistry } from "./rendererRegistry";
 import { materialCells } from "@jsonforms/material-renderers";
-import { IRIToStringFn, SparqlBuildOptions } from "@slub/edb-core-types";
+import { IRIToStringFn, SparqlBuildOptions } from "@graviola/edb-core-types";
 import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
 import {
   primaryTextFieldControlTester,

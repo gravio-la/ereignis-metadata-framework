@@ -17,19 +17,19 @@ import {
 import merge from "lodash/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { extractFieldIfString } from "@slub/edb-data-mapping";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { extractFieldIfString } from "@graviola/edb-data-mapping";
 import {
   useGlobalSearchWithHelper,
   useRightDrawerState,
   useKeyEventForSimilarityFinder,
   useAdbContext,
-} from "@slub/edb-state-hooks";
-import { makeFormsPath } from "@slub/edb-ui-utils";
+} from "@graviola/edb-state-hooks";
+import { makeFormsPath } from "@graviola/edb-ui-utils";
 import { JSONSchema7 } from "json-schema";
-import { PrimaryField } from "@slub/edb-core-types";
-import { EntityDetailListItem } from "@slub/edb-advanced-components";
-import { SearchbarWithFloatingButton } from "@slub/edb-basic-components";
+import { PrimaryField } from "@graviola/edb-core-types";
+import { EntityDetailListItem } from "@graviola/edb-advanced-components";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
 
 const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
   const {

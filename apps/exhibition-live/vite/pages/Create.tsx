@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import React, { useEffect, useMemo, useState } from "react";
-import { decodeIRI } from "@slub/edb-core-utils";
+import { decodeIRI } from "@graviola/edb-core-utils";
 import { MainLayout } from "../../components/layout/main-layout";
 import { Button, Hidden } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -10,7 +10,7 @@ import {
   useFormEditor,
   useModifiedRouter,
   useSettings,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import NiceModal from "@ebay/nice-modal-react";
 
 export const CreatePage = () => {

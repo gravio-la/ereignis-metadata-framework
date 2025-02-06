@@ -11,18 +11,18 @@ import {
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { Clear, Save } from "@mui/icons-material";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 import { JSONSchema7 } from "json-schema";
 import { useJsonForms } from "@jsonforms/react";
 import dot from "dot";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
+import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
 import get from "lodash/get";
 import NiceModal from "@ebay/nice-modal-react";
-import { withEllipsis } from "@slub/edb-ui-utils";
-import { specialDate2LocalDate } from "@slub/edb-ui-utils";
+import { withEllipsis } from "@graviola/edb-ui-utils";
+import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { PrimaryFieldDeclaration } from "@slub/edb-core-types";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
 
 type SimpleExpandPanelRendererProps = {
   data: any;

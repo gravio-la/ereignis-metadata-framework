@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 
-import { filterUndefOrNull } from "@slub/edb-ui-utils";
-import { useQuery } from "@slub/edb-state-hooks";
+import { filterUndefOrNull } from "@graviola/edb-ui-utils";
+import { useQuery } from "@graviola/edb-state-hooks";
 import { typeIRItoTypeName } from "../../config";
 import Ajv from "ajv";
 import { useTranslation } from "next-i18next";
@@ -15,20 +15,20 @@ import {
   BasicThingInformation,
   PrimaryFieldExtract,
   PrimaryFieldExtractDeclaration,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import {
   ClassicEntityCard,
   ClassicResultListItem,
-} from "@slub/edb-basic-components";
+} from "@graviola/edb-basic-components";
 import {
   LobidAllPropTable,
   WikidataAllPropTable,
-} from "@slub/edb-advanced-components";
+} from "@graviola/edb-advanced-components";
 import {
   findEntityWithinLobid,
   findEntityWithinLobidByIRI,
-} from "@slub/edb-authorities";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+} from "@graviola/edb-authorities";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 import { lobidTypemap } from "@slub/exhibition-schema";
 
 type Props = {

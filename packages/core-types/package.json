@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-core-types",
+  "name": "@graviola/edb-core-types",
   "version": "1.1.0",
   "description": "Core types for EDB",
   "type": "module",

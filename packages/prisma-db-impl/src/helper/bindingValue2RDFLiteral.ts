@@ -1,4 +1,4 @@
-import { isValidUrl } from "@slub/edb-core-utils";
+import { isValidUrl } from "@graviola/edb-core-utils";
 import { BindingValue } from "../types";
 
 /**

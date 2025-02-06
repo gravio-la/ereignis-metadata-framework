@@ -1,5 +1,5 @@
 {
-  "name": "@slub/sparql-db-impl",
+  "name": "@graviola/sparql-db-impl",
   "version": "1.1.0",
   "description": "a set of store specific implementations of SPARQL query builders",
   "type": "module",
@@ -22,23 +22,23 @@
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@slub/json-schema-utils": "workspace:*",
-    "@slub/sparql-schema": "workspace:*",
-    "@slub/edb-graph-traversal": "workspace:*",
+    "@graviola/json-schema-utils": "workspace:*",
+    "@graviola/sparql-schema": "workspace:*",
+    "@graviola/edb-graph-traversal": "workspace:*",
     "@slub/exhibition-schema": "workspace:*",
     "@slub/exhibition-sparql-config": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-global-types": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "json-schema": "^0.4.0"
   }
 }

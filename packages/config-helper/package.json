@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-config-helper",
+  "name": "@graviola/edb-config-helper",
   "version": "1.0.0",
   "description": "helper functions to facilitate configuration of the EDB specific instances",
   "type": "module",
@@ -25,10 +25,10 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
-    "@slub/edb-global-types": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "eslint-config-edb": "workspace:*",
     "@types/jest": "^29",
     "typescript": "^5"

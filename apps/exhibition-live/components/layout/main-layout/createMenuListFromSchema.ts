@@ -7,8 +7,8 @@ import {
 import { JSONSchema7 } from "json-schema";
 
 import { TFunction } from "i18next";
-import { Permission } from "@slub/edb-core-types";
-import { MenuGroup, MenuItem } from "@slub/edb-advanced-components";
+import { Permission } from "@graviola/edb-core-types";
+import { MenuGroup, MenuItem } from "@graviola/edb-advanced-components";
 
 const icons = { IconFaceId, IconPaint, IconDots, IconCorporation };
 

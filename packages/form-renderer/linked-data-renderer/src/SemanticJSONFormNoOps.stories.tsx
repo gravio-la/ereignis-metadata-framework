@@ -2,7 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import { useState } from "react";
 import type { Meta } from "@storybook/react";
 
-import { useExtendedSchema } from "@slub/edb-state-hooks";
+import { useExtendedSchema } from "@graviola/edb-state-hooks";
 import { SemanticJsonFormNoOps } from "./SemanticJsonFormNoOps";
 import namespace from "@rdfjs/namespace";
 const sladb = namespace("http://ontologies.slub-dresden.de/exhibition#");

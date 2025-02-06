@@ -7,10 +7,10 @@ import React, {
   useState,
 } from "react";
 
-import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
-import { findEntityByClass } from "@slub/sparql-schema";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
-import { EntityDetailElement } from "@slub/edb-advanced-components";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { findEntityByClass } from "@graviola/sparql-schema";
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
+import { EntityDetailElement } from "@graviola/edb-advanced-components";
 
 export type DiscoverSearchTableProps = {
   searchString: string;

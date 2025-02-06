@@ -1,5 +1,5 @@
 {
-  "name": "@slub/json-schema-prisma-utils",
+  "name": "@graviola/json-schema-prisma-utils",
   "version": "1.1.0",
   "description": "JsonSchema utility functions for JSONSchema to Prisma conversion",
   "type": "module",
@@ -25,17 +25,17 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@slub/json-schema-utils": "workspace:*",
-    "@slub/edb-core-utils": "workspace:*",
+    "@graviola/json-schema-utils": "workspace:*",
+    "@graviola/edb-core-utils": "workspace:*",
     "json-schema": "^0.4.0"
   }
 }

@@ -2,7 +2,7 @@ import { run, subcommands } from "cmd-ts";
 import { dataStore, importStores } from "./dataStore";
 import { flatImportHandler } from "./flatImportHandler";
 import { availableFlatMappings } from "@slub/exhibition-schema";
-import { makeEdbCli } from "@slub/edb-cli-creator";
+import { makeEdbCli } from "@graviola/edb-cli-creator";
 import { schema } from "@slub/exhibition-schema";
 import { seedHandler } from "./seedHandler";
 import { mapFromAuthority } from "./mapFromAuthority";

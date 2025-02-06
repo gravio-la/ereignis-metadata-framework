@@ -8,11 +8,11 @@ import {
   useAdbContext,
   useGlobalSearch,
   useRightDrawerState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { OptionsModal } from "./OptionsModal";
 import { useTranslation } from "next-i18next";
-import { SearchbarWithFloatingButton } from "@slub/edb-basic-components";
-import { SemanticJsonFormNoOpsProps } from "@slub/edb-global-types";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import { SemanticJsonFormNoOpsProps } from "@graviola/edb-global-types";
 
 export type ChangeCause = "user" | "mapping" | "reload";
 

@@ -5,7 +5,7 @@ import { Login } from "../google/GoogleOAuth";
 import { useGoogleToken } from "../google/useGoogleToken";
 import NiceModal from "@ebay/nice-modal-react";
 import { GoogleDrivePickerModal } from "../google/GoogleDrivePicker";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
 import { GoogleSpreadSheetContainer } from "../google/GoogleSpreadSheetContainer";
 import { hasGrantedAnyScopeGoogle, useGoogleOAuth } from "@react-oauth/google";
 

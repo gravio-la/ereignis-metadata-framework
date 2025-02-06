@@ -1,20 +1,20 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import { useAdbContext, useTypeIRIFromEntity } from "@slub/edb-state-hooks";
+import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useCRUDWithQueryClient,
   useExtendedSchema,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 import { Button, Stack } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import { useSnackbar } from "notistack";
-import { useFormDataStore } from "@slub/edb-state-hooks";
-import { PrimaryFieldResults } from "@slub/edb-core-types";
-import { cleanJSONLD } from "@slub/sparql-schema";
-import { EditEntityModalProps } from "@slub/edb-global-types";
-import { MuiEditDialog } from "@slub/edb-basic-components";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+import { useFormDataStore } from "@graviola/edb-state-hooks";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { cleanJSONLD } from "@graviola/sparql-schema";
+import { EditEntityModalProps } from "@graviola/edb-global-types";
+import { MuiEditDialog } from "@graviola/edb-basic-components";
+import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
 
 export const EditEntityModal = NiceModal.create(
   ({

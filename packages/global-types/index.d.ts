@@ -4,8 +4,8 @@ import {
   SparqlBuildOptions,
   SparqlEndpoint,
   StringToIRIFn,
-} from "@slub/edb-core-types";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
+} from "@graviola/edb-core-types";
+import { WalkerOptions } from "@graviola/edb-graph-traversal";
 import { NamespaceBuilder } from "@rdfjs/namespace";
 import { JSONSchema7 } from "json-schema";
 import { UrlObject } from "url";
@@ -15,7 +15,7 @@ import {
   JsonFormsRendererRegistryEntry,
   JsonFormsUISchemaRegistryEntry,
 } from "@jsonforms/core";
-import { JSONLDConfig } from "@slub/edb-state-hooks/src";
+import { JSONLDConfig } from "@graviola/edb-state-hooks/src";
 import { ErrorObject } from "ajv";
 import { JsonFormsInitStateProps } from "@jsonforms/react";
 import React from "react";
@@ -23,7 +23,7 @@ import {
   DeclarativeMapping,
   DeclarativeMappings,
   DeclarativeMatchBasedFlatMappings,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 
 export type EdbConfRaw = {
   BASE_IRI: string;
