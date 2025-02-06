@@ -7,10 +7,10 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "description": "A TypeScript library for traversing RDF Graphs to extract and query data matching JSON Schemas, facilitating the development of semantic user interfaces.",
