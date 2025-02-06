@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "react-virtuoso": "^4.6.2",
-    "@types/react": "^18.3.3"
+    "@types/react": "~18.3"
   },
   "peerDependencies": {
     "@mui/material": "^5",

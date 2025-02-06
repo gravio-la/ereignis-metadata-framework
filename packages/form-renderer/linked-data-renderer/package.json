@@ -37,7 +37,7 @@
     "dot": "2.0.0-beta.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
+    "@types/react": "~18.3",
     "@types/lodash": "^4.17.4",
     "@types/mui-image": "^1.0.5",
     "@ebay/nice-modal-react": "^1.2.13"

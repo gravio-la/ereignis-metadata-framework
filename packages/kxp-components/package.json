@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/react": "^18.3.4",
     "@rdfjs/types": "^1.1.0"
   },
   "peerDependencies": {

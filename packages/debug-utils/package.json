@@ -28,7 +28,7 @@
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
-    "@types/react": "^18.3.1"
+    "@types/react": "~18.3"
   },
   "peerDependencies": {
     "next": ">14",

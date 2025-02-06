@@ -30,7 +30,7 @@
     "mui-image": "^1.0.7"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
+    "@types/react": "~18.3",
     "@types/lodash-es": "^4.17.12",
     "@types/mui-image": "^1.0.5"
   }
