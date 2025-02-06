@@ -26,7 +26,7 @@
   "scripts": {
     "start": "turbo run demo",
     "build": "turbo run build",
-    "build:packages": "turbo run build --filter=@slub/* --filter=@slub/edb-kxp-components --continue",
+    "build:packages": "turbo run build --filter='./packages/*' --continue",
     "build:manifestations": "turbo run build --filter='./manifestation/*' --continue",
     "build:pages": "turbo run build:pages",
     "cli": "bun ./apps/edb-cli/src/index.ts",
