@@ -12,8 +12,6 @@ import {
 
 import {
   useAdbContext,
-  useDataStore,
-  useGlobalCRUDOptions,
   useGlobalSearch,
   useModalRegistry,
   useSimilarityFinderState,
@@ -73,19 +71,16 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   onSelectedEntityChange,
   searchOnDataPath,
   search,
-  jsonSchema,
   hideFooter,
   knowledgeSources,
   additionalKnowledgeSources,
 }) => {
   const {
-    schema,
     queryBuildOptions,
     normDataMapping,
     createEntityIRI,
     typeNameToTypeIRI,
     typeIRIToTypeName,
-    jsonLDConfig: { defaultPrefix },
     components: { EditEntityModal },
   } = useAdbContext();
   const [typeName, setTypeName] = useState(
@@ -112,11 +107,10 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     typeName,
   ]);
 
-  const { prefixes, primaryFields } = queryBuildOptions;
+  const { primaryFields } = queryBuildOptions;
   const {
     search: globalSearch,
     typeName: globalTypeName,
-    path: globalPath,
     setSearch,
   } = useGlobalSearch();
 
@@ -219,13 +213,6 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
     [typeName, typeNameToTypeIRI],
   );
 
-  const { crudOptions } = useGlobalCRUDOptions();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
   const { mapData } = useDeclarativeMapper();
   const handleManuallyMapData = useCallback(
     async (
@@ -298,15 +285,12 @@ export const SimilarityFinder: FunctionComponent<SimilarityFinderProps> = ({
   }, [ref]);
   const { registerModal, modalRegistry } = useModalRegistry(NiceModal);
 
-  const getDefaultLabelKey = useCallback(
-    (typeIRI?: string) => {
-      const fieldDefinitions = primaryFields[typeName] as
-        | PrimaryField
-        | undefined;
-      return fieldDefinitions?.label || "title";
-    },
-    [primaryFields, typeName],
-  );
+  const getDefaultLabelKey = useCallback(() => {
+    const fieldDefinitions = primaryFields[typeName] as
+      | PrimaryField
+      | undefined;
+    return fieldDefinitions?.label || "title";
+  }, [primaryFields, typeName]);
 
   const showEditDialog = useCallback(() => {
     const defaultLabelKey = getDefaultLabelKey(preselectedClassIRI);
