@@ -32,7 +32,7 @@
     "json-schema": "^0.4.0",
     "lodash": "^4.17.21",
     "notistack": "^3.0.1",
-    "ajv": "^8.14.0",
+    "ajv": "^8.12",
     "json-schema-to-ts": "^3.1.0",
     "dot": "2.0.0-beta.1"
   },
