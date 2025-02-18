@@ -1,6 +1,5 @@
-import { Bindings, DatasetCore, Quad, ResultStream } from "@rdfjs/types";
-import { NamespaceBuilder } from "@rdfjs/namespace";
-import { DeclarativeMapping } from "@graviola/edb-ui-utils";
+import type { Bindings, DatasetCore, Quad, ResultStream } from "@rdfjs/types";
+import type { NamespaceBuilder } from "@rdfjs/namespace";
 export type * from "./settings";
 
 export type Prefixes = {
@@ -164,13 +163,16 @@ export type PermissionDeclaration<T extends string> = {
 
 export type SameAsTypeMap = Record<string, string | string[]>;
 
-export type NormDataMapping = {
+export type NormDataMapping<MappingType> = {
   label: string;
-  mapping: DeclarativeMapping;
+  mapping: MappingType;
   sameAsTypeMap: SameAsTypeMap;
 };
 
-export type NormDataMappings = Record<string, NormDataMapping>;
+export type NormDataMappings<MappingType> = Record<
+  string,
+  NormDataMapping<MappingType>
+>;
 
 export type AutocompleteSuggestion = {
   label: string;
@@ -181,4 +183,13 @@ export type ColumnDesc<T> = {
   index: number;
   value: T;
   letter: string;
+};
+
+export type WalkerOptions = {
+  omitEmptyArrays: boolean;
+  omitEmptyObjects: boolean;
+  maxRecursionEachRef: number;
+  maxRecursion: number;
+  skipAtLevel: number;
+  doNotRecurseNamedNodes?: boolean;
 };
