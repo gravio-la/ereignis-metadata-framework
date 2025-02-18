@@ -57,21 +57,23 @@
     "apps/*"
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.27.12",
     "@turbo/gen": "^2.4.0",
-    "hygen": "^6.2.11",
+    "dependency-cruiser": "^16.10.0",
     "eslint": "^8.57.1",
     "husky": "^8.0.3",
+    "hygen": "^6.2.11",
     "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
+    "prisma": "^5.22.0",
     "tsup": "^8.3.6",
     "turbo": "^2.4.0",
-    "@changesets/cli": "^2.27.12",
     "typescript": "^5.7.3",
-    "prisma": "^5.22.0"
+    "clean-package": "^2.2.0"
   },
   "packageManager": "bun@1.2.2",
   "overrides": {
-    "@typescript-eslint/typescript-estree": "^7.4.0"
+    "@typescript-eslint/typescript-estree": "^8"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,md}": [

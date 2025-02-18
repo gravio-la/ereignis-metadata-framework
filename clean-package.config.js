@@ -1,0 +1,8 @@
+export const remove = [
+  "scripts",
+  "devDependencies",
+  "config",
+  "husky",
+  "lint-staged",
+  "clean-package",
+];
