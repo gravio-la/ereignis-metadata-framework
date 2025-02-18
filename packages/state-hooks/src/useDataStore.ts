@@ -7,9 +7,9 @@ import {
   CRUDFunctions,
   SparqlBuildOptions,
   StringToIRIFn,
+  WalkerOptions,
 } from "@graviola/edb-core-types";
 import { useMemo } from "react";
-import { WalkerOptions } from "@graviola/edb-graph-traversal";
 import { useAdbContext } from "./provider";
 import { useSettings } from "./useLocalSettings";
 
@@ -26,7 +26,6 @@ type UseDataStoreState = {
   ready: boolean;
 };
 
-type DataStoreImplementation = "sparql" | "restfull";
 export const useDataStore = ({
   crudOptionsPartial = {},
   schema,
@@ -43,7 +42,7 @@ export const useDataStore = ({
   const { activeEndpoint } = useSettings();
 
   const { jsonLDConfig } = useAdbContext();
-  const dataStore = useMemo(
+  const dataStore = useMemo<AbstractDatastore | undefined>(
     () =>
       activeEndpoint.provider === "rest"
         ? initRestfullStore({
@@ -68,6 +67,9 @@ export const useDataStore = ({
     [
       crudOptions,
       jsonLDConfig.defaultPrefix,
+      jsonLDConfig.jsonldContext,
+      activeEndpoint.provider,
+      activeEndpoint.endpoint,
       walkerOptions,
       schema,
       queryBuildOptions,

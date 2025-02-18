@@ -10,8 +10,9 @@ import {
   resolveSchema,
 } from "@graviola/json-schema-utils";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
-import { JsonSchema, WalkerOptions } from "./types";
+import { JsonSchema } from "./types";
 import DatasetCore from "@rdfjs/dataset/DatasetCore";
+import { WalkerOptions } from "@graviola/edb-core-types";
 
 const isNil = (val: any) => val === undefined || val === null;
 

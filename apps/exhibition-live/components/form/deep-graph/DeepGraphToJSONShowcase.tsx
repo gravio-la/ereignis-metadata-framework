@@ -8,10 +8,8 @@ import dsExt from "rdf-dataset-ext";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { JsonView } from "react-json-view-lite";
 import stringToStream from "string-to-stream";
-import {
-  traverseGraphExtractBySchema,
-  WalkerOptions,
-} from "@graviola/edb-graph-traversal";
+import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
+import { WalkerOptions } from "@graviola/edb-core-types";
 
 import { addressSchema } from "../../../fixtures/schema";
 // @ts-ignore

@@ -3,11 +3,12 @@ import { JSONSchema7 } from "json-schema";
 import { bringDefinitionToTop, defs } from "@graviola/json-schema-utils";
 import { rdf } from "@tpluscode/rdf-ns-builders";
 import df from "@rdfjs/data-model";
+import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
 import {
-  traverseGraphExtractBySchema,
+  IRIToStringFn,
+  SPARQLCRUDOptions,
   WalkerOptions,
-} from "@graviola/edb-graph-traversal";
-import { IRIToStringFn, SPARQLCRUDOptions } from "@graviola/edb-core-types";
+} from "@graviola/edb-core-types";
 import type { JsonLdContext } from "jsonld-context-parser";
 
 export type DSProcessingOptions = SPARQLCRUDOptions & {

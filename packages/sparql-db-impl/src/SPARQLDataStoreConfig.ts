@@ -2,8 +2,8 @@ import {
   CRUDFunctions,
   SparqlBuildOptions,
   StringToIRIFn,
+  WalkerOptions,
 } from "@graviola/edb-core-types";
-import { WalkerOptions } from "@graviola/edb-graph-traversal";
 import { JSONSchema7 } from "json-schema";
 import { DatastoreBaseConfig } from "@graviola/edb-global-types";
 
