@@ -1,6 +1,5 @@
 import {
   IRIToStringFn,
-  NormDataMapping,
   NormDataMappings,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
@@ -10,15 +9,15 @@ import {
   searchEntityByLabel,
 } from "@graviola/sparql-schema";
 import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
-import { DeclarativeMapping, StrategyContext } from "@graviola/edb-data-mapping";
+import {
+  DeclarativeMapping,
+  StrategyContext,
+} from "@graviola/edb-data-mapping";
 import {
   createLogger,
   makeCreateDeeperContextFn,
 } from "@graviola/edb-data-mapping/src/makeCreateDeeperContextFn";
-import {
-  findEntitiesCommonPropsWithinWikidataByIRI,
-  getEntityFromWikidataByIRI,
-} from "../wikidata";
+import { getEntityFromWikidataByIRI } from "../wikidata";
 
 /**
  * Creating a context for the mapping requires a lot of boilerplate code. Thus, this function is provided
@@ -40,7 +39,7 @@ export const makeDefaultMappingStrategyContext: (
   createEntityIRI: (typeIRI: string) => string,
   typeIRIToTypeName: IRIToStringFn,
   primaryFields: PrimaryFieldDeclaration,
-  normDataMappings?: NormDataMappings,
+  normDataMappings?: NormDataMappings<DeclarativeMapping>,
   disableLogging?: boolean,
 ) => StrategyContext = (
   doQuery,

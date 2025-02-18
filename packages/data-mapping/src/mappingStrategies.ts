@@ -59,7 +59,7 @@ export type StrategyContext = {
   currentMapping?: DeclarativeMappings;
   primaryFields: PrimaryFieldDeclaration;
   typeIRItoTypeName: IRIToStringFn;
-  normDataMappings: NormDataMappings;
+  normDataMappings: NormDataMappings<DeclarativeMapping>;
   path: string[];
   logger: Logger;
   createDeeperContext: CreateDeeperContextFn;
