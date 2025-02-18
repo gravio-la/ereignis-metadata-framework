@@ -4,10 +4,16 @@
   "description": "Core types for EDB",
   "type": "module",
   "types": "./index.d.ts",
+  "files": [
+    "index.d.ts",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
-    "doc": "typedoc"
+    "lint": "eslint \"**/*.d.ts\"",
+    "lint-fix": "eslint --fix \"**/*.d.ts\"",
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "peerDependencies": {
     "@rdfjs/namespace": "^2.0.1",
@@ -16,5 +22,12 @@
   "devDependencies": {
     "@rdfjs/namespace": "^2.0.1",
     "@rdfjs/types": "^1.1.0"
+  },
+  "typedocOptions": {
+    "entryPoints": ["index.d.ts"],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.js"
   }
 }
