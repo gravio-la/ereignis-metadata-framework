@@ -21,9 +21,9 @@ export type PrimaryField = Partial<{
   image: string;
 }>;
 export type PrimaryFieldExtract<T> = Partial<{
-  label: FieldExtractDeclaration;
-  description: FieldExtractDeclaration;
-  image: FieldExtractDeclaration;
+  label: FieldExtractDeclaration<T>;
+  description: FieldExtractDeclaration<T>;
+  image: FieldExtractDeclaration<T>;
 }>;
 export type PrimaryFieldDeclaration<Key extends string = string> = {
   [typeName: Key]: PrimaryField;

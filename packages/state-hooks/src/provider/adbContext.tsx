@@ -1,5 +1,4 @@
 import { createContext, useContext } from "react";
-import { JsonLdContext } from "jsonld-context-parser";
 import {
   EditEntityModalProps,
   EntityDetailModalProps,
@@ -10,12 +9,6 @@ import {
 } from "@graviola/edb-global-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
 import { SparqlEndpoint } from "@graviola/edb-core-types";
-
-export type JSONLDConfig = {
-  defaultPrefix: string;
-  jsonldContext?: JsonLdContext;
-  allowUnsafeSourceIRIs?: boolean;
-};
 
 /**
  * Context for the ADB
