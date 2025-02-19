@@ -1,11 +1,12 @@
-import { Box, Grid } from "@mui/material";
+import { Alert, Box, Button, Grid } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import {
   useAdbContext,
   useFormEditor,
   useGlobalSearch,
+  useLocalSettings,
   useModifiedRouter,
   useRightDrawerState,
   useSettings,
@@ -132,6 +133,45 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
 
   const uischema = useMemo(() => uischemata?.[typeName], [typeName]);
 
+  const { activeEndpoint } = useSettings();
+  const { openSettings } = useLocalSettings();
+
+  if (!activeEndpoint) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <Alert
+          severity="warning"
+          action={
+            <Button color="inherit" size="small" onClick={openSettings}>
+              Open Settings
+            </Button>
+          }
+        >
+          No active endpoint configured. Please configure an endpoint in
+          settings.
+        </Alert>
+      </Box>
+    );
+  }
+
+  const jsonFormsPropsFinal = useMemo(
+    () => ({
+      uischema,
+      renderers: mainFormRenderers,
+      config: {
+        useCRUDHook: useCRUDWithQueryClient,
+      },
+    }),
+    [uischema, mainFormRenderers],
+  );
+
   return (
     <WithPreviewForm data={data} classIRI={classIRI} entityIRI={entityIRI}>
       {loadedSchema && (
@@ -148,13 +188,7 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
             defaultPrefix={defaultPrefix}
             jsonldContext={jsonldContext}
             schema={loadedSchema as JSONSchema7}
-            jsonFormsProps={{
-              uischema,
-              renderers: mainFormRenderers,
-              config: {
-                useCRUDHook: useCRUDWithQueryClient,
-              },
-            }}
+            jsonFormsProps={jsonFormsPropsFinal}
             enableSidebar={false}
             disableSimilarityFinder={true}
             wrapWithinCard={true}
