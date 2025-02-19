@@ -32,10 +32,12 @@ import { OverflowContainer } from "@graviola/edb-basic-components";
 import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
 import { isValidUrl } from "@graviola/edb-ui-utils";
-import { Image } from "mui-image";
 import { EntityChip } from "../show";
 import { useQuery } from "@graviola/edb-state-hooks";
-import { findEntityWithinLobidByIRI, gndBaseIRI } from "@graviola/edb-authorities";
+import {
+  findEntityWithinLobidByIRI,
+  gndBaseIRI,
+} from "@graviola/edb-authorities";
 
 export interface AllPropTableProps {
   allProps?: any;
@@ -296,7 +298,7 @@ const PropertyItem = ({
             isImageUrl(value as string) ? (
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Link href={value as string} target="_blank">
-                  <Image
+                  <img
                     src={value as string}
                     alt={value as string}
                     width={100}

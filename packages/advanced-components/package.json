@@ -26,12 +26,10 @@
     "@ebay/nice-modal-react": "^1.2",
     "react-json-view-lite": "^1.4",
     "next-i18next": "^15",
-    "lodash-es": "^4.17.21",
-    "mui-image": "^1.0.7"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/react": "~18.3",
-    "@types/lodash-es": "^4.17.12",
-    "@types/mui-image": "^1.0.5"
+    "@types/lodash-es": "^4.17.12"
   }
 }
