@@ -10,7 +10,7 @@ type FormDebuggingToolsProps = {
 };
 export const FormDebuggingTools = ({ jsonData }: FormDebuggingToolsProps) => {
   const { features } = useSettings();
-  const { doLocalQuery } = useGlobalCRUDOptions();
+  const { crudOptions } = useGlobalCRUDOptions();
   if (!features?.enableDebug) return null;
 
   return (
@@ -25,7 +25,7 @@ export const FormDebuggingTools = ({ jsonData }: FormDebuggingToolsProps) => {
         );
       })}
       <Grid item>
-        <SPARQLLocalOxigraphToolkit sparqlQuery={doLocalQuery} />
+        <SPARQLLocalOxigraphToolkit sparqlQuery={crudOptions?.constructFetch} />
       </Grid>
     </Grid>
   );
