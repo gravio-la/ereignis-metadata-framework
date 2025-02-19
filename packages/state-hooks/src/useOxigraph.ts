@@ -1,8 +1,8 @@
 import { AsyncOxigraph } from "@graviola/async-oxigraph";
-import init, { Store } from "oxigraph/web";
 import { create } from "zustand";
 import { useAdbContext } from "./provider";
 import { useEffect } from "react";
+import type { Store } from "oxigraph/web";
 
 const initAsyncOxigraph = async function (publicBasePath: string) {
   const ao = AsyncOxigraph.getInstance(publicBasePath + "/worker.js");
@@ -11,8 +11,10 @@ const initAsyncOxigraph = async function (publicBasePath: string) {
 };
 
 const initSyncOxigraph = async function (publicBasePath: string) {
-  await init(publicBasePath + "/web_bg.wasm"); // Default is same folder as worker.js
-  return new Store();
+  return import("oxigraph/web").then(async ({ default: init, Store }) => {
+    await init(publicBasePath + "/web_bg.wasm"); // Default is same folder as worker.js
+    return new Store();
+  });
 };
 
 type OxigraphStore = {

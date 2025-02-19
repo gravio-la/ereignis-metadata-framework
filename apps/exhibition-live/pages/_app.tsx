@@ -41,9 +41,9 @@ import { EntityDetailModal } from "@graviola/edb-advanced-components";
 import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder";
 import { useSearchParams } from "next/navigation";
-import { ModRouter } from "@graviola/edb-global-types";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeComponent } from "@graviola/edb-default-theme";
+import { ModRouter } from "@graviola/semantic-jsonform-types";
 
 export const queryClient = new QueryClient();
 const QueryClientProviderWrapper = ({

@@ -3,7 +3,7 @@ import { Quad } from "@rdfjs/types";
 import { SparqlEndpoint, CRUDFunctions } from "@graviola/edb-core-types";
 import { useOxigraph } from "./useOxigraph";
 import { useMemo } from "react";
-import { Store } from "oxigraph/web";
+import type { Store } from "oxigraph/web";
 
 export const makeLocalWorkerCrudOptions: (
   store: Store | undefined,

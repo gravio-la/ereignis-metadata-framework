@@ -3,12 +3,12 @@ import { AsyncOxigraph, RDFMimetype } from "@graviola/async-oxigraph";
 import { useCallback, useEffect, useState } from "react";
 
 import { useOxigraph } from "./useOxigraph";
-import { Store } from "oxigraph/web";
+import type { Store } from "oxigraph/web";
 
 export const isAsyncOxigraph = (
   ao: AsyncOxigraph | Store,
 ): ao is AsyncOxigraph => {
-  return "close" in ao;
+  return typeof ao === "object" && "close" in ao;
 };
 /**
  * Load RDF data sources into local in memory Oxigraph store
