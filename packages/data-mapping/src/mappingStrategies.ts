@@ -992,6 +992,11 @@ export type DeclarativeFinalFlatMapping = {
   [key: string]: DeclarativeFlatMappings;
 };
 
+export type AvailableMappings = Record<
+  string,
+  { mapping: DeclarativeMapping; typeName: string }
+>;
+
 export const strategyFunctionMap: { [strategyId: string]: StrategyFunction } = {
   concatenate,
   takeFirst,

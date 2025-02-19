@@ -118,6 +118,11 @@ export type DeclarativeMatchBasedFlatMapping = {
 export type DeclarativeMatchBasedFlatMappings =
   DeclarativeMatchBasedFlatMapping[];
 
+export type AvailableFlatMappings = Record<
+  string,
+  { mapping: DeclarativeMatchBasedFlatMappings; typeName: string }
+>;
+
 /**
  * Converts a match based flat mapping to a declarative flat mapping
  *

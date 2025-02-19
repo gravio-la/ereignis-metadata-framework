@@ -1,29 +1,12 @@
-import {
+import type {
   IRIToStringFn,
-  NormDataMapping,
-  SparqlBuildOptions,
   SparqlEndpoint,
   StringToIRIFn,
+  WalkerOptions,
 } from "@graviola/edb-core-types";
-import { WalkerOptions } from "@graviola/edb-graph-traversal";
-import { NamespaceBuilder } from "@rdfjs/namespace";
-import { JSONSchema7 } from "json-schema";
-import { UrlObject } from "url";
-import { ParsedUrlQuery } from "querystring";
-import {
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry,
-} from "@jsonforms/core";
-import { JSONLDConfig } from "@graviola/edb-state-hooks/src";
-import { ErrorObject } from "ajv";
-import { JsonFormsInitStateProps } from "@jsonforms/react";
-import React from "react";
-import {
-  DeclarativeMapping,
-  DeclarativeMappings,
-  DeclarativeMatchBasedFlatMappings,
-} from "@graviola/edb-data-mapping";
+import type { NamespaceBuilder } from "@rdfjs/namespace";
+import type { JsonLdContext } from "jsonld-context-parser";
+import type { JSONSchema7 } from "json-schema";
 
 export type EdbConfRaw = {
   BASE_IRI: string;
@@ -143,117 +126,8 @@ export type AbstractDatastore<
   iterableImplementation?: AbstractDatastoreIterable<DocumentResult>;
 };
 
-export type EditEntityModalProps = {
-  typeIRI: string | undefined;
-  entityIRI: string;
-  data: any;
-  disableLoad?: boolean;
-};
-
-export type EntityDetailModalProps = EditEntityModalProps & {
-  readonly?: boolean;
-  disableInlineEditing?: boolean;
-};
-export type Url = UrlObject | string;
-
-export type ModRouter = {
-  query: ParsedUrlQuery;
-  asPath: string;
-  replace: (url: Url, as?: Url) => Promise<void | boolean>;
-  push: (url: Url, as?: Url) => Promise<void | boolean>;
-  pathname: string;
-  searchParams: URLSearchParams;
-  setSearchParams?: (searchParams: URLSearchParams) => void;
-};
-
-export type SemanticJsonFormProps = {
-  entityIRI?: string | undefined;
-  data: any;
-  onChange: (data: any) => void;
-  shouldLoadInitially?: boolean;
-  typeIRI: string;
-  schema: JSONSchema7;
-  jsonldContext: JsonLdContext;
-  debugEnabled?: boolean;
-  jsonFormsProps?: Partial<JsonFormsInitStateProps>;
-  onEntityChange?: (entityIRI: string | undefined) => void;
-  onEntityDataChange?: (entityData: any) => void;
+export type JSONLDConfig = {
   defaultPrefix: string;
-  hideToolbar?: boolean;
-  forceEditMode?: boolean;
-  defaultEditMode?: boolean;
-  searchText?: string;
-  toolbarChildren?: React.ReactNode;
-  disableSimilarityFinder?: boolean;
-  enableSidebar?: boolean;
-  wrapWithinCard?: boolean;
+  jsonldContext?: JsonLdContext;
+  allowUnsafeSourceIRIs?: boolean;
 };
-
-export type SemanticJsonFormNoOpsProps = {
-  typeIRI: string;
-  data: any;
-  onChange?: (data: any, reason: ChangeCause) => void;
-  onError?: (errors: ErrorObject[]) => void;
-  schema: JSONSchema7;
-  jsonFormsProps?: Partial<JsonFormsInitStateProps>;
-  onEntityChange?: (entityIRI: string | undefined) => void;
-  onEntityDataChange?: (entityData: any) => void;
-  toolbar?: React.ReactNode;
-  forceEditMode?: boolean;
-  defaultEditMode?: boolean;
-  searchText?: string;
-  disableSimilarityFinder?: boolean;
-  enableSidebar?: boolean;
-  wrapWithinCard?: boolean;
-  formsPath?: string;
-};
-
-export type KnowledgeSources = "kb" | "gnd" | "wikidata" | "k10plus" | "ai";
-
-export type SimilarityFinderProps = {
-  finderId: string;
-  data: any;
-  classIRI: string;
-  jsonSchema: JSONSchema7;
-  onEntityIRIChange?: (entityIRI: string | undefined) => void;
-  onMappedDataAccepted?: (data: any) => void;
-  onExistingEntityAccepted?: (entityIRI: string, data: any) => void;
-  onSelectedEntityChange?: (id: string, authorityIRI: string) => void;
-  searchOnDataPath?: string;
-  search?: string;
-  hideFooter?: boolean;
-  knowledgeSources?: KnowledgeSources[];
-  additionalKnowledgeSources?: KnowledgeSources[];
-};
-
-export type GlobalAppConfig = {
-  queryBuildOptions: SparqlBuildOptions;
-  typeNameToTypeIRI: StringToIRIFn;
-  typeIRIToTypeName: IRIToStringFn;
-  createEntityIRI: (typeName: string, id?: string) => string;
-  propertyNameToIRI: StringToIRIFn;
-  propertyIRIToPropertyName: IRIToStringFn;
-  jsonLDConfig: JSONLDConfig;
-  normDataMapping: {
-    [authorityIRI: string]: NormDataMapping;
-  };
-  schema: JSONSchema7;
-  makeStubSchema?: (schema: JSONSchema7) => JSONSchema7;
-  uiSchemaDefaultRegistry?: JsonFormsUISchemaRegistryEntry[];
-  rendererRegistry?: JsonFormsRendererRegistryEntry[];
-  primaryFieldRendererRegistry?: (
-    typeIRI: string,
-  ) => JsonFormsRendererRegistryEntry[];
-  cellRendererRegistry?: JsonFormsCellRendererRegistryEntry[];
-  uischemata?: Record<string, any>;
-};
-
-export type AvailableFlatMappings = Record<
-  string,
-  { mapping: DeclarativeMatchBasedFlatMappings; typeName: string }
->;
-
-export type AvailableMappings = Record<
-  string,
-  { mapping: DeclarativeMapping; typeName: string }
->;

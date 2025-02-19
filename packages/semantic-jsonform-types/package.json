@@ -1,0 +1,25 @@
+{
+  "name": "@graviola/semantic-jsonform-types",
+  "version": "1.0.0",
+  "description": "Prop types for Semantic JSON Forms",
+  "type": "module",
+  "types": "./index.d.ts",
+  "scripts": {
+    "lint": "eslint \"**/*.d.ts\"",
+    "lint-fix": "eslint --fix \"**/*.d.ts\"",
+    "doc": "typedoc"
+  },
+  "devDependencies": {
+    "ajv": "^8.12",
+    "@jsonforms/react": "^3",
+    "@jsonforms/core": "^3",
+    "jsonld-context-parser": "^2.4.0",
+    "json-schema": "^0.4.0",
+    "react": ">=18",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
+  }
+}
