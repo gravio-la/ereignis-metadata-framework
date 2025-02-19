@@ -12,9 +12,7 @@ import {
 import { OptionsModal } from "./OptionsModal";
 import { useTranslation } from "next-i18next";
 import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
-import { SemanticJsonFormNoOpsProps } from "@graviola/edb-global-types";
-
-export type ChangeCause = "user" | "mapping" | "reload";
+import { SemanticJsonFormNoOpsProps } from "@graviola/semantic-jsonform-types";
 
 export const SemanticJsonFormNoOps: FunctionComponent<
   SemanticJsonFormNoOpsProps
@@ -130,15 +128,17 @@ export const SemanticJsonFormNoOps: FunctionComponent<
     config,
     ...jfpProps
   } = jsonFormsProps;
-  const finalJsonFormsProps = {
-    ...jfpProps,
-    uischemas: uiSchemaDefaultRegistry,
-    config: {
-      ...config,
-      formsPath,
-      typeIRI,
-    },
-  };
+  const finalJsonFormsProps = useMemo(() => {
+    return {
+      ...jfpProps,
+      uischemas: uiSchemaDefaultRegistry,
+      config: {
+        ...config,
+        formsPath,
+        typeIRI,
+      },
+    };
+  }, [jfpProps, uiSchemaDefaultRegistry, config, formsPath, typeIRI]);
   const allRenderer = useMemo(
     () => [
       ...(rendererRegistry || []),
@@ -164,7 +164,7 @@ export const SemanticJsonFormNoOps: FunctionComponent<
             }
           >
             <WithCard>
-              {toolbar ? toolbar : null}
+              {toolbar && React.isValidElement(toolbar) ? toolbar : null}
               <JsonForms
                 data={data}
                 renderers={allRenderer}

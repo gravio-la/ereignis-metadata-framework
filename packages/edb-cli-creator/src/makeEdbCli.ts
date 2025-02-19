@@ -1,7 +1,4 @@
-import {
-  AbstractDatastore,
-  AvailableFlatMappings,
-} from "@graviola/edb-global-types";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import { formatJSONResult } from "@graviola/edb-core-utils";
 import {
   boolean,
@@ -17,7 +14,10 @@ import {
 import { JSONSchema7 } from "json-schema";
 import { defs } from "@graviola/json-schema-utils";
 import { File } from "cmd-ts/batteries/fs";
-import { AuthorityConfiguration } from "@graviola/edb-data-mapping";
+import {
+  AuthorityConfiguration,
+  AvailableFlatMappings,
+} from "@graviola/edb-data-mapping";
 
 export type FlatImportHandler = (option: {
   file: string;

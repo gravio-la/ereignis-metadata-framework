@@ -8,7 +8,6 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import { Image } from "mui-image";
 import merge from "lodash/merge";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
@@ -65,7 +64,7 @@ const ImageRendererComponent = (props: ControlProps) => {
           )}
           {data && (
             <Grid item>
-              <Image
+              <img
                 src={data}
                 alt={data}
                 style={{ maxWidth: "200px", width: "100%" }}
