@@ -9,7 +9,10 @@ import React, {
   useState,
 } from "react";
 
-import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import { SemanticJsonFormToolbar } from "./SemanticJsonFormToolbar";
 import { useSettings } from "@graviola/edb-state-hooks";
@@ -19,9 +22,11 @@ import { create } from "zustand";
 import { useTranslation } from "next-i18next";
 import { cleanJSONLD, LoadResult } from "@graviola/sparql-schema";
 import { FormDebuggingTools } from "@graviola/edb-debug-utils";
-import { SemanticJsonFormProps } from "@graviola/edb-global-types";
 import { GenericModal } from "@graviola/edb-basic-components";
-import { ChangeCause } from "@graviola/edb-linked-data-renderer";
+import {
+  ChangeCause,
+  SemanticJsonFormProps,
+} from "@graviola/semantic-jsonform-types";
 
 type SemanticJsonFormStateType = {
   isSaving: boolean;
@@ -58,7 +63,7 @@ const SemanticJsonFormOperational: FunctionComponent<SemanticJsonFormProps> = ({
   typeIRI,
   schema,
   jsonldContext,
-  jsonFormsProps = {},
+  jsonFormsProps,
   hideToolbar,
   forceEditMode,
   defaultEditMode,
@@ -240,6 +245,14 @@ const SemanticJsonFormOperational: FunctionComponent<SemanticJsonFormProps> = ({
     [onChange, editMode, isLoading, isReloading],
   );
 
+  const jsonFormsPropsFinal = useMemo(
+    () => ({
+      readonly: !editMode || !initiallyLoaded,
+      ...(jsonFormsProps || {}),
+    }),
+    [editMode, initiallyLoaded, jsonFormsProps],
+  );
+
   return (
     <Box sx={{ minHeight: "100%", width: "100%" }}>
       <Backdrop
@@ -254,10 +267,7 @@ const SemanticJsonFormOperational: FunctionComponent<SemanticJsonFormProps> = ({
         onChange={handleOnChange}
         schema={schema}
         formsPath="root"
-        jsonFormsProps={{
-          readonly: !editMode || !initiallyLoaded,
-          ...(jsonFormsProps || {}),
-        }}
+        jsonFormsProps={jsonFormsPropsFinal}
         toolbar={
           !hideToolbar && (
             <SemanticJsonFormToolbar
