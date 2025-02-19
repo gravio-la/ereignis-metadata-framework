@@ -17,11 +17,13 @@ import { rendererRegistry } from "./rendererRegistry";
 import { materialCells } from "@jsonforms/material-renderers";
 import { primaryFieldsRegistry } from "./primaryFieldsRegistry";
 import { uischemata } from "./uischemata";
+import { DeclarativeMapping } from "@graviola/edb-data-mapping";
+import { GlobalAppConfig } from "@graviola/semantic-jsonform-types";
 
 const someNameToTypeIRI = (name: string) => sladb(name).value;
 const someIRIToTypeName = (iri: string) =>
   iri?.substring(BASE_IRI.length, iri.length);
-export const exhibitionConfig = {
+export const exhibitionConfig: GlobalAppConfig<DeclarativeMapping> = {
   queryBuildOptions: defaultQueryBuilderOptions,
   typeNameToTypeIRI: someNameToTypeIRI,
   propertyNameToIRI: someNameToTypeIRI,
