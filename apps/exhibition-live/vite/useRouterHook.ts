@@ -1,4 +1,3 @@
-import { ModRouter } from "@graviola/edb-global-types";
 import {
   Location,
   Params,
@@ -8,6 +7,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useCallback } from "react";
+import { ModRouter } from "@graviola/semantic-jsonform-types";
 
 /**
  * Function converts path like /user/123 to /user/:id
