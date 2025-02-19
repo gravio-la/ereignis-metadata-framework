@@ -29,5 +29,8 @@
   },
   "clean-package": {
     "extends": "../../../clean-package.config.js"
+  },
+  "eslintConfig": {
+    "extends": "edb"
   }
 }
