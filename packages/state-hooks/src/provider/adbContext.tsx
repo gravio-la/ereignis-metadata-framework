@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import {
+import type {
   EditEntityModalProps,
   EntityDetailModalProps,
   GlobalAppConfig,
   ModRouter,
   SemanticJsonFormNoOpsProps,
   SimilarityFinderProps,
-} from "@graviola/edb-global-types";
+} from "@graviola/semantic-jsonform-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
 import { SparqlEndpoint } from "@graviola/edb-core-types";
 
@@ -18,29 +18,35 @@ import { SparqlEndpoint } from "@graviola/edb-core-types";
  * @param lockedSPARQLEndpoint Optional locked SPARQL endpoint
  * @param useRouterHook Pass the hook needed for your framework specific routing (next router, react-router-dom,...)
  */
-type AdbContextValue = GlobalAppConfig & {
-  lockedSPARQLEndpoint?: SparqlEndpoint;
-  env: {
-    publicBasePath: string;
-    baseIRI: string;
+type AdbContextValue<DeclarativeMappingType> =
+  GlobalAppConfig<DeclarativeMappingType> & {
+    lockedSPARQLEndpoint?: SparqlEndpoint;
+    env: {
+      publicBasePath: string;
+      baseIRI: string;
+    };
+    components: {
+      EditEntityModal: React.FC<EditEntityModalProps & NiceModalHocProps>;
+      EntityDetailModal: React.FC<EntityDetailModalProps & NiceModalHocProps>;
+      SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
+      SimilarityFinder: React.FC<SimilarityFinderProps>;
+    };
+    useRouterHook: () => ModRouter;
   };
-  components: {
-    EditEntityModal: React.FC<EditEntityModalProps & NiceModalHocProps>;
-    EntityDetailModal: React.FC<EntityDetailModalProps & NiceModalHocProps>;
-    SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
-    SimilarityFinder: React.FC<SimilarityFinderProps>;
+
+type EdbGlobalContextProps<DeclarativeMappingType> =
+  AdbContextValue<DeclarativeMappingType> & {
+    children: React.ReactNode;
   };
-  useRouterHook: () => ModRouter;
-};
 
-type EdbGlobalContextProps = AdbContextValue & {
-  children: React.ReactNode;
-};
+export const AdbContext = createContext<AdbContextValue<any>>(null);
 
-export const AdbContext = createContext<AdbContextValue>(null);
-
-export const AdbProvider = ({ children, ...rest }: EdbGlobalContextProps) => {
+export const AdbProvider = <DeclarativeMappingType,>({
+  children,
+  ...rest
+}: EdbGlobalContextProps<DeclarativeMappingType>) => {
   return <AdbContext.Provider value={rest}>{children}</AdbContext.Provider>;
 };
 
-export const useAdbContext = () => useContext(AdbContext);
+export const useAdbContext = <DeclarativeMappingType,>() =>
+  useContext(AdbContext) as AdbContextValue<DeclarativeMappingType>;

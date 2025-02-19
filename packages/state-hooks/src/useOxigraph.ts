@@ -1,4 +1,5 @@
-import { AsyncOxigraph } from "async-oxigraph";
+import { AsyncOxigraph } from "@graviola/async-oxigraph";
+import init, { Store } from "oxigraph/web";
 import { create } from "zustand";
 import { useAdbContext } from "./provider";
 import { useEffect } from "react";
@@ -9,28 +10,27 @@ const initAsyncOxigraph = async function (publicBasePath: string) {
   return ao;
 };
 
+const initSyncOxigraph = async function (publicBasePath: string) {
+  await init(publicBasePath + "/web_bg.wasm"); // Default is same folder as worker.js
+  return new Store();
+};
+
 type OxigraphStore = {
-  oxigraph: { ao: AsyncOxigraph } | undefined;
-  init: (baseIRI: string) => void;
+  oxigraph: { ao: AsyncOxigraph | Store } | undefined;
+  init: (baseIRI: string, sync?: boolean) => void;
   initialized: boolean;
-  bulkLoaded: boolean;
-  setBulkLoaded: (b: boolean) => void;
 };
 
 export const useOxigraphZustand = create<OxigraphStore>((set, get) => {
   return {
     oxigraph: undefined,
-    bulkLoaded: false,
     initialized: false,
     init: async (publicBasePath: string) => {
       if (get().initialized) return;
       set({ initialized: true });
-      console.log("really init oxigraph");
       const ao = await initAsyncOxigraph(publicBasePath);
-      console.log({ ao });
       set({ oxigraph: { ao } });
     },
-    setBulkLoaded: (b) => set({ bulkLoaded: b }),
   };
 });
 

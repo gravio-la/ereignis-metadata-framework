@@ -1,9 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { RDFMimetype } from "async-oxigraph";
+import { AsyncOxigraph, RDFMimetype } from "@graviola/async-oxigraph";
 import { useCallback, useEffect, useState } from "react";
 
 import { useOxigraph } from "./useOxigraph";
+import { Store } from "oxigraph/web";
 
+export const isAsyncOxigraph = (
+  ao: AsyncOxigraph | Store,
+): ao is AsyncOxigraph => {
+  return "close" in ao;
+};
 /**
  * Load RDF data sources into local in memory Oxigraph store
  *
@@ -11,16 +17,25 @@ import { useOxigraph } from "./useOxigraph";
  * @param baseIRI Base IRI for the RDF data source
  */
 export const useRDFDataSources = (source: string, baseIRI: string) => {
-  const { oxigraph, bulkLoaded, setBulkLoaded } = useOxigraph();
+  const { oxigraph } = useOxigraph();
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkLoaded, setBulkLoaded] = useState(false);
   const { data } = useQuery(["knowledge", source], () =>
     fetch(source).then((r) => r.text()),
   );
 
   const load = useCallback(
-    async (ao: any) => {
+    async (ao: AsyncOxigraph | Store) => {
       setBulkLoading(true);
-      await ao.load(data, RDFMimetype.TURTLE, baseIRI);
+      if (isAsyncOxigraph(ao)) {
+        console.log("load async");
+        await ao.load(data, RDFMimetype.TURTLE, baseIRI);
+      } else {
+        ao.load(data, {
+          format: RDFMimetype.TURTLE,
+          base_iri: baseIRI,
+        });
+      }
       setBulkLoading(false);
       setBulkLoaded(true);
     },

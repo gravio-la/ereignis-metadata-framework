@@ -27,6 +27,7 @@
   "devDependencies": {
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-global-types": "workspace:*",
+    "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
@@ -34,7 +35,9 @@
     "eslint-config-edb": "workspace:*",
     "notistack": "^3.0.1",
     "typescript": "^5.3.3",
-    "react": ">=18"
+    "react": ">=18",
+    "@graviola/async-oxigraph": "workspace:*",
+    "oxigraph": "^0.4.8"
   },
   "peerDependencies": {
     "@ebay/nice-modal-react": ">=1",
@@ -42,11 +45,12 @@
     "@tanstack/react-query": "^4",
     "react": "^16.9.0 || ^17.0.0 || ^18",
     "react-redux": "^9.1.1",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "@graviola/async-oxigraph": "0.0.10",
+    "oxigraph": "^0.4.8"
   },
   "dependencies": {
     "@rdfjs/dataset": "^2.0.2",
-    "async-oxigraph": "^0.0.9",
     "n3": "^1.17.3",
     "jsonld-context-parser": "^2.4.0",
     "@graviola/remote-query-implementations": "workspace:*",
