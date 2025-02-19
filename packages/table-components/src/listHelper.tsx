@@ -9,13 +9,17 @@ import * as React from "react";
 import { MouseEvent, useCallback, useMemo } from "react";
 import { TFunction } from "i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { PrimaryField, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
 import { JsonSchema, RankedTester, TesterContext } from "@jsonforms/core";
 import { isJSONSchema } from "@graviola/json-schema-utils";
 import { useAdbContext } from "@graviola/edb-state-hooks";
 import { cellConfigRegistry } from "./cellConfigRegistry";
 import {
   extractSingleFieldIfString,
+  mkAccessor,
   pathToString,
   urlSuffix,
 } from "./tableRegistryHelper";
@@ -181,7 +185,10 @@ export const computeColumns: (
         {
           id: pathToString([...path, "IRI"]),
           header: pathToString([...path, "IRI"]),
-          accessorKey: `${pathToString([...path, "entity"])}.value`,
+          accessorFn: mkAccessor(
+            `${pathToString([...path, "entity"])}.value`,
+            "",
+          ),
           Cell: ({ cell }) => (
             <OverflowContainer tooltip={cell.getValue()}>
               {urlSuffix(cell.getValue() ?? "")}
