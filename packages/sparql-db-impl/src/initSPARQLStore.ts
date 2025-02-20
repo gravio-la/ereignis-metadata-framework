@@ -203,13 +203,14 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
       const typeIRI = typeNameToTypeIRI(typeName);
       const loadedSchema = bringDefinitionToTop(rootSchema, typeName);
-      const { sorting } = query;
+      const { sorting, pagination, fields } = query;
       const queryString = withDefaultPrefix(
         defaultPrefix,
         jsonSchema2Select(
           loadedSchema,
           typeIRI,
           [],
+          fields,
           {
             primaryFields: queryBuildOptions.primaryFields,
             ...(sorting && sorting.length > 0
@@ -221,6 +222,12 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
                 }
               : {}),
             limit: limit || defaultLimit,
+            ...(pagination
+              ? {
+                  offset: pagination.pageIndex * pagination.pageSize,
+                  limit: pagination.pageSize,
+                }
+              : {}),
           },
           undefined,
           queryBuildOptions.sparqlFlavour,
@@ -230,6 +237,34 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         withHeaders: true,
       });
       return res;
+    },
+    countDocuments: async (typeName, query) => {
+      const typeIRI = typeNameToTypeIRI(typeName);
+      const loadedSchema = bringDefinitionToTop(rootSchema, typeName);
+      const queryString = withDefaultPrefix(
+        defaultPrefix,
+        jsonSchema2Select(
+          loadedSchema,
+          typeIRI,
+          [],
+          [],
+          undefined,
+          true,
+          queryBuildOptions.sparqlFlavour,
+        ),
+      );
+      const res = await selectFetch(queryString, {
+        withHeaders: true,
+      });
+      const literalValue = res.results?.bindings[0]?.entity_count?.value;
+      if (!literalValue) {
+        throw new Error("Cannot find entity_count in query result");
+      }
+      const amount = parseInt(literalValue);
+      if (isNaN(amount)) {
+        throw new Error("Invalid count");
+      }
+      return amount;
     },
     getClasses: (entityIRI) => {
       return getClasses(entityIRI, selectFetch, {
