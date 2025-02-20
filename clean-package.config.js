@@ -5,4 +5,6 @@ export const remove = [
   "husky",
   "lint-staged",
   "clean-package",
+  "eslintConfig",
+  "typedocOptions",
 ];

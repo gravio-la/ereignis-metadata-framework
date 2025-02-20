@@ -84,7 +84,9 @@ module.exports = {
         "That's problematic as the package either (1) won't be available on live (2 - worse) will be " +
         "available on live with an non-guaranteed version. Fix it by adding the package to the dependencies " +
         "in your package.json.",
-      from: {},
+      from: {
+        pathNot: ["tsup.config.js"],
+      },
       to: {
         dependencyTypes: ["npm-no-pkg", "npm-unknown"],
       },
@@ -106,7 +108,7 @@ module.exports = {
         "Likely this module depends on an external ('npm') package that occurs more than once " +
         "in your package.json i.e. bot as a devDependencies and in dependencies. This will cause " +
         "maintenance problems later on.",
-      severity: "warn",
+      severity: "info",
       from: {},
       to: {
         moreThanOneDependencyType: true,
@@ -141,7 +143,7 @@ module.exports = {
         "section of your package.json. If this module is development only - add it to the " +
         "from.pathNot re of the not-to-dev-dep rule in the dependency-cruiser configuration",
       from: {
-        path: "^(packages)",
+        path: "^(apps)",
         pathNot: "[.](?:spec|test)[.](?:js|mjs|cjs|jsx|ts|mts|cts|tsx)$",
       },
       to: {
@@ -172,7 +174,7 @@ module.exports = {
         "in your package.json. This makes sense if your package is e.g. a plugin, but in " +
         "other cases - maybe not so much. If the use of a peer dependency is intentional " +
         "add an exception to your dependency-cruiser configuration.",
-      severity: "warn",
+      severity: "info",
       from: {},
       to: {
         dependencyTypes: ["npm-peer"],
