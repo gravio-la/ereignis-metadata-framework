@@ -19,9 +19,11 @@ export const makeLocalWorkerCrudOptions: (
       askFetch: async (query) => Boolean(await doQuery(query)),
       // @ts-ignore
       constructFetch: async (query) => {
-        console.time("constructFetch query");
+        const randomId = Math.random().toString(36).substring(2, 15);
+        console.time(`constructFetch query ${randomId}`);
         const result = await doQuery(query);
-        console.timeEnd("constructFetch query");
+        console.timeEnd(`constructFetch query ${randomId}`);
+        console.info({ query, result });
 
         let ds = datasetFactory.dataset();
         if (!result?.data) {
@@ -32,11 +34,11 @@ export const makeLocalWorkerCrudOptions: (
         }
 
         try {
-          console.time("constructFetch parsing");
+          console.time(`constructFetch parsing ${randomId}`);
           const parser = new N3.Parser();
           const quads = parser.parse(result.data);
           ds = datasetFactory.dataset(quads);
-          console.timeEnd("constructFetch parsing");
+          console.timeEnd(`constructFetch parsing ${randomId}`);
         } catch (e: any) {
           throw new Error("unable to parse the data" + e.message);
         }
@@ -47,9 +49,11 @@ export const makeLocalWorkerCrudOptions: (
         return result?.data;
       },
       selectFetch: async (query, options) => {
-        console.time("selectFetch query");
+        const randomId = Math.random().toString(36).substring(2, 15);
+        console.time(`selectFetch query ${randomId}`);
         const result = await doQuery(query);
-        console.timeEnd("selectFetch query");
+        console.timeEnd(`selectFetch query ${randomId}`);
+        console.info({ query, result });
         return options?.withHeaders
           ? result?.data
           : result?.data?.results?.bindings;
