@@ -22,7 +22,7 @@ export const mkAccessor =
   };
 export const urlSuffix = (uri: string) => {
   return uri.substring(
-    (uri.includes("#") ? uri.lastIndexOf("#") : uri.lastIndexOf("/")) + 1 ?? 0,
+    (uri.includes("#") ? uri.lastIndexOf("#") : uri.lastIndexOf("/")) + 1,
     uri.length,
   );
 };

@@ -9,7 +9,6 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  useSettings,
 } from "@graviola/edb-state-hooks";
 import {
   Backdrop,
@@ -19,6 +18,7 @@ import {
   ListItemIcon,
   MenuItem,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
 import {
   MaterialReactTable,
@@ -37,6 +37,8 @@ import { MRT_Localization_DE } from "material-react-table/locales/de";
 
 import { JSONSchema7 } from "json-schema";
 import {
+  CloudDone,
+  CloudSync,
   Delete,
   DeleteForever,
   Edit,
@@ -57,6 +59,10 @@ import { GenericModal } from "@graviola/edb-basic-components";
 import { ExportMenuButton } from "./ExportMenuButton";
 import { TableConfigRegistry } from "./types";
 import { typeIRItoTypeName } from "adb-next/components/config";
+import { PaginationState } from "@tanstack/table-core";
+
+const defaultLimit = 25;
+const upperLimit = 10000;
 
 export type SemanticTableProps = {
   typeName: string;
@@ -89,6 +95,12 @@ export const SemanticTable = ({
     [csvOptions],
   );
 
+  const [loadAllAtOnce, setLoadAllAtOnce] = useState(false);
+
+  const handleToggleLoadAll = useCallback(() => {
+    setLoadAllAtOnce(!loadAllAtOnce);
+  }, [loadAllAtOnce, setLoadAllAtOnce]);
+
   const typeIRI = useMemo(() => {
     return typeNameToTypeIRI(typeName);
   }, [typeName, typeNameToTypeIRI]);
@@ -101,11 +113,7 @@ export const SemanticTable = ({
     [typeName],
   );
 
-  const { activeEndpoint } = useSettings();
-
-  const [sorting, setSorting] = useState<MRT_SortingState>([
-    { id: "IRI", desc: false },
-  ]);
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const handleColumnOrderChange = useCallback(
     (s: MRT_SortingState) => {
@@ -122,27 +130,61 @@ export const SemanticTable = ({
     queryBuildOptions,
   });
 
+  const { data: countData, isLoading: countLoading } = useQuery<number | null>(
+    ["count", typeIRI, sorting],
+    async () => {
+      const typeName = typeIRItoTypeName(typeIRI);
+      if (dataStore.countDocuments) {
+        try {
+          const amount = await dataStore.countDocuments(typeName, { sorting });
+          return amount;
+        } catch (e) {
+          console.error(e);
+          return null;
+        }
+      }
+      return null;
+    },
+  );
+
+  const manualPagination = useMemo(() => {
+    return Boolean(countData && countData > defaultLimit && !loadAllAtOnce);
+  }, [countData, loadAllAtOnce]);
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: defaultLimit,
+  });
+
+  const handlePaginationChange = useCallback(
+    (pagination: PaginationState) => {
+      setPagination(pagination);
+    },
+    [setPagination],
+  );
+
   const { data: resultListData, isLoading } = useQuery(
-    ["allEntries", typeIRI, sorting],
+    ["allEntries", typeIRI, sorting, loadAllAtOnce ? undefined : pagination],
     () => {
       const typeName = typeIRItoTypeName(typeIRI);
+
       return dataStore.findDocumentsAsFlatResultSet(
         typeName,
         {
           sorting,
+          pagination: loadAllAtOnce ? undefined : pagination,
         },
-        4000,
+        loadAllAtOnce ? upperLimit : defaultLimit,
       );
     },
-    { enabled: ready },
+    {
+      enabled: ready && !countLoading,
+      keepPreviousData: true,
+    },
   );
 
   const resultList = useMemo(
     () => resultListData?.results?.bindings ?? [],
-    [resultListData],
-  );
-  const headerVars = useMemo(
-    () => resultListData?.head?.vars,
     [resultListData],
   );
 
@@ -411,17 +453,18 @@ export const SemanticTable = ({
     enableRowSelection: true,
     enableFacetedValues: true,
     onRowSelectionChange: handleRowSelectionChange,
-    manualPagination: false,
+    manualPagination,
     manualSorting: true,
+    onPaginationChange: handlePaginationChange,
     onSortingChange: handleColumnOrderChange,
     onColumnVisibilityChange: handleChangeColumnVisibility,
     columnFilterDisplayMode: "popover",
     initialState: {
       columnVisibility: conf.columnVisibility,
-      pagination: { pageIndex: 0, pageSize: 25 },
+      pagination: { pageIndex: 0, pageSize: defaultLimit },
     },
     localization,
-    rowCount: resultList.length,
+    rowCount: !loadAllAtOnce && countData ? countData : resultList.length,
     enableRowActions: true,
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{ display: "flex", gap: "1rem" }}>
@@ -485,6 +528,19 @@ export const SemanticTable = ({
             >
               <DeleteForever />
             </IconButton>
+            <Tooltip
+              title={
+                t("load all data into client") + ` (max ${upperLimit} entries)`
+              }
+            >
+              <IconButton
+                onClick={() => handleToggleLoadAll()}
+                color={loadAllAtOnce ? "success" : "default"}
+                aria-label={t("load all data into client")}
+              >
+                {loadAllAtOnce ? <CloudDone /> : <CloudSync />}
+              </IconButton>
+            </Tooltip>
           </>
         }
       </Box>
@@ -546,6 +602,7 @@ export const SemanticTable = ({
     enableColumnDragging: false,
     onColumnFiltersChange: handleColumnFilterChange,
     state: {
+      pagination,
       columnOrder,
       sorting,
       rowSelection,
