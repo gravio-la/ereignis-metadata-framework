@@ -1,8 +1,4 @@
-import {
-  ControlProps,
-  OwnPropsOfControl,
-  showAsRequired,
-} from "@jsonforms/core";
+import { ControlProps, showAsRequired } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import { Edit, EditOff } from "@mui/icons-material";
 import {
@@ -98,7 +94,7 @@ const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
               id: id + "-input",
               onPaste: handlePaste,
             }}
-            value={data as string}
+            value={(data || "") as string}
             onChange={handleChange_}
             previewOptions={{
               rehypePlugins: rehypePlugins as any,
@@ -114,7 +110,7 @@ const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
             wrapperElement={{
               "data-color-mode": "light",
             }}
-            source={data as string}
+            source={(data || "") as string}
             rehypePlugins={rehypePlugins as any}
           />
         )}

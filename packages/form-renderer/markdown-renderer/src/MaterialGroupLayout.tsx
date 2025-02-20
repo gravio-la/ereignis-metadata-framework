@@ -19,13 +19,13 @@ import {
   Grid,
   Hidden,
 } from "@mui/material";
-import isEmpty from "lodash/isEmpty";
-import React, { useMemo } from "react";
+import isEmpty from "lodash-es/isEmpty";
+import { useMemo } from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSanitize from "rehype-sanitize";
 
 import { getI18nDescription, getI18nLabel } from "./i18nHelper";
-import { MDEditorMarkdown } from "@graviola/edb-markdown-renderer";
+import { MDEditorMarkdown } from "./MDEditor";
 
 const style: { [x: string]: any } = { marginBottom: "10px" };
 
