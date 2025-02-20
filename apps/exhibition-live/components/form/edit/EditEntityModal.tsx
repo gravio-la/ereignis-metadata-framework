@@ -12,9 +12,12 @@ import { useSnackbar } from "notistack";
 import { useFormDataStore } from "@graviola/edb-state-hooks";
 import { PrimaryFieldResults } from "@graviola/edb-core-types";
 import { cleanJSONLD } from "@graviola/sparql-schema";
-import { EditEntityModalProps } from "@graviola/edb-global-types";
 import { MuiEditDialog } from "@graviola/edb-basic-components";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { EditEntityModalProps } from "@graviola/semantic-jsonform-types";
 
 export const EditEntityModal = NiceModal.create(
   ({
@@ -31,11 +34,7 @@ export const EditEntityModal = NiceModal.create(
       components: { SemanticJsonForm },
     } = useAdbContext();
     const modal = useModal();
-    const typeIRIs = useTypeIRIFromEntity(entityIRI);
-    const classIRI: string | undefined = useMemo(
-      () => typeIRI || typeIRIs?.[0],
-      [typeIRI, typeIRIs],
-    );
+    const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
     const typeName = useMemo(
       () => typeIRIToTypeName(classIRI),
       [classIRI, typeIRIToTypeName],

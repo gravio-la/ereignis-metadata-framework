@@ -1,7 +1,10 @@
 import { MRT_ColumnDef } from "material-react-table";
 import { TFunction } from "i18next";
 import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
-import { mkAccessor, TableConfigRegistry } from "@graviola/edb-table-components";
+import {
+  mkAccessor,
+  TableConfigRegistry,
+} from "@graviola/edb-table-components";
 const p = (path: string[]) => path.join("_");
 const dateColDef: (
   key: string,
@@ -18,7 +21,7 @@ const dateColDef: (
           ? specialDate2LocalDate(Number(v), "de")
           : String(v);
       } catch (error) {
-        console.error("Error processing date:", error);
+        console.warn("Error processing date:", error);
         return String(v);
       }
     }),
