@@ -44,8 +44,7 @@ export const EntityDetailModal = NiceModal.create(
       typeIRIToTypeName,
     } = useAdbContext();
     const modal = useModal();
-    const typeIRIs = useTypeIRIFromEntity(entityIRI);
-    const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+    const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
     const typeName = useMemo(
       () => typeIRIToTypeName(classIRI),
       [classIRI, typeIRIToTypeName],

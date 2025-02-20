@@ -13,7 +13,10 @@ import {
   useCRUDWithQueryClient,
   useExtendedSchema,
 } from "@graviola/edb-state-hooks";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import NiceModal from "@ebay/nice-modal-react";
 import { Clear, HideImage } from "@mui/icons-material";
 import { ellipsis } from "@graviola/edb-ui-utils";
@@ -36,8 +39,7 @@ export const EntityDetailListItem = ({
     typeIRIToTypeName,
     components: { EntityDetailModal },
   } = useAdbContext();
-  const typeIRIs = useTypeIRIFromEntity(entityIRI);
-  const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+  const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI);
   const typeName = useMemo(
     () => typeIRIToTypeName(classIRI),
     [classIRI, typeIRIToTypeName],

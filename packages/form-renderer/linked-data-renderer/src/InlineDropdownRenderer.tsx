@@ -16,7 +16,6 @@ import {
 import { PrimaryField } from "@graviola/edb-core-types";
 import { PreloadedOptionSelect } from "@graviola/edb-advanced-components";
 import { JSONSchema7 } from "json-schema";
-import get from "lodash/get";
 
 const InlineDropdownRendererComponent = (props: ControlProps) => {
   const {
@@ -124,26 +123,34 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
     async (searchString?: string) =>
       typeName && ready && dataStore
         ? (async () => {
-            const documents = await dataStore.findDocuments(
+            const primaryField: PrimaryField | undefined =
+              primaryFields[typeName];
+            if (!primaryField) {
+              return [];
+            }
+
+            const result = await dataStore.findDocumentsAsFlatResultSet(
               typeName,
               {
                 ...(searchString ? { search: searchString } : {}),
+                fields: [primaryField.label],
               },
               limit,
             );
 
-            const results = [];
-            for (const item of documents) {
-              const primaryField = primaryFields[typeName];
-              const primary = primaryField ? get(item, primaryField.label) : "";
-
-              results.push({
-                label: primary,
-                value: item["@id"],
-              });
+            try {
+              return result.results.bindings
+                .map((binding) => ({
+                  label:
+                    binding[`${primaryField.label}_single`]?.value ||
+                    binding["entity"]?.value,
+                  value: binding["entity"]?.value,
+                }))
+                .filter((item) => typeof item.value === "string");
+            } catch (error) {
+              console.error(error);
+              return [];
             }
-
-            return results;
           })()
         : [],
     [primaryFields, typeName, ready, dataStore, limit],

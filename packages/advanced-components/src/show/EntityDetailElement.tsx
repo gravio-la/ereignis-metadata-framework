@@ -1,9 +1,18 @@
 import { Box, BoxProps } from "@mui/material";
-import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
 import { useMemo } from "react";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { EntityDetailCard } from "./EntityDetailCard";
-import { useTypeIRIFromEntity, useExtendedSchema } from "@graviola/edb-state-hooks";
+import {
+  useTypeIRIFromEntity,
+  useExtendedSchema,
+} from "@graviola/edb-state-hooks";
 import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
 import { filterUndefOrNull } from "@graviola/edb-ui-utils";
 
@@ -14,6 +23,7 @@ export type EntityDetailElementProps = {
   cardActionChildren?: React.ReactNode;
   disableInlineEditing?: boolean;
   readonly?: boolean;
+  disableLoad?: boolean;
 };
 
 export const EntityDetailElement = ({
@@ -23,14 +33,14 @@ export const EntityDetailElement = ({
   cardActionChildren,
   disableInlineEditing,
   readonly,
+  disableLoad,
   ...rest
 }: EntityDetailElementProps & Partial<BoxProps>) => {
   const {
     queryBuildOptions: { primaryFields },
     typeIRIToTypeName,
   } = useAdbContext();
-  const typeIRIs = useTypeIRIFromEntity(entityIRI);
-  const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+  const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
   const typeName = useMemo(
     () => typeIRIToTypeName(classIRI),
     [classIRI, typeIRIToTypeName],
@@ -80,6 +90,7 @@ export const EntityDetailElement = ({
         disableInlineEditing={disableInlineEditing}
         readonly={readonly}
         tableProps={{ disabledProperties }}
+        disableLoad={disableLoad}
       />
     </Box>
   );

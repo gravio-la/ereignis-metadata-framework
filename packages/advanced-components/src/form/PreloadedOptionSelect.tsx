@@ -46,7 +46,7 @@ export const PreloadedOptionSelect: FunctionComponent<
     () => {
       return load();
     },
-    { enabled: true },
+    { enabled: true, refetchOnWindowFocus: true },
   );
 
   const handleOnChange = useCallback(
@@ -76,7 +76,7 @@ export const PreloadedOptionSelect: FunctionComponent<
       <InputLabel id={selectID}>{title}</InputLabel>
       <Select
         labelId={selectID}
-        value={v}
+        value={v || ""}
         label={title}
         disabled={readOnly}
         onChange={handleOnChange}

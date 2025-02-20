@@ -30,12 +30,19 @@ export type SimplifiedEndpointConfig = {
   jsonldContext?: object;
 };
 
+export type PaginationState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
 export type QueryType = {
   sorting?: {
     id: string;
     desc?: boolean;
   }[];
   search?: string;
+  pagination?: PaginationState;
+  fields?: string[];
 };
 
 export type DatastoreBaseConfig = {
@@ -122,6 +129,7 @@ export type AbstractDatastore<
     query: QueryType,
     limit?: number,
   ) => Promise<any>;
+  countDocuments?: (typeName: string, query: QueryType) => Promise<number>;
   getClasses?: (entityIRI: string) => Promise<string[]>;
   iterableImplementation?: AbstractDatastoreIterable<DocumentResult>;
 };

@@ -4,7 +4,10 @@ import {
   useCRUDWithQueryClient,
   useExtendedSchema,
 } from "@graviola/edb-state-hooks";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { ellipsis } from "@graviola/edb-ui-utils";
 import NiceModal from "@ebay/nice-modal-react";
 import { Avatar, Chip, ChipProps, Tooltip } from "@mui/material";
@@ -12,19 +15,20 @@ import { PrimaryFieldResults } from "@graviola/edb-core-types";
 
 export type EntityChipProps = {
   index?: number;
+  disableLoad?: boolean;
   entityIRI: string;
   typeIRI?: string;
   data?: any;
 } & ChipProps;
 export const EntityChip = ({
   index,
+  disableLoad,
   entityIRI,
   typeIRI,
   data: defaultData,
   ...chipProps
 }: EntityChipProps) => {
-  const typeIRIs = useTypeIRIFromEntity(entityIRI);
-  const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+  const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
   const {
     queryBuildOptions: { primaryFieldExtracts },
     typeIRIToTypeName,
@@ -41,7 +45,7 @@ export const EntityChip = ({
     entityIRI,
     typeIRI: classIRI,
     schema: loadedSchema,
-    queryOptions: { enabled: true, refetchOnWindowFocus: true },
+    queryOptions: { enabled: !disableLoad, refetchOnWindowFocus: true },
     loadQueryKey: "show",
   });
 
@@ -67,11 +71,6 @@ export const EntityChip = ({
     };
   }, [typeName, data, primaryFieldExtracts]);
   const { label, image, description } = cardInfo;
-  //Sorry for this hack, in future we will have class dependent List items
-  const variant = useMemo(
-    () => (typeIRI.endsWith("Person") ? "circular" : "rounded"),
-    [typeIRI],
-  );
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
   const showDetailModal = useCallback(
     (e: MouseEvent) => {

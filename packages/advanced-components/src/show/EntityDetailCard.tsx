@@ -25,7 +25,7 @@ import {
 import isString from "lodash-es/isString";
 import { Edit } from "@mui/icons-material";
 import { PrimaryFieldResults } from "@graviola/edb-core-types";
-import { ModRouter } from "@graviola/edb-global-types";
+import { ModRouter } from "@graviola/semantic-jsonform-types";
 
 type OwnProps = {
   typeIRI: string;
@@ -37,6 +37,7 @@ type OwnProps = {
   disableInlineEditing?: boolean;
   onEditClicked?: () => void;
   tableProps?: Partial<AllPropTableProps>;
+  disableLoad?: boolean;
 };
 
 export type EntityDetailCardProps = OwnProps;
@@ -50,6 +51,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
   disableInlineEditing,
   onEditClicked,
   tableProps = {},
+  disableLoad,
 }) => {
   const { t } = useTranslation();
   const {
@@ -155,6 +157,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
         allProps={data}
         disableContextMenu
         inlineEditing={true}
+        disableLoad={disableLoad}
         {...tableProps}
       />
       {enableDebug && (
