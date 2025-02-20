@@ -1,7 +1,7 @@
 {
   "name": "@graviola/edb-core-utils",
   "version": "1.1.0",
-  "description": "Core utils for EDB",
+  "description": "Core utilities for EDB",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -14,23 +14,42 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
     "test": "jest",
     "test:watch": "jest --watch --color",
     "test:coverage": "jest --coverage",
-    "doc": "typedoc"
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint-fix": "eslint --fix \"src/**/*.ts\"",
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "devDependencies": {
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "eslint-config-edb": "workspace:*",
-    "typescript": "^5"
+    "@types/jest": "^29.0.0",
+    "jest": "^29.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@graviola/edb-core-types": "^1.1.0"
+  },
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "extends": "edb"
   }
 }
