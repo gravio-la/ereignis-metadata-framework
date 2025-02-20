@@ -25,6 +25,7 @@ const propertiesToSPARQLSelectPatterns = (
   rootSchema: JSONSchema7,
   currentVariable: string,
   excludedProperties?: string[],
+  includedProperties?: string[],
   path?: string[],
   level: number = 0,
   primaryFields?: PrimaryFieldDeclaration,
@@ -39,7 +40,11 @@ const propertiesToSPARQLSelectPatterns = (
 
   Object.entries(properties).forEach(
     ([property, subSchema]: [string, JSONSchema7]) => {
-      if (excludedProperties?.includes(property) || property.startsWith("@"))
+      if (
+        excludedProperties?.includes(property) ||
+        property.startsWith("@") ||
+        (includedProperties && !includedProperties.includes(property))
+      )
         return;
       const subPath = [...path, property],
         isRequired = Boolean(schema.required?.includes(property)),
@@ -115,6 +120,7 @@ const propertiesToSPARQLSelectPatterns = (
             rootSchema,
             variable,
             excludedProperties,
+            includedProperties,
             subPath,
             level + 1,
             primaryFields,
@@ -139,6 +145,7 @@ const propertiesToSPARQLSelectPatterns = (
               rootSchema,
               variable,
               excludedProperties,
+              includedProperties,
               subPath,
               level + 1,
               primaryFields,
@@ -241,6 +248,7 @@ export const jsonSchema2Select = (
   rootSchema: JSONSchema7,
   typeIRI?: string,
   excludeProperties?: string[],
+  includedProperties?: string[],
   sparqlSelectOptions?: SPARQLSelectOptions,
   countResults?: boolean,
   flavour?: SPARQLFlavour,
@@ -253,6 +261,7 @@ export const jsonSchema2Select = (
     rootSchema,
     variable,
     excludeProperties,
+    includedProperties,
     [],
     0,
     sparqlSelectOptions?.primaryFields,
@@ -260,14 +269,17 @@ export const jsonSchema2Select = (
     minimal,
   );
   const matchType = typeIRI ? `?entity a <${typeIRI}> .` : "";
-  const sparqlFinish = sparqlSelectOptions
-    ? sparqlPartFromOptions(sparqlSelectOptions)
-    : "";
-  const query = `SELECT DISTINCT ${variable} ${select} WHERE {
+  const sparqlFinish =
+    sparqlSelectOptions && !countResults
+      ? `GROUP BY ${variable} \n ${sparqlPartFromOptions(sparqlSelectOptions)}`
+      : "";
+  const finalSelect = countResults
+    ? `(COUNT(DISTINCT ${variable}) AS ?entity_count)`
+    : `DISTINCT ${variable} ${select}`;
+  const query = `SELECT ${finalSelect} WHERE {
     ${matchType}
     ${where}
 }
-GROUP BY ${variable}
 ${sparqlFinish}`;
 
   return query;
