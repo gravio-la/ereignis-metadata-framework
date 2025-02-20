@@ -15,11 +15,11 @@
     "@jsonforms/core": "^3",
     "jsonld-context-parser": "^2.4.0",
     "json-schema": "^0.4.0",
-    "react": ">=18",
+    "react": "^18",
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-global-types": "workspace:*"
   },
   "peerDependencies": {
-    "react": "^18 || ^19"
+    "react": "^16.9.0 || ^17.0.0 || ^18"
   }
 }
