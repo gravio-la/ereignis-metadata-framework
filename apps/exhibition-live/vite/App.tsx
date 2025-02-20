@@ -29,11 +29,11 @@ import "react-json-view-lite/dist/index.css";
 import "@triply/yasgui/build/yasgui.min.css";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";
 import { Box, CircularProgress } from "@mui/material";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const queryClient = new QueryClient();
 
 const sparqlEndpoint = envToSparqlEndpoint(import.meta.env, "VITE");
-console.log("sparqlEndpoint", import.meta.env);
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const appConfig =
@@ -115,6 +115,7 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
           </ThemeComponent>
         </Provider>
       </LocalizationProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 };
