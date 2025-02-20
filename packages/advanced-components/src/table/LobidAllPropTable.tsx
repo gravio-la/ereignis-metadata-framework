@@ -26,12 +26,11 @@ import React, {
   useState,
 } from "react";
 
-import { camelCaseToTitleCase } from "@graviola/edb-ui-utils";
+import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-ui-utils";
 import { WikidataAllPropTable } from "../wikidata";
 import { OverflowContainer } from "@graviola/edb-basic-components";
 import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
-import { isValidUrl } from "@graviola/edb-ui-utils";
 import { EntityChip } from "../show";
 import { useQuery } from "@graviola/edb-state-hooks";
 import {
@@ -45,6 +44,7 @@ export interface AllPropTableProps {
   disableContextMenu?: boolean;
   inlineEditing?: boolean;
   disabledProperties?: string[];
+  disableLoad?: boolean;
 }
 
 type Props = AllPropTableProps;
@@ -199,7 +199,7 @@ const PropertyItem = ({
       >
         {disableContextMenu ? (
           <OverflowContainer variant="body2">
-            {typeof exists === "function" && exists(property, { ns: "table" })
+            {typeof exists === "function" && exists(property)
               ? t(property)
               : camelCaseToTitleCase(property)}
           </OverflowContainer>
@@ -280,6 +280,7 @@ const PropertyItem = ({
                     data={v}
                     entityIRI={v["@id"]}
                     typeIRI={v["@type"]}
+                    disableLoad={true}
                   />
                 );
               }
@@ -325,6 +326,7 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
   disableContextMenu,
   inlineEditing,
   disabledProperties,
+  disableLoad,
 }) => {
   const gndIRI = useMemo(() => {
     const gndIRI_ = allProps?.idAuthority?.id;
@@ -335,7 +337,7 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
     ["lobid", gndIRI],
     () => findEntityWithinLobidByIRI(gndIRI),
     // @ts-ignore
-    { enabled: !!gndIRI },
+    { enabled: !!gndIRI && !disableLoad },
   );
 
   const grouped = React.useMemo(
