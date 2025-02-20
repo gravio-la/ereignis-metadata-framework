@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:vite": "vite --host",
     "build": "next build",
+    "build:vite": "vite build",
     "demo": "bun run dev:vite",
     "start": "next start || bunx serve@latest -p 3000 ./out",
     "lint": "next lint",
@@ -212,6 +213,7 @@
     "vite": "^5.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "mermaid": "^10.9.1",
-    "mdx-mermaid": "^2.0.0"
+    "mdx-mermaid": "^2.0.0",
+    "rollup-plugin-visualizer": "^5.14.0"
   }
 }
