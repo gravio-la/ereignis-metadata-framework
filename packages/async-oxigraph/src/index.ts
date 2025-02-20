@@ -22,9 +22,10 @@ export class AsyncOxigraph {
   private static _instance: AsyncOxigraph;
   private _worker: Worker;
   private _queryDefs: QueryDefinition[] = [];
-
-  private constructor(workerPath: string) {
+  private _timeout: number = 30000;
+  private constructor(workerPath: string, timeout: number = 30000) {
     this._worker = new Worker(workerPath);
+    this._timeout = timeout;
   }
 
   static getInstance(workerPath: string = "./assets/oxigraph/worker.js") {
@@ -161,10 +162,18 @@ export class AsyncOxigraph {
     const taskID = Math.random().toString(36).substring(2, 15);
     return new Promise((resolve, reject) => {
       // Resolve result
+      let failed = false;
+      const timeoutId = setTimeout(() => {
+        failed = true;
+        reject(new Error(`Worker task timed out after ${this._timeout} ms`));
+      }, this._timeout);
+
       this._worker.addEventListener(
         "message",
         (event) => {
           if (event.data.taskID !== taskID) return;
+          if (failed) return;
+          clearTimeout(timeoutId); // Clear timeout if we get a response
           if (event.data.error != undefined) reject(event.data.error);
           resolve(event.data);
         },
