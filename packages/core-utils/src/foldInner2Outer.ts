@@ -9,7 +9,7 @@ export const foldInner2Outer = (<
 >(input: { [k in T1]: { [k in T2]: TV } }) =>
   Object.entries(input).reduce(
     // @ts-ignore
-    (prev, cur: [string, { [k in T2]: TV }]) => {
+    (prev, cur: [string, { [_ in T2]: TV }]) => {
       const t = {
         ...prev,
         ...Object.fromEntries(
