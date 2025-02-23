@@ -1,6 +1,9 @@
-import { JsonSchema, resolveSchema } from "@jsonforms/core";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { isJSONSchema, isJSONSchemaDefinition } from "@graviola/json-schema-utils";
+import { JSONSchema7 } from "json-schema";
+import {
+  isJSONSchema,
+  isJSONSchemaDefinition,
+  resolveSchema,
+} from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
 
 const MAX_RECURSION = 4;
@@ -16,7 +19,7 @@ const mkSubject = (subjectURI: string | Variable) =>
 
 const propertiesContainStopSymbol = (
   properties: object,
-  stopSymbols: string[]
+  stopSymbols: string[],
 ) => {
   return Object.keys(properties).some((key) => stopSymbols.includes(key));
 };
@@ -25,7 +28,7 @@ const createSubSelect = (
   subject: string,
   predicate: string,
   object: string,
-  limit: number
+  limit: number,
 ) => `
   {
     SELECT ${subject} ${predicate} (GROUP_CONCAT(${object}; SEPARATOR=",") AS ?${object}_list)
@@ -40,7 +43,7 @@ const createSubSelect = (
 const createCountQuery = (
   subject: string,
   predicate: string,
-  object: string
+  object: string,
 ) => `
   {
     SELECT ${subject} ${predicate} (COUNT(${object}) AS ?${object}_count)
@@ -57,7 +60,7 @@ export const jsonSchema2constructWithLimits = (
   stopSymbols: string[] = [],
   excludedProperties: string[] = [],
   maxRecursion: number = MAX_RECURSION,
-  defaultLimit: number = DEFAULT_LIMIT
+  defaultLimit: number = DEFAULT_LIMIT,
 ): {
   whereRequired: string;
   whereOptionals: string;
@@ -74,9 +77,13 @@ export const jsonSchema2constructWithLimits = (
   const propertiesToSPARQLPatterns = (
     sP: string,
     subSchema: JSONSchema7,
-    level: number
+    level: number,
   ) => {
-    if (level >= maxRecursion || (level > 0 && propertiesContainStopSymbol(subSchema.properties || {}, stopSymbols))) {
+    if (
+      level >= maxRecursion ||
+      (level > 0 &&
+        propertiesContainStopSymbol(subSchema.properties || {}, stopSymbols))
+    ) {
       return;
     }
 
@@ -104,18 +111,41 @@ export const jsonSchema2constructWithLimits = (
           construct += `${sP} ${p} ${o} .\n`;
         }
 
-        if (schema.$ref || schema.properties || (schema.items && isJSONSchemaDefinition(schema.items) && isJSONSchema(schema.items))) {
-          const nextSchema: JSONSchema7 | null = (schema.$ref
-            ? resolveSchema(schema as JsonSchema, "", rootSchema as JsonSchema)
-            : schema.properties
-            ? schema
-            : isJSONSchemaDefinition(schema.items) && isJSONSchema(schema.items)
-            ? schema.items
-            : null) as JSONSchema7 | null;
+        if (
+          schema.$ref ||
+          schema.properties ||
+          (schema.items &&
+            isJSONSchemaDefinition(schema.items) &&
+            isJSONSchema(schema.items))
+        ) {
+          const nextSchema: JSONSchema7 | null = (
+            schema.$ref
+              ? resolveSchema(
+                  schema as JSONSchema7,
+                  "",
+                  rootSchema as JSONSchema7,
+                )
+              : schema.properties
+                ? schema
+                : isJSONSchemaDefinition(schema.items) &&
+                    isJSONSchema(schema.items)
+                  ? schema.items
+                  : null
+          ) as JSONSchema7 | null;
 
-          if (nextSchema && isJSONSchemaDefinition(nextSchema) && isJSONSchema(nextSchema)) {
+          if (
+            nextSchema &&
+            isJSONSchemaDefinition(nextSchema) &&
+            isJSONSchema(nextSchema)
+          ) {
             const typedNextSchema = nextSchema as JSONSchema7;
-            if (typedNextSchema.properties && !propertiesContainStopSymbol(typedNextSchema.properties, stopSymbols)) {
+            if (
+              typedNextSchema.properties &&
+              !propertiesContainStopSymbol(
+                typedNextSchema.properties,
+                stopSymbols,
+              )
+            ) {
               propertiesToSPARQLPatterns(o, typedNextSchema, level + 1);
             }
           }
@@ -130,7 +160,11 @@ export const jsonSchema2constructWithLimits = (
 
   propertiesToSPARQLPatterns(s, rootSchema, 0);
 
-  if (isJSONSchemaDefinition(rootSchema.items) && isJSONSchema(rootSchema.items) && rootSchema.items.properties) {
+  if (
+    isJSONSchemaDefinition(rootSchema.items) &&
+    isJSONSchema(rootSchema.items) &&
+    rootSchema.items.properties
+  ) {
     propertiesToSPARQLPatterns(s, rootSchema.items, 0);
   }
 

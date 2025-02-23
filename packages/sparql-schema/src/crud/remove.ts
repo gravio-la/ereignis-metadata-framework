@@ -1,4 +1,4 @@
-import { makeSPARQLDeleteQuery } from "./makeSPARQLDeleteQuery";
+import { makeSPARQLDeleteQuery } from "@/crud/makeSPARQLDeleteQuery";
 import { JSONSchema7 } from "json-schema";
 import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 

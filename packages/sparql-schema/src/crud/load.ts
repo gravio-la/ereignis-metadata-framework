@@ -1,5 +1,5 @@
 import { JSONSchema7 } from "json-schema";
-import { makeSPARQLConstructQuery } from "./makeSPARQLConstructQuery";
+import { makeSPARQLConstructQuery } from "@/crud/makeSPARQLConstructQuery";
 import { JsonLdContext } from "jsonld-context-parser";
 import { Dataset, DatasetCore } from "@rdfjs/types";
 import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";

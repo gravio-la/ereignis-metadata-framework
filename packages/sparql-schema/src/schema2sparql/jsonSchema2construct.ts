@@ -1,7 +1,10 @@
-import { JsonSchema, resolveSchema } from "@jsonforms/core";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
-import { isJSONSchema, isJSONSchemaDefinition } from "@graviola/json-schema-utils";
+import {
+  isJSONSchema,
+  isJSONSchemaDefinition,
+  resolveSchema,
+} from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
 
 const propertiesContainStopSymbol = (
@@ -70,9 +73,9 @@ export const jsonSchema2construct: (
         construct += `${sP} ${p} ${o} .\n`;
         if (schema.$ref) {
           const subSchema = resolveSchema(
-            schema as JsonSchema,
+            schema as JSONSchema7,
             "",
-            rootSchema as JsonSchema,
+            rootSchema as JSONSchema7,
           );
           if (
             subSchema &&
@@ -103,9 +106,9 @@ export const jsonSchema2construct: (
           ) {
             //const ref = schema.items.$ref
             const subSchema = resolveSchema(
-              schema.items as JsonSchema,
+              schema.items as JSONSchema7,
               "",
-              rootSchema as JsonSchema,
+              rootSchema as JSONSchema7,
             );
             if (
               subSchema &&

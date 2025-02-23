@@ -16,9 +16,9 @@ import {
   defs,
   prepareStubbedSchema,
 } from "@graviola/json-schema-utils";
-import { cleanJSONLD } from "@graviola/sparql-schema";
 import { save } from "./save";
 import { bindings2RDFResultSet } from "./helper/bindings2RDFResultSet";
+import { cleanJSONLD } from "@graviola/jsonld-utils";
 
 export type PrismaStoreOptions = {
   jsonldContext: any;

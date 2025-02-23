@@ -1,5 +1,5 @@
 import { JSONSchema7 } from "json-schema";
-import { makeSPARQLToTrashQuery } from "./makeSPARQLToTrashQuery";
+import { makeSPARQLToTrashQuery } from "@/crud/makeSPARQLToTrashQuery";
 import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 
 export const moveToTrash = async (

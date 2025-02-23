@@ -39,6 +39,9 @@
     "@slub/exhibition-sparql-config": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-global-types": "workspace:*",
+    "@graviola/jsonld-utils": "workspace:*"
+  },
+  "peerDependencies": {
     "json-schema": "^0.4.0"
   }
 }

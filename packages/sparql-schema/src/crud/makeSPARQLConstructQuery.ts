@@ -1,7 +1,10 @@
-import { makeSPARQLWherePart, withDefaultPrefix } from "./makeSPARQLWherePart";
+import {
+  makeSPARQLWherePart,
+  withDefaultPrefix,
+} from "@/crud/makeSPARQLWherePart";
 import { JSONSchema7 } from "json-schema";
 import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
-import { jsonSchema2construct } from "..";
+import { jsonSchema2construct } from "@/schema2sparql/jsonSchema2construct";
 import { CONSTRUCT } from "@tpluscode/sparql-builder";
 import df from "@rdfjs/data-model";
 

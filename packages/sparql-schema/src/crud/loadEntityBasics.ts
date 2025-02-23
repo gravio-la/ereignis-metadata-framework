@@ -1,4 +1,4 @@
-import { basicFieldsQuery } from "./basicFieldsQuery";
+import { basicFieldsQuery } from "@/crud/basicFieldsQuery";
 import { PrimaryField, SPARQLCRUDOptions } from "@graviola/edb-core-types";
 
 export const loadEntityBasics = async (

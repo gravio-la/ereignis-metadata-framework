@@ -1,4 +1,4 @@
-import { makeSPARQLWherePart } from ".";
+import { makeSPARQLWherePart } from "@/crud/makeSPARQLWherePart";
 import { SELECT } from "@tpluscode/sparql-builder";
 import { Variable } from "@rdfjs/types";
 import df from "@rdfjs/data-model";

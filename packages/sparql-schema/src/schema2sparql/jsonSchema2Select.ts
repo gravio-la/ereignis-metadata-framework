@@ -1,10 +1,10 @@
-import { JsonSchema, resolveSchema } from "@jsonforms/core";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 import {
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
+  resolveSchema,
 } from "@graviola/json-schema-utils";
 
 import {
@@ -61,9 +61,9 @@ const propertiesToSPARQLSelectPatterns = (
             const fieldDecl = primaryFields[typeName];
             if (fieldDecl.label) {
               const subSubSchema = resolveSchema(
-                subSchema.items as JsonSchema,
+                subSchema.items as JSONSchema7,
                 "",
-                rootSchema as JsonSchema,
+                rootSchema as JSONSchema7,
               );
               if (
                 subSubSchema &&
@@ -71,6 +71,7 @@ const propertiesToSPARQLSelectPatterns = (
                 isJSONSchema(subSubSchema as JSONSchema7)
               ) {
                 if (
+                  //@ts-ignore
                   subSubSchema?.properties?.[fieldDecl.label]?.type === "string"
                 ) {
                   const lableVariable = makeVariable([...subPath, "label"]);
@@ -134,9 +135,9 @@ const propertiesToSPARQLSelectPatterns = (
         select += subSelect;
       } else if (subSchema.$ref && !minimal) {
         const subSubSchema = resolveSchema(
-          subSchema as JsonSchema,
+          subSchema as JSONSchema7,
           "",
-          rootSchema as JsonSchema,
+          rootSchema as JSONSchema7,
         );
         if (subSubSchema && subSubSchema.properties) {
           const { where: subWhere, select: subSelect } =

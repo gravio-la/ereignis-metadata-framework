@@ -24,20 +24,24 @@
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "doc": "typedoc"
   },
+  "dependencies": {
+    "@graviola/jsonld-utils": "workspace:*",
+    "@graviola/json-schema-utils": "workspace:*",
+    "@graviola/edb-graph-traversal": "workspace:*"
+  },
   "devDependencies": {
     "@rdfjs/types": "^1.1.0",
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@graviola/edb-graph-traversal": "workspace:*",
-    "@graviola/json-schema-utils": "workspace:*",
     "@types/jest": "^29.5.12",
+    "@jest/globals": "^29.7.0",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@rdfjs/data-model": "^2.0.2",
     "@rdfjs/parser-jsonld": "^2.1.1",
     "@tpluscode/rdf-ns-builders": "^4.3.0",

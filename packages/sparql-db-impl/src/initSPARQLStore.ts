@@ -7,7 +7,6 @@ import { SPARQLDataStoreConfig } from "./SPARQLDataStoreConfig";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JSONSchema7 } from "json-schema";
 import {
-  cleanJSONLD,
   exists,
   findEntityByAuthorityIRI,
   findEntityByClass,
@@ -19,6 +18,7 @@ import {
   searchEntityByLabel,
   withDefaultPrefix,
 } from "@graviola/sparql-schema";
+import { cleanJSONLD } from "@graviola/jsonld-utils";
 
 export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
   dataStoreConfig,
