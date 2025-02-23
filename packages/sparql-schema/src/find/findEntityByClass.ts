@@ -1,6 +1,6 @@
 import df from "@rdfjs/data-model";
 import { SELECT } from "@tpluscode/sparql-builder";
-import { PrimaryField, QueryOptions } from "@graviola/edb-core-types";
+import { Entity, PrimaryField, QueryOptions } from "@graviola/edb-core-types";
 
 export type FindEntityByClassOptions = QueryOptions & {
   primaryFields?: PrimaryField;
@@ -17,16 +17,6 @@ const toPredicate = (field: string) => {
   //only allow alphanumeric, dashes and underscores
   const cleanField = field.replace(/[^a-zA-Z0-9_-]/g, "");
   return cleanField.startsWith(":") ? cleanField : `:${cleanField}`;
-};
-
-export type Entity = {
-  entityIRI: string;
-  // @deprecated use entityIRI instead
-  value: string;
-  name?: string;
-  label?: string;
-  description?: string;
-  image?: string;
 };
 
 export type FindEntityByClassFn = (
