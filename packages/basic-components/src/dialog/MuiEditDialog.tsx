@@ -27,8 +27,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import * as React from "react";
-import { useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,9 +55,9 @@ export type MuiEditDialogProps = {
   editMode?: boolean;
   open?: boolean;
   title?: string;
-  search?: React.ReactNode;
-  children?: React.ReactNode;
-  actions?: React.ReactNode;
+  search?: ReactNode;
+  children?: ReactNode;
+  actions?: ReactNode;
 };
 export const MuiEditDialog = ({
   children,
