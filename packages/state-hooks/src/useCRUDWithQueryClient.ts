@@ -1,11 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cleanJSONLD, jsonld2DataSet, LoadResult } from "@graviola/sparql-schema";
+import {
+  cleanJSONLD,
+  jsonld2DataSet,
+  LoadResult,
+} from "@graviola/sparql-schema";
 import { useDataStore } from "./useDataStore";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { useAdbContext } from "./provider";
-import { UseCRUDHook } from "./useCrudHook";
+import type { UseCRUDHook } from "./useCrudHook";
 import { useCallback } from "react";
-import { NamedAndTypedEntity } from "@graviola/edb-core-types";
+import type { NamedAndTypedEntity } from "@graviola/edb-core-types";
 
 const getAllSubjectsFromResult = (result: any) => {
   const ds = jsonld2DataSet(result);
