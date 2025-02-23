@@ -113,6 +113,11 @@ export type AbstractDatastore<
     limit?: number,
     cb?: (document: any) => Promise<DocumentResult>,
   ) => Promise<FindResult>;
+  findEntityByTypeName?: (
+    typeName: string,
+    searchString: string,
+    limit?: number,
+  ) => Promise<Entity[]>;
   findDocumentsByLabel?: (
     typeName: string,
     label: string,
