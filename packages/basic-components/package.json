@@ -13,23 +13,45 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\""
+    "prepare": "bun run build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "dependencies": {
-    "@graviola/edb-state-hooks": "workspace:*",
-    "@ebay/nice-modal-react": "^1.2",
-    "next-i18next": "^15.3.0"
+    "@graviola/edb-state-hooks": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "~18.3"
+    "@types/react": "~18.3",
+    "@ebay/nice-modal-react": "^1.2",
+    "next-i18next": "^15.3.0",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "@mui/material": "^5",
     "@mui/icons-material": "^5",
+    "@ebay/nice-modal-react": "^1.2",
+    "next-i18next": "^15",
     "react": "^18"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }
