@@ -193,3 +193,13 @@ export type WalkerOptions = {
   skipAtLevel: number;
   doNotRecurseNamedNodes?: boolean;
 };
+
+export type Entity = {
+  entityIRI: string;
+  // @deprecated use entityIRI instead
+  value: string;
+  name?: string;
+  label?: string;
+  description?: string;
+  image?: string;
+};

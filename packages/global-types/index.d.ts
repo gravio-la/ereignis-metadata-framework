@@ -3,6 +3,7 @@ import type {
   SparqlEndpoint,
   StringToIRIFn,
   WalkerOptions,
+  Entity,
 } from "@graviola/edb-core-types";
 import type { NamespaceBuilder } from "@rdfjs/namespace";
 import type { JsonLdContext } from "jsonld-context-parser";
