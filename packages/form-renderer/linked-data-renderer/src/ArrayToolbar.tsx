@@ -20,10 +20,13 @@ import {
 import { JSONSchema7 } from "json-schema";
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import { NoteAdd } from "@mui/icons-material";
-import { PrimaryField, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
 import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
 import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
-import { KnowledgeSources } from "@graviola/edb-global-types";
+import { KnowledgeSources } from "@graviola/semantic-jsonform-types";
 
 export interface ArrayLayoutToolbarProps {
   label: string;

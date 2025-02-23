@@ -13,6 +13,7 @@
   "peerDependencies": {
     "@mui/material": "^5",
     "@mui/icons-material": "^5",
+    "@ebay/nice-modal-react": "^1.2",
     "react": "^18"
   },
   "dependencies": {
@@ -23,13 +24,13 @@
     "@graviola/edb-basic-components": "workspace:*",
     "@graviola/edb-authorities": "workspace:*",
     "@graviola/edb-data-mapping": "workspace:*",
-    "@ebay/nice-modal-react": "^1.2",
     "react-json-view-lite": "^1.4",
     "next-i18next": "^15",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/react": "~18.3",
-    "@types/lodash-es": "^4.17.12"
+    "@types/lodash-es": "^4.17.12",
+    "@ebay/nice-modal-react": "^1.2"
   }
 }

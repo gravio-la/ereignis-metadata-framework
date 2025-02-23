@@ -100,10 +100,10 @@ export const DiscoverAutocompleteInput: FunctionComponent<
               },
               limit,
             )
-          ).map(({ name = "", value }: { name: string; value: any }) => {
+          ).map(({ label = "", entityIRI }) => {
             return {
-              label: name,
-              value,
+              label,
+              value: entityIRI,
             };
           })
         : [],

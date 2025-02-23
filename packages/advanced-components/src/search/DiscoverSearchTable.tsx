@@ -1,5 +1,5 @@
 import { List } from "@mui/material";
-import React, {
+import {
   FunctionComponent,
   useCallback,
   useEffect,
@@ -7,53 +7,74 @@ import React, {
   useState,
 } from "react";
 
-import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
-import { findEntityByClass } from "@graviola/sparql-schema";
+import {
+  useAdbContext,
+  useDataStore,
+  useGlobalCRUDOptions,
+  useQueryClient,
+} from "@graviola/edb-state-hooks";
 import { ClassicResultListItem } from "@graviola/edb-basic-components";
 import { EntityDetailElement } from "@graviola/edb-advanced-components";
+import { Entity } from "@graviola/edb-core-types";
 
 export type DiscoverSearchTableProps = {
   searchString: string;
   typeName?: string;
   onAcceptItem?: (id: string | undefined, data: any) => void;
   selectedIndex?: number;
+  limit?: number;
 };
 
 export const DiscoverSearchTable: FunctionComponent<
   DiscoverSearchTableProps
-> = ({ searchString, typeName = "Person", onAcceptItem, selectedIndex }) => {
+> = ({
+  searchString,
+  typeName = "Person",
+  onAcceptItem,
+  selectedIndex,
+  limit,
+}) => {
   const [resultTable, setResultTable] = useState<any | undefined>();
-  const {
-    typeNameToTypeIRI,
-    jsonLDConfig: { defaultPrefix },
-    queryBuildOptions,
-  } = useAdbContext();
+  const { schema, typeNameToTypeIRI, queryBuildOptions } = useAdbContext();
+  const queryClient = useQueryClient();
   const { crudOptions } = useGlobalCRUDOptions();
   const typeIRI = useMemo(
     () => typeNameToTypeIRI(typeName),
     [typeName, typeNameToTypeIRI],
   );
 
+  const { dataStore, ready } = useDataStore({
+    schema,
+    crudOptionsPartial: crudOptions,
+    typeNameToTypeIRI,
+    queryBuildOptions,
+  });
+
   const fetchData = useCallback(async () => {
-    console.log("fetch data");
-    if (!searchString || searchString.length < 1 || !crudOptions || !typeIRI)
+    if (
+      !searchString ||
+      searchString.length < 1 ||
+      !crudOptions ||
+      !typeIRI ||
+      !ready
+    )
       return;
+    const result = await queryClient.fetchQuery<Entity[]>({
+      queryKey: ["discover-search", typeName, searchString],
+      queryFn: () =>
+        dataStore?.findEntityByTypeName(typeName, searchString, limit),
+    });
     setResultTable(
-      (
-        await findEntityByClass(
-          searchString,
-          typeIRI,
-          crudOptions.selectFetch,
-          { defaultPrefix, queryBuildOptions },
-        )
-      ).map(({ name = "", value }: { name: string; value: any }) => {
+      result.map(({ label = "", entityIRI, description, image }) => {
         return {
-          label: name,
-          id: value as string,
+          label,
+          id: entityIRI,
+          secondary: description,
+          avatar: image,
         };
       }),
     );
-  }, [searchString, typeIRI, crudOptions, defaultPrefix, queryBuildOptions]);
+  }, [searchString, typeIRI, ready, dataStore, queryClient]);
 
   const handleSelect = useCallback(
     (id: string | undefined) => {
