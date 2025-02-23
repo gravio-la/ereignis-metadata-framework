@@ -10,6 +10,5 @@ module.exports = {
     "no-debugger": "error",
     "no-alert": "error",
     "no-unused-expressions": "error",
-    "eslint-import-resolver-alias": "error",
   },
 };
