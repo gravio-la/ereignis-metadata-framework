@@ -1,10 +1,6 @@
-import NiceModal from "@ebay/nice-modal-react";
-import { NormDataMapping, PrimaryField } from "@graviola/edb-core-types";
-import { DeclarativeFlatMapping, mapByConfig } from "@graviola/edb-data-mapping";
-import { KnowledgeSources } from "@graviola/edb-global-types";
+import { NormDataMapping } from "@graviola/edb-core-types";
+import { DeclarativeMapping, mapByConfig } from "@graviola/edb-data-mapping";
 import {
-  useSimilarityFinderState,
-  useModalRegistry,
   useGlobalCRUDOptions,
   useDataStore,
   useAdbContext,
@@ -12,10 +8,10 @@ import {
 import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
 import { primaryFields } from "@slub/exhibition-schema";
 import prefixes from "@zazuko/rdf-vocabularies/prefixes";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback } from "react";
 
 const getMappingConfig = (
-  normDataMapping: Record<string, NormDataMapping>,
+  normDataMapping: Record<string, NormDataMapping<DeclarativeMapping>>,
   authorityIRI: string,
   typeName: string,
 ) => {
@@ -40,7 +36,7 @@ export const useDeclarativeMapper = () => {
     createEntityIRI,
     normDataMapping,
     jsonLDConfig,
-  } = useAdbContext();
+  } = useAdbContext<DeclarativeMapping>();
   const { crudOptions } = useGlobalCRUDOptions();
   const { dataStore, ready } = useDataStore({
     schema,
