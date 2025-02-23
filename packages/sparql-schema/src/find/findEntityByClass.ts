@@ -53,32 +53,37 @@ export const findEntityByClass: FindEntityByClassFn = async (
     safeDescriptionV = df.variable("safeDescription"),
     safeImageV = df.variable("safeImage"),
     oneOfLabelOrDesc = df.variable("oneOfTitle"),
-    firstOneOfTitleV = df.variable("firstOneOfTitle");
+    firstOneOfTitleV = df.variable("firstOneOfTitle"),
+    firstImageV = df.variable("firstImage"),
+    firstDescriptionV = df.variable("firstDescription");
+
   let query =
     searchString && searchString.length > 0
-      ? SELECT.DISTINCT` ${subjectV} (SAMPLE(${oneOfLabelOrDesc}) AS ${firstOneOfTitleV})`
+      ? SELECT.DISTINCT` ${subjectV} (SAMPLE(${oneOfLabelOrDesc}) AS ${firstOneOfTitleV}) (SAMPLE(${imageV}) AS ${firstImageV}) (SAMPLE(${descriptionV}) AS ${firstDescriptionV})`
           .WHERE`
           ${subjectV} a <${typeIRI}> .
             OPTIONAL {${subjectV} ${labelPredicate} ${nameV} .}
-            ${titlePredicate ? `OPTIONAL {${subjectV} ${titlePredicate} ${titleV} .}` : ""}
+            OPTIONAL {${subjectV} ${titlePredicate} ${titleV} .}
             OPTIONAL {${subjectV} ${descriptionPredicate} ${descriptionV} .}
-         packages   OPTIONAL {${subjectV} ${imagePredicate} ${imageV} .}
+            OPTIONAL {${subjectV} ${imagePredicate} ${imageV} .}
 
             BIND (COALESCE(${nameV}, "") AS ${safeNameV})
             BIND (COALESCE(${titleV}, "") AS ${safeTitleV})
             BIND (COALESCE(${descriptionV}, "") AS ${safeDescriptionV})
             BIND (COALESCE(${imageV}, "") AS ${safeImageV})
-            BIND (CONCAT(${safeNameV}, " ", ${safeTitleV}, " ", ${safeDescriptionV}) AS ${concatenatedV})
             BIND (COALESCE(${nameV}, ${titleV}, ${descriptionV}, "") AS ${oneOfLabelOrDesc})
+
+            BIND (CONCAT(${safeNameV}, " ", ${safeTitleV}, " ", ${safeDescriptionV}) AS ${concatenatedV})
             FILTER(contains(lcase(${concatenatedV}), lcase("${searchString}") )) .
+
             FILTER isIRI(${subjectV})
             FILTER (strlen(${oneOfLabelOrDesc}) > 0)
         `
-      : SELECT.DISTINCT` ${subjectV} (SAMPLE(${oneOfLabelOrDesc}) AS ${firstOneOfTitleV})`
+      : SELECT.DISTINCT` ${subjectV} (SAMPLE(${oneOfLabelOrDesc}) AS ${firstOneOfTitleV}) (SAMPLE(${imageV}) AS ${firstImageV}) (SAMPLE(${descriptionV}) AS ${firstDescriptionV})`
           .WHERE`
           ${subjectV} a <${typeIRI}> .
             OPTIONAL {${subjectV} ${labelPredicate} ${nameV} .}
-            ${titlePredicate ? `OPTIONAL {${subjectV} ${titlePredicate} ${titleV} .}` : ""}
+            OPTIONAL {${subjectV} ${titlePredicate} ${titleV} .}
             OPTIONAL {${subjectV} ${descriptionPredicate} ${descriptionV} .}
             BIND (COALESCE(${nameV}, ${titleV}, ${descriptionV}, "") AS ${oneOfLabelOrDesc})
             FILTER isIRI(${subjectV})
@@ -95,11 +100,12 @@ export const findEntityByClass: FindEntityByClassFn = async (
     return bindings
       .map((binding: any) => ({
         entityIRI: binding[subjectV.value]?.value,
-        name: binding[firstOneOfTitleV.value]?.value,
+        typeIRI: typeIRI,
+        name: binding[safeNameV.value]?.value,
         value: binding[subjectV.value]?.value,
-        label: binding[safeNameV.value]?.value,
-        description: binding[safeDescriptionV.value]?.value,
-        image: binding[safeImageV.value]?.value,
+        label: binding[firstOneOfTitleV.value]?.value,
+        description: binding[firstDescriptionV.value]?.value,
+        image: binding[firstImageV.value]?.value,
       }))
       .filter((entity: Entity) => entity.entityIRI);
   } catch (e) {

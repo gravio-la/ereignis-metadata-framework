@@ -196,6 +196,7 @@ export type WalkerOptions = {
 
 export type Entity = {
   entityIRI: string;
+  typeIRI: string;
   // @deprecated use entityIRI instead
   value: string;
   name?: string;
