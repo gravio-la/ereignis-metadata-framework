@@ -67,8 +67,8 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       limit || defaultLimit,
     );
     const results: any[] = [];
-    for (const { value } of items) {
-      const doc = await loadDocument(typeName, value);
+    for (const { entityIRI } of items) {
+      const doc = await loadDocument(typeName, entityIRI);
       if (cb) {
         results.push(await cb(doc));
       } else {
@@ -100,9 +100,9 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         if (currentIndex >= items.length) {
           return Promise.resolve({ done: true, value: null });
         }
-        const value = items[currentIndex].value;
+        const entityIRI = items[currentIndex].entityIRI;
         currentIndex++;
-        return loadDocument(typeName, value).then((doc) => {
+        return loadDocument(typeName, entityIRI).then((doc) => {
           return { done: false, value: doc };
         });
       },
@@ -180,6 +180,20 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         },
       );
       return ids;
+    },
+    findEntityByTypeName: async (typeName, searchString, limit) => {
+      const typeIRI = typeNameToTypeIRI(typeName);
+      return await findEntityByClass(
+        searchString,
+        typeIRI,
+        selectFetch,
+        {
+          defaultPrefix,
+          queryBuildOptions,
+          primaryFields: queryBuildOptions.primaryFields[typeName],
+        },
+        limit,
+      );
     },
     findDocumentsByAuthorityIRI: async (
       typeName,
