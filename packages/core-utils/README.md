@@ -2,6 +2,12 @@
 
 A collection of utility functions used across the Graviola project. This package provides common helper functions for string manipulation, data transformation, date handling, and more.
 
+## Guidelines
+
+Functions added to this package should not have any dependecies or be already provided by lodash. (A negative example would be `camelCaseToTitleCase` which is provided by lodash or `ellipsis` which is provided by `lodash.truncate` but for historical reasons its still in this package and will be removed in the future.)
+
+Also these functions are intendet to be used in the browser and in node.js.
+
 ## Installation
 
 ```bash
@@ -67,7 +73,7 @@ bun add @graviola/core-utils
 ### SPARQL/RDF Utilities
 
 - `envToSparqlEndpoint`: Convert environment variables to SPARQL endpoint configuration
-- `encodeIRI/decodeIRI`: Encode/decode IRIs for safe transmission
+- `encodeIRI/decodeIRI`: Encode/decode IRIs to a format that is safe to use in URLs, but unlike `encodeURIComponent` and `decodeURIComponent` just converts the IRI to a base64 string, thus
 
 ### Array/Object Utilities
 
