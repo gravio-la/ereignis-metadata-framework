@@ -1,0 +1,61 @@
+{
+  "name": "@graviola/jsonld-utils",
+  "version": "1.0.0",
+  "description": "a set of JSONLD related utilities",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "bun run build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint \"**/*.ts*\"",
+    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
+  },
+  "dependencies": {
+    "@graviola/edb-core-utils": "workspace:*",
+    "@graviola/edb-graph-traversal": "workspace:*"
+  },
+  "peerDependencies": {
+    "jsonld": "^8.3.2",
+    "json-schema": "^0.4.0",
+    "@rdfjs/dataset": "^2.0.2",
+    "jsonld-context-parser": "^2.4.0",
+    "n3": "^1.17.2"
+  },
+  "devDependencies": {
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@rdfjs/types": "^1.1.0",
+    "eslint-config-edb": "workspace:*",
+    "typescript": "^5"
+  },
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
+  }
+}
+
