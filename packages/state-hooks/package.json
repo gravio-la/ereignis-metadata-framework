@@ -20,6 +20,7 @@
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/jsonld-utils": "workspace:*",
     "@types/jest": "^29.5.12",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3"
@@ -39,6 +40,7 @@
     "@graviola/sparql-db-impl": "^1.1.0",
     "@graviola/sparql-schema": "^1.1.0",
     "@graviola/restfull-fetch-db-impl": "^1.1.0",
+    "@graviola/jsonld-utils": "^1.0.0",
     "oxigraph": "^0.4.8",
     "@rdfjs/dataset": "^2.0.2",
     "n3": "^1.17.3",

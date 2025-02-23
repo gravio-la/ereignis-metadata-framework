@@ -4,6 +4,9 @@
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "strict": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
