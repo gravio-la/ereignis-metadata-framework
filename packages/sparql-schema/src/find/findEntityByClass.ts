@@ -37,7 +37,7 @@ export const findEntityByClass: FindEntityByClassFn = async (
   const { queryBuildOptions, defaultPrefix, primaryFields } = options;
   const { label, description, image } = primaryFields || {};
   const labelPredicate = label ? toPredicate(label) : ":name";
-  const titlePredicate = label ? undefined : ":title";
+  const titlePredicate = ":title";
   const descriptionPredicate = description
     ? toPredicate(description)
     : ":description";
