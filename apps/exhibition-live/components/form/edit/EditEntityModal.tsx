@@ -11,7 +11,7 @@ import { JSONSchema7 } from "json-schema";
 import { useSnackbar } from "notistack";
 import { useFormDataStore } from "@graviola/edb-state-hooks";
 import { PrimaryFieldResults } from "@graviola/edb-core-types";
-import { cleanJSONLD } from "@graviola/sparql-schema";
+import { cleanJSONLD } from "@graviola/jsonld-utils";
 import { MuiEditDialog } from "@graviola/edb-basic-components";
 import {
   applyToEachField,

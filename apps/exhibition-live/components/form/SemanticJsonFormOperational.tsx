@@ -20,13 +20,14 @@ import { useQueryKeyResolver } from "@graviola/edb-state-hooks";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
 import { create } from "zustand";
 import { useTranslation } from "next-i18next";
-import { cleanJSONLD, LoadResult } from "@graviola/sparql-schema";
+import { cleanJSONLD } from "@graviola/jsonld-utils";
 import { FormDebuggingTools } from "@graviola/edb-debug-utils";
 import { GenericModal } from "@graviola/edb-basic-components";
 import {
   ChangeCause,
   SemanticJsonFormProps,
 } from "@graviola/semantic-jsonform-types";
+import type { LoadResult } from "@graviola/sparql-schema";
 
 type SemanticJsonFormStateType = {
   isSaving: boolean;
