@@ -3,45 +3,51 @@
   "version": "1.1.0",
   "description": "a set of store specific implementations of SPARQL query builders",
   "type": "module",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests --color",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --color",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "devDependencies": {
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3"
+    "json-schema": "^0.4.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
     "@graviola/json-schema-utils": "workspace:*",
     "@graviola/sparql-schema": "workspace:*",
-    "@graviola/edb-graph-traversal": "workspace:*",
-    "@slub/exhibition-schema": "workspace:*",
-    "@slub/exhibition-sparql-config": "workspace:*",
-    "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*",
     "@graviola/jsonld-utils": "workspace:*"
   },
-  "peerDependencies": {
-    "json-schema": "^0.4.0"
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }
