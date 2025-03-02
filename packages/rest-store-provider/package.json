@@ -1,0 +1,49 @@
+{
+  "name": "@graviola/rest-store-provider",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "bun run build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
+  },
+  "peerDependencies": {
+    "@graviola/edb-state-hooks": "^1.0.0",
+    "react": "^18"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@graviola/edb-state-hooks": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
+  }
+}
