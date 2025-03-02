@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import {
   bringDefinitionToTop,
   prepareStubbedSchema,
 } from "@graviola/json-schema-utils";
-import { StringToIRIFn } from "@graviola/edb-core-types";
+import type { StringToIRIFn } from "@graviola/edb-core-types";
 import { useAdbContext } from "./provider";
 
 type UseExtendedSchemaProps = {

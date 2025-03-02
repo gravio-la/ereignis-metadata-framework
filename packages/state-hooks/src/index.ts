@@ -14,8 +14,6 @@ export * from "./useFormEditor";
 export * from "./useGlobalSearch";
 export * from "./useGlobalSearchWithHelper";
 export * from "./useLocalHistory";
-export * from "./useOxigraph";
-export * from "./useRDFDataSources";
 export * from "./useQueryKeyResolver";
 export * from "./useRightDrawerState";
 export * from "./useTypeIRIFromEntity";
