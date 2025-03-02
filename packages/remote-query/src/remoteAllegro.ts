@@ -1,5 +1,3 @@
-import datasetFactory from "@rdfjs/dataset";
-import N3 from "n3";
 import {
   CRUDFunctions,
   RDFSelectResult,
@@ -7,6 +5,8 @@ import {
   SelectFetchOverload,
   SparqlEndpoint,
 } from "@graviola/edb-core-types";
+import datasetFactory from "@rdfjs/dataset";
+import N3 from "n3";
 
 const fetchNTriples = (query: string, endpoint: string, token?: string) =>
   fetch(endpoint, {

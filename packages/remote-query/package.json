@@ -21,8 +21,8 @@
     "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
     "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
     "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz",
     "doc": "typedoc"

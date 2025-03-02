@@ -1,7 +1,5 @@
 import { QueryEngine } from "@comunica/query-sparql";
 import { IDataSource } from "@comunica/types";
-import datasetFactory from "@rdfjs/dataset";
-import N3 from "n3";
 import {
   CRUDFunctions,
   RDFSelectResult,
@@ -9,6 +7,8 @@ import {
   SelectFetchOverload,
   SparqlEndpoint,
 } from "@graviola/edb-core-types";
+import datasetFactory from "@rdfjs/dataset";
+import N3 from "n3";
 
 const fetchNTriples = (query: string, endpoint: string) =>
   fetch(endpoint, {

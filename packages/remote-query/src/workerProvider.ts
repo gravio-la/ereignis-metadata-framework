@@ -1,6 +1,7 @@
 import { SparqlEndpoint, WorkerProvider } from "@graviola/edb-core-types";
-import { oxigraphCrudOptions } from "./remoteOxigraph";
+
 import { allegroCrudOptions } from "./remoteAllegro";
+import { oxigraphCrudOptions } from "./remoteOxigraph";
 import { qleverCrudOptions } from "./remoteQlever";
 
 const workerProvider: WorkerProvider = {
