@@ -60,7 +60,7 @@ export const oxigraphCrudOptions: (
     return ds;
   },
   updateFetch: defaultQueryFetch(
-    url.replace("query", "update"),
+    url.replace(/\/query$/, "/update"),
     undefined,
     "application/sparql-update",
   ),
