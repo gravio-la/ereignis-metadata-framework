@@ -14,14 +14,17 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests --color",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --color",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz",
     "doc": "typedoc"
   },
   "devDependencies": {
@@ -29,16 +32,21 @@
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "@types/json-schema": "^7.0.14",
+    "@comunica/types": "^2.10.0",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "tsup": "^8.0.0"
   },
   "dependencies": {
     "@comunica/query-sparql": "^2.10.2",
-    "@comunica/types": "^2.10.0",
     "@rdfjs/dataset": "^2.0.2",
-    "json-schema": "^0.4.0",
     "n3": "^1.17.2"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }
