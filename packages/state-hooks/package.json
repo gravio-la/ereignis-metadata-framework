@@ -16,37 +16,25 @@
   },
   "devDependencies": {
     "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*",
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/json-schema-utils": "workspace:*",
     "@graviola/jsonld-utils": "workspace:*",
     "@types/jest": "^29.5.12",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "json-schema": "^0.4.0"
   },
   "peerDependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
-    "notistack": "^3.0.1",
     "@tanstack/react-query": "^4.36.1",
     "react": "^16.9.0 || ^17.0.0 || ^18",
     "react-redux": "^9.1.1",
     "zustand": "^4.5.2",
-    "@graviola/async-oxigraph": "0.0.10",
     "@graviola/edb-core-utils": "^1.1.0",
-    "@graviola/edb-ui-utils": "^1.1.0",
-    "@graviola/edb-graph-traversal": "^1.1.0",
-    "@graviola/remote-query-implementations": "^1.1.0",
-    "@graviola/sparql-db-impl": "^1.1.0",
-    "@graviola/sparql-schema": "^1.1.0",
-    "@graviola/restfull-fetch-db-impl": "^1.1.0",
+    "@graviola/json-schema-utils": "^1.1.0",
     "@graviola/jsonld-utils": "^1.0.0",
-    "oxigraph": "^0.4.8",
-    "@rdfjs/dataset": "^2.0.2",
-    "n3": "^1.17.3",
-    "jsonld-context-parser": "^2.4.0",
-    "@reduxjs/toolkit": "^2.2.3",
-    "json-schema": "^0.4.0",
-    "jsonld": "^8.3.2"
+    "@reduxjs/toolkit": "^2.2.3"
   }
 }
