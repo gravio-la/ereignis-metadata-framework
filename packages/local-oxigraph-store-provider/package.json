@@ -1,0 +1,63 @@
+{
+  "name": "@graviola/local-oxigraph-store-provider",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "bun run build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
+  },
+  "peerDependencies": {
+    "@graviola/edb-state-hooks": "^1.1.0",
+    "@tanstack/react-query": "^4.36.1",
+    "@mui/material": "^5",
+    "@mui/icons-material": "^5",
+    "react": "^18"
+  },
+  "dependencies": {
+    "@graviola/remote-query-implementations": "workspace:*",
+    "@graviola/sparql-db-impl": "workspace:*",
+    "@graviola/async-oxigraph": "workspace:*",
+    "@rdfjs/dataset": "^2.0.2",
+    "n3": "^1.17.2",
+    "oxigraph": "^0.4.8"
+  },
+  "devDependencies": {
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-state-hooks": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"],
+    "rules": {
+      "no-console": "off"
+    }
+  }
+}
+
