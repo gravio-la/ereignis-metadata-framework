@@ -1,7 +1,8 @@
-import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
-import { decode } from "./jsonPointer";
 import { JSONSchema4, JSONSchema7 } from "json-schema";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+
+import { decode } from "./jsonPointer";
 
 type JsonSchema = JSONSchema7 | JSONSchema4;
 

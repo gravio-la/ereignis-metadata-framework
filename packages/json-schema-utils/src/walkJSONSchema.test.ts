@@ -1,6 +1,7 @@
+import { JSONSchema7 } from "json-schema";
+
 import { bringDefinitionToTop } from "./jsonSchema";
 import { resolveAndWalkJSONSchema, walkJSONSchema } from "./walkJSONSchema";
-import { JSONSchema7 } from "json-schema";
 
 describe("walkJSONSchema", () => {
   it("should walk through a JSON schema and call appropriate callbacks", () => {

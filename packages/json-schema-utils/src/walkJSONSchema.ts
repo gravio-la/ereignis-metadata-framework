@@ -1,4 +1,5 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+
 import { isJSONSchema, isJSONSchemaDefinition } from "./jsonSchema";
 import { resolveSchema } from "./resolver";
 

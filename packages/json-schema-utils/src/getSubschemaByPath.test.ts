@@ -1,6 +1,7 @@
 import { JSONSchema7 } from "json-schema";
-import { bringDefinitionToTop } from "./jsonSchema";
+
 import { getSubschemaByPath } from "./getSubschemaByPath";
+import { bringDefinitionToTop } from "./jsonSchema";
 
 const rootSchema = {
   $id: "https://example.com/schemas/person",
