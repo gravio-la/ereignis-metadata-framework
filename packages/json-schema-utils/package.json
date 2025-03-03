@@ -14,11 +14,17 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz",
     "test": "jest",
     "test:watch": "jest --watch --color",
     "test:coverage": "jest --coverage",
@@ -31,10 +37,18 @@
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "tsup": "^8.0.0"
   },
   "dependencies": {
     "json-schema": "^0.4.0",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }
