@@ -1,5 +1,5 @@
 import datasetFactory from "@rdfjs/dataset";
-import { DatasetCore, Quad } from "@rdfjs/types";
+import type { DatasetCore, Quad } from "@rdfjs/types";
 import jsonld from "jsonld";
 
 export const jsonld2DataSet: (

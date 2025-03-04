@@ -1,9 +1,9 @@
-import { NamedEntityData, WalkerOptions } from "@graviola/edb-core-types";
+import type { NamedEntityData, WalkerOptions } from "@graviola/edb-core-types";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
 import datasetFactory from "@rdfjs/dataset";
-import { Dataset } from "@rdfjs/types";
-import { JSONSchema7 } from "json-schema";
+import type { Dataset } from "@rdfjs/types";
+import type { JSONSchema7 } from "json-schema";
 
 import { jsonld2DataSet } from "./jsonld2DataSet";
 

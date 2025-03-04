@@ -1,4 +1,4 @@
-import { DatasetCore, Quad } from "@rdfjs/types";
+import type { DatasetCore, Quad } from "@rdfjs/types";
 import N3 from "n3";
 
 export const dataset2NTriples: (
