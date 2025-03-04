@@ -1,10 +1,10 @@
-import { JSONSchema7 } from "json-schema";
 import {
   isJSONSchema,
   isJSONSchemaDefinition,
   resolveSchema,
 } from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
+import { JSONSchema7 } from "json-schema";
 
 const MAX_RECURSION = 4;
 const DEFAULT_LIMIT = 10;

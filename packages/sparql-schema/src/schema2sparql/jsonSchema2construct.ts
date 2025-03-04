@@ -1,11 +1,10 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-
 import {
   isJSONSchema,
   isJSONSchemaDefinition,
   resolveSchema,
 } from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 const propertiesContainStopSymbol = (
   properties: object,

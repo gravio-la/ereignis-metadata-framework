@@ -1,17 +1,15 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-
+import {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+  SPARQLFlavour,
+} from "@graviola/edb-core-types";
 import {
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
   resolveSchema,
 } from "@graviola/json-schema-utils";
-
-import {
-  PrimaryField,
-  PrimaryFieldDeclaration,
-  SPARQLFlavour,
-} from "@graviola/edb-core-types";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 const makeWherePart = (queryClause: string, required: boolean) =>
   required ? queryClause : ` OPTIONAL { ${queryClause} } `;

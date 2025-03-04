@@ -1,6 +1,6 @@
+import { Entity, PrimaryField, QueryOptions } from "@graviola/edb-core-types";
 import df from "@rdfjs/data-model";
 import { SELECT } from "@tpluscode/sparql-builder";
-import { Entity, PrimaryField, QueryOptions } from "@graviola/edb-core-types";
 
 export type FindEntityByClassOptions = QueryOptions & {
   primaryFields?: PrimaryField;

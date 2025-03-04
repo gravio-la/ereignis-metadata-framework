@@ -1,8 +1,8 @@
-import df from "@rdfjs/data-model";
-import { SELECT } from "@tpluscode/sparql-builder";
 import { QueryBuilderOptions } from "@graviola/edb-core-types";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import df from "@rdfjs/data-model";
 import { Term } from "@rdfjs/types";
+import { SELECT } from "@tpluscode/sparql-builder";
 
 type Bindings = Record<string, Term>[];
 

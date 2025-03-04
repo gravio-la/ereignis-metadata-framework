@@ -1,12 +1,13 @@
-import { INSERT } from "@tpluscode/sparql-builder";
-import { withDefaultPrefix } from "@/crud/makeSPARQLWherePart";
-import { JSONSchema7 } from "json-schema";
 import {
   NamedAndTypedEntity,
   SPARQLCRUDOptions,
 } from "@graviola/edb-core-types";
-import { jsonld2DataSet, dataset2NTriples } from "@graviola/jsonld-utils";
+import { dataset2NTriples, jsonld2DataSet } from "@graviola/jsonld-utils";
+import { INSERT } from "@tpluscode/sparql-builder";
+import { JSONSchema7 } from "json-schema";
+
 import { makeSPARQLDeleteQuery } from "@/crud/makeSPARQLDeleteQuery";
+import { withDefaultPrefix } from "@/crud/makeSPARQLWherePart";
 
 type SaveOptions = SPARQLCRUDOptions & {
   skipRemove?: boolean;

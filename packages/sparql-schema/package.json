@@ -14,11 +14,19 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
+    "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --color",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
@@ -31,6 +39,7 @@
   },
   "devDependencies": {
     "@rdfjs/types": "^1.1.0",
+    "@tpluscode/rdf-ns-builders": "^4.3.0",
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
@@ -39,12 +48,12 @@
     "@jest/globals": "^29.7.0",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "tsup": "^8.0.0"
   },
   "peerDependencies": {
     "@rdfjs/data-model": "^2.0.2",
     "@rdfjs/parser-jsonld": "^2.1.1",
-    "@tpluscode/rdf-ns-builders": "^4.3.0",
     "@tpluscode/sparql-builder": "^0.3.31",
     "json-schema": "^0.4.0",
     "jsonld": "^8.3.2",
@@ -52,5 +61,12 @@
     "n3": "^1.17.2",
     "rdf-dataset-ext": "^1.1.0",
     "string-to-stream": "^3.0.1"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }

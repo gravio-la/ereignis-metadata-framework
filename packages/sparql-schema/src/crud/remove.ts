@@ -1,6 +1,7 @@
-import { makeSPARQLDeleteQuery } from "@/crud/makeSPARQLDeleteQuery";
-import { JSONSchema7 } from "json-schema";
 import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
+import { JSONSchema7 } from "json-schema";
+
+import { makeSPARQLDeleteQuery } from "@/crud/makeSPARQLDeleteQuery";
 
 export const remove = async (
   entityIRI: string,

@@ -1,9 +1,9 @@
 import { BindingsStream } from "@comunica/types";
+import { Prefixes } from "@graviola/edb-core-types";
 import { Literal, NamedNode } from "@rdfjs/types";
 
-import { rdfLiteralToNative } from "./primitives";
-import { Prefixes } from "@graviola/edb-core-types";
 import { prefixes2sparqlPrefixDeclaration } from "./prefixes2sparqlPrefixDeclaration";
+import { rdfLiteralToNative } from "./primitives";
 
 type TypeMapping = {
   "xsd:string": string;
