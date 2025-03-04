@@ -11,15 +11,20 @@ import {
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { Clear, Save } from "@mui/icons-material";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { JSONSchema7 } from "json-schema";
 import { useJsonForms } from "@jsonforms/react";
 import dot from "dot";
-import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
 import get from "lodash/get";
 import NiceModal from "@ebay/nice-modal-react";
-import { withEllipsis } from "@graviola/edb-ui-utils";
-import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
+import { specialDate2LocalDate, withEllipsis } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";

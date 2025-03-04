@@ -11,7 +11,7 @@ import {
   useRightDrawerState,
   useSettings,
 } from "@graviola/edb-state-hooks";
-import { encodeIRI } from "@graviola/edb-ui-utils";
+import { encodeIRI } from "@graviola/edb-core-utils";
 import NewSemanticJsonForm from "../../form/SemanticJsonFormOperational";
 import { useFormDataStore, useExtendedSchema } from "@graviola/edb-state-hooks";
 import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";

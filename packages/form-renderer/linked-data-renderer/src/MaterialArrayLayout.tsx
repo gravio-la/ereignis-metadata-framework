@@ -21,7 +21,7 @@ import { useJsonForms } from "@jsonforms/react";
 import { uniqBy, orderBy } from "lodash-es";
 import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
 import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath, validate } from "@graviola/edb-ui-utils";
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
 import { JSONSchema7 } from "json-schema";
 import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
@@ -41,6 +41,7 @@ import { JSONSchema } from "json-schema-to-ts";
 import { useTranslation } from "next-i18next";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { Pulse } from "@graviola/edb-basic-components";
+import { validate } from "@graviola/edb-ui-utils";
 
 const uiSchemaOptionsSchema = {
   type: "object",

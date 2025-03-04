@@ -14,7 +14,7 @@ import { ArrayLayoutToolbar } from "./ArrayToolbar";
 import { useJsonForms } from "@jsonforms/react";
 import { uniqBy, orderBy } from "lodash-es";
 import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath } from "@graviola/edb-ui-utils";
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
 import { JSONSchema7 } from "json-schema";
 import { Box, Grid, IconButton, Stack } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";

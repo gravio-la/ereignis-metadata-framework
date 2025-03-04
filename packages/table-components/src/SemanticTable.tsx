@@ -53,7 +53,7 @@ import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
 import { useTranslation } from "next-i18next";
 import { moveToTrash } from "@graviola/sparql-schema";
 import { computeColumns } from "./listHelper";
-import { encodeIRI, filterUndefOrNull } from "@graviola/edb-ui-utils";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { GenericModal } from "@graviola/edb-basic-components";
 import { ExportMenuButton } from "./ExportMenuButton";

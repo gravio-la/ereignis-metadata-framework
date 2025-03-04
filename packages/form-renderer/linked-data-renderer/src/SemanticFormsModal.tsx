@@ -3,12 +3,15 @@ import { JSONSchema7 } from "json-schema";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useControlled } from "@mui/material";
-import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import NiceModal from "@ebay/nice-modal-react";
-import { irisToData } from "@graviola/edb-ui-utils";
-import { SemanticJsonFormProps } from "@graviola/edb-global-types";
+import { irisToData } from "@graviola/edb-core-utils";
 import { GenericModal, MuiEditDialog } from "@graviola/edb-basic-components";
+import type { SemanticJsonFormProps } from "@graviola/semantic-jsonform-types";
 
 type SemanticFormsModalProps = {
   label?: string;

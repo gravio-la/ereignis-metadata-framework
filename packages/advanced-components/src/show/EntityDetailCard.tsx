@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import { AllPropTableProps, LobidAllPropTable } from "../table";
-import { encodeIRI } from "@graviola/edb-ui-utils";
+import { encodeIRI } from "@graviola/edb-core-utils";
 
 import NiceModal from "@ebay/nice-modal-react";
 import {

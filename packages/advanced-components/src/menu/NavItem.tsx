@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material";
 import { useEffect, useCallback } from "react";
 
 import { MenuItem } from "./types";
-import { encodeIRI } from "@graviola/edb-ui-utils";
+import { encodeIRI } from "@graviola/edb-core-utils";
 import { useAdbContext, useModifiedRouter } from "@graviola/edb-state-hooks";
 
 type NavItemProps = {

@@ -26,7 +26,7 @@ import React, {
   useState,
 } from "react";
 
-import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-ui-utils";
+import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-core-utils";
 import { WikidataAllPropTable } from "../wikidata";
 import { OverflowContainer } from "@graviola/edb-basic-components";
 import { specialDate2LocalDate } from "@graviola/edb-ui-utils";

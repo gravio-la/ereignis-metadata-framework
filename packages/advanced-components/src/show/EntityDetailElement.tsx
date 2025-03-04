@@ -14,7 +14,7 @@ import {
   useExtendedSchema,
 } from "@graviola/edb-state-hooks";
 import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
-import { filterUndefOrNull } from "@graviola/edb-ui-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 export type EntityDetailElementProps = {
   typeIRI: string | undefined;

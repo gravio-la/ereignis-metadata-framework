@@ -13,7 +13,7 @@ import {
   useGlobalSearch,
   useModifiedRouter,
 } from "@graviola/edb-state-hooks";
-import { encodeIRI } from "@graviola/edb-ui-utils";
+import { encodeIRI } from "@graviola/edb-core-utils";
 import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
 
 // styles

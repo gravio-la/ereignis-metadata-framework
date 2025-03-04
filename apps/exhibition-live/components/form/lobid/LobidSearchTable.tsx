@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 
-import { filterUndefOrNull } from "@graviola/edb-ui-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { useQuery } from "@graviola/edb-state-hooks";
 import { typeIRItoTypeName } from "../../config";
 import Ajv from "ajv";
@@ -28,7 +28,10 @@ import {
   findEntityWithinLobid,
   findEntityWithinLobidByIRI,
 } from "@graviola/edb-authorities";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { lobidTypemap } from "@slub/exhibition-schema";
 
 type Props = {
