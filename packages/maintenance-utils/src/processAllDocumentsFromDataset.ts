@@ -1,5 +1,5 @@
-import { Dataset, DatasetCore } from "@rdfjs/types";
-import { JSONSchema7 } from "json-schema";
+import type { Dataset, DatasetCore } from "@rdfjs/types";
+import type { JSONSchema7 } from "json-schema";
 import { bringDefinitionToTop, defs } from "@graviola/json-schema-utils";
 import { rdf } from "@tpluscode/rdf-ns-builders";
 import df from "@rdfjs/data-model";
