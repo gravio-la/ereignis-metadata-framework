@@ -52,14 +52,14 @@
     "tsup": "^8.0.0"
   },
   "peerDependencies": {
-    "@rdfjs/data-model": "^2.0.2",
-    "@rdfjs/namespace": "^2.0.0"
+    "@rdfjs/data-model": "^2.0.2"
   },
   "dependencies": {
     "@graviola/edb-core-utils": "workspace:*",
     "@graviola/json-schema-utils": "workspace:*",
     "@tpluscode/rdf-ns-builders": "^4.3.0",
     "rdf-dataset-ext": "^1.0.1",
+    "@rdfjs/namespace": "^2.0.0",
     "clownface": "2.0.2",
     "lodash-es": "^4.17.21"
   },
