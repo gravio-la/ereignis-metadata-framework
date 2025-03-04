@@ -21,7 +21,7 @@
   "dependencies": {
     "@graviola/edb-core-utils": "workspace:*",
     "next-i18next": "^15",
-    "lodash-es": "^4.17"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/react": "~18.3",

@@ -31,17 +31,17 @@
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "@graviola/edb-graph-traversal": "workspace:*",
-    "jsonld-context-parser": "^3.0.0",
+    "jsonld-context-parser": "^2.4.0",
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
+    "json-schema": "^0.4.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@rdfjs/data-model": "^2.0.2",
     "@tpluscode/rdf-ns-builders": "^4.3.0",
     "@graviola/json-schema-utils": "workspace:*",
-    "@graviola/edb-graph-traversal": "workspace:*",
-    "json-schema": "^0.4.0"
+    "@graviola/edb-graph-traversal": "workspace:*"
   }
 }
