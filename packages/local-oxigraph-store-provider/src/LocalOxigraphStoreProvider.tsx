@@ -1,7 +1,7 @@
 import { SparqlEndpoint } from "@graviola/edb-core-types";
 import { CrudProviderContext, useAdbContext } from "@graviola/edb-state-hooks";
 import { initSPARQLStore } from "@graviola/sparql-db-impl";
-import React, { FunctionComponent, useMemo } from "react";
+import { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import { isAsyncOxigraph } from "./isAsyncOxigraph";
 import { useAsyncLocalWorkerCrudOptions } from "./localAsyncOxigraph";
@@ -9,7 +9,7 @@ import { useSyncLocalWorkerCrudOptions } from "./localSyncOxigraph";
 import { useOxigraph } from "./useOxigraph";
 
 export type LocalOxigraphStoreProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   endpoint: SparqlEndpoint;
   defaultLimit: number;
 };
