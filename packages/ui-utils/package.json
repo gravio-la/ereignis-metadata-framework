@@ -12,8 +12,7 @@
     "lint-fix": "eslint --fix \"**/*.ts*\"",
     "test": "jest",
     "test:watch": "jest --watch --color",
-    "test:coverage": "jest --coverage",
-    "push": "yalc push"
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
     "@comunica/types": "^2.10.0",
