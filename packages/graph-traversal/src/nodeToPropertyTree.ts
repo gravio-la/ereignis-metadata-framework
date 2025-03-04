@@ -1,6 +1,6 @@
 import df from "@rdfjs/data-model";
-import { BlankNode, NamedNode, Term } from "@rdfjs/types";
-import clownface, { AnyPointer } from "clownface";
+import type { BlankNode, NamedNode, Term } from "@rdfjs/types";
+import clownface, { type AnyPointer } from "clownface";
 
 export type RootNode = {
   id: string | number;

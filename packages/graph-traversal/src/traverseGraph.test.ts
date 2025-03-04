@@ -1,11 +1,12 @@
-import { JSONSchema7 } from "json-schema";
-import type { DatasetCore, Quad } from "@rdfjs/types";
+import type { WalkerOptions } from "@graviola/edb-core-types";
 import datasetFactory from "@rdfjs/dataset";
-import { traverseGraphExtractBySchema } from "./traverseGraphExtractBySchema";
-import { WalkerOptions } from "./types";
-import clownface from "clownface";
-import { rdf, schema } from "@tpluscode/rdf-ns-builders";
 import namespace from "@rdfjs/namespace";
+import type { DatasetCore } from "@rdfjs/types";
+import { rdf, schema } from "@tpluscode/rdf-ns-builders";
+import clownface from "clownface";
+import type { JSONSchema7 } from "json-schema";
+
+import { traverseGraphExtractBySchema } from "./traverseGraphExtractBySchema";
 
 describe("traverseGraphExtractBySchema", () => {
   const baseIRI = "http://schema.org/";

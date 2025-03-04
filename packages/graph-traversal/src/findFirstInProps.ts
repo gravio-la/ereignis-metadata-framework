@@ -1,5 +1,6 @@
-import { NamedNode } from "@rdfjs/types";
-import { NodePropertyTree } from "./nodeToPropertyTree";
+import type { NamedNode } from "@rdfjs/types";
+
+import type { NodePropertyTree } from "./nodeToPropertyTree";
 
 /**
  * Find the first value of a property in a property tree.
