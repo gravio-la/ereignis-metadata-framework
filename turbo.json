@@ -23,6 +23,9 @@
     "build:prisma": {
       "cache": false
     },
+    "publish-clean": {
+      "cache": false
+    },
     "docs": {},
     "dev": {
       "cache": false,
