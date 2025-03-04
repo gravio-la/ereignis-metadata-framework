@@ -32,7 +32,7 @@
     "skipErrorChecking": true
   },
   "clean-package": {
-    "extends": "../../../clean-package.config.js"
+    "extends": "../../../clean-package.config.cjs"
   },
   "eslintConfig": {
     "extends": "edb"
