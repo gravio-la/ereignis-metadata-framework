@@ -18,7 +18,7 @@ import {
 } from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { debounce, uniq } from "lodash";
+import { debounce, uniq } from "lodash-es";
 import { PrimaryField } from "@graviola/edb-core-types";
 import { NumberInput } from "../NumberInput";
 import { ClassicResultListWrapper } from "@graviola/edb-basic-components";

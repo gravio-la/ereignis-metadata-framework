@@ -12,7 +12,7 @@ import { TrendingDown, TrendingUp } from "@mui/icons-material";
 import { useQuery } from "@graviola/edb-state-hooks";
 import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import { SELECT } from "@tpluscode/sparql-builder";
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 import { useMemo } from "react";
 import { SearchBar } from "./Search";
 import { ParentSize } from "@visx/responsive";

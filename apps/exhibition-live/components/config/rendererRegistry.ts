@@ -13,7 +13,7 @@ import {
   UISchemaElement,
 } from "@jsonforms/core";
 import { JSONSchema7 } from "json-schema";
-import { isEmpty } from "lodash";
+import { isEmpty } from "lodash-es";
 import { MarkdownTextFieldRenderer } from "@graviola/edb-markdown-renderer";
 import {
   materialCustomAnyOfControlTester,

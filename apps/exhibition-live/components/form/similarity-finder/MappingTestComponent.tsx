@@ -5,7 +5,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useDeclarativeMapper } from "./useDeclarativeMapper";
 import { Grid, Paper } from "@mui/material";
 import { exhibitionConfig } from "../../config/exhibitionAppConfig";
-import { set } from "lodash";
+import { set } from "lodash-es";
 import { JsonView } from "react-json-view-lite";
 
 type MappingTestComponentProps = {

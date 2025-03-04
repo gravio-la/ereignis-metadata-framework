@@ -9,7 +9,7 @@ import { useQuery } from "@graviola/edb-state-hooks";
 import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import { SELECT } from "@tpluscode/sparql-builder";
 import df from "@rdfjs/data-model";
-import { isString, orderBy, uniq } from "lodash";
+import { isString, orderBy, uniq } from "lodash-es";
 import { Box, Chip, Grid, Skeleton, Tab, Tabs } from "@mui/material";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
@@ -19,7 +19,10 @@ import { ListAlt, Polyline, Timeline } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
 import { fixSparqlOrder, withDefaultPrefix } from "@graviola/sparql-schema";
-import { IRIToStringFn, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import {
+  IRIToStringFn,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
 import { VisTimelineWrapper } from "@graviola/edb-vis-timeline";
 import {
   GenericListItem,
