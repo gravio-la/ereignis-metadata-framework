@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
 import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash";
+import { uniqBy, orderBy } from "lodash-es";
 import { SemanticFormsModal } from "./SemanticFormsModal";
 import { irisToData, makeFormsPath } from "@graviola/edb-ui-utils";
 import { JSONSchema7 } from "json-schema";

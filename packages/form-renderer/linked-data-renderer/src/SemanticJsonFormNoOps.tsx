@@ -1,7 +1,7 @@
 import { JsonFormsCore, JsonSchema } from "@jsonforms/core";
 import { JsonForms } from "@jsonforms/react";
 import { Card, CardContent, Grid } from "@mui/material";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import React, { FunctionComponent, useCallback, useMemo } from "react";
 import NiceModal from "@ebay/nice-modal-react";
 import {

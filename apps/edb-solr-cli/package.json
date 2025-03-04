@@ -31,7 +31,7 @@
     "@graviola/sparql-schema": "workspace:*",
     "@tpluscode/sparql-builder": "^0.3.31",
     "node-fetch": "^3.3.2",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "cmd-ts": "^0.13.0"
   }
 }

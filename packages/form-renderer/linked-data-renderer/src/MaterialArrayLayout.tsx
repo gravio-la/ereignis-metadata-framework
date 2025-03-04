@@ -18,7 +18,7 @@ import React, {
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
 import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash";
+import { uniqBy, orderBy } from "lodash-es";
 import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
 import { SemanticFormsModal } from "./SemanticFormsModal";
 import { irisToData, makeFormsPath, validate } from "@graviola/edb-ui-utils";
@@ -33,7 +33,10 @@ import {
 } from "@graviola/edb-state-hooks";
 import { useSnackbar } from "notistack";
 import { ErrorObject } from "ajv";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { JSONSchema } from "json-schema-to-ts";
 import { useTranslation } from "next-i18next";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
