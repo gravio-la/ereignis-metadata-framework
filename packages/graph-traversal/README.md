@@ -1,4 +1,4 @@
-# Graph Traversal Package
+# @graviola/edb-graph-traversal
 
 This package provides utilities for traversing RDF graphs and extracting structured data according to JSON Schema definitions. It's a core component of the EDB Framework that bridges the gap between semantic graph data and structured JSON objects.
 
@@ -67,37 +67,36 @@ Here's a complete example of extracting structured data from an RDF graph:
 ```typescript
 import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
 import datasetFactory from "@rdfjs/dataset";
-import N3Parser from "@rdfjs/parser-n3";
-import dsExt from "rdf-dataset-ext";
-import stringToStream from "string-to-stream";
-import type { JSONSchema7 } from "json-schema";
+import { Parser } from "n3";
 
 // Define your schema
-const personSchema: JSONSchema7 = {
+const personSchema = {
   type: "object",
-  properties: {
-    name: { type: "string" },
-    age: { type: "number" },
-    email: { type: "string" },
-    knows: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          name: { type: "string" },
+  definitions: {
+    Person: {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        age: { type: "number" },
+        email: { type: "string" },
+        knows: {
+          type: "array",
+          items: {
+            $ref: "#/definitions/Person",
+          },
         },
       },
     },
   },
+  properties: {},
 };
+personSchema.properties = personSchema.definitions.Person.properties;
 
 // Load your RDF data
 async function loadDataset(turtleData) {
-  const parser = new N3Parser();
-  return dsExt.fromStream(
-    datasetFactory.dataset(),
-    parser.import(stringToStream(turtleData)),
-  );
+  const parser = new Parser();
+  const dataset = await parser.parse(turtleData);
+  return datasetFactory.dataset(dataset);
 }
 
 // Extract structured data
@@ -114,6 +113,7 @@ async function extractPersonData() {
       
     ex:person2 a schema:Person ;
       schema:name "Jane Smith" .
+      schema:knows ex:person1 .
   `;
 
   const dataset = await loadDataset(turtleData);
