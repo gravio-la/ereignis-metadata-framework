@@ -11,6 +11,7 @@ import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { SimilarityFinder } from "../components/form/similarity-finder/SimilarityFinder";
 import { ThemeComponent } from "@graviola/edb-default-theme";
+import { LocalOxigraphStoreProvider } from "@graviola/local-oxigraph-store-provider";
 import NiceModal from "@ebay/nice-modal-react";
 import "react-json-view-lite/dist/index.css";
 
@@ -68,10 +69,19 @@ export const withMuiTheme = (Story) => {
       >
         <ThemeComponent>
           <QueryClientProvider client={queryClient}>
-            <NiceModal.Provider>
-              <CssBaseline />
-              <Story />
-            </NiceModal.Provider>
+            <LocalOxigraphStoreProvider
+              endpoint={{
+                endpoint: "urn:worker",
+                label: "Local",
+                provider: "oxigraph",
+              }}
+              defaultLimit={10}
+            >
+              <NiceModal.Provider>
+                <CssBaseline />
+                <Story />
+              </NiceModal.Provider>
+            </LocalOxigraphStoreProvider>
           </QueryClientProvider>
         </ThemeComponent>
       </AdbProvider>
