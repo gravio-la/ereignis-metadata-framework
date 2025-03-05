@@ -24,12 +24,18 @@
       "cache": false
     },
     "publish-clean": {
+      "dependsOn": ["^build"],
       "cache": false
     },
     "docs": {},
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "depcheck": {
+      "outputs": ["reports/**"],
+      "cache": false,
+      "persistent": false
     }
   }
 }

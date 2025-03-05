@@ -48,7 +48,9 @@
     "build:prisma": "turbo run build:prisma && sed -i \"s/env(\\\"DATABASE_PROVIDER\\\")/\\\"${DATABASE_PROVIDER:-sqlite}\\\"/g\" ./prisma/*.prisma",
     "prisma:exhibition:generate": "prisma generate --schema ./prisma/exhibition.prisma",
     "prisma:exhibition:migrate": "prisma migrate dev --schema ./prisma/exhibition.prisma",
-    "purge": "rm -rf node_modules && find -maxdepth 3 -name node_modules | xargs rm -rf"
+    "purge": "rm -rf node_modules && find -maxdepth 3 -name node_modules | xargs rm -rf",
+    "syncpack:mismatches": "syncpack list-mismatches --types prod",
+    "depcheck": "turbo run depcheck --filter='./packages/*' --continue"
   },
   "workspaces": [
     "packages/*",
@@ -60,6 +62,8 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.12",
     "@turbo/gen": "^2.4.0",
+    "clean-package": "^2.2.0",
+    "depcheck": "^1.4.7",
     "dependency-cruiser": "^16.10.0",
     "eslint": "^8.57.1",
     "husky": "^8.0.3",
@@ -67,10 +71,10 @@
     "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
     "prisma": "^5.22.0",
+    "syncpack": "^13.0.2",
     "tsup": "^8.3.6",
     "turbo": "^2.4.0",
-    "typescript": "^5.7.3",
-    "clean-package": "^2.2.0"
+    "typescript": "^5.7.3"
   },
   "packageManager": "bun@1.2.2",
   "overrides": {
