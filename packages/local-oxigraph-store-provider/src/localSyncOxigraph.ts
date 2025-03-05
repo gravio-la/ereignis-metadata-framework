@@ -38,7 +38,7 @@ export const makeLocalWorkerCrudOptions: (
 
         return options?.withHeaders
           ? sparqlResult
-          : sparqlResult.results.bindings;
+          : sparqlResult.results?.bindings;
       },
     }) as CRUDFunctions;
 };

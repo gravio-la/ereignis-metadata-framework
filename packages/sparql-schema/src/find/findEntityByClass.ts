@@ -97,6 +97,7 @@ export const findEntityByClass: FindEntityByClassFn = async (
     : fixedQuery;
   try {
     const bindings = await doQuery(queryString);
+    if (!bindings) return [];
     return bindings
       .map((binding: any) => ({
         entityIRI: binding[subjectV.value]?.value,
