@@ -14,8 +14,8 @@ import {
   useQueryClient,
 } from "@graviola/edb-state-hooks";
 import { ClassicResultListItem } from "@graviola/edb-basic-components";
-import { EntityDetailElement } from "@graviola/edb-advanced-components";
 import { Entity } from "@graviola/edb-core-types";
+import { EntityDetailElement } from "../show";
 
 export type DiscoverSearchTableProps = {
   searchString: string;

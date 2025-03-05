@@ -6,7 +6,7 @@ import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import { useQuery } from "@graviola/edb-state-hooks";
 import { findEntityByClass, loadEntityBasics } from "@graviola/sparql-schema";
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";
-import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
+import { DebouncedAutocomplete } from "../form";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;
