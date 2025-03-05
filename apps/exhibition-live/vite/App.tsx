@@ -1,9 +1,4 @@
-import {
-  AdbProvider,
-  store,
-  useOxigraph,
-  useRDFDataSources,
-} from "@graviola/edb-state-hooks";
+import { AdbProvider, store } from "@graviola/edb-state-hooks";
 import { Provider } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/de";
@@ -16,7 +11,7 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { kulinarikAppConfig } from "../components/config/kulinarikAppConfig";
-import { envToSparqlEndpoint } from "@graviola/edb-ui-utils";
+import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
 import { EntityDetailModal } from "@graviola/edb-advanced-components";
 import { SimilarityFinder } from "../components/form/similarity-finder";
 import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
@@ -24,7 +19,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import NiceModal from "@ebay/nice-modal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeComponent } from "@graviola/edb-default-theme";
-
+import { SparqlStoreProvider } from "@graviola/sparql-store-provider";
 import "react-json-view-lite/dist/index.css";
 import "@triply/yasgui/build/yasgui.min.css";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";
@@ -34,6 +29,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 export const queryClient = new QueryClient();
 
 const sparqlEndpoint = envToSparqlEndpoint(import.meta.env, "VITE");
+console.log(sparqlEndpoint);
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const appConfig =
@@ -54,30 +50,6 @@ const Loading = () => {
       <CircularProgress />
     </Box>
   );
-};
-
-const OxigraphProvider = ({ children }: { children?: React.ReactNode }) => {
-  const { oxigraph } = useOxigraph();
-  if (!oxigraph?.ao) {
-    return <Loading />;
-  }
-
-  return <>{children}</>;
-};
-
-const OxigraphInit = ({ children }: { children?: React.ReactNode }) => {
-  const { bulkLoaded } = useRDFDataSources(
-    "/ontology/exhibition-info.owl.ttl",
-    BASE_IRI,
-  );
-  const { bulkLoaded: bulkLoaded2 } = useRDFDataSources(
-    "/example-exhibitions.ttl",
-    BASE_IRI,
-  );
-  if (!bulkLoaded || !bulkLoaded2) {
-    return <Loading />;
-  }
-  return <>{children}</>;
 };
 
 export const App = ({ children }: { children?: React.ReactNode }) => {
@@ -104,11 +76,12 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
                 normDataMapping={availableAuthorityMappings}
               >
                 <GoogleOAuthProvider clientId={googleClientId}>
-                  <OxigraphProvider>
-                    <OxigraphInit>
-                      <NiceModal.Provider>{children}</NiceModal.Provider>
-                    </OxigraphInit>
-                  </OxigraphProvider>
+                  <SparqlStoreProvider
+                    endpoint={sparqlEndpoint}
+                    defaultLimit={100}
+                  >
+                    <NiceModal.Provider>{children}</NiceModal.Provider>
+                  </SparqlStoreProvider>
                 </GoogleOAuthProvider>
               </AdbProvider>
             </SnackbarProvider>
