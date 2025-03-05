@@ -1,9 +1,9 @@
 import Ajv from "ajv";
+import jsonpath from "jsonpath";
 import cloneDeep from "lodash-es/cloneDeep";
 import get from "lodash-es/get";
 import isNil from "lodash-es/isNil";
 import set from "lodash-es/set";
-import jsonpath from "jsonpath";
 
 import {
   DeclarativeMappings,

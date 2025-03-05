@@ -1,18 +1,18 @@
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-
-import { mapByConfig } from "./mapByConfig";
-import isNil from "lodash-es/isNil";
-import set from "lodash-es/set";
-import get from "lodash-es/get";
-import { getPaddedDate, makeSpecialDate } from "@graviola/edb-core-utils";
 import {
   IRIToStringFn,
   NormDataMappings,
   PrimaryFieldDeclaration,
 } from "@graviola/edb-core-types";
-import { JSONSchema7 } from "json-schema";
+import { getPaddedDate, makeSpecialDate } from "@graviola/edb-core-utils";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import type { JSONSchema7 } from "json-schema";
 import { isNaN } from "lodash-es";
+import get from "lodash-es/get";
+import isNil from "lodash-es/isNil";
+import set from "lodash-es/set";
+
+import { mapByConfig } from "./mapByConfig";
 
 dayjs.extend(customParseFormat);
 
