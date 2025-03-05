@@ -22,7 +22,7 @@
     "dev": "tsup --watch",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
-    "pack-clean": "bun run clean-package && (bun pm pack || true) && bun run clean-package restore",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
     "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "peerDependencies": {

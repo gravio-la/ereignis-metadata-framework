@@ -35,11 +35,7 @@
     "@types/json-schema": "^7.0.14",
     "@types/lodash": "^4.14.200",
     "@types/rdf-dataset-ext": "^1.0.3",
-    "@types/rdfjs__data-model": "^2.0.8",
-    "@types/rdfjs__dataset": "^2.0.0",
-    "@types/rdfjs__namespace": "^2.0.8",
-    "@types/rdfjs__parser-jsonld": "^1.2.5",
-    "@types/rdfjs__parser-n3": "^1.1.5",
+    "@rdfjs/types": "^1.1.0",
     "eslint-config-edb": "workspace:*",
     "jest": "^29.7.0",
     "rdf-dataset-ext": "^1.0.1",
@@ -47,11 +43,14 @@
     "ts-jest-mock-import-meta": "^1.2.0",
     "typescript": "^5.3.3"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@rdfjs/dataset": "^2.0.2",
     "@rdfjs/data-model": "^2.0.2",
     "@rdfjs/namespace": "^2.0.0",
-    "@rdfjs/types": "^1.1.0",
+  },
+  "dependencies": {
+    "@rdfjs/data-model": "^2.0.2",
+    "@rdfjs/namespace": "^2.0.0",
     "@graviola/edb-marc-to-rdf": "workspace:*"
   },
   "keywords": [
