@@ -13,7 +13,7 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import merge from "lodash/merge";
+import merge from "lodash-es/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";

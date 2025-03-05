@@ -8,12 +8,18 @@ import React, {
   useState,
 } from "react";
 
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
 import { JSONSchema7 } from "json-schema";
 import { useJsonForms } from "@jsonforms/react";
 import dot from "dot";
-import { useAdbContext, useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
-import get from "lodash/get";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import get from "lodash-es/get";
 import NiceModal from "@ebay/nice-modal-react";
 import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 

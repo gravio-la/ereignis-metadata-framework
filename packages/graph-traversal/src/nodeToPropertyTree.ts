@@ -1,22 +1,8 @@
 import df from "@rdfjs/data-model";
 import type { BlankNode, NamedNode, Term } from "@rdfjs/types";
 import clownface, { type AnyPointer } from "clownface";
+import type { NodePropertyTree } from "@graviola/edb-global-types";
 
-export type RootNode = {
-  id: string | number;
-  properties: NodePropertyTree;
-};
-
-export type NodePropertyTree = {
-  [key: string]: NodePropertyItem[];
-};
-
-export type NodePropertyItem = {
-  value: string;
-  term: Term;
-  termType: string;
-  properties?: NodePropertyTree;
-};
 export const nodeToPropertyTree: (
   node: NamedNode | BlankNode,
   ds: AnyPointer,

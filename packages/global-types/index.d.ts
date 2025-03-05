@@ -8,6 +8,7 @@ import type {
 import type { NamespaceBuilder } from "@rdfjs/namespace";
 import type { JsonLdContext } from "jsonld-context-parser";
 import type { JSONSchema7 } from "json-schema";
+import type { Term } from "@rdfjs/types";
 
 export type EdbConfRaw = {
   BASE_IRI: string;
@@ -144,4 +145,20 @@ export type JSONLDConfig = {
   defaultPrefix: string;
   jsonldContext?: JsonLdContext;
   allowUnsafeSourceIRIs?: boolean;
+};
+
+export type RootNode = {
+  id: string | number;
+  properties: NodePropertyTree;
+};
+
+export type NodePropertyTree = {
+  [key: string]: NodePropertyItem[];
+};
+
+export type NodePropertyItem = {
+  value: string;
+  term: Term;
+  termType: string;
+  properties?: NodePropertyTree;
 };

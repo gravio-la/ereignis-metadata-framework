@@ -8,7 +8,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import merge from "lodash/merge";
+import merge from "lodash-es/merge";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
 

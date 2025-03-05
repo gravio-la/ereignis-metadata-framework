@@ -22,7 +22,7 @@ import {
   useAdbContext,
   useCRUDWithQueryClient,
 } from "@graviola/edb-state-hooks";
-import get from "lodash/get";
+import get from "lodash-es/get";
 import NiceModal from "@ebay/nice-modal-react";
 import { specialDate2LocalDate, withEllipsis } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";

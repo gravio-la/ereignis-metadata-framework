@@ -2,7 +2,7 @@ import { useGlobalSearch } from "./useGlobalSearch";
 import { useCallback, useState } from "react";
 import { useCRUDWithQueryClient } from "./useCRUDWithQueryClient";
 import type { JSONSchema7 } from "json-schema";
-import get from "lodash/get";
+import get from "lodash-es/get";
 import { useRightDrawerState } from "./useRightDrawerState";
 import { useAdbContext } from "./provider";
 

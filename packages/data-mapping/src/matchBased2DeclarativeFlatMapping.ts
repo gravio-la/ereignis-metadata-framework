@@ -3,8 +3,8 @@ import {
   DeclarativeFlatMapping,
   DeclarativeFlatMappings,
 } from "./mappingStrategies";
-import flatten from "lodash/flatten";
-import uniq from "lodash/uniq";
+import flatten from "lodash-es/flatten";
+import uniq from "lodash-es/uniq";
 import dot from "dot";
 import { JSONSchema7 } from "json-schema";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";

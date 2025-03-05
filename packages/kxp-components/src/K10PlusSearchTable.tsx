@@ -3,7 +3,7 @@ import { dcterms } from "@tpluscode/rdf-ns-builders";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 
 import { useLocalHistory, useSettings } from "@graviola/edb-state-hooks";
-import { findFirstInProps, RootNode } from "@graviola/edb-graph-traversal";
+import { findFirstInProps } from "@graviola/edb-graph-traversal";
 import { useTranslation } from "next-i18next";
 import { findEntityWithinK10Plus } from "@graviola/edb-kxp-utils";
 import { fabio } from "@graviola/edb-marc-to-rdf";
@@ -12,6 +12,7 @@ import {
   ClassicResultListItem,
 } from "@graviola/edb-basic-components";
 import { KXPAllPropTable } from "./KXPAllPropTable";
+import type { RootNode } from "@graviola/edb-global-types";
 
 type Props = {
   searchString: string;

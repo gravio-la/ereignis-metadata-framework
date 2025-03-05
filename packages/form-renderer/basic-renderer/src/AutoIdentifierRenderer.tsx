@@ -8,7 +8,7 @@ import {
   Hidden,
   IconButton,
 } from "@mui/material";
-import merge from "lodash/merge";
+import merge from "lodash-es/merge";
 import React, { useCallback, useState } from "react";
 import { useSettings } from "@graviola/edb-state-hooks";
 

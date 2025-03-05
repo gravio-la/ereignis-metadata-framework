@@ -1,5 +1,5 @@
-import { BlankNode } from "@rdfjs/types";
-import { findFirstInProps, NodePropertyTree } from "@graviola/edb-graph-traversal";
+import type { BlankNode } from "@rdfjs/types";
+import { findFirstInProps } from "@graviola/edb-graph-traversal";
 import { useMemo } from "react";
 import { dcterms, foaf, rdfs, skos } from "@tpluscode/rdf-ns-builders";
 import { geonames, radatana } from "@graviola/edb-marc-to-rdf";
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { KXPAllPropTable } from "./KXPAllPropTable";
+import type { NodePropertyTree } from "@graviola/edb-global-types";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />

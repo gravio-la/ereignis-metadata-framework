@@ -7,7 +7,7 @@ import {
   JsonSchema7,
   Resolve,
 } from "@jsonforms/core";
-import merge from "lodash/merge";
+import merge from "lodash-es/merge";
 import React, {
   useCallback,
   useEffect,
