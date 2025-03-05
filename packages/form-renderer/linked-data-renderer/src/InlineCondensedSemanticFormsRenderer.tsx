@@ -1,3 +1,15 @@
+import { EntityDetailListItem } from "@graviola/edb-advanced-components";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { PrimaryField } from "@graviola/edb-core-types";
+import { makeFormsPath } from "@graviola/edb-core-utils";
+import { extractFieldIfString } from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useGlobalSearchWithHelper,
+  useKeyEventForSimilarityFinder,
+  useRightDrawerState,
+} from "@graviola/edb-state-hooks";
 import {
   ControlProps,
   JsonSchema,
@@ -14,22 +26,9 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import merge from "lodash-es/merge";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
-import { extractFieldIfString } from "@graviola/edb-data-mapping";
-import {
-  useGlobalSearchWithHelper,
-  useRightDrawerState,
-  useKeyEventForSimilarityFinder,
-  useAdbContext,
-} from "@graviola/edb-state-hooks";
-import { makeFormsPath } from "@graviola/edb-ui-utils";
 import { JSONSchema7 } from "json-schema";
-import { PrimaryField } from "@graviola/edb-core-types";
-import { EntityDetailListItem } from "@graviola/edb-advanced-components";
-import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import merge from "lodash-es/merge";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
   const {

@@ -1,3 +1,7 @@
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
+import { useAdbContext } from "@graviola/edb-state-hooks";
+import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import {
   ArrayLayoutProps,
   composePaths,
@@ -7,23 +11,19 @@ import {
   JsonSchema7,
   Resolve,
 } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Grid, IconButton, Stack } from "@mui/material";
+import { JSONSchema7 } from "json-schema";
+import { orderBy, uniqBy } from "lodash-es";
 import merge from "lodash-es/merge";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
-import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash-es";
-import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
-import { JSONSchema7 } from "json-schema";
-import { Box, Grid, IconButton, Stack } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
-import AddIcon from "@mui/icons-material/Add";
-import { useAdbContext } from "@graviola/edb-state-hooks";
-import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
-import { useSnackbar } from "notistack";
+import { SemanticFormsModal } from "./SemanticFormsModal";
 import { SimpleChipRenderer } from "./SimpleChipRenderer";
-import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 
 type OwnProps = {
   removeItems(path: string, toDelete: number[]): () => void;

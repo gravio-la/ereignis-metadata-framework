@@ -1,11 +1,10 @@
-import { JsonSchema } from "@jsonforms/core";
-import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useMemo } from "react";
-
-import { useControlled } from "@mui/material";
-import { ErrorObject } from "ajv";
 import { SemanticJsonFormProps } from "@graviola/edb-global-types";
 import { useAdbContext } from "@graviola/edb-state-hooks";
+import { JsonSchema } from "@jsonforms/core";
+import { useControlled } from "@mui/material";
+import { ErrorObject } from "ajv";
+import { JSONSchema7 } from "json-schema";
+import React, { useCallback, useMemo } from "react";
 
 type SemanticFormsInlineProps = {
   label?: string;
@@ -51,7 +50,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
   const handleDataChange = useCallback(
     (data_: any) => {
       setFormData(data_);
-      onFormDataChange && onFormDataChange(data_);
+      onFormDataChange?.(data_);
     },
     [setFormData, onFormDataChange],
   );

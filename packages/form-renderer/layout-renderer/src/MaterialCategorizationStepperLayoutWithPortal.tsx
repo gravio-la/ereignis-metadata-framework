@@ -1,16 +1,4 @@
-import React, { ComponentType, useCallback, useState } from "react";
-import merge from "lodash-es/merge";
-import {
-  Box,
-  Button,
-  Grid,
-  Hidden,
-  MobileStepper,
-  Step,
-  StepButton,
-  Stepper,
-  Typography,
-} from "@mui/material";
+import { optionallyCreatePortal } from "@graviola/edb-ui-utils";
 import {
   and,
   Categorization,
@@ -24,15 +12,27 @@ import {
   StatePropsOfLayout,
   uiTypeIs,
 } from "@jsonforms/core";
-import { useJsonForms, withJsonFormsLayoutProps } from "@jsonforms/react";
 import {
   AjvProps,
   MaterialLayoutRenderer,
   MaterialLayoutRendererProps,
 } from "@jsonforms/material-renderers";
+import { useJsonForms, withJsonFormsLayoutProps } from "@jsonforms/react";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Grid,
+  Hidden,
+  MobileStepper,
+  Step,
+  StepButton,
+  Stepper,
+  Typography,
+} from "@mui/material";
+import merge from "lodash-es/merge";
 import { useTranslation } from "next-i18next";
-import { optionallyCreatePortal } from "@graviola/edb-ui-utils";
+import React, { ComponentType, useCallback, useState } from "react";
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
   4,
@@ -215,17 +215,18 @@ export const MaterialCategorizationStepperLayout = (
     </Hidden>
   );
 };
-const withAjvProps =
-  <P extends {}>(
-    Component: ComponentType<AjvProps & P>,
-    actionContainer: HTMLElement | undefined,
-  ) =>
-  (props: P) => {
+const withAjvProps = <P extends {}>(
+  Component: ComponentType<AjvProps & P>,
+  actionContainer: HTMLElement | undefined,
+) => {
+  const ComponentWithAjv = (props: P) => {
     const ctx = useJsonForms();
     const ajv = getAjv({ jsonforms: { ...ctx } }) as unknown as AjvProps["ajv"];
 
     return <Component {...props} ajv={ajv} actionContainer={actionContainer} />;
   };
+  return ComponentWithAjv;
+};
 
 export const materialCategorizationStepperLayoutWithPortal = (
   actionContainer?: HTMLElement | undefined,

@@ -1,3 +1,19 @@
+import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
+import {
+  useAdbContext,
+  useGlobalSearchWithHelper,
+  useKeyEventForSimilarityFinder,
+  useRightDrawerState,
+} from "@graviola/edb-state-hooks";
+import { KnowledgeSources } from "@graviola/semantic-jsonform-types";
+import { JsonSchema7 } from "@jsonforms/core";
+import { NoteAdd } from "@mui/icons-material";
 import {
   Box,
   Grid,
@@ -6,27 +22,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import * as React from "react";
-import { useTranslation } from "next-i18next";
-
-import { useCallback, useMemo } from "react";
-import { JsonSchema7 } from "@jsonforms/core";
-import {
-  useAdbContext,
-  useGlobalSearchWithHelper,
-  useKeyEventForSimilarityFinder,
-  useRightDrawerState,
-} from "@graviola/edb-state-hooks";
 import { JSONSchema7 } from "json-schema";
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
-import { NoteAdd } from "@mui/icons-material";
-import {
-  PrimaryField,
-  PrimaryFieldDeclaration,
-} from "@graviola/edb-core-types";
-import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
-import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
-import { KnowledgeSources } from "@graviola/semantic-jsonform-types";
+import { useTranslation } from "next-i18next";
+import * as React from "react";
+import { useCallback, useMemo } from "react";
 
 export interface ArrayLayoutToolbarProps {
   label: string;
@@ -104,7 +103,7 @@ export const ArrayLayoutToolbar = ({
         [getDefaultLabelKey(typeName, primaryFields)]: value,
       })();
     },
-    [addItem, path, typeName, typeIRI, primaryFields],
+    [addItem, path, typeName, typeIRI, primaryFields, createEntityIRI],
   );
   const handleEntityIRIChange = useCallback(
     (iri: string) => {
@@ -115,14 +114,13 @@ export const ArrayLayoutToolbar = ({
 
   const handleExistingEntityAccepted = useCallback(
     (iri: string, data: any) => {
-      console.log("onExistingEntityAccepted", { iri, data });
       const label =
         data[getDefaultLabelKey(typeName, primaryFields)] || data.label || iri;
       //handleSelectedChange({ value: iri, label });
       addItem(path, data)();
       inputRef.current?.focus();
     },
-    [addItem, typeName],
+    [addItem, typeName, path, primaryFields],
   );
 
   const handleMappedDataAccepted = useCallback(

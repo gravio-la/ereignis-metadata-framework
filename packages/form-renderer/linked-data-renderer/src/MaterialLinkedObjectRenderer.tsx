@@ -1,4 +1,3 @@
-import isEmpty from "lodash-es/isEmpty";
 import {
   findUISchema,
   Generate,
@@ -9,6 +8,7 @@ import {
 } from "@jsonforms/core";
 import { JsonFormsDispatch, withJsonFormsDetailProps } from "@jsonforms/react";
 import { Hidden } from "@mui/material";
+import isEmpty from "lodash-es/isEmpty";
 import React, { useMemo } from "react";
 
 const MaterialLinkedObjectRendererComponent = ({

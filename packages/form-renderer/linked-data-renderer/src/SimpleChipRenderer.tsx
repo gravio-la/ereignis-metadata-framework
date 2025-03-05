@@ -1,5 +1,19 @@
+import NiceModal from "@ebay/nice-modal-react";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JsonSchema, update } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
 import { Avatar, Chip, ChipProps, Tooltip } from "@mui/material";
+import dot from "dot";
+import { JSONSchema7 } from "json-schema";
+import get from "lodash-es/get";
 import React, {
   MouseEvent,
   useCallback,
@@ -7,21 +21,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-
-import {
-  applyToEachField,
-  extractFieldIfString,
-} from "@graviola/edb-data-mapping";
-import { JSONSchema7 } from "json-schema";
-import { useJsonForms } from "@jsonforms/react";
-import dot from "dot";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-} from "@graviola/edb-state-hooks";
-import get from "lodash-es/get";
-import NiceModal from "@ebay/nice-modal-react";
-import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 
 type SimpleChipRendererProps = {
   data: any;

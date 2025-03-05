@@ -1,3 +1,16 @@
+import { Pulse } from "@graviola/edb-basic-components";
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+  useFormDataStore,
+} from "@graviola/edb-state-hooks";
+import { validate } from "@graviola/edb-ui-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import {
   ArrayLayoutProps,
   composePaths,
@@ -7,7 +20,16 @@ import {
   JsonSchema7,
   Resolve,
 } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
+import CheckIcon from "@mui/icons-material/Check";
+import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
+import { ErrorObject } from "ajv";
+import { JSONSchema7 } from "json-schema";
+import { JSONSchema } from "json-schema-to-ts";
+import { orderBy, uniqBy } from "lodash-es";
 import merge from "lodash-es/merge";
+import { useTranslation } from "next-i18next";
+import { useSnackbar } from "notistack";
 import React, {
   useCallback,
   useEffect,
@@ -17,31 +39,9 @@ import React, {
 } from "react";
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
-import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash-es";
-import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
-import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
-import { JSONSchema7 } from "json-schema";
-import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
-import CheckIcon from "@mui/icons-material/Check";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-  useFormDataStore,
-} from "@graviola/edb-state-hooks";
-import { useSnackbar } from "notistack";
-import { ErrorObject } from "ajv";
-import {
-  applyToEachField,
-  extractFieldIfString,
-} from "@graviola/edb-data-mapping";
-import { JSONSchema } from "json-schema-to-ts";
-import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@graviola/json-schema-utils";
-import { Pulse } from "@graviola/edb-basic-components";
-import { validate } from "@graviola/edb-ui-utils";
+import { SemanticFormsModal } from "./SemanticFormsModal";
+import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
 
 const uiSchemaOptionsSchema = {
   type: "object",

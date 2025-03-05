@@ -1,21 +1,19 @@
-import { ControlProps, OwnPropsOfControl, Resolve } from "@jsonforms/core";
-import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
-import { FormControl, Hidden } from "@mui/material";
-import merge from "lodash-es/merge";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-
+import { PreloadedOptionSelect } from "@graviola/edb-advanced-components";
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { PrimaryField } from "@graviola/edb-core-types";
 import { extractFieldIfString } from "@graviola/edb-data-mapping";
-import { makeFormsPath } from "@graviola/edb-ui-utils";
-import { useTranslation } from "next-i18next";
 import {
   useAdbContext,
   useDataStore,
   useGlobalCRUDOptions,
 } from "@graviola/edb-state-hooks";
-import { PrimaryField } from "@graviola/edb-core-types";
-import { PreloadedOptionSelect } from "@graviola/edb-advanced-components";
+import { ControlProps, OwnPropsOfControl, Resolve } from "@jsonforms/core";
+import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
+import { FormControl, Hidden } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
+import merge from "lodash-es/merge";
+import { useTranslation } from "next-i18next";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineDropdownRendererComponent = (props: ControlProps) => {
   const {
@@ -30,20 +28,12 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
     rootSchema,
     label,
   } = props;
-  const {
-    typeIRIToTypeName,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-    jsonLDConfig: { defaultPrefix },
-  } = useAdbContext();
+  const { typeIRIToTypeName, typeNameToTypeIRI, queryBuildOptions } =
+    useAdbContext();
   const { primaryFields } = queryBuildOptions;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const ctx = useJsonForms();
   const [realLabel, setRealLabel] = useState("");
-  const formsPath = useMemo(
-    () => makeFormsPath(config?.formsPath, path),
-    [config?.formsPath, path],
-  );
   const selected = useMemo(
     () =>
       data

@@ -1,4 +1,18 @@
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import { specialDate2LocalDate, withEllipsis } from "@graviola/edb-ui-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JsonSchema, update } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
+import { Clear, Save } from "@mui/icons-material";
 import {
   Avatar,
   IconButton,
@@ -8,26 +22,11 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
-import React, { useCallback, useEffect, useMemo } from "react";
-
-import { Clear, Save } from "@mui/icons-material";
-import {
-  applyToEachField,
-  extractFieldIfString,
-} from "@graviola/edb-data-mapping";
-import { JSONSchema7 } from "json-schema";
-import { useJsonForms } from "@jsonforms/react";
 import dot from "dot";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-} from "@graviola/edb-state-hooks";
+import { JSONSchema7 } from "json-schema";
 import get from "lodash-es/get";
-import NiceModal from "@ebay/nice-modal-react";
-import { specialDate2LocalDate, withEllipsis } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@graviola/json-schema-utils";
-import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 type SimpleExpandPanelRendererProps = {
   data: any;

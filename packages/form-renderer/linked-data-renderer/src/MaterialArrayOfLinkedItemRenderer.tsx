@@ -21,6 +21,7 @@ const MaterialArrayOfLinkedItemRendererComponent = ({
   uischemas,
   addItem,
   removeItems,
+  arraySchema,
 }: ArrayLayoutProps) => {
   const addItemCb = useCallback(
     (p: string, value: any) => addItem(p, value),
@@ -44,6 +45,7 @@ const MaterialArrayOfLinkedItemRendererComponent = ({
         renderers={renderers}
         cells={cells}
         uischemas={uischemas}
+        arraySchema={arraySchema}
       />
     </Hidden>
   );

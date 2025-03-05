@@ -1,4 +1,5 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -11,7 +12,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
 
 type OptionsModalProps = {

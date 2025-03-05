@@ -1,10 +1,10 @@
-import { JSONSchema7 } from "json-schema";
-import { useState } from "react";
-import type { Meta } from "@storybook/react";
-
 import { useExtendedSchema } from "@graviola/edb-state-hooks";
-import { SemanticJsonFormNoOps } from "./SemanticJsonFormNoOps";
 import namespace from "@rdfjs/namespace";
+import type { Meta } from "@storybook/react";
+import type { JSONSchema7 } from "json-schema";
+import { useState } from "react";
+
+import { SemanticJsonFormNoOps } from "./SemanticJsonFormNoOps";
 const sladb = namespace("http://ontologies.slub-dresden.de/exhibition#");
 const slent = namespace("http://ontologies.slub-dresden.de/exhibition/entity#");
 

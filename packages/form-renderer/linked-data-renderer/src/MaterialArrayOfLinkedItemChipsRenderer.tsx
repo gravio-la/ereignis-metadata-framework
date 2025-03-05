@@ -1,7 +1,7 @@
-import { ArrayLayoutProps } from "@jsonforms/core";
+import type { ArrayLayoutProps } from "@jsonforms/core";
 import { withJsonFormsArrayLayoutProps } from "@jsonforms/react";
 import { Hidden } from "@mui/material";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 import { MaterialArrayChipsLayout } from "./MaterialArrayChipsLayout";
 
@@ -21,6 +21,7 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
   uischemas,
   addItem,
   removeItems,
+  arraySchema,
 }: ArrayLayoutProps) => {
   const addItemCb = useCallback(
     (p: string, value: any) => addItem(p, value),
@@ -44,6 +45,7 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
         renderers={renderers}
         cells={cells}
         uischemas={uischemas}
+        arraySchema={arraySchema}
       />
     </Hidden>
   );

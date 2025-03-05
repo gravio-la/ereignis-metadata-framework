@@ -1,18 +1,34 @@
-import { JsonFormsCore, JsonSchema } from "@jsonforms/core";
-import { JsonForms } from "@jsonforms/react";
-import { Card, CardContent, Grid } from "@mui/material";
-import { merge } from "lodash-es";
-import React, { FunctionComponent, useCallback, useMemo } from "react";
 import NiceModal from "@ebay/nice-modal-react";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
 import {
   useAdbContext,
   useGlobalSearch,
   useRightDrawerState,
 } from "@graviola/edb-state-hooks";
-import { OptionsModal } from "./OptionsModal";
-import { useTranslation } from "next-i18next";
-import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
 import { SemanticJsonFormNoOpsProps } from "@graviola/semantic-jsonform-types";
+import { JsonFormsCore, JsonSchema } from "@jsonforms/core";
+import { JsonForms } from "@jsonforms/react";
+import { Card, CardContent, Grid } from "@mui/material";
+import { merge } from "lodash-es";
+import { useTranslation } from "next-i18next";
+import React, { FunctionComponent, useCallback, useMemo } from "react";
+
+import { OptionsModal } from "./OptionsModal";
+
+const WithCard = ({
+  children,
+  wrapWithinCard,
+}: {
+  children: React.ReactNode;
+  wrapWithinCard?: boolean;
+}) =>
+  wrapWithinCard ? (
+    <Card sx={{ padding: (theme) => theme.spacing(2) }}>
+      <CardContent>{children}</CardContent>
+    </Card>
+  ) : (
+    children
+  );
 
 export const SemanticJsonFormNoOps: FunctionComponent<
   SemanticJsonFormNoOpsProps
@@ -53,8 +69,9 @@ export const SemanticJsonFormNoOps: FunctionComponent<
 
   const handleFormChange = useCallback(
     (state: Pick<JsonFormsCore, "data" | "errors">) => {
-      onChange && onChange(state.data, "user");
-      if (onError) onError(state.errors || []);
+      onChange?.(state.data, "user");
+      if (onError && state.errors && state.errors.length > 0)
+        onError(state.errors);
     },
     [onChange, onError],
   );
@@ -103,25 +120,12 @@ export const SemanticJsonFormNoOps: FunctionComponent<
 
   const handleEntityIRIChange = useCallback(
     (iri) => {
-      onEntityDataChange &&
-        onEntityDataChange({ "@id": iri, "@type": typeIRI });
+      onEntityDataChange?.(iri);
       closeDrawer();
     },
     [onEntityDataChange, typeIRI, closeDrawer],
   );
 
-  const WithCard = useMemo(
-    () =>
-      ({ children }: { children: React.ReactNode }) =>
-        wrapWithinCard ? (
-          <Card sx={{ padding: (theme) => theme.spacing(2) }}>
-            <CardContent>{children}</CardContent>
-          </Card>
-        ) : (
-          children
-        ),
-    [wrapWithinCard],
-  );
   const {
     cells: jfpCells,
     renderers: jfpRenderers,
@@ -163,7 +167,7 @@ export const SemanticJsonFormNoOps: FunctionComponent<
               disableSimilarityFinder || enableSidebar || !searchText ? 12 : 6
             }
           >
-            <WithCard>
+            <WithCard wrapWithinCard={wrapWithinCard}>
               {toolbar && React.isValidElement(toolbar) ? toolbar : null}
               <JsonForms
                 data={data}
