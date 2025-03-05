@@ -22,14 +22,14 @@ import { debounce, uniq } from "lodash-es";
 import { PrimaryField } from "@graviola/edb-core-types";
 import { NumberInput } from "../NumberInput";
 import { ClassicResultListWrapper } from "@graviola/edb-basic-components";
-import {
-  KnowledgeSources,
-  SimilarityFinderProps,
-} from "@graviola/edb-global-types";
 import { FindOptions, KnowledgeBaseDescription } from "./types";
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 import { useKnowledgeBases } from "./useKnowledgeBases";
 import { useDeclarativeMapper } from "./useDeclarativeMapper";
+import {
+  KnowledgeSources,
+  SimilarityFinderProps,
+} from "@graviola/semantic-jsonform-types";
 
 const performSearch = (
   searchString: string,
