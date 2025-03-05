@@ -1,20 +1,21 @@
-import { Box, BoxProps } from "@mui/material";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-} from "@graviola/edb-state-hooks";
-import { useMemo } from "react";
+import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   applyToEachField,
   extractFieldIfString,
 } from "@graviola/edb-data-mapping";
-import { EntityDetailCard } from "./EntityDetailCard";
 import {
-  useTypeIRIFromEntity,
-  useExtendedSchema,
+  useAdbContext,
+  useCRUDWithQueryClient,
 } from "@graviola/edb-state-hooks";
-import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
-import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import {
+  useExtendedSchema,
+  useTypeIRIFromEntity,
+} from "@graviola/edb-state-hooks";
+import { Box, BoxProps } from "@mui/material";
+import { useMemo } from "react";
+
+import { EntityDetailCard } from "./EntityDetailCard";
 
 export type EntityDetailElementProps = {
   typeIRI: string | undefined;

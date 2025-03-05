@@ -1,3 +1,6 @@
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { ClearSharp } from "@mui/icons-material";
 import {
   CircularProgress,
   InputLabel,
@@ -7,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { useTranslation } from "next-i18next";
 import React, {
   FunctionComponent,
   use,
@@ -14,11 +18,6 @@ import React, {
   useId,
   useMemo,
 } from "react";
-
-import { useQuery } from "@graviola/edb-state-hooks";
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
-import { ClearSharp } from "@mui/icons-material";
-import { useTranslation } from "next-i18next";
 
 export type PreloadedOptionSelect = {
   title: string;
@@ -53,14 +52,14 @@ export const PreloadedOptionSelect: FunctionComponent<
     (e: SelectChangeEvent<string>): void => {
       const value = e.target.value;
       if (value === null) {
-        onChange && onChange(e as React.SyntheticEvent, null);
+        onChange?.(e as React.SyntheticEvent, null);
         return;
       }
       const selected = suggestions?.find(
         (suggestion) => suggestion.value === value,
       );
       if (selected) {
-        onChange && onChange(e as React.SyntheticEvent, selected);
+        onChange?.(e as React.SyntheticEvent, selected);
       }
     },
     [onChange, suggestions],

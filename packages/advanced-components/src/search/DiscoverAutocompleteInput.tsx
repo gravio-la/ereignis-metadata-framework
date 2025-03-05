@@ -1,11 +1,11 @@
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { findEntityByClass, loadEntityBasics } from "@graviola/sparql-schema";
 import { TextFieldProps, useControlled } from "@mui/material";
 import parse from "html-react-parser";
 import React, { FunctionComponent, useCallback } from "react";
 
-import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
-import { useQuery } from "@graviola/edb-state-hooks";
-import { findEntityByClass, loadEntityBasics } from "@graviola/sparql-schema";
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import { DebouncedAutocomplete } from "../form";
 
 interface OwnProps {
@@ -73,9 +73,9 @@ export const DiscoverAutocompleteInput: FunctionComponent<
     (e: React.SyntheticEvent, item: AutocompleteSuggestion | null) => {
       e.stopPropagation();
       e.preventDefault();
-      onSelectionChange && onSelectionChange(item);
+      onSelectionChange?.(item);
       setSelectedUncontrolled(item);
-      onSearchValueChange && onSearchValueChange(null);
+      onSearchValueChange?.(null);
       setSearchString(null);
     },
     [
@@ -134,7 +134,7 @@ export const DiscoverAutocompleteInput: FunctionComponent<
   const handleEnter = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Enter" && searchString?.length > 0) {
-        onEnterSearch && onEnterSearch(searchString);
+        onEnterSearch?.(searchString);
       }
     },
     [onEnterSearch, searchString],
@@ -142,7 +142,7 @@ export const DiscoverAutocompleteInput: FunctionComponent<
 
   const handleSearchValueChange = useCallback(
     (value: string | undefined) => {
-      onSearchValueChange && onSearchValueChange(value);
+      onSearchValueChange?.(value);
       setSearchString(value);
     },
     [onSearchValueChange, setSearchString],

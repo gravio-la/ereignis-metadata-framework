@@ -1,4 +1,12 @@
 import {
+  findEntityWithinLobidByIRI,
+  gndBaseIRI,
+} from "@graviola/edb-authorities";
+import { OverflowContainer } from "@graviola/edb-basic-components";
+import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-core-utils";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
+import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
@@ -18,25 +26,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, {
-  Fragment,
-  FunctionComponent,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
-
-import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-core-utils";
-import { WikidataAllPropTable } from "../wikidata";
-import { OverflowContainer } from "@graviola/edb-basic-components";
-import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import { useTranslation } from "next-i18next";
+import React, { Fragment, FunctionComponent, useMemo, useState } from "react";
+
 import { EntityChip } from "../show";
-import { useQuery } from "@graviola/edb-state-hooks";
-import {
-  findEntityWithinLobidByIRI,
-  gndBaseIRI,
-} from "@graviola/edb-authorities";
+import { WikidataAllPropTable } from "../wikidata";
 
 export interface AllPropTableProps {
   allProps?: any;
@@ -143,25 +137,13 @@ const useMenuState = () => {
 
 const PropertyContextMenu = ({
   onClose,
-  property,
 }: {
   onClose?: () => void;
   property: string;
 }) => {
-  const [mappingModalOpen, setMappingModalOpen] = useState<boolean>(false);
-  const handleCreateMapping = useCallback(() => {
-    setMappingModalOpen(true);
-  }, [setMappingModalOpen]);
-
-  const handleMappingModalClose = useCallback(() => {
-    setMappingModalOpen(false);
-    onClose && onClose();
-  }, [setMappingModalOpen, onClose]);
-
   return (
     <>
       <MenuList dense>
-        <MenuItem onClick={handleCreateMapping}>create Mapping</MenuItem>
         <MenuItem onClick={onClose}>Property info</MenuItem>
       </MenuList>
     </>
@@ -324,7 +306,6 @@ const PropertyItem = ({
 export const LobidAllPropTable: FunctionComponent<Props> = ({
   allProps,
   disableContextMenu,
-  inlineEditing,
   disabledProperties,
   disableLoad,
 }) => {

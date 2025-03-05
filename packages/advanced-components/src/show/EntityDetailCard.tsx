@@ -1,5 +1,14 @@
-import React, { FunctionComponent, useCallback } from "react";
-import { JsonView } from "react-json-view-lite";
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { encodeIRI } from "@graviola/edb-core-utils";
+import {
+  useAdbContext,
+  useModalRegistry,
+  useModifiedRouter,
+  useSettings,
+} from "@graviola/edb-state-hooks";
+import { ModRouter } from "@graviola/semantic-jsonform-types";
+import { Edit } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -11,21 +20,12 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "next-i18next";
-import { AllPropTableProps, LobidAllPropTable } from "../table";
-import { encodeIRI } from "@graviola/edb-core-utils";
-
-import NiceModal from "@ebay/nice-modal-react";
-import {
-  useAdbContext,
-  useModalRegistry,
-  useModifiedRouter,
-  useSettings,
-} from "@graviola/edb-state-hooks";
 import isString from "lodash-es/isString";
-import { Edit } from "@mui/icons-material";
-import { PrimaryFieldResults } from "@graviola/edb-core-types";
-import { ModRouter } from "@graviola/semantic-jsonform-types";
+import { useTranslation } from "next-i18next";
+import React, { FunctionComponent, useCallback } from "react";
+import { JsonView } from "react-json-view-lite";
+
+import { AllPropTableProps, LobidAllPropTable } from "../table";
 
 type OwnProps = {
   typeIRI: string;
@@ -59,11 +59,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
     components: { EditEntityModal },
   } = useAdbContext();
 
-  //FIXME: This is a workaround for the missing router in the context in some circumstances, yet to be researched
-  let router: ModRouter | undefined;
-  try {
-    router = useModifiedRouter();
-  } catch (e) {}
+  const router: ModRouter = useModifiedRouter();
 
   const { registerModal } = useModalRegistry(NiceModal);
   const editEntry = useCallback(() => {
@@ -78,10 +74,9 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
       });
     } else {
       const typeName = typeIRIToTypeName(typeIRI);
-      router &&
-        router.push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
+      router.push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
     }
-    onEditClicked && onEditClicked();
+    onEditClicked?.();
   }, [
     typeIRI,
     entityIRI,
@@ -95,7 +90,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
   ]);
 
   const {
-    features: { enableDebug, enableStylizedCard },
+    features: { enableDebug },
   } = useSettings();
 
   return (

@@ -1,17 +1,17 @@
-import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
-import React, { MouseEvent, useCallback, useMemo, useState } from "react";
-import {
-  useCRUDWithQueryClient,
-  useExtendedSchema,
-} from "@graviola/edb-state-hooks";
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { ellipsis } from "@graviola/edb-core-utils";
 import {
   applyToEachField,
   extractFieldIfString,
 } from "@graviola/edb-data-mapping";
-import { ellipsis } from "@graviola/edb-ui-utils";
-import NiceModal from "@ebay/nice-modal-react";
+import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
+import {
+  useCRUDWithQueryClient,
+  useExtendedSchema,
+} from "@graviola/edb-state-hooks";
 import { Avatar, Chip, ChipProps, Tooltip } from "@mui/material";
-import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import React, { MouseEvent, useCallback, useMemo, useState } from "react";
 
 export type EntityChipProps = {
   index?: number;

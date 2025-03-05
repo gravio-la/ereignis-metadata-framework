@@ -1,5 +1,9 @@
-import React, { FunctionComponent, useCallback, useMemo } from "react";
-import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import NiceModal from "@ebay/nice-modal-react";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 import {
   Avatar,
   ListItem,
@@ -7,9 +11,7 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import NiceModal from "@ebay/nice-modal-react";
-import { useAdbContext } from "@graviola/edb-state-hooks";
-import { EntityDetailModal } from "../show";
+import { FunctionComponent, useCallback, useMemo } from "react";
 
 interface OwnProps {
   index: number;
@@ -29,6 +31,7 @@ export const TypedListItem: FunctionComponent<Props> = ({
   const {
     typeIRIToTypeName,
     queryBuildOptions: { primaryFieldExtracts },
+    components: { EntityDetailModal },
   } = useAdbContext();
   const typeIRI = data["@type"] as string;
   const entityIRI = data["@id"] as string;
@@ -55,7 +58,7 @@ export const TypedListItem: FunctionComponent<Props> = ({
       disableInlineEditing: true,
       readonly,
     });
-  }, [typeIRI, entityIRI, data, disableLoad, EntityDetailModal]);
+  }, [typeIRI, entityIRI, data, disableLoad, EntityDetailModal, readonly]);
 
   return (
     <ListItem>

@@ -1,3 +1,5 @@
+import { encodeIRI } from "@graviola/edb-core-utils";
+import { useAdbContext, useModifiedRouter } from "@graviola/edb-state-hooks";
 import { Add as AddIcon } from "@mui/icons-material";
 import {
   Avatar,
@@ -10,11 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material";
-import { useEffect, useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 import { MenuItem } from "./types";
-import { encodeIRI } from "@graviola/edb-core-utils";
-import { useAdbContext, useModifiedRouter } from "@graviola/edb-state-hooks";
 
 type NavItemProps = {
   item: MenuItem;

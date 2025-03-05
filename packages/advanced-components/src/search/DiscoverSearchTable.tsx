@@ -1,3 +1,11 @@
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
+import { Entity } from "@graviola/edb-core-types";
+import {
+  useAdbContext,
+  useDataStore,
+  useGlobalCRUDOptions,
+  useQueryClient,
+} from "@graviola/edb-state-hooks";
 import { List } from "@mui/material";
 import {
   FunctionComponent,
@@ -7,14 +15,6 @@ import {
   useState,
 } from "react";
 
-import {
-  useAdbContext,
-  useDataStore,
-  useGlobalCRUDOptions,
-  useQueryClient,
-} from "@graviola/edb-state-hooks";
-import { ClassicResultListItem } from "@graviola/edb-basic-components";
-import { Entity } from "@graviola/edb-core-types";
 import { EntityDetailElement } from "../show";
 
 export type DiscoverSearchTableProps = {
@@ -74,12 +74,21 @@ export const DiscoverSearchTable: FunctionComponent<
         };
       }),
     );
-  }, [searchString, typeIRI, ready, dataStore, queryClient]);
+  }, [
+    searchString,
+    typeIRI,
+    ready,
+    dataStore,
+    queryClient,
+    crudOptions,
+    typeName,
+    limit,
+  ]);
 
   const handleSelect = useCallback(
     (id: string | undefined) => {
       const data = id && resultTable?.find((entry) => entry.id === id);
-      onAcceptItem && data && onAcceptItem(id, data);
+      if (data) onAcceptItem?.(id, data);
     },
     [resultTable, onAcceptItem],
   );

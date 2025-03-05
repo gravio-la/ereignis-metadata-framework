@@ -1,3 +1,16 @@
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { ellipsis } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
+import {
+  useCRUDWithQueryClient,
+  useExtendedSchema,
+} from "@graviola/edb-state-hooks";
+import { Clear, HideImage } from "@mui/icons-material";
 import {
   Avatar,
   IconButton,
@@ -8,19 +21,6 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
-import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
-import {
-  useCRUDWithQueryClient,
-  useExtendedSchema,
-} from "@graviola/edb-state-hooks";
-import {
-  applyToEachField,
-  extractFieldIfString,
-} from "@graviola/edb-data-mapping";
-import NiceModal from "@ebay/nice-modal-react";
-import { Clear, HideImage } from "@mui/icons-material";
-import { ellipsis } from "@graviola/edb-ui-utils";
-import { PrimaryFieldResults } from "@graviola/edb-core-types";
 
 export type EntityDetailListItemProps = {
   entityIRI: string;

@@ -1,7 +1,10 @@
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { useQuery } from "@graviola/edb-state-hooks";
 import { Link, Search } from "@mui/icons-material";
 import { CircularProgress } from "@mui/material";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import debounce from "lodash-es/debounce";
+import { useTranslation } from "next-i18next";
 import React, {
   FunctionComponent,
   useCallback,
@@ -10,9 +13,6 @@ import React, {
 } from "react";
 
 import { TextField } from "./TextField";
-import { useQuery } from "@graviola/edb-state-hooks";
-import { useTranslation } from "next-i18next";
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 
 export type DebouncedAutocompleteProps = {
   load: (value?: string) => Promise<AutocompleteSuggestion[]>;
@@ -66,7 +66,7 @@ export const DebouncedAutocomplete: FunctionComponent<
   const debouncedRequest = useCallback(
     debounce(async (value: string) => {
       const data = await load(value);
-      onDebouncedSearchChange && onDebouncedSearchChange(value);
+      onDebouncedSearchChange?.(value);
       if (data.length > 0) {
         setSuggestions([...data, ...emptySuggestions]);
       } else {
@@ -80,7 +80,7 @@ export const DebouncedAutocomplete: FunctionComponent<
   const handleOnChange = useCallback(
     (e: any): void => {
       const value = e.currentTarget.value;
-      onSearchValueChange && onSearchValueChange(value);
+      onSearchValueChange?.(value);
       if (value.length >= minSearchLength && !autocompleteDisabled) {
         setLoading(true);
         debouncedRequest(value);

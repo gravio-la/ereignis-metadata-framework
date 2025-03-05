@@ -1,4 +1,20 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import {
+  useExtendedSchema,
+  useTypeIRIFromEntity,
+} from "@graviola/edb-state-hooks";
+import { EntityDetailModalProps } from "@graviola/semantic-jsonform-types";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -10,25 +26,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-} from "@graviola/edb-state-hooks";
-import { useCallback, useMemo, useState } from "react";
-import {
-  applyToEachField,
-  extractFieldIfString,
-} from "@graviola/edb-data-mapping";
-import { EntityDetailCard } from "./EntityDetailCard";
-import {
-  useTypeIRIFromEntity,
-  useExtendedSchema,
-} from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
-import { filterUndefOrNull } from "@graviola/edb-core-utils";
-import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
-import { EntityDetailModalProps } from "@graviola/semantic-jsonform-types";
+import { useCallback, useMemo, useState } from "react";
+
+import { EntityDetailCard } from "./EntityDetailCard";
 
 export const EntityDetailModal = NiceModal.create(
   ({
