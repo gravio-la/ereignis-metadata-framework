@@ -6,6 +6,7 @@
   "types": "src/index.tsx",
   "sideEffects": false,
   "scripts": {
+    "depcheck": "depcheck",
     "typecheck": "tsc -b",
     "lint": "eslint \"**/*.ts*\"",
     "lint-fix": "eslint --fix \"**/*.ts*\""

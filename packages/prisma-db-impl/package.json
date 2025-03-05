@@ -16,6 +16,7 @@
     "jsonSchema2Prisma": "./src/jsonSchema2Prisma-cli.ts"
   },
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup",
     "dev": "tsup --watch",
     "gen:model": "bun src/createModel.ts > schema.prisma",

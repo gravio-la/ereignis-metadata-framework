@@ -13,6 +13,7 @@
     }
   },
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint \"**/*.ts*\"",

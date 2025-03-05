@@ -20,6 +20,7 @@
     "README.md"
   ],
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint src/**/*.ts",
@@ -40,6 +41,7 @@
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "eslint-config-edb": "workspace:*",
     "@types/rdf-dataset-ext": "^1.0.3",
     "@rdfjs/types": "^1.1.0",

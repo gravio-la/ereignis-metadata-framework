@@ -3,12 +3,30 @@
   "version": "1.1.0",
   "description": "use hooks that implement global state management logic for the EDB project",
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts",
-    "dev": "tsup src/index.ts",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "depcheck": "depcheck",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore",
     "test": "jest",
     "test:watch": "jest --watch --color",
     "test:coverage": "jest --coverage",
@@ -22,9 +40,11 @@
     "@graviola/json-schema-utils": "workspace:*",
     "@graviola/jsonld-utils": "workspace:*",
     "@types/jest": "^29.5.12",
+    "@types/lodash-es": "^4.17.12",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.3.3",
-    "json-schema": "^0.4.0"
+    "json-schema": "^0.4.0",
+    "tsup": "^8.0.0"
   },
   "peerDependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
@@ -36,5 +56,15 @@
     "@graviola/json-schema-utils": "^1.1.0",
     "@graviola/jsonld-utils": "^1.0.0",
     "@reduxjs/toolkit": "^2.2.3"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }

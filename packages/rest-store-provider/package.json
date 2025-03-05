@@ -17,6 +17,7 @@
     "dist"
   ],
   "scripts": {
+    "depcheck": "depcheck",
     "prepare": "bun run build",
     "build": "tsup",
     "dev": "tsup --watch",

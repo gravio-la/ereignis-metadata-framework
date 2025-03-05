@@ -5,6 +5,7 @@
   "type": "module",
   "types": "./index.d.ts",
   "scripts": {
+    "depcheck": "depcheck",
     "lint": "eslint \"**/*.d.ts\"",
     "lint-fix": "eslint --fix \"**/*.d.ts\"",
     "doc": "typedoc"
