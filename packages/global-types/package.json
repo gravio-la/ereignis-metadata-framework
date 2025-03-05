@@ -23,7 +23,6 @@
     "jsonld-context-parser": "^2.4.0"
   },
   "peerDependencies": {
-    "@graviola/edb-core-types": "^1.1.0",
     "@rdfjs/namespace": "^2.0.1",
     "json-schema": "^0.4.0",
     "jsonld-context-parser": "^2.4.0"

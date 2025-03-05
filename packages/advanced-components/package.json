@@ -42,7 +42,7 @@
     "@graviola/edb-authorities": "workspace:*",
     "@graviola/edb-data-mapping": "workspace:*",
     "@graviola/edb-core-utils": "workspace:*",
-    "react-json-view-lite": "^1.4",
+    "react-json-view-lite": "^2.3.0",
     "next-i18next": "^15",
     "lodash-es": "^4.17.21"
   },

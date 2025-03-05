@@ -27,13 +27,12 @@
     "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "peerDependencies": {
-    "@graviola/edb-state-hooks": "^1.0.0",
+    "@graviola/edb-state-hooks": "workspace:*",
     "react": "^18"
   },
   "dependencies": {
   },
   "devDependencies": {
-    "@graviola/edb-state-hooks": "workspace:*",
     "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
