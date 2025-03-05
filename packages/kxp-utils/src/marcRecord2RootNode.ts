@@ -1,11 +1,12 @@
 import datasetFactory from "@rdfjs/dataset";
 import clownface from "clownface";
+import { nodeToPropertyTree } from "@graviola/edb-graph-traversal";
 import {
-  NodePropertyTree,
-  nodeToPropertyTree,
-  RootNode,
-} from "@graviola/edb-graph-traversal";
-import { kxp, mapDatafieldToQuads, RecordElement } from "@graviola/edb-marc-to-rdf";
+  kxp,
+  mapDatafieldToQuads,
+  RecordElement,
+} from "@graviola/edb-marc-to-rdf";
+import type { RootNode, NodePropertyTree } from "@graviola/edb-global-types";
 
 export const marcRecord2RootNode: (record: RecordElement) => RootNode = (
   record,
