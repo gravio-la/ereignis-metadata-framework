@@ -16,7 +16,7 @@ import {
 import {
   createLogger,
   makeCreateDeeperContextFn,
-} from "@graviola/edb-data-mapping/src/makeCreateDeeperContextFn";
+} from "@graviola/edb-data-mapping";
 import { getEntityFromWikidataByIRI } from "../wikidata";
 
 /**
