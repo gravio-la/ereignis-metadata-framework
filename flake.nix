@@ -23,6 +23,7 @@
             openssl
             appimage-run
             tree
+            graphviz
           ];
           LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
           PRISMA_QUERY_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/query-engine";

@@ -81,3 +81,8 @@ apps/edb-prisma-cli/schema.prisma
 .aider*
 venv/
 .venv/
+
+
+reports/
+
+dependency-graphs/
