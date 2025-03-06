@@ -8,7 +8,9 @@ const packageFiles = glob.sync(path.join(__dirname, 'packages/**/package.json'),
   absolute: true
 });
 
+
 const packageVersions = new Map();
+
 
 packageFiles.forEach(packagePath => {
   try {
@@ -25,10 +27,13 @@ const replaceWorkspaceReferences = (dependencies) => {
   if (!dependencies) return dependencies;
   
   const result = { ...dependencies };
-  
   for (const [dep, version] of Object.entries(result)) {
     if (version === 'workspace:*' && packageVersions.has(dep)) {
       result[dep] = `^${packageVersions.get(dep)}`;
+    } else {
+      if(version === 'workspace:*') {
+        console.warn(`${dep} is a workspace dependency but no version is set`);
+      }
     }
   }
   
