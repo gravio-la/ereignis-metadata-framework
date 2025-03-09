@@ -38,6 +38,7 @@
     "@graviola/sparql-db-impl": "workspace:*",
     "@graviola/async-oxigraph": "workspace:*",
     "@rdfjs/dataset": "^2.0.2",
+    "@rdfjs/data-model": "^2.0.2",
     "n3": "^1.17.2",
     "oxigraph": "^0.4.8"
   },

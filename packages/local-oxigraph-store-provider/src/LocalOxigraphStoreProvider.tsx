@@ -1,47 +1,76 @@
 import { SparqlEndpoint } from "@graviola/edb-core-types";
 import { CrudProviderContext, useAdbContext } from "@graviola/edb-state-hooks";
 import { initSPARQLStore } from "@graviola/sparql-db-impl";
-import { type FunctionComponent, type ReactNode, useMemo } from "react";
+import {
+  type FunctionComponent,
+  type ReactNode,
+  useMemo,
+  useState,
+} from "react";
 
-import { isAsyncOxigraph } from "./isAsyncOxigraph";
 import { useAsyncLocalWorkerCrudOptions } from "./localAsyncOxigraph";
-import { useSyncLocalWorkerCrudOptions } from "./localSyncOxigraph";
 import { useOxigraph } from "./useOxigraph";
+import { bulkLoader, LoadableData } from "./bulkLoader";
 
 export type LocalOxigraphStoreProviderProps = {
   children: ReactNode;
   endpoint: SparqlEndpoint;
   defaultLimit: number;
+  initialData?: LoadableData;
+  loader?: ReactNode;
 };
 
 export const LocalOxigraphStoreProvider: FunctionComponent<
   LocalOxigraphStoreProviderProps
-> = ({ children, endpoint, defaultLimit }) => {
+> = ({ children, endpoint, defaultLimit, initialData, loader }) => {
   const { oxigraph } = useOxigraph();
-  const asyncCrudOptions = useAsyncLocalWorkerCrudOptions(endpoint);
-  const syncCrudOptions = useSyncLocalWorkerCrudOptions(endpoint);
-  const crudOptions = isAsyncOxigraph(oxigraph?.ao)
-    ? asyncCrudOptions
-    : syncCrudOptions;
+  const crudOptions = useAsyncLocalWorkerCrudOptions(endpoint);
   const {
     schema,
     typeNameToTypeIRI,
     queryBuildOptions,
     jsonLDConfig: { defaultPrefix, jsonldContext },
   } = useAdbContext();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const dataStore = useMemo(() => {
-    return initSPARQLStore({
+    const store = oxigraph?.ao;
+    if (!store) {
+      return null;
+    }
+    const dataStore = initSPARQLStore({
       defaultPrefix,
       jsonldContext,
       typeNameToTypeIRI,
       queryBuildOptions,
-      walkerOptions: {},
+      walkerOptions: {
+        maxRecursion: 1,
+        maxRecursionEachRef: 3,
+        skipAtLevel: 10,
+      },
       sparqlQueryFunctions: crudOptions,
       schema,
       defaultLimit,
     });
+
+    if (initialData && !dataLoaded) {
+      bulkLoader(store, initialData)
+        .then(() => {
+          setDataLoaded(true);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setDataLoaded(true);
+        });
+    } else {
+      setDataLoaded(true);
+    }
+
+    return dataStore;
   }, [
+    oxigraph?.ao,
     crudOptions,
     schema,
     typeNameToTypeIRI,
@@ -49,13 +78,19 @@ export const LocalOxigraphStoreProvider: FunctionComponent<
     defaultPrefix,
     jsonldContext,
     defaultLimit,
+    initialData,
+    setDataLoaded,
   ]);
 
   return (
     <CrudProviderContext.Provider
-      value={{ crudOptions, dataStore, isReady: Boolean(dataStore) }}
+      value={{
+        crudOptions,
+        dataStore,
+        isReady: Boolean(dataStore && dataLoaded),
+      }}
     >
-      {children}
+      {!loader || dataLoaded ? children : loader}
     </CrudProviderContext.Provider>
   );
 };
