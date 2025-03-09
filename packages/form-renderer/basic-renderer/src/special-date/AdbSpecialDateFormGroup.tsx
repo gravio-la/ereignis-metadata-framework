@@ -68,21 +68,44 @@ export const AdbSpecialDateFormGroup = ({
     <FormGroup row={true} {...props}>
       <TextField
         disabled={disabled}
-        sx={{ width: "5em" }}
+        sx={{
+          width: "5em",
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderTopRightRadius: "0",
+              borderBottomRightRadius: "0",
+            },
+          },
+        }}
         label={"Tag"}
         value={getDatePartAsString(data ?? 0, "day")}
         onChange={(e) => handleTextFieldChange(e, "day")}
       />
       <TextField
         disabled={disabled}
-        sx={{ width: "5em" }}
+        sx={{
+          width: "5em",
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderRadius: "0",
+            },
+          },
+        }}
         onChange={(e) => handleTextFieldChange(e, "month")}
         label={"Monat"}
         value={getDatePartAsString(data ?? 0, "month")}
       />
       <TextField
         disabled={disabled}
-        sx={{ width: "8em" }}
+        sx={{
+          width: "8em",
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderTopLeftRadius: "0",
+              borderBottomLeftRadius: "0",
+            },
+          },
+        }}
         onChange={(e) => handleTextFieldChange(e, "year")}
         label={"Jahr"}
         value={getDatePartAsString(data ?? 0, "year")}
