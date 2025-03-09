@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const classIRI = sladb.Exhibition.value;
 const exampleData = {
-  "@id": slent["Exhibition#s-12"].value,
+  "@id": slent["4d7bfa16-83fe-3997-b710-68942aab7abb"].value,
   "@type": classIRI,
   title: "Otto Dix Ausstellung",
 };

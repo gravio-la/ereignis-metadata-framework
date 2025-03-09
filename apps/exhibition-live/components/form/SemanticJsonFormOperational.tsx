@@ -101,18 +101,18 @@ const SemanticJsonFormOperational: FunctionComponent<SemanticJsonFormProps> = ({
     [saveMutation.isLoading, isSaving, isReloading],
   );
 
-  const refetch = useCallback(
-    () =>
-      loadEntity(entityIRI, typeIRI).then((loadResult: LoadResult | null) => {
+  const refetch = useCallback(() => {
+    return loadEntity(entityIRI, typeIRI).then(
+      (loadResult: LoadResult | null) => {
         if (loadResult !== null && loadResult?.document) {
           const data = loadResult.document;
           updateSourceToTargets(entityIRI, loadResult.subjects);
           onChange(data);
           return data;
         }
-      }),
-    [loadEntity, entityIRI, typeIRI, schema, onChange, updateSourceToTargets],
-  );
+      },
+    );
+  }, [loadEntity, entityIRI, typeIRI, schema, onChange, updateSourceToTargets]);
 
   useEffect(() => {
     return () => {

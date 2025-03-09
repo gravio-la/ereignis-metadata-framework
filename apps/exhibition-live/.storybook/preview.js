@@ -1,5 +1,9 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryClient, QueryClientProvider } from "@graviola/edb-state-hooks";
+import { CssBaseline, CircularProgress } from "@mui/material";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@graviola/edb-state-hooks";
 
 import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
 import { AdbProvider, store } from "@graviola/edb-state-hooks";
@@ -30,6 +34,33 @@ export const parameters = {
 
 const queryClient = new QueryClient();
 
+const LocalStoreWithExampleDataProvider = ({ children }) => {
+  const { data } = useQuery(["exampleData"], async () => {
+    const basePath = PUBLIC_BASE_PATH || "";
+    const data = await fetch(basePath + "/example-exhibitions.ttl").then(
+      (res) => res.text(),
+    );
+    const ontology = await fetch(
+      basePath + "/ontology/exhibition-info.owl.ttl",
+    ).then((res) => res.text());
+    return [data, ontology];
+  });
+  return (
+    <LocalOxigraphStoreProvider
+      endpoint={{
+        endpoint: "urn:worker",
+        label: "Local",
+        provider: "worker",
+      }}
+      defaultLimit={10}
+      initialData={data}
+      loader={<CircularProgress />}
+    >
+      {children}
+    </LocalOxigraphStoreProvider>
+  );
+};
+
 export const useRouterMock = () => {
   return {
     push: async (url) => {
@@ -49,14 +80,8 @@ export const withMuiTheme = (Story) => {
     <Provider store={store}>
       <AdbProvider
         {...exhibitionConfig}
-        lockedSPARQLEndpoint={{
-          endpoint: "https://ausstellungsdatenbank.kuenste.live/query",
-          //endpoint: "http://localhost:7878/query",
-          label: "Remote",
-          provider: "oxigraph",
-        }}
         env={{
-          publicBasePath: PUBLIC_BASE_PATH,
+          publicBasePath: PUBLIC_BASE_PATH || "",
           baseIRI: BASE_IRI,
         }}
         components={{
@@ -69,19 +94,12 @@ export const withMuiTheme = (Story) => {
       >
         <ThemeComponent>
           <QueryClientProvider client={queryClient}>
-            <LocalOxigraphStoreProvider
-              endpoint={{
-                endpoint: "urn:worker",
-                label: "Local",
-                provider: "oxigraph",
-              }}
-              defaultLimit={10}
-            >
+            <LocalStoreWithExampleDataProvider>
               <NiceModal.Provider>
                 <CssBaseline />
                 <Story />
               </NiceModal.Provider>
-            </LocalOxigraphStoreProvider>
+            </LocalStoreWithExampleDataProvider>
           </QueryClientProvider>
         </ThemeComponent>
       </AdbProvider>
