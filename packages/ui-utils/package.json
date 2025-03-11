@@ -21,6 +21,7 @@
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.200",
     "@types/json-schema": "^7.0.14",
@@ -48,14 +49,7 @@
     "@graviola/json-schema-utils": "workspace:*",
     "@graviola/sparql-schema": "workspace:*",
     "@graviola/edb-graph-traversal": "workspace:*",
-    "@slub/exhibition-schema": "workspace:*",
-    "@slub/exhibition-sparql-config": "workspace:*",
-    "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*",
     "@graviola/edb-authorities": "workspace:*",
-    "cross-fetch": "^4.0.0",
-    "jsonpath": "^1.1.1",
-    "json-schema": "^0.4.0",
     "json-schema-to-ts": "^3.0.1",
     "lodash-es": "^4.17.21"
   }
