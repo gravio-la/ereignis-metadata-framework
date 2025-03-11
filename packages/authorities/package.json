@@ -17,11 +17,11 @@
     "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@graviola/edb-build-helper": "workspace:*"
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*"
   },
   "dependencies": {
-    "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*",
     "lodash-es": "^4.17.21",
     "cross-fetch": "^4.0.0"
   }
