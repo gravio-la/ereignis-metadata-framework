@@ -1,5 +1,4 @@
 import Ajv from "ajv";
-import jsonpath from "jsonpath";
 import cloneDeep from "lodash-es/cloneDeep";
 import get from "lodash-es/get";
 import isNil from "lodash-es/isNil";
@@ -10,6 +9,7 @@ import {
   StrategyContext,
   strategyFunctionMap,
 } from "./mappingStrategies";
+import jsonpath from "jsonpath";
 
 /**
  * Get value from sourceData via a sourcePath which can be either a string or an array of strings
