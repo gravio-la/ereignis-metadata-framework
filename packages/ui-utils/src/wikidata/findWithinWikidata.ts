@@ -202,8 +202,6 @@ export const getEntityFromWikidataByIRI: (
 export const findEntitiesCommonPropsWithinWikidataByIRI = async (
   iri: string,
 ) => {
-  console.log("findEntitiesCommonPropsWithinWikidataByIRI", iri);
-
   return getCommonPropsFromWikidata(
     iri,
     ["https://query.wikidata.org/sparql"],

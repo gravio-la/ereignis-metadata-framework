@@ -1,14 +1,10 @@
+import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
 import {
   IRIToStringFn,
   NormDataMappings,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
 } from "@graviola/edb-core-types";
-import {
-  findEntityByAuthorityIRI,
-  searchEntityByLabel,
-} from "@graviola/sparql-schema";
-import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
 import {
   DeclarativeMapping,
   StrategyContext,
@@ -17,6 +13,11 @@ import {
   createLogger,
   makeCreateDeeperContextFn,
 } from "@graviola/edb-data-mapping";
+import {
+  findEntityByAuthorityIRI,
+  searchEntityByLabel,
+} from "@graviola/sparql-schema";
+
 import { getEntityFromWikidataByIRI } from "../wikidata";
 
 /**
