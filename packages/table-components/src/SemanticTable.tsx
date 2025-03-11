@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import NiceModal from "@ebay/nice-modal-react";
+import { GenericModal } from "@graviola/edb-basic-components";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   useAdbContext,
   useDataStore,
@@ -10,6 +10,18 @@ import {
   useQuery,
   useQueryClient,
 } from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { moveToTrash } from "@graviola/sparql-schema";
+import {
+  CloudDone,
+  CloudSync,
+  Delete,
+  DeleteForever,
+  Edit,
+  FileDownload,
+  NoteAdd,
+  OpenInNew,
+} from "@mui/icons-material";
 import {
   Backdrop,
   Box,
@@ -20,6 +32,10 @@ import {
   Skeleton,
   Tooltip,
 } from "@mui/material";
+import Button from "@mui/material/Button";
+import { PaginationState } from "@tanstack/table-core";
+import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
+import type { JSONSchema7 } from "json-schema";
 import {
   MaterialReactTable,
   MRT_ColumnDef,
@@ -32,34 +48,16 @@ import {
   MRT_VisibilityState,
   useMaterialReactTable,
 } from "material-react-table";
-import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_DE } from "material-react-table/locales/de";
-
-import { JSONSchema7 } from "json-schema";
-import {
-  CloudDone,
-  CloudSync,
-  Delete,
-  DeleteForever,
-  Edit,
-  FileDownload,
-  NoteAdd,
-  OpenInNew,
-} from "@mui/icons-material";
-import NiceModal from "@ebay/nice-modal-react";
-import { useSnackbar } from "notistack";
-import Button from "@mui/material/Button";
-import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { useTranslation } from "next-i18next";
-import { moveToTrash } from "@graviola/sparql-schema";
-import { computeColumns } from "./listHelper";
-import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
-import { bringDefinitionToTop } from "@graviola/json-schema-utils";
-import { GenericModal } from "@graviola/edb-basic-components";
+import { useSnackbar } from "notistack";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { ExportMenuButton } from "./ExportMenuButton";
+import { computeColumns } from "./listHelper";
 import { TableConfigRegistry } from "./types";
-import { typeIRItoTypeName } from "adb-next/components/config";
-import { PaginationState } from "@tanstack/table-core";
 
 const defaultLimit = 25;
 const upperLimit = 10000;
@@ -85,6 +83,7 @@ export const SemanticTable = ({
     queryBuildOptions,
     jsonLDConfig: { defaultPrefix },
     typeNameToTypeIRI,
+    typeIRIToTypeName,
     createEntityIRI,
     schema,
     components: { EntityDetailModal },
@@ -110,7 +109,7 @@ export const SemanticTable = ({
 
   const loadedSchema = useMemo(
     () => bringDefinitionToTop(schema as JSONSchema7, typeName),
-    [typeName],
+    [typeName, schema],
   );
 
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -133,7 +132,7 @@ export const SemanticTable = ({
   const { data: countData, isLoading: countLoading } = useQuery<number | null>(
     ["count", typeIRI, sorting],
     async () => {
-      const typeName = typeIRItoTypeName(typeIRI);
+      const typeName = typeIRIToTypeName(typeIRI);
       if (dataStore.countDocuments) {
         try {
           const amount = await dataStore.countDocuments(typeName, { sorting });
@@ -166,7 +165,7 @@ export const SemanticTable = ({
   const { data: resultListData, isLoading } = useQuery(
     ["allEntries", typeIRI, sorting, loadAllAtOnce ? undefined : pagination],
     () => {
-      const typeName = typeIRItoTypeName(typeIRI);
+      const typeName = typeIRIToTypeName(typeIRI);
 
       return dataStore.findDocumentsAsFlatResultSet(
         typeName,
@@ -252,7 +251,6 @@ export const SemanticTable = ({
       },
       {
         onSuccess: async () => {
-          console.log("invalidateQueries");
           queryClient.invalidateQueries(["list"]);
           queryClient.invalidateQueries(
             filterUndefOrNull(["allEntries", typeIRI || undefined]),
@@ -269,7 +267,6 @@ export const SemanticTable = ({
     },
     {
       onSuccess: async () => {
-        console.log("invalidateQueries");
         queryClient.invalidateQueries(["list"]);
         queryClient.invalidateQueries(
           filterUndefOrNull(["allEntries", typeIRI || undefined]),

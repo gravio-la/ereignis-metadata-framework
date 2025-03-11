@@ -1,4 +1,9 @@
 import {
+  OverflowChip,
+  OverflowContainer,
+} from "@graviola/edb-basic-components";
+import { parseMarkdownLinks } from "@graviola/edb-core-utils";
+import {
   and,
   formatIs,
   isArrayObjectControl,
@@ -8,12 +13,11 @@ import {
   isStringControl,
   rankWith,
 } from "@jsonforms/core";
-import { OverflowChip, OverflowContainer } from "@graviola/edb-basic-components";
 import { Checkbox, Grid, Link, Typography } from "@mui/material";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import isNil from "lodash-es/isNil";
-import { parseMarkdownLinks } from "@graviola/edb-core-utils";
-import * as React from "react";
+import { MRT_TableInstance } from "material-react-table";
+
 import {
   MuiTableColumnDefinitionRegistryEntry,
   PrimaryColumnContent,
@@ -28,7 +32,6 @@ import {
   titleOf,
   urlSuffix,
 } from "./tableRegistryHelper";
-import { MRT_TableInstance } from "material-react-table";
 
 export const cellConfigRegistry: MuiTableColumnDefinitionRegistryEntry[] = [
   {

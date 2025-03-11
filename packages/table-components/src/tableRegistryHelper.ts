@@ -1,10 +1,10 @@
-import get from "lodash-es/get";
-import { isControl, Tester } from "@jsonforms/core";
-import { isPrimitive } from "@graviola/json-schema-utils";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import { FieldExtractDeclaration } from "@graviola/edb-core-types";
+import { isPrimitive } from "@graviola/json-schema-utils";
+import { isControl, Tester } from "@jsonforms/core";
 import { TFunction } from "i18next";
-import { MRT_ColumnDef } from "material-react-table";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import get from "lodash-es/get";
+import type { MRT_ColumnDef } from "material-react-table";
 
 export const pathToString = (path: string[]) => path.join("_");
 
