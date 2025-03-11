@@ -4,6 +4,7 @@ export interface WorkerInstruction {
   initPayload?: InitPayload;
   loadPayload?: LoadPayload;
   queryPayload?: QueryPayload;
+  timeoutInMS?: number;
 }
 
 export interface WorkerResult {
