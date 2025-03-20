@@ -1,12 +1,10 @@
-import { useSimilarityFinderState } from "@graviola/edb-state-hooks";
 import { SimilarityFinder } from "./SimilarityFinder";
 import { useKnowledgeBases } from "./useKnowledgeBases";
 import React, { useCallback, useMemo, useState } from "react";
-import { useDeclarativeMapper } from "./useDeclarativeMapper";
 import { Grid, Paper } from "@mui/material";
 import { exhibitionConfig } from "../../config/exhibitionAppConfig";
-import { set } from "lodash-es";
 import { JsonView } from "react-json-view-lite";
+import { useDeclarativeMapper } from "@graviola/data-mapping-hooks";
 
 type MappingTestComponentProps = {
   typeName:

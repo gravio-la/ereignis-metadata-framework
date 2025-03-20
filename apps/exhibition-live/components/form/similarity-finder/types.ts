@@ -1,4 +1,4 @@
-import { KnowledgeSources } from "@graviola/edb-global-types";
+import { KnowledgeSources } from "@graviola/semantic-jsonform-types";
 import * as React from "react";
 import { BasicThingInformation } from "@graviola/edb-core-types";
 
