@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useGlobalCRUDOptions } from "./useGlobalCRUDOptions";
-import { useAdbContext } from "./provider";
 import { useDataStore } from "./useDataStore";
 import { useMemo } from "react";
 
@@ -9,15 +7,7 @@ export const useTypeIRIFromEntity = (
   typeIRI?: string,
   disableQuery?: boolean,
 ) => {
-  const { schema, typeNameToTypeIRI, queryBuildOptions, jsonLDConfig } =
-    useAdbContext();
-  const { crudOptions } = useGlobalCRUDOptions();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { dataStore, ready } = useDataStore();
   const { data: typeIRIs } = useQuery(
     ["classes", entityIRI],
     async () => {

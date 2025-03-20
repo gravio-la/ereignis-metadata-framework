@@ -45,17 +45,10 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   schema,
   queryOptions,
   loadQueryKey,
-  crudOptionsPartial,
   allowUnsafeSourceIRIs,
 }) => {
-  const { queryBuildOptions, typeNameToTypeIRI, jsonLDConfig } =
-    useAdbContext();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { jsonLDConfig } = useAdbContext();
+  const { dataStore, ready } = useDataStore();
 
   const { defaultPrefix, jsonldContext } = jsonLDConfig;
   //const { resolveSourceIRIs } = useQueryKeyResolver();
