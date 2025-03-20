@@ -22,7 +22,7 @@
     "@tsconfig/node18": "^18.2.2",
     "bun-types": "^1.0.30",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@elysiajs/eden": "^1.0.8",

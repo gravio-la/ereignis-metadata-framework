@@ -22,7 +22,7 @@
     "bun-types": "^1.0.30",
     "graphiql-explorer": "^0.9.0",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@benzene/http": "^0.4.2",
