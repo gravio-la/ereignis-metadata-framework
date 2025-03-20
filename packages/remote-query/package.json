@@ -34,7 +34,7 @@
     "@graviola/edb-tsup-config": "workspace:*",
     "@comunica/types": "^2.10.0",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3",
+    "typescript": "^5.8.2",
     "tsup": "^8.0.0"
   },
   "dependencies": {

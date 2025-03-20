@@ -38,10 +38,10 @@
     "@types/react": "~18.3",
     "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
-    "next": ">14",
+    "next": ">=14",
     "react": "^16.9.0 || ^17.0.0 || ^18",
     "@mui/material": "^5",
     "@mui/lab": "^5",

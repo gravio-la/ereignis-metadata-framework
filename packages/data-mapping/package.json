@@ -39,7 +39,7 @@
     "ajv": "^8.12",
     "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "ajv": "^8.12",

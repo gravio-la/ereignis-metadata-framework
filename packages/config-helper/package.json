@@ -33,7 +33,7 @@
     "@graviola/edb-tsup-config": "workspace:*",
     "@graviola/edb-global-types": "workspace:*",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5",
+    "typescript": "^5.8.2",
     "tsup": "^8.0.0"
   },
   "clean-package": {

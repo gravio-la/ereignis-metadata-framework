@@ -25,6 +25,7 @@
   "private": true,
   "scripts": {
     "start": "turbo run demo",
+    "storybook": "cd ./apps/exhibition-live && bun run storybook",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter='./packages/*' --continue",
     "build:manifestations": "turbo run build --filter='./manifestation/*' --continue",
@@ -74,12 +75,9 @@
     "syncpack": "^13.0.2",
     "tsup": "^8.3.6",
     "turbo": "^2.4.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   },
   "packageManager": "bun@1.2.2",
-  "overrides": {
-    "@typescript-eslint/typescript-estree": "^8"
-  },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,md}": [
       "prettier --write --ignore-unknown"

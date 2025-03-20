@@ -39,7 +39,7 @@
     "eslint-config-edb": "workspace:*",
     "@storybook/react": "^8.1.5",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "@mui/material": "^5",

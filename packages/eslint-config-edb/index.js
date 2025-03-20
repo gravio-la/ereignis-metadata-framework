@@ -11,4 +11,7 @@ module.exports = {
     "no-alert": "error",
     "no-unused-expressions": "error",
   },
+  parserOptions: {
+    warnOnUnsupportedTypeScriptVersion: false,
+  },
 };

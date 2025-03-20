@@ -62,7 +62,7 @@
     "notistack": "^3",
     "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "clean-package": {
     "extends": "../../../clean-package.config.cjs"

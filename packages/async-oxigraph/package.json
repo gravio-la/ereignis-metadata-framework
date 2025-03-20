@@ -6,8 +6,15 @@
   "main": "dist/index.js",
   "type": "module",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "depcheck": "depcheck",
-    "build": "tsup src/index.ts --format esm --dts"
+    "build": "tsup src/index.ts --format esm --dts",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
   }
 }

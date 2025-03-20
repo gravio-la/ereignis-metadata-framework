@@ -4,10 +4,21 @@
   "description": "Prop types for Semantic JSON Forms",
   "type": "module",
   "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "index.d.ts",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "depcheck": "depcheck",
     "lint": "eslint \"**/*.d.ts\"",
     "lint-fix": "eslint --fix \"**/*.d.ts\"",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore",
     "doc": "typedoc"
   },
   "devDependencies": {
@@ -18,9 +29,17 @@
     "json-schema": "^0.4.0",
     "react": "^18",
     "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*"
+    "@graviola/edb-global-types": "workspace:*",
+    "eslint-config-edb": "workspace:*"
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17.0.0 || ^18"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": ["eslint-config-edb"]
   }
 }

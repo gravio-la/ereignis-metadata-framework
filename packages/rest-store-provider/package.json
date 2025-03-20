@@ -27,17 +27,19 @@
     "publish-clean": "bun run pack-clean && npm publish *.tgz && rm *.tgz"
   },
   "peerDependencies": {
-    "@graviola/edb-state-hooks": "workspace:*",
     "react": "^18"
   },
   "dependencies": {
+    "@graviola/edb-state-hooks": "workspace:*",
+    "@graviola/restfull-fetch-db-impl": "workspace:*"
   },
   "devDependencies": {
-    "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "clean-package": {
     "extends": "../../../clean-package.config.cjs"
