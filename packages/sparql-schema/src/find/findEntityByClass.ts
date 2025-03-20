@@ -2,9 +2,7 @@ import { Entity, PrimaryField, QueryOptions } from "@graviola/edb-core-types";
 import df from "@rdfjs/data-model";
 import { SELECT } from "@tpluscode/sparql-builder";
 
-export type FindEntityByClassOptions = QueryOptions & {
-  primaryFields?: PrimaryField;
-};
+export type FindEntityByClassOptions = QueryOptions;
 
 export const fixSparqlOrder: (sparqlQuery: string) => string = (
   sparqlQuery,
@@ -34,8 +32,10 @@ export const findEntityByClass: FindEntityByClassFn = async (
   options,
   limit?: number,
 ) => {
-  const { queryBuildOptions, defaultPrefix, primaryFields } = options;
-  const { label, description, image } = primaryFields || {};
+  const { queryBuildOptions, defaultPrefix } = options;
+  const { primaryFields, typeIRItoTypeName } = queryBuildOptions;
+  const primaryFieldDeclaration = primaryFields?.[typeIRItoTypeName(typeIRI)];
+  const { label, description, image } = primaryFieldDeclaration || {};
   const labelPredicate = label ? toPredicate(label) : ":name";
   const titlePredicate = ":title";
   const descriptionPredicate = description

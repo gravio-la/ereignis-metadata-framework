@@ -191,7 +191,6 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         {
           defaultPrefix,
           queryBuildOptions,
-          primaryFields: queryBuildOptions.primaryFields[typeName],
         },
         limit,
       );
