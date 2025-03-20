@@ -1,6 +1,6 @@
 {
   "name": "@graviola/edb-graph-traversal",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -69,7 +69,9 @@
   },
   "eslintConfig": {
     "root": true,
-    "extends": ["eslint-config-edb"]
+    "extends": [
+      "eslint-config-edb"
+    ]
   },
   "keywords": [
     "RDF",

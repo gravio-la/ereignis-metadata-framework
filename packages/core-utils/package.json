@@ -1,6 +1,6 @@
 {
   "name": "@graviola/edb-core-utils",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Core utilities for EDB",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -43,7 +43,9 @@
     "typescript": "^5.8.2"
   },
   "typedocOptions": {
-    "entryPoints": ["src/index.ts"],
+    "entryPoints": [
+      "src/index.ts"
+    ],
     "skipErrorChecking": true
   },
   "clean-package": {
@@ -51,6 +53,8 @@
   },
   "eslintConfig": {
     "root": true,
-    "extends": ["eslint-config-edb"]
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@graviola/semantic-jsonform-types",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Prop types for Semantic JSON Forms",
   "type": "module",
   "types": "./index.d.ts",
@@ -40,6 +40,8 @@
   },
   "eslintConfig": {
     "root": true,
-    "extends": ["eslint-config-edb"]
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }

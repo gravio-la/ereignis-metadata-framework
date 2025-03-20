@@ -1,6 +1,6 @@
 {
   "name": "@graviola/json-schema-utils",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "JsonSchema utility functions for EDB",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -49,6 +49,8 @@
   },
   "eslintConfig": {
     "root": true,
-    "extends": ["eslint-config-edb"]
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }
