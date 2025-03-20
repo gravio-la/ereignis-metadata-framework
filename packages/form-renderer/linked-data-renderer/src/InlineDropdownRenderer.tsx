@@ -2,34 +2,17 @@ import { PreloadedOptionSelect } from "@graviola/edb-advanced-components";
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import { PrimaryField } from "@graviola/edb-core-types";
 import { extractFieldIfString } from "@graviola/edb-data-mapping";
-import {
-  useAdbContext,
-  useDataStore,
-  useGlobalCRUDOptions,
-} from "@graviola/edb-state-hooks";
+import { useAdbContext, useDataStore } from "@graviola/edb-state-hooks";
 import { ControlProps, OwnPropsOfControl, Resolve } from "@jsonforms/core";
 import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
 import { FormControl, Hidden } from "@mui/material";
-import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
-import { useTranslation } from "next-i18next";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineDropdownRendererComponent = (props: ControlProps) => {
-  const {
-    id,
-    schema,
-    uischema,
-    visible,
-    config,
-    data,
-    handleChange,
-    path,
-    rootSchema,
-    label,
-  } = props;
-  const { typeIRIToTypeName, typeNameToTypeIRI, queryBuildOptions } =
-    useAdbContext();
+  const { id, uischema, visible, config, data, handleChange, path, label } =
+    props;
+  const { typeIRIToTypeName, queryBuildOptions } = useAdbContext();
   const { primaryFields } = queryBuildOptions;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const ctx = useJsonForms();
@@ -41,7 +24,7 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
         : { value: null, label: null },
     [data, realLabel],
   );
-  const { $ref, typeIRI } = appliedUiSchemaOptions.context || {};
+  const { typeIRI } = appliedUiSchemaOptions.context || {};
 
   useEffect(() => {
     if (!data) setRealLabel("");
@@ -99,16 +82,7 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
     return appliedUiSchemaOptions.limit || 100;
   }, [appliedUiSchemaOptions.limit]);
 
-  const { t } = useTranslation();
-
-  const { crudOptions } = useGlobalCRUDOptions();
-
-  const { dataStore, ready } = useDataStore({
-    schema: rootSchema as JSONSchema7,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { dataStore, ready } = useDataStore();
   const load = useCallback(
     async (searchString?: string) =>
       typeName && ready && dataStore

@@ -122,12 +122,7 @@ export const SemanticTable = ({
   );
 
   const { crudOptions } = useGlobalCRUDOptions();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { dataStore, ready } = useDataStore();
 
   const { data: countData, isLoading: countLoading } = useQuery<number | null>(
     ["count", typeIRI, sorting],
