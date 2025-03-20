@@ -1,6 +1,6 @@
 {
   "name": "@graviola/edb-advanced-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -53,11 +53,12 @@
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@storybook/react": "^8.1.5",
     "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "clean-package": {
     "extends": "../../../clean-package.config.cjs"

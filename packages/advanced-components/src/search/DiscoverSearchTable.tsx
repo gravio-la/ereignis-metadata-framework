@@ -35,30 +35,17 @@ export const DiscoverSearchTable: FunctionComponent<
   limit,
 }) => {
   const [resultTable, setResultTable] = useState<any | undefined>();
-  const { schema, typeNameToTypeIRI, queryBuildOptions } = useAdbContext();
+  const { typeNameToTypeIRI } = useAdbContext();
   const queryClient = useQueryClient();
-  const { crudOptions } = useGlobalCRUDOptions();
   const typeIRI = useMemo(
     () => typeNameToTypeIRI(typeName),
     [typeName, typeNameToTypeIRI],
   );
 
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { dataStore, ready } = useDataStore();
 
   const fetchData = useCallback(async () => {
-    if (
-      !searchString ||
-      searchString.length < 1 ||
-      !crudOptions ||
-      !typeIRI ||
-      !ready
-    )
-      return;
+    if (!searchString || searchString.length < 1 || !typeIRI || !ready) return;
     const result = await queryClient.fetchQuery<Entity[]>({
       queryKey: ["discover-search", typeName, searchString],
       queryFn: () =>
@@ -74,16 +61,7 @@ export const DiscoverSearchTable: FunctionComponent<
         };
       }),
     );
-  }, [
-    searchString,
-    typeIRI,
-    ready,
-    dataStore,
-    queryClient,
-    crudOptions,
-    typeName,
-    limit,
-  ]);
+  }, [searchString, typeIRI, ready, dataStore, queryClient, typeName, limit]);
 
   const handleSelect = useCallback(
     (id: string | undefined) => {
