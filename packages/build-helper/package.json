@@ -7,11 +7,10 @@
     "access": "public"
   },
   "bin": {
-    "make-package-json": "./make-package-json.js",
     "get-dependecies": "./get-dependencies.js"
   },
   "devDependencies": {
     "npm-registry-fetch": "^17.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.2"
   }
 }
