@@ -44,14 +44,15 @@
     "prepare": "husky install",
     "changeset:init": "changeset init",
     "changeset": "changeset",
-    "publish": "turbo run publish-clean",
+    "publish": "turbo run publish-clean --continue",
     "helper:deps": "bun ./packages/build-helper/get-dependencies.js",
     "build:prisma": "turbo run build:prisma && sed -i \"s/env(\\\"DATABASE_PROVIDER\\\")/\\\"${DATABASE_PROVIDER:-sqlite}\\\"/g\" ./prisma/*.prisma",
     "prisma:exhibition:generate": "prisma generate --schema ./prisma/exhibition.prisma",
     "prisma:exhibition:migrate": "prisma migrate dev --schema ./prisma/exhibition.prisma",
     "purge": "rm -rf node_modules && find -maxdepth 3 -name node_modules | xargs rm -rf",
     "syncpack:mismatches": "syncpack list-mismatches --types prod",
-    "depcheck": "turbo run depcheck --filter='./packages/*' --continue"
+    "depcheck": "turbo run depcheck --filter='./packages/*' --continue",
+    "restore": "find -maxdepth 4 -name '*.json.backup' -execdir bunx clean-package restore \\;"
   },
   "workspaces": [
     "packages/*",
