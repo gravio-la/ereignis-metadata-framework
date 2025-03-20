@@ -33,7 +33,7 @@ to: packages/<%= name.split("/")[1] %>/package.json
     "@graviola/edb-tsup-config": "workspace:*",
     "eslint-config-edb": "workspace:*",
     "@types/jest": "^29",
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   }
 }
 

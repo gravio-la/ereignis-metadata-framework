@@ -25,8 +25,8 @@ to: packages/<%= name.split("/")[1] %>/package.json
     "depcheck": "depcheck",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint src/**/*.ts",
-    "lint-fix": "eslint --fix src/**/*.ts",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
     "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
     "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
   },
@@ -42,10 +42,10 @@ to: packages/<%= name.split("/")[1] %>/package.json
     "@graviola/edb-tsup-config": "workspace:*",
     "eslint-config-edb": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   },
   "clean-package": {
-    "extends": "../../clean-package.config.cjs"
+    "extends": "../../../clean-package.config.cjs"
   },
   "eslintConfig": {
     "root": true,
