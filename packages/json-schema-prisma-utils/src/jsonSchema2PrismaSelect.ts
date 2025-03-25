@@ -1,4 +1,8 @@
-import { JSONSchema4, JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type {
+  JSONSchema4,
+  JSONSchema7,
+  JSONSchema7Definition,
+} from "json-schema";
 import {
   defs,
   isJSONSchema,

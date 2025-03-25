@@ -26,17 +26,16 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
+    "@graviola/edb-core-types": "workspace:*",
     "@types/json-schema": "^7.0.14",
+    "json-schema": "^0.4.0",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.8.2"
   },
   "dependencies": {
     "@graviola/json-schema-utils": "workspace:*",
-    "@graviola/edb-core-utils": "workspace:*",
-    "json-schema": "^0.4.0"
+    "@graviola/edb-core-utils": "workspace:*"
   }
 }

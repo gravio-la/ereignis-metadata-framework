@@ -1,5 +1,5 @@
-import { JSONSchema7 } from "json-schema";
-import { jsonSchema2Prisma, n2MTable } from "./jsonSchema2Prisma";
+import type { JSONSchema7 } from "json-schema";
+import { jsonSchema2Prisma } from "./jsonSchema2Prisma";
 
 const schema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",

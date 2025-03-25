@@ -1,5 +1,8 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { PrimaryField, PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
 import {
   defs,
   isJSONSchema,
@@ -7,7 +10,7 @@ import {
   isPrimitive,
   resolveSchema,
 } from "@graviola/json-schema-utils";
-import { JsonSchema } from "./jsonSchema2PrismaSelect";
+import type { JsonSchema } from "./jsonSchema2PrismaSelect";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 type JsonSchema2PrismaFlatSelectOptions = {
