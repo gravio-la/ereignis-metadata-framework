@@ -26,30 +26,25 @@
     "lint-fix": "eslint --fix \"**/*.ts*\""
   },
   "devDependencies": {
-    "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "@types/json-schema": "^7.0.14",
     "eslint-config-edb": "workspace:*",
     "typescript": "^5.8.2",
+    "json-schema": "^0.4.0",
     "prisma": "^5.11.0"
   },
   "dependencies": {
     "@graviola/json-schema-prisma-utils": "workspace:*",
     "@graviola/json-schema-utils": "workspace:*",
-    "@graviola/sparql-schema": "workspace:*",
-    "@graviola/edb-graph-traversal": "workspace:*",
-    "@graviola/edb-core-types": "workspace:*",
-    "@graviola/edb-global-types": "workspace:*",
-    "@slub/exhibition-schema": "workspace:*",
-    "@graviola/remote-query-implementations": "workspace:*",
-    "@slub/exhibition-sparql-config": "workspace:*",
+    "@graviola/edb-core-utils": "workspace:*",
     "@graviola/jsonld-utils": "workspace:*",
-    "@prisma/client": "^5.17.0",
-    "json-schema": "^0.4.0",
-    "uuid": "^9.0.1",
     "cli-progress": "^3.12.0",
     "lodash-es": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@prisma/client": "^5 || ^6"
   }
 }

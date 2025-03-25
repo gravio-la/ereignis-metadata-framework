@@ -2,11 +2,11 @@ import {
   jsonSchema2PrismaFlatSelect,
   jsonSchema2PrismaSelect,
 } from "@graviola/json-schema-prisma-utils";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import { toJSONLD } from "./helper";
-import { AbstractDatastore } from "@graviola/edb-global-types";
+import type { AbstractDatastore } from "@graviola/edb-global-types";
 import { importAllDocuments, importSingleDocument } from "./import";
-import {
+import type {
   IRIToStringFn,
   PrimaryFieldDeclaration,
   StringToIRIFn,
