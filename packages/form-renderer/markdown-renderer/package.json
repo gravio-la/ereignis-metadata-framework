@@ -8,30 +8,37 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
     "depcheck": "depcheck",
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lint-fix": "eslint --fix \"**/*.{ts,tsx}\"",
     "test": "jest",
     "test:watch": "jest --watch --color",
     "test:coverage": "jest --coverage",
-    "doc": "typedoc"
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
   },
   "devDependencies": {
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "@tanstack/react-query": "=4.36.1",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.8.2",
     "react": "^18"
   },
   "peerDependencies": {
@@ -46,9 +53,25 @@
     "react": "^16.9.0 || ^17.0.0 || ^18"
   },
   "dependencies": {
+    "@graviola/edb-layout-renderer": "workspace:*",
     "lodash-es": "^4.17.21",
     "rehype-sanitize": "^6.0.0",
     "rehype-external-links": "^3.0.0",
     "turndown": "^7.0.0"
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/index.tsx"
+    ],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }

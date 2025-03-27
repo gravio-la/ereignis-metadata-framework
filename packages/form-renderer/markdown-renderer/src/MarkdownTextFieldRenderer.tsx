@@ -12,9 +12,9 @@ import merge from "lodash-es/merge";
 import React, { useCallback, useMemo, useState } from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSanitize from "rehype-sanitize";
+import TurndownService from "turndown";
 
 import MDEditor, { MDEditorMarkdown } from "./MDEditor";
-import TurndownService from "turndown";
 
 const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
   const {
