@@ -1,6 +1,6 @@
 {
   "name": "@graviola/sparql-db-impl",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "a set of store specific implementations of SPARQL query builders",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -27,7 +27,6 @@
     "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
   },
   "devDependencies": {
-    "@graviola/edb-build-helper": "workspace:*",
     "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-global-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
