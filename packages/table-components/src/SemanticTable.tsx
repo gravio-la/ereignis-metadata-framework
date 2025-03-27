@@ -236,7 +236,7 @@ export const SemanticTable = ({
     [typeIRI, EntityDetailModal],
   );
   const queryClient = useQueryClient();
-  const { mutateAsync: moveToTrashAsync, isLoading: aboutToMoveToTrash } =
+  const { mutateAsync: moveToTrashAsync, isPending: aboutToMoveToTrash } =
     useMutation({
       mutationKey: ["moveToTrash", (id: string | string[]) => id],
       mutationFn: async (id: string | string[]) => {
@@ -254,7 +254,7 @@ export const SemanticTable = ({
         });
       },
     });
-  const { mutateAsync: removeEntity, isLoading: aboutToRemove } = useMutation({
+  const { mutateAsync: removeEntity, isPending: aboutToRemove } = useMutation({
     mutationKey: ["remove", (id: string) => id],
     mutationFn: async (id: string) => {
       if (!id || !dataStore.removeDocument)
