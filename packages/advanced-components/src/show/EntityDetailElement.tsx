@@ -76,7 +76,10 @@ export const EntityDetailElement = ({
   }, [fieldDeclaration, data]);
 
   const disabledProperties = useMemo(
-    () => filterUndefOrNull(Object.values(fieldDeclaration)),
+    () =>
+      fieldDeclaration
+        ? filterUndefOrNull(Object.values(fieldDeclaration))
+        : [],
     [fieldDeclaration],
   );
 
