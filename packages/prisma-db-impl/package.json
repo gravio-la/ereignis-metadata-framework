@@ -1,20 +1,30 @@
 {
   "name": "@graviola/prisma-db-impl",
-  "version": "1.2.0",
-  "description": "a set of store specific implementations of PRISMA query builders",
+  "version": "1.3.2",
+  "description": "A set of store specific implementations of PRISMA query builders",
   "type": "module",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     }
   },
   "bin": {
-    "jsonSchema2Prisma": "./src/jsonSchema2Prisma-cli.ts"
+    "jsonSchema2Prisma": "./dist/jsonSchema2Prisma-cli.js"
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
     "depcheck": "depcheck",
     "build": "tsup",
@@ -23,7 +33,10 @@
     "build:model": "bun src/createModel.ts > schema.prisma && prisma format && mv schema.prisma ../../prisma/schema.prisma",
     "format:model": "prisma format ./schema.prisma",
     "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\""
+    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
   },
   "devDependencies": {
     "@graviola/edb-tsconfig": "workspace:*",
@@ -46,5 +59,20 @@
   },
   "peerDependencies": {
     "@prisma/client": "^5 || ^6"
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/index.ts"
+    ],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }

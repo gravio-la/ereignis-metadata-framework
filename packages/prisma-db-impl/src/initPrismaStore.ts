@@ -19,14 +19,7 @@ import {
 import { save } from "./save";
 import { bindings2RDFResultSet } from "./helper/bindings2RDFResultSet";
 import { cleanJSONLD } from "@graviola/jsonld-utils";
-
-export type PrismaStoreOptions = {
-  jsonldContext: any;
-  defaultPrefix: string;
-  typeNameToTypeIRI: StringToIRIFn;
-  typeIRItoTypeName: IRIToStringFn;
-};
-
+import type { PrismaStoreOptions } from "./types";
 /**
  * Initialize a prisma store with the given prisma client
  *
@@ -39,9 +32,12 @@ export type PrismaStoreOptions = {
  * @param rootSchema The root schema of the data
  * @param primaryFields The primary fields of the data (labels, descriptions, etc.)
  * @param jsonldContext The jsonld context to be used
- * @param defaultPrefix The default prefix to be used
- * @param typeNameToTypeIRI A function to convert a type name to a type IRI
- * @param typeIRItoTypeName A function to convert a type IRI to a type name
+ * @param options The options to be used
+ * @param options.defaultPrefix The default prefix to be used
+ * @param options.typeNameToTypeIRI A function to convert a type name to a type IRI
+ * @param options.typeIRItoTypeName A function to convert a type IRI to a type name
+ * @param options.idToIRI A function to convert an id to an IRI (if empty it is assumed that the id is already an IRI)
+ * @param options.IRItoId A function to convert an IRI to an id (if empty it is assumed that the id is already an id)
  */
 export const initPrismaStore: (
   prisma: any,
@@ -52,8 +48,22 @@ export const initPrismaStore: (
   prisma,
   rootSchema,
   primaryFields,
-  { jsonldContext, defaultPrefix, typeNameToTypeIRI, typeIRItoTypeName },
+  {
+    jsonldContext,
+    defaultPrefix,
+    typeNameToTypeIRI,
+    typeIRItoTypeName,
+    idToIRI,
+    IRItoId,
+    typeIsNotIRI,
+  },
 ) => {
+  const toJSONLDWithOptions = (entry: any) => {
+    return toJSONLD(entry, new WeakSet(), {
+      idToIRI,
+      ...(typeIsNotIRI ? { typeNameToTypeIRI } : {}),
+    });
+  };
   const load = async (typeName: string, entityIRI: string) => {
     const select = jsonSchema2PrismaSelect(typeName, rootSchema, {
       maxRecursion: 4,
@@ -64,7 +74,7 @@ export const initPrismaStore: (
       },
       select,
     });
-    return toJSONLD(entry);
+    return toJSONLDWithOptions(entry);
   };
 
   const loadMany = async (typeName: string, limit?: number) => {
@@ -75,7 +85,7 @@ export const initPrismaStore: (
       take: limit,
       select,
     });
-    return entries.map((entry: any) => toJSONLD(entry));
+    return entries.map(toJSONLDWithOptions);
   };
 
   const loadManyFlat = async (
@@ -117,17 +127,25 @@ export const initPrismaStore: (
       take: limit,
       select,
     });
-    return entries.map((entry: any) => toJSONLD(entry));
+    return entries.map(toJSONLDWithOptions);
   };
   const dataStore: AbstractDatastore = {
     typeNameToTypeIRI: typeNameToTypeIRI,
     typeIRItoTypeName: typeIRItoTypeName,
     importDocument: (typeName, entityIRI, importStore) =>
-      importSingleDocument(typeName, entityIRI, importStore, prisma),
+      importSingleDocument(typeName, entityIRI, importStore, prisma, {
+        IRItoId,
+        typeNameToTypeIRI,
+        typeIsNotIRI,
+      }),
     importDocuments: (typeName, importStore, limit) =>
-      importAllDocuments(typeName, importStore, prisma, limit),
+      importAllDocuments(typeName, importStore, prisma, limit, {
+        IRItoId,
+        typeNameToTypeIRI,
+        typeIsNotIRI,
+      }),
     loadDocument: async (typeName: string, entityIRI: string) => {
-      return load(typeName, entityIRI);
+      return load(typeName, IRItoId ? IRItoId(entityIRI) : entityIRI);
     },
     findDocuments: async (typeName, query, limit, cb) => {
       const entries =
@@ -144,7 +162,7 @@ export const initPrismaStore: (
     existsDocument: async (typeName: string, entityIRI: string) => {
       const entry = await prisma[typeName].findUnique({
         where: {
-          id: entityIRI,
+          id: IRItoId ? IRItoId(entityIRI) : entityIRI,
         },
         select: {
           id: true,
@@ -155,7 +173,7 @@ export const initPrismaStore: (
     removeDocument: async (typeName: string, entityIRI: string) => {
       return await prisma[typeName].delete({
         where: {
-          id: entityIRI,
+          id: IRItoId ? IRItoId(entityIRI) : entityIRI,
         },
       });
     },
@@ -177,7 +195,11 @@ export const initPrismaStore: (
 
       const error = new Set<string>();
 
-      const result = await save(typeName, cleanData, prisma, error);
+      const result = await save(typeName, cleanData, prisma, error, {
+        idToIRI,
+        typeNameToTypeIRI,
+        typeIsNotIRI,
+      });
       if (error.size > 0) {
         throw new Error("Error while saving data");
       }
@@ -242,7 +264,7 @@ export const initPrismaStore: (
         try {
           const entry = await prisma[typeName].findUnique({
             where: {
-              id: entityIRI,
+              id: IRItoId ? IRItoId(entityIRI) : entityIRI,
             },
             select: {
               id: true,

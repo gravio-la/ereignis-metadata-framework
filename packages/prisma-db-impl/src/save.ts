@@ -1,11 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import { getPropertiesAndConnects } from "./helper";
+import { StringToIRIFn } from "@graviola/edb-core-types";
 
 export const save = async (
   typeNameOrigin: string,
   document: any,
   prisma: PrismaClient,
   importError: Set<string>,
+  options: {
+    idToIRI?: StringToIRIFn;
+    typeNameToTypeIRI?: StringToIRIFn;
+    typeIsNotIRI?: boolean;
+  },
 ) => {
   const { id, properties, connects } = await getPropertiesAndConnects(
     typeNameOrigin,
@@ -13,6 +19,7 @@ export const save = async (
     prisma,
     importError,
     "",
+    options,
   );
   if (!id) {
     console.error("no id");

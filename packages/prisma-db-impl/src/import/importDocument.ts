@@ -1,6 +1,7 @@
 import { AbstractDatastore } from "@graviola/edb-global-types";
 import type { PrismaClient } from "@prisma/client";
 import { getPropertiesAndConnects } from "../helper";
+import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
 
 /**
  * Import a document into the prisma store and connect it to other documents
@@ -20,6 +21,11 @@ export const importDocument = async (
   prisma: PrismaClient,
   visited: Set<any>,
   importError: Set<string>,
+  options?: {
+    IRItoId?: IRIToStringFn;
+    typeNameToTypeIRI?: StringToIRIFn;
+    typeIsNotIRI?: boolean;
+  },
 ) => {
   if (visited.has(document["@id"]) || importError.has(document["@id"])) {
     return;
@@ -31,6 +37,7 @@ export const importDocument = async (
     prisma,
     importError,
     "",
+    options ?? {},
     async (
       typeIRI: string | undefined,
       entityIRI: string,
@@ -66,6 +73,7 @@ export const importDocument = async (
                 prisma,
                 visited,
                 importError,
+                options,
               ),
           );
         return true;
@@ -126,6 +134,11 @@ export const importSingleDocument = (
   entityIRI: string,
   importStore: AbstractDatastore,
   prisma: PrismaClient,
+  options?: {
+    IRItoId?: IRIToStringFn;
+    typeNameToTypeIRI?: StringToIRIFn;
+    typeIsNotIRI?: boolean;
+  },
 ) =>
   importStore
     .loadDocument(typeName, entityIRI)
@@ -137,6 +150,7 @@ export const importSingleDocument = (
         prisma,
         new Set(),
         new Set<string>(),
+        options ?? {},
       ),
     )
     .then(async () => {

@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PropertiesAndConnects } from "../types";
+import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
 
 export const getPropertiesAndConnects = async (
   typeNameOrigin: string,
@@ -7,6 +8,11 @@ export const getPropertiesAndConnects = async (
   prisma: PrismaClient,
   importError: Set<string>,
   prefix: string = "",
+  options: {
+    IRItoId?: IRIToStringFn;
+    typeNameToTypeIRI?: StringToIRIFn;
+    typeIsNotIRI?: boolean;
+  },
   middleware?: (
     typeIRI: string | undefined,
     entityIRI: string,
@@ -17,7 +23,25 @@ export const getPropertiesAndConnects = async (
   const { id, ...rest } = Object.fromEntries(
     Object.entries(document)
       .filter(([key, value]) => typeof value !== "object")
-      .map(([key, value]) => [`${prefix}${key.replace("@", "")}`, value]),
+      .map(([key, value]) => {
+        if (key === "@id" && options.IRItoId) {
+          return [
+            `${prefix}${key.replace("@", "")}`,
+            options.IRItoId(value as string),
+          ];
+        } else if (
+          key === "@type" &&
+          options.typeIsNotIRI &&
+          options.typeNameToTypeIRI
+        ) {
+          return [
+            `${prefix}${key.replace("@", "")}`,
+            options.typeNameToTypeIRI(value as string),
+          ];
+        } else {
+          return [`${prefix}${key.replace("@", "")}`, value];
+        }
+      }),
   );
   let connects: Record<string, { id: string } | { id: string }[]> = {};
   let properties: Record<string, any> = rest;
@@ -69,6 +93,7 @@ export const getPropertiesAndConnects = async (
             prisma,
             importError,
             `${key}_`,
+            options,
             middleware,
           );
         properties = {
