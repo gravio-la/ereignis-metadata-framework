@@ -112,9 +112,9 @@ export const Dashboard = (props) => {
   const { t } = useTranslation();
   const { crudOptions } = useGlobalCRUDOptions();
   const { selectFetch } = crudOptions || {};
-  const { data: typeCountData } = useQuery(
-    ["typeCount"],
-    () => {
+  const { data: typeCountData } = useQuery({
+    queryKey: ["typeCount"],
+    queryFn: () => {
       const countV = df.variable("count");
       const query = fixSparqlOrder(
         SELECT`
@@ -128,8 +128,9 @@ export const Dashboard = (props) => {
       );
       return selectFetch(query);
     },
-    { enabled: !!selectFetch, refetchInterval: 1000 * 10 },
-  );
+    enabled: !!selectFetch,
+    refetchInterval: 1000 * 10,
+  });
 
   const scoreCount = useMemo(
     () =>

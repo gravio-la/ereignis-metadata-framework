@@ -191,11 +191,11 @@ const LobidSearchTable: FunctionComponent<Props> = ({
     );
   }, [searchString, typeIRI]);
 
-  const { data: rawEntry } = useQuery(
-    ["lobid", selectedId],
-    () => findEntityWithinLobidByIRI(selectedId),
-    { enabled: !!selectedId },
-  );
+  const { data: rawEntry } = useQuery({
+    queryKey: ["lobid", selectedId],
+    queryFn: () => findEntityWithinLobidByIRI(selectedId),
+    enabled: !!selectedId,
+  });
 
   useEffect(() => {
     if (rawEntry) {

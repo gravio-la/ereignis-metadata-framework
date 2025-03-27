@@ -62,9 +62,9 @@ export const GoogleDrivePicker: FC<GoogleDrivePickerProps> = ({
   const { googleDrive } = useSettings();
   const { clientId } = useGoogleOAuth();
   const { t } = useTranslation();
-  const { data: files } = useQuery(
-    ["files"],
-    async () => {
+  const { data: files } = useQuery({
+    queryKey: ["google", "files"],
+    queryFn: async () => {
       const key = clientId || googleDrive?.apiKey;
       if (!key) {
         throw new Error("No API Key provided");
@@ -90,8 +90,8 @@ export const GoogleDrivePicker: FC<GoogleDrivePickerProps> = ({
       });
       return response.json();
     },
-    { enabled: !!credentials?.access_token },
-  );
+    enabled: !!credentials?.access_token,
+  });
 
   const fileList = useMemo(() => {
     return files?.files?.map((file: any) => ({

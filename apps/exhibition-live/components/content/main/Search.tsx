@@ -205,9 +205,9 @@ export const SearchBar = ({ relevantTypes }: { relevantTypes: string[] }) => {
     [setSelectedClassIRIs],
   );
 
-  const { data: searchResults, isLoading: searchResultsLoading } = useQuery(
-    ["search", searchText],
-    async () => {
+  const { data: searchResults, isLoading: searchResultsLoading } = useQuery({
+    queryKey: ["search", searchText],
+    queryFn: async () => {
       if (!selectFetch) return [];
       const count = df.variable("count");
       const searchString = searchText.toLowerCase().replace(/"/g, "");
@@ -229,12 +229,10 @@ export const SearchBar = ({ relevantTypes }: { relevantTypes: string[] }) => {
         score: parseInt(item.count?.value) || 0,
       }));
     },
-    {
-      enabled: !!selectFetch,
-      keepPreviousData: true,
-      staleTime: 1000,
-    },
-  );
+    enabled: !!selectFetch,
+    placeholderData: (prev) => prev,
+    staleTime: 1000,
+  });
 
   const searchResultsAndSelected = useMemo(() => {
     return orderBy(
@@ -260,9 +258,9 @@ export const SearchBar = ({ relevantTypes }: { relevantTypes: string[] }) => {
     [setSelectedId],
   );
 
-  const { data: allExhibitionsData } = useQuery(
-    ["allExhibitions", searchText, selectedClassIRIs],
-    async () => {
+  const { data: allExhibitionsData } = useQuery({
+    queryKey: ["allExhibitions", searchText, selectedClassIRIs],
+    queryFn: async () => {
       if (!selectFetch) return [];
       const searchString = searchText.toLowerCase().replace(/"/g, "");
       const optionalProperties = [
@@ -307,24 +305,11 @@ export const SearchBar = ({ relevantTypes }: { relevantTypes: string[] }) => {
       );
       return await selectFetch(query);
     },
-    {
-      enabled: !searchResultsLoading,
-      keepPreviousData: true,
-      staleTime: 1000,
-    },
-  );
+    enabled: !searchResultsLoading,
+    placeholderData: (prev) => prev,
+    staleTime: 1000,
+  });
 
-  const mapTypeToScore = (item?: any) => {
-    return {
-      title:
-        item.title?.value ||
-        item.name?.value ||
-        item.label?.value ||
-        item.entity?.value,
-      to: item.toDateDisplay || item.birthDate,
-      from: item.fromDateDisplay || item.deathDate,
-    };
-  };
   const timelineItems = useMemo<TimelineItem[]>(
     () =>
       filterUndefOrNull(
@@ -341,7 +326,6 @@ export const SearchBar = ({ relevantTypes }: { relevantTypes: string[] }) => {
   );
 
   const dateScore = useMemo(() => {
-    //const allExhibitions = allExhibitionsData?.map(mapTypeToScore)
     const allYears = uniq(
       filterUndefOrNull(
         timelineItems?.flatMap((item) => [item.start, item.end]) || [],

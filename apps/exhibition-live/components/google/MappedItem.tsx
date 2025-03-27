@@ -78,7 +78,9 @@ export const MappedItem = <CellType extends CellTypeLike>({
     normDataMapping,
   ]);
 
-  const { data, isLoading } = useQuery(["mappedData", path], mapData, {
+  const { data, isLoading } = useQuery({
+    queryKey: ["mappedData", path],
+    queryFn: mapData,
     enabled: workSheet.loaded && spreadSheetMapping.length > 0,
     staleTime: 1000 * 60 * 2, // 2 minutes,
   });

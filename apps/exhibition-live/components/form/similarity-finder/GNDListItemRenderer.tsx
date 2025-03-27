@@ -31,14 +31,12 @@ export const GNDListItemRenderer = ({
   const { t } = useTranslation();
   const { id } = initialData;
   const queryClient = useQueryClient();
-  const { data } = useQuery<BasicThingInformation>(
-    ["entityDetail", id],
-    async () => fetchBasicInformationFromGND(id, initialData),
-    {
-      initialData,
-      enabled: selected,
-    },
-  );
+  const { data } = useQuery({
+    queryKey: ["entityDetail", id],
+    queryFn: async () => fetchBasicInformationFromGND(id, initialData),
+    initialData,
+    enabled: selected,
+  });
 
   const { resetElementIndex } = useSimilarityFinderState();
 
