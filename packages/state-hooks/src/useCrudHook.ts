@@ -27,7 +27,7 @@ export type UseCRUDWithQueryClientOptions = {
   entityIRI?: string | undefined;
   typeIRI?: string | undefined;
   schema: JSONSchema7;
-  queryOptions?: QueryObserverOptions<any, Error>;
+  queryOptions?: Omit<QueryObserverOptions<any, Error>, "queryKey" | "queryFn">;
   loadQueryKey?: string;
   crudOptionsPartial?: Partial<CRUDOptions>;
   allowUnsafeSourceIRIs?: boolean;

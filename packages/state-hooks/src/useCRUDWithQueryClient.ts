@@ -135,14 +135,14 @@ export const useCRUDWithQueryClient: UseCRUDHook<
 
   const loadEntity = useCallback(
     async (entityIRI: string, typeIRI: string) => {
-      return queryClient.fetchQuery(
-        [loadQueryKey, typeIRI, entityIRI],
-        async () => {
+      return queryClient.fetchQuery({
+        queryKey: [loadQueryKey, typeIRI, entityIRI],
+        queryFn: async () => {
           const typeName = dataStore.typeIRItoTypeName(typeIRI);
           const result = await dataStore.loadDocument(typeName, entityIRI);
           return resultWithSubjects(result);
         },
-      );
+      });
     },
     [loadQueryKey, dataStore.loadDocument, queryClient],
   );
