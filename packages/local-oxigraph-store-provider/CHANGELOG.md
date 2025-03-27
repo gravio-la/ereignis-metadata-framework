@@ -1,5 +1,16 @@
 # @graviola/local-oxigraph-store-provider
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/async-oxigraph@0.1.1
+  - @graviola/sparql-db-impl@1.2.3
+  - @graviola/remote-query-implementations@1.2.1
+  - @graviola/edb-state-hooks@1.2.1
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @slub/sparql-schema
 
+## 1.2.2
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.1
+  - @graviola/edb-graph-traversal@1.2.1
+  - @graviola/jsonld-utils@1.1.1
+  - @graviola/edb-core-utils@1.2.1
+
 ## 1.2.0
 
 ### Minor Changes

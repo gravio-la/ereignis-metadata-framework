@@ -1,5 +1,15 @@
 # @slub/sparql-db-impl
 
+## 1.2.3
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.1
+  - @graviola/sparql-schema@1.2.2
+  - @graviola/jsonld-utils@1.1.1
+
 ## 1.2.0
 
 ### Minor Changes

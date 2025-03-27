@@ -1,5 +1,14 @@
 # @graviola/edb-kxp-utils
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/edb-graph-traversal@1.2.1
+  - @graviola/edb-marc-to-rdf@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes

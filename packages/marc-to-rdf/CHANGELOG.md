@@ -1,5 +1,13 @@
 # @graviola/edb-marc-to-rdf
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/edb-core-utils@1.2.1
+
 ## 1.1.0
 
 ### Minor Changes

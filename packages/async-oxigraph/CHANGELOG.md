@@ -1,5 +1,11 @@
 # @graviola/async-oxigraph
 
+## 0.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+
 ## 0.1.0
 
 ### Minor Changes

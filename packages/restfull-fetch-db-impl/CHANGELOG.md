@@ -1,5 +1,11 @@
 # @slub/sparql-db-impl
 
+## 1.2.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+
 ## 1.2.0
 
 ### Minor Changes

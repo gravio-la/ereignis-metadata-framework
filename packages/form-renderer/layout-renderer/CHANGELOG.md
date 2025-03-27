@@ -1,5 +1,13 @@
 # @graviola/edb-layout-renderer
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/edb-ui-utils@0.2.1
+
 ## 1.1.0
 
 ### Minor Changes

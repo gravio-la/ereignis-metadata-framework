@@ -1,5 +1,13 @@
 # @graviola/edb-markdown-renderer
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/edb-layout-renderer@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes

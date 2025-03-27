@@ -1,6 +1,6 @@
 {
   "name": "@graviola/edb-resizable-drawer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A mouse and touch resizable drawer",
   "type": "module",
   "main": "./dist/index.cjs",

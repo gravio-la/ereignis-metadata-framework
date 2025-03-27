@@ -1,5 +1,14 @@
 # @graviola/rest-store-provider
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/restfull-fetch-db-impl@1.2.1
+  - @graviola/edb-state-hooks@1.2.1
+
 ## 1.1.0
 
 ### Minor Changes

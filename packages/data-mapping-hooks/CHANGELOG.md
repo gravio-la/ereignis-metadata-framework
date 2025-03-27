@@ -1,5 +1,15 @@
 # @graviola/data-mapping-hooks
 
+## 1.1.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/edb-data-mapping@0.2.1
+  - @graviola/edb-state-hooks@1.2.1
+  - @graviola/edb-ui-utils@0.2.1
+
 ## 1.1.0
 
 ### Minor Changes
