@@ -8,14 +8,12 @@ export const useTypeIRIFromEntity = (
   disableQuery?: boolean,
 ) => {
   const { dataStore, ready } = useDataStore();
-  const { data: typeIRIs } = useQuery(
-    ["classes", entityIRI],
-    async () => {
+  const { data: typeIRIs } = useQuery({
+    queryKey: ["classes", entityIRI],
+    queryFn: async () => {
       return await dataStore.getClasses(entityIRI);
     },
-    {
-      enabled: Boolean(!typeIRI && entityIRI && ready && !disableQuery),
-    },
-  );
+    enabled: Boolean(!typeIRI && entityIRI && ready && !disableQuery),
+  });
   return useMemo(() => typeIRI || typeIRIs?.[0], [typeIRI, typeIRIs]);
 };

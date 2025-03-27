@@ -40,13 +40,14 @@ const emptySuggestions: AutocompleteSuggestion[] = [
 export const PreloadedOptionSelect: FunctionComponent<
   PreloadedOptionSelect
 > = ({ load, title, readOnly, value, typeIRI, onChange }) => {
-  const { data: suggestions, isLoading } = useQuery(
-    ["suggestions", typeIRI],
-    () => {
+  const { data: suggestions, isLoading } = useQuery({
+    queryKey: ["suggestions", typeIRI],
+    queryFn: () => {
       return load();
     },
-    { enabled: true, refetchOnWindowFocus: true },
-  );
+    enabled: true,
+    refetchOnWindowFocus: true,
+  });
 
   const handleOnChange = useCallback(
     (e: SelectChangeEvent<string>): void => {

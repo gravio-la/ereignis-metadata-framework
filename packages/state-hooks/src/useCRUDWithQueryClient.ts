@@ -55,44 +55,40 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   const { enabled, ...queryOptionsRest } = queryOptions || {};
   const queryClient = useQueryClient();
 
-  const loadQuery = useQuery<LoadResult | null>(
-    [loadQueryKey, entityIRI],
-    async () => {
+  const loadQuery = useQuery({
+    queryKey: [loadQueryKey, entityIRI],
+    queryFn: async () => {
       if (!entityIRI || !ready) return null;
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       const result = await dataStore.loadDocument(typeName, entityIRI);
       return resultWithSubjects(result);
     },
-    {
-      enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
-      refetchOnWindowFocus: false,
-      ...queryOptionsRest,
-    },
-  );
+    enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
+    refetchOnWindowFocus: false,
+    ...queryOptionsRest,
+  });
 
-  const removeMutation = useMutation(
-    ["remove", entityIRI],
-    async () => {
+  const removeMutation = useMutation({
+    mutationKey: ["remove", entityIRI],
+    mutationFn: async () => {
       if (!entityIRI || !ready) {
         throw new Error("entityIRI or updateFetch is not defined");
       }
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       return await dataStore.removeDocument(typeName, entityIRI);
     },
-    {
-      onSuccess: async () => {
-        console.log("invalidateQueries");
-        queryClient.invalidateQueries(["list"]);
-        queryClient.invalidateQueries(
-          filterUndefOrNull(["allEntries", typeIRI || undefined]),
-        );
-      },
+    onSuccess: async () => {
+      console.log("invalidateQueries");
+      queryClient.invalidateQueries({ queryKey: ["list"] });
+      queryClient.invalidateQueries({
+        queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
+      });
     },
-  );
+  });
 
-  const saveMutation = useMutation(
-    ["save", entityIRI],
-    async (data: Record<string, any>) => {
+  const saveMutation = useMutation({
+    mutationKey: ["save", entityIRI],
+    mutationFn: async (data: Record<string, any>) => {
       if (!Boolean(allowUnsafeSourceIRIs)) {
         if (!entityIRI || !typeIRI || !ready)
           throw new Error(
@@ -115,31 +111,27 @@ export const useCRUDWithQueryClient: UseCRUDHook<
       const { "@context": context, ...cleanDataWithoutContext } = cleanData;
       return cleanDataWithoutContext;
     },
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["load", entityIRI]);
-        await queryClient.invalidateQueries(["show", entityIRI]);
-        /*for (const sourceIRI of resolveSourceIRIs(entityIRI)) {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["load", entityIRI] });
+      await queryClient.invalidateQueries({ queryKey: ["show", entityIRI] });
+      /*for (const sourceIRI of resolveSourceIRIs(entityIRI)) {
         console.log('invalidateQueries', sourceIRI)
-        await queryClient.invalidateQueries(["load", sourceIRI]);
+        await queryClient.invalidateQueries({ queryKey: ["load", sourceIRI] });
       }*/
-      },
     },
-  );
+  });
 
-  const existsQuery = useQuery<boolean | null>(
-    ["exists", entityIRI],
-    async () => {
+  const existsQuery = useQuery({
+    queryKey: ["exists", entityIRI],
+    queryFn: async () => {
       if (!entityIRI || !typeIRI || !ready) return null;
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       return await dataStore.existsDocument(typeName, entityIRI);
     },
-    {
-      enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
-      refetchOnWindowFocus: false,
-      ...queryOptionsRest,
-    },
-  );
+    enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
+    refetchOnWindowFocus: false,
+    ...queryOptionsRest,
+  });
 
   const loadEntity = useCallback(
     async (entityIRI: string, typeIRI: string) => {

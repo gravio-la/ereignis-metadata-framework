@@ -16,9 +16,10 @@ export const useRDFDataSources = (source: string, baseIRI: string) => {
   const { oxigraph } = useOxigraph();
   const [bulkLoading, setBulkLoading] = useState(false);
   const [bulkLoaded, setBulkLoaded] = useState(false);
-  const { data } = useQuery(["knowledge", source], () =>
-    fetch(source).then((r) => r.text()),
-  );
+  const { data } = useQuery({
+    queryKey: ["knowledge", source],
+    queryFn: () => fetch(source).then((r) => r.text()),
+  });
 
   const load = useCallback(
     async (ao: AsyncOxigraph | Store) => {

@@ -94,13 +94,11 @@ export const DebouncedAutocomplete: FunctionComponent<
       autocompleteDisabled,
     ],
   );
-  const { data: initialData, isLoading } = useQuery(
-    ["initiallyLoadSuggestions", initialQueryKey],
-    () => load(),
-    {
-      enabled: Boolean(initialQueryKey && loadOnStart && ready),
-    },
-  );
+  const { data: initialData, isLoading } = useQuery({
+    queryKey: ["initiallyLoadSuggestions", initialQueryKey],
+    queryFn: () => load(),
+    enabled: Boolean(initialQueryKey && loadOnStart && ready),
+  });
 
   useEffect(() => {
     if (initialData?.length > 0) {

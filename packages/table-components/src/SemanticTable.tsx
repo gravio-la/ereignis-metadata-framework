@@ -124,9 +124,9 @@ export const SemanticTable = ({
   const { crudOptions } = useGlobalCRUDOptions();
   const { dataStore, ready } = useDataStore();
 
-  const { data: countData, isLoading: countLoading } = useQuery<number | null>(
-    ["count", typeIRI, sorting],
-    async () => {
+  const { data: countData, isLoading: countLoading } = useQuery({
+    queryKey: ["count", typeIRI, sorting],
+    queryFn: async () => {
       const typeName = typeIRIToTypeName(typeIRI);
       if (dataStore.countDocuments) {
         try {
@@ -139,7 +139,7 @@ export const SemanticTable = ({
       }
       return null;
     },
-  );
+  });
 
   const manualPagination = useMemo(() => {
     return Boolean(countData && countData > defaultLimit && !loadAllAtOnce);
@@ -157,9 +157,14 @@ export const SemanticTable = ({
     [setPagination],
   );
 
-  const { data: resultListData, isLoading } = useQuery(
-    ["allEntries", typeIRI, sorting, loadAllAtOnce ? undefined : pagination],
-    () => {
+  const { data: resultListData, isLoading } = useQuery({
+    queryKey: [
+      "allEntries",
+      typeIRI,
+      sorting,
+      loadAllAtOnce ? undefined : pagination,
+    ],
+    queryFn: () => {
       const typeName = typeIRIToTypeName(typeIRI);
 
       return dataStore.findDocumentsAsFlatResultSet(
@@ -171,11 +176,9 @@ export const SemanticTable = ({
         loadAllAtOnce ? upperLimit : defaultLimit,
       );
     },
-    {
-      enabled: ready && !countLoading,
-      keepPreviousData: true,
-    },
-  );
+    enabled: ready && !countLoading,
+    placeholderData: (previousData) => previousData,
+  });
 
   const resultList = useMemo(
     () => resultListData?.results?.bindings ?? [],
@@ -234,9 +237,9 @@ export const SemanticTable = ({
   );
   const queryClient = useQueryClient();
   const { mutateAsync: moveToTrashAsync, isLoading: aboutToMoveToTrash } =
-    useMutation(
-      ["moveToTrash", (id: string | string[]) => id],
-      async (id: string | string[]) => {
+    useMutation({
+      mutationKey: ["moveToTrash", (id: string | string[]) => id],
+      mutationFn: async (id: string | string[]) => {
         if (!id || !crudOptions.updateFetch)
           throw new Error("entityIRI or updateFetch is not defined");
         return moveToTrash(id, typeIRI, loadedSchema, crudOptions.updateFetch, {
@@ -244,31 +247,27 @@ export const SemanticTable = ({
           queryBuildOptions,
         });
       },
-      {
-        onSuccess: async () => {
-          queryClient.invalidateQueries(["list"]);
-          queryClient.invalidateQueries(
-            filterUndefOrNull(["allEntries", typeIRI || undefined]),
-          );
-        },
+      onSuccess: async () => {
+        queryClient.invalidateQueries({ queryKey: ["list"] });
+        queryClient.invalidateQueries({
+          queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
+        });
       },
-    );
-  const { mutateAsync: removeEntity, isLoading: aboutToRemove } = useMutation(
-    ["remove", (id: string) => id],
-    async (id: string) => {
+    });
+  const { mutateAsync: removeEntity, isLoading: aboutToRemove } = useMutation({
+    mutationKey: ["remove", (id: string) => id],
+    mutationFn: async (id: string) => {
       if (!id || !dataStore.removeDocument)
         throw new Error("entityIRI or removeDocument is not defined");
       return dataStore.removeDocument(typeName, id);
     },
-    {
-      onSuccess: async () => {
-        queryClient.invalidateQueries(["list"]);
-        queryClient.invalidateQueries(
-          filterUndefOrNull(["allEntries", typeIRI || undefined]),
-        );
-      },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["list"] });
+      queryClient.invalidateQueries({
+        queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
+      });
     },
-  );
+  });
   const { enqueueSnackbar } = useSnackbar();
   const handleRemove = useCallback(
     async (id: string) => {

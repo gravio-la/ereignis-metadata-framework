@@ -110,9 +110,9 @@ export const DiscoverAutocompleteInput: FunctionComponent<
     [typeIRI, crudOptions, limit, defaultPrefix, queryBuildOptions],
   );
 
-  const { data: basicFields } = useQuery(
-    ["loadEntity", selected?.value, typeName],
-    async () => {
+  const { data: basicFields } = useQuery({
+    queryKey: ["loadEntity", selected?.value, typeName],
+    queryFn: async () => {
       const value = selected?.value;
       if (value && crudOptions && crudOptions.selectFetch) {
         const typeIRI = typeNameToTypeIRI(typeName);
@@ -122,14 +122,12 @@ export const DiscoverAutocompleteInput: FunctionComponent<
       }
       return null;
     },
-    {
-      enabled: Boolean(
-        crudOptions?.selectFetch &&
-          typeof selected?.value === "string" &&
-          (!selected?.label || selected?.label?.length === 0),
-      ),
-    },
-  );
+    enabled: Boolean(
+      crudOptions?.selectFetch &&
+        typeof selected?.value === "string" &&
+        (!selected?.label || selected?.label?.length === 0),
+    ),
+  });
 
   const handleEnter = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {

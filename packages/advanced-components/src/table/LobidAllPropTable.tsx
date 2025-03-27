@@ -314,12 +314,11 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
     if (typeof gndIRI_ !== "string") return undefined;
     return gndIRI_.startsWith(gndBaseIRI) ? gndIRI_ : undefined;
   }, [allProps]);
-  const { data: rawEntry } = useQuery(
-    ["lobid", gndIRI],
-    () => findEntityWithinLobidByIRI(gndIRI),
-    // @ts-ignore
-    { enabled: !!gndIRI && !disableLoad },
-  );
+  const { data: rawEntry } = useQuery({
+    queryKey: ["lobid", gndIRI],
+    queryFn: () => findEntityWithinLobidByIRI(gndIRI),
+    enabled: !!gndIRI && !disableLoad,
+  });
 
   const grouped = React.useMemo(
     () => (allProps ? obj2Groups(allProps) : emtyObjectGroups),

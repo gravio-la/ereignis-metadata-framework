@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
-import { StringToIRIFn } from "@graviola/edb-core-types";
-import {
+import type { StringToIRIFn } from "@graviola/edb-core-types";
+import type {
   AbstractDatastore,
   CountAndIterable,
   DatastoreBaseConfig,
