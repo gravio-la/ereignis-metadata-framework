@@ -40,3 +40,5 @@ export default {
     active: true,
   },
 } as Config;
+
+export * from "./initSPARQLDataStoreFromConfig";
