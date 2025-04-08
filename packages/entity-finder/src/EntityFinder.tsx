@@ -15,14 +15,12 @@ import {
   SimilarityFinderProps,
 } from "@graviola/semantic-jsonform-types";
 import { Resolve } from "@jsonforms/core";
-import { Unstable_NumberInput as NumberInput } from "@mui/base";
 import { NoteAdd } from "@mui/icons-material";
-import { Button, CircularProgress, Grid, Hidden, List } from "@mui/material";
+import { Button, CircularProgress, Grid, List, Menu, MenuItem, TextField } from "@mui/material";
 import { debounce, uniq } from "lodash-es";
 import { useTranslation } from "next-i18next";
 import * as React from "react";
 import {
-  FunctionComponent,
   useCallback,
   useEffect,
   useMemo,
@@ -61,6 +59,55 @@ const performSearch = (
   });
 };
 
+type AdvancedFilterSettingsMenuProps = {
+  onLimitChange: (limit: number) => void;
+  limit: number;
+}
+
+const AdvancedFilterSettingsMenu = ({ onLimitChange, limit }: AdvancedFilterSettingsMenuProps) => {
+  const { t } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const handleLimitChange = useCallback(
+    (e: any) => onLimitChange(parseInt(e.target.value)),
+    [onLimitChange],
+  );
+
+  return (<Grid container alignItems="center">
+    <Grid item>
+      <Button
+        size="small"
+        variant="outlined"
+        aria-haspopup="true"
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+        title={t("limit")}
+      >
+        {t("limit")}: {limit}
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+      >
+        <MenuItem sx={{ p: 2 }}>
+          <TextField
+            label={t("limit")}
+            type="number"
+            value={limit}
+            onChange={handleLimitChange}
+            inputProps={{
+              min: 1,
+              max: 100,
+              step: 1
+            }}
+            size="small"
+            sx={{ width: "100px" }}
+          />
+        </MenuItem>
+      </Menu>
+    </Grid>
+  </Grid>
+  );
+};
 type EntityFinderProps<
   FindResultType,
   FullEntityType,
@@ -106,7 +153,7 @@ export const EntityFinder = <
   const selectedKnowledgeSources = useMemo(() => {
     const preselectedKnowledgeSources =
       knowledgeSources ||
-      allKnowledgeBases
+      (allKnowledgeBases || [])
         .filter((kb) => normDataMapping[kb.authorityIRI]?.mapping?.[typeName])
         .map((kb) => kb.id);
 
@@ -132,7 +179,7 @@ export const EntityFinder = <
 
   const [limit, setLimit] = useState(20);
   const handleLimitChange = useCallback(
-    (e: any) => setLimit(parseInt(e.target.value)),
+    (limit: number) => setLimit(limit),
     [setLimit],
   );
   const {
@@ -169,9 +216,10 @@ export const EntityFinder = <
   );
   const knowledgeBases = useMemo(
     () =>
-      allKnowledgeBases.filter(({ id }) =>
-        selectedKnowledgeSources.includes(id),
-      ),
+      (allKnowledgeBases || [])
+        .filter(({ id }) =>
+          selectedKnowledgeSources.includes(id),
+        ),
     [allKnowledgeBases, selectedKnowledgeSources],
   );
 
@@ -404,6 +452,7 @@ export const EntityFinder = <
           >
             <Grid item sx={{ width: "100%" }}>
               <SearchFieldWithBadges
+                onCreateNew={showEditDialog}
                 disabled={Boolean(dataPathSearch)}
                 searchString={searchString || ""}
                 typeIRI={classIRI}
@@ -412,15 +461,7 @@ export const EntityFinder = <
                 knowledgeBases={knowledgeBases}
                 onKeyUp={handleKeyUp}
                 advancedConfigChildren={
-                  <NumberInput
-                    style={{ maxWidth: "4em" }}
-                    value={limit}
-                    onChange={handleLimitChange}
-                    min={1}
-                    max={100}
-                    step={1}
-                    title={t("limit")}
-                  />
+                  <AdvancedFilterSettingsMenu onLimitChange={handleLimitChange} limit={limit} />
                 }
               />
             </Grid>
@@ -463,31 +504,30 @@ export const EntityFinder = <
                 .join(",")}
             </Grid>
           </Grid>
-          <Hidden xsUp={hideFooter}>
-            <Grid
-              container
-              ref={setRef}
-              alignItems="center"
-              justifyContent="center"
-              direction={"column"}
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                left: 0,
-                backgroundColor: "white",
-              }}
+          <Grid
+            container
+            ref={setRef}
+            alignItems="center"
+            justifyContent="center"
+            direction={"column"}
+            sx={{
+              display: hideFooter ? "none" : "flex",
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              left: 0,
+              backgroundColor: "white",
+            }}
+          >
+            <Button
+              variant="contained"
+              color={"primary"}
+              startIcon={<NoteAdd />}
+              onClick={showEditDialog}
             >
-              <Button
-                variant="contained"
-                color={"primary"}
-                startIcon={<NoteAdd />}
-                onClick={showEditDialog}
-              >
-                {t("create new", { item: t(typeName) })}
-              </Button>
-            </Grid>
-          </Hidden>
+              {t("create new", { item: t(typeName) })}
+            </Button>
+          </Grid>
         </div>
       </div>
     )
