@@ -97,8 +97,8 @@ const SemanticJsonFormOperational: FunctionComponent<SemanticJsonFormProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
   const isLoading = useMemo(
-    () => saveMutation.isLoading || isSaving || isReloading,
-    [saveMutation.isLoading, isSaving, isReloading],
+    () => saveMutation.isPending || isSaving || isReloading,
+    [saveMutation.isPending, isSaving, isReloading],
   );
 
   const refetch = useCallback(() => {
