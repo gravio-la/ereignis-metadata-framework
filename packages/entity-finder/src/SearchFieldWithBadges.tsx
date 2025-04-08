@@ -1,10 +1,12 @@
 import { useAdbContext } from "@graviola/edb-state-hooks";
 import { FinderKnowledgeBaseDescription } from "@graviola/semantic-jsonform-types";
+import { AddCircle } from "@mui/icons-material";
 import {
   Badge,
   Box,
   Divider,
   Grid,
+  IconButton,
   TextField,
   TextFieldProps,
   Tooltip,
@@ -18,6 +20,7 @@ export const SearchFieldWithBadges = ({
   typeIRI,
   onSearchStringChange,
   selectedKnowledgeSources,
+  onCreateNew,
   toggleKnowledgeSource,
   knowledgeBases,
   advancedConfigChildren,
@@ -25,6 +28,7 @@ export const SearchFieldWithBadges = ({
 }: {
   searchString: string;
   typeIRI: string;
+  onCreateNew?: () => void;
   onSearchStringChange: (value: string) => void;
   knowledgeBases: FinderKnowledgeBaseDescription[];
   selectedKnowledgeSources: string[];
@@ -51,6 +55,30 @@ export const SearchFieldWithBadges = ({
         borderRadius: "4px",
       }}
     >
+      {onCreateNew && (<Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mr: 1,
+        }}
+      >
+        <Tooltip title={`${t("create_new")} ${t(typeName)}`}>
+          <IconButton
+            color="primary"
+            size="small"
+            onClick={() => {
+              // This will be handled by the parent component
+              if (onCreateNew) {
+                onCreateNew();
+              }
+            }}
+          >
+            <AddCircle />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      )}
       <Box sx={{ flexGrow: 1 }}>
         <TextField
           variant={"standard"}
