@@ -7,10 +7,10 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js"
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -32,11 +32,8 @@
     "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@comunica/types": "^2.10.0",
-    "@graviola/edb-core-types": "workspace:*",
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
-    "@rdfjs/types": "^2.0.1",
     "@types/lodash-es": "^4.17.12",
     "ajv": "^8.12",
     "eslint-config-edb": "workspace:*",
@@ -59,11 +56,7 @@
     "react-dom": "^16.9.0 || ^17.0.0 || ^18"
   },
   "dependencies": {
-    "@comunica/query-sparql": "^2.10.2",
-    "@graviola/sparql-schema": "workspace:*",
     "@graviola/edb-core-utils": "workspace:*",
-    "@graviola/edb-authorities": "workspace:*",
-    "@graviola/edb-data-mapping": "workspace:*",
     "json-schema-to-ts": "^3.0.1",
     "lodash-es": "^4.17.21"
   },

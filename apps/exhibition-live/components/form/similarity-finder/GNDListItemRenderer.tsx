@@ -14,11 +14,9 @@ import {
 } from "@graviola/edb-basic-components";
 import { Button, IconButton, Stack } from "@mui/material";
 import { Check } from "@mui/icons-material";
-import {
-  LobidAllPropTable,
-  WikidataAllPropTable,
-} from "@graviola/edb-advanced-components";
 import { ListItemRendererProps } from "./types";
+import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
+import { LobidAllPropTable } from "../lobid/LobidAllPropTable";
 
 export const GNDListItemRenderer = ({
   data: initialData,
@@ -41,10 +39,10 @@ export const GNDListItemRenderer = ({
   const { resetElementIndex } = useSimilarityFinderState();
 
   const handleAccept = useCallback(async () => {
-    const finalData = await queryClient.fetchQuery(
-      ["entityDetail", id],
-      async () => fetchBasicInformationFromGND(id, initialData),
-    );
+    const finalData = await queryClient.fetchQuery({
+      queryKey: ["entityDetail", id],
+      queryFn: async () => fetchBasicInformationFromGND(id, initialData),
+    });
     resetElementIndex();
     onAccept && onAccept(id, finalData);
   }, [onAccept, id, queryClient, initialData, resetElementIndex]);

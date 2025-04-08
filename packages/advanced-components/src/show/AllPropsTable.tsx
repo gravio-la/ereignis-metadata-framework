@@ -1,15 +1,8 @@
-import {
-  findEntityWithinLobidByIRI,
-  gndBaseIRI,
-} from "@graviola/edb-authorities";
+
 import { OverflowContainer } from "@graviola/edb-basic-components";
 import { camelCaseToTitleCase, isValidUrl } from "@graviola/edb-core-utils";
-import { useQuery } from "@graviola/edb-state-hooks";
 import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
   Checkbox,
@@ -28,9 +21,8 @@ import {
 } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import React, { Fragment, FunctionComponent, useMemo, useState } from "react";
+import { EntityChip } from "./EntityChip";
 
-import { EntityChip } from "../show";
-import { WikidataAllPropTable } from "../wikidata";
 
 export interface AllPropTableProps {
   allProps?: any;
@@ -38,7 +30,6 @@ export interface AllPropTableProps {
   disableContextMenu?: boolean;
   inlineEditing?: boolean;
   disabledProperties?: string[];
-  disableLoad?: boolean;
 }
 
 type Props = AllPropTableProps;
@@ -62,7 +53,7 @@ const LabledLink = ({
       ),
     [uri],
   );
-  return onClick && uri.startsWith(gndBaseIRI) ? (
+  return onClick ? (
     <Link onClick={onClick} component="button">
       {label || urlSuffix}
     </Link>
@@ -303,22 +294,11 @@ const PropertyItem = ({
     </TableRow>
   );
 };
-export const LobidAllPropTable: FunctionComponent<Props> = ({
+export const AllPropTable: FunctionComponent<Props> = ({
   allProps,
   disableContextMenu,
   disabledProperties,
-  disableLoad,
 }) => {
-  const gndIRI = useMemo(() => {
-    const gndIRI_ = allProps?.idAuthority?.id;
-    if (typeof gndIRI_ !== "string") return undefined;
-    return gndIRI_.startsWith(gndBaseIRI) ? gndIRI_ : undefined;
-  }, [allProps]);
-  const { data: rawEntry } = useQuery({
-    queryKey: ["lobid", gndIRI],
-    queryFn: () => findEntityWithinLobidByIRI(gndIRI),
-    enabled: !!gndIRI && !disableLoad,
-  });
 
   const grouped = React.useMemo(
     () => (allProps ? obj2Groups(allProps) : emtyObjectGroups),
@@ -331,101 +311,73 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
   } = useTranslation();
 
   return (
-    <>
-      <TableContainer component={Container}>
-        <Table
-          sx={{ minWidth: "100%", tableLayout: "fixed" }}
-          aria-label="custom detail table"
-        >
-          <TableBody>
-            {grouped?.default &&
-              Object.entries(grouped.default)
-                .filter(
-                  ([key, value]) =>
-                    disabledProperties?.includes(key) !== true &&
-                    !key.startsWith("@") &&
-                    (typeof value === "string" ||
-                      typeof value === "number" ||
-                      typeof value === "boolean" ||
-                      (typeof value === "object" &&
-                        value["@id"] &&
-                        value["@type"]) ||
-                      (Array.isArray(value) && value.length > 0)),
-                )
-                .map(([key, value]) => (
-                  <PropertyItem
-                    key={key}
-                    property={key}
-                    value={value}
-                    disableContextMenu={disableContextMenu}
-                  />
-                ))}
-            {grouped?.groups &&
-              grouped.groups
-                .filter(({ properties }) => Object.keys(properties).length > 0)
-                .map(({ groupKey, properties }) => (
-                  <Fragment key={groupKey}>
-                    <TableRow>
-                      <TableCell>
-                        <Typography>
-                          {typeof exists === "function" && exists(groupKey)
-                            ? t(groupKey)
-                            : camelCaseToTitleCase(groupKey)}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                    {Object.entries(properties)
-                      .filter(
-                        ([key, value]) =>
-                          disabledProperties?.includes(key) !== true &&
-                          !key.startsWith("@") &&
-                          (typeof value === "string" ||
-                            typeof value === "number" ||
-                            typeof value === "boolean" ||
-                            (typeof value === "object" &&
-                              value["@id"] &&
-                              value["@type"]) ||
-                            (Array.isArray(value) && value.length > 0)),
-                      )
-                      .map(([key, value]) => (
-                        <PropertyItem
-                          key={key}
-                          property={key}
-                          value={value}
-                          disableContextMenu={disableContextMenu}
-                        />
-                      ))}
-                  </Fragment>
-                ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {rawEntry && (
-        <>
-          <Accordion>
-            <AccordionSummary>
-              <Typography>GND Eintrag</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <LobidAllPropTable allProps={rawEntry} disableContextMenu />
-            </AccordionDetails>
-          </Accordion>
-          {((rawEntry as any)?.sameAs || [])
-            .filter(({ id }) =>
-              id.startsWith("http://www.wikidata.org/entity/"),
-            )
-            .map(({ id }) => (
-              <Accordion key={id}>
-                <AccordionSummary>
-                  <Typography>Wikidata Einträge</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <WikidataAllPropTable key={id} thingIRI={id} />
-                </AccordionDetails>
-              </Accordion>
-            ))}
-        </>
-      )}
-    </>
+    <TableContainer component={Container}>
+      <Table
+        sx={{ minWidth: "100%", tableLayout: "fixed" }}
+        aria-label="custom detail table"
+      >
+        <TableBody>
+          {grouped?.default &&
+            Object.entries(grouped.default)
+              .filter(
+                ([key, value]) =>
+                  disabledProperties?.includes(key) !== true &&
+                  !key.startsWith("@") &&
+                  (typeof value === "string" ||
+                    typeof value === "number" ||
+                    typeof value === "boolean" ||
+                    (typeof value === "object" &&
+                      value["@id"] &&
+                      value["@type"]) ||
+                    (Array.isArray(value) && value.length > 0)),
+              )
+              .map(([key, value]) => (
+                <PropertyItem
+                  key={key}
+                  property={key}
+                  value={value}
+                  disableContextMenu={disableContextMenu}
+                />
+              ))}
+          {grouped?.groups &&
+            grouped.groups
+              .filter(({ properties }) => Object.keys(properties).length > 0)
+              .map(({ groupKey, properties }) => (
+                <Fragment key={groupKey}>
+                  <TableRow>
+                    <TableCell>
+                      <Typography>
+                        {typeof exists === "function" && exists(groupKey)
+                          ? t(groupKey)
+                          : camelCaseToTitleCase(groupKey)}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  {Object.entries(properties)
+                    .filter(
+                      ([key, value]) =>
+                        disabledProperties?.includes(key) !== true &&
+                        !key.startsWith("@") &&
+                        (typeof value === "string" ||
+                          typeof value === "number" ||
+                          typeof value === "boolean" ||
+                          (typeof value === "object" &&
+                            value["@id"] &&
+                            value["@type"]) ||
+                          (Array.isArray(value) && value.length > 0)),
+                    )
+                    .map(([key, value]) => (
+                      <PropertyItem
+                        key={key}
+                        property={key}
+                        value={value}
+                        disableContextMenu={disableContextMenu}
+                      />
+                    ))}
+                </Fragment>
+              ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };

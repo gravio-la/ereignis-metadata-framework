@@ -1,12 +1,16 @@
-import { NormDataMapping } from "@graviola/edb-core-types";
-import { DeclarativeMapping, mapByConfig } from "@graviola/edb-data-mapping";
+import type { NormDataMapping } from "@graviola/edb-core-types";
 import {
-  useGlobalCRUDOptions,
-  useDataStore,
+  type DeclarativeMapping,
+  mapByConfig,
+} from "@graviola/edb-data-mapping";
+import {
   useAdbContext,
+  useDataStore,
 } from "@graviola/edb-state-hooks";
-import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
+import type { MapDataFromAuthorityFn } from "@graviola/semantic-jsonform-types";
 import { useCallback } from "react";
+
+import { makeDefaultMappingStrategyContext } from "./makeDefaultMappingStrategyContext";
 
 const getMappingConfig = (
   normDataMapping: Record<string, NormDataMapping<DeclarativeMapping>>,
@@ -31,13 +35,12 @@ export const useDeclarativeMapper = () => {
     queryBuildOptions,
     createEntityIRI,
     normDataMapping,
-    jsonLDConfig,
+    authorityAccess,
   } = useAdbContext<DeclarativeMapping>();
   const { primaryFields } = queryBuildOptions;
-  const { crudOptions } = useGlobalCRUDOptions();
   const { dataStore } = useDataStore();
 
-  const mapData = useCallback(
+  const mapData: MapDataFromAuthorityFn = useCallback(
     async (
       id: string | undefined,
       classIRI: string,
@@ -48,15 +51,12 @@ export const useDeclarativeMapper = () => {
       if (!id || !entryData?.allProps) return;
       try {
         const defaultMappingContext = makeDefaultMappingStrategyContext(
-          crudOptions?.selectFetch,
-          {
-            defaultPrefix: jsonLDConfig.defaultPrefix,
-            prefixes: {},
-          },
+          dataStore,
           createEntityIRI,
           typeIRIToTypeName,
           primaryFields,
           normDataMapping,
+          authorityAccess,
         );
 
         const mappingConfig = getMappingConfig(
@@ -135,14 +135,12 @@ export const useDeclarativeMapper = () => {
       }
     },
     [
+      dataStore,
       typeIRIToTypeName,
-      dataStore.upsertDocument,
-      crudOptions?.selectFetch,
       createEntityIRI,
-      jsonLDConfig.defaultPrefix,
       normDataMapping,
       primaryFields,
-      normDataMapping,
+      authorityAccess,
     ],
   );
 

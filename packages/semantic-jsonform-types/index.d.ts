@@ -93,9 +93,8 @@ export type GlobalSemanticConfig = {
 };
 
 export type GlobalAppConfig<DeclarativeMappingType> = GlobalSemanticConfig & {
-  normDataMapping: {
-    [authorityIRI: string]: NormDataMapping<DeclarativeMappingType>;
-  };
+  normDataMapping: Record<string, NormDataMapping<DeclarativeMappingType>>;
+  authorityAccess?: Record<string, AuthorityConfiguration>;
   schema: JSONSchema7;
   makeStubSchema?: (schema: JSONSchema7) => JSONSchema7;
   uiSchemaDefaultRegistry?: JsonFormsUISchemaRegistryEntry[];
@@ -183,3 +182,6 @@ export type FinderKnowledgeBaseDescription<
     onAccept?: (id: string, entry: FindResultType) => void,
   ) => React.ReactNode;
 };
+
+export type MapDataFromAuthorityFn = (id: string | undefined, classIRI: string, entryData: any, authorityIRI: string, limit?: number) => Promise<any>;
+

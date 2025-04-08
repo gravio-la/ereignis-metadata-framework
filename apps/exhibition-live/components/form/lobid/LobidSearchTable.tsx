@@ -21,10 +21,6 @@ import {
   ClassicResultListItem,
 } from "@graviola/edb-basic-components";
 import {
-  LobidAllPropTable,
-  WikidataAllPropTable,
-} from "@graviola/edb-advanced-components";
-import {
   findEntityWithinLobid,
   findEntityWithinLobidByIRI,
 } from "@graviola/edb-authorities";
@@ -33,6 +29,8 @@ import {
   extractFieldIfString,
 } from "@graviola/edb-data-mapping";
 import { lobidTypemap } from "@slub/exhibition-schema";
+import { LobidAllPropTable } from "./LobidAllPropTable";
+import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
 
 type Props = {
   searchString: string;

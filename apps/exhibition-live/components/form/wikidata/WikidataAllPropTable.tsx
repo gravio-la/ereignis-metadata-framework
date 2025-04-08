@@ -1,9 +1,5 @@
 import { OverflowContainer } from "@graviola/edb-basic-components";
 import {
-  CommonPropertyValues,
-  getCommonPropsFromWikidata,
-} from "@graviola/edb-ui-utils";
-import {
   Container,
   Skeleton,
   Table,
@@ -12,6 +8,7 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
+import { getCommonPropsFromWikidata, type CommonPropertyValues } from "@graviola/edb-wikidata-utils";
 import React, { FunctionComponent, useEffect, useState } from "react";
 
 interface OwnProps {

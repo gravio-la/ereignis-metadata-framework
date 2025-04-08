@@ -38,10 +38,8 @@
     "@graviola/edb-state-hooks": "workspace:*",
     "@graviola/edb-ui-utils": "workspace:*",
     "@graviola/edb-basic-components": "workspace:*",
-    "@graviola/edb-authorities": "workspace:*",
     "@graviola/edb-data-mapping": "workspace:*",
     "@graviola/edb-core-utils": "workspace:*",
-    "@graviola/sparql-schema": "workspace:*",
     "react-json-view-lite": "^2.3.0",
     "next-i18next": "^15",
     "lodash-es": "^4.17.21"

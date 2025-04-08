@@ -81,6 +81,7 @@
     "@graviola/entity-finder": "workspace:*",
     "@graviola/sparql-store-provider": "workspace:*",
     "@graviola/data-mapping-hooks": "workspace:*",
+    "@graviola/edb-wikidata-utils": "workspace:*",
     "@slub/exhibition-schema": "workspace:*",
     "@slub/kulinarik-schema": "workspace:*",
     "@tanstack/table-core": "^8.16.0",

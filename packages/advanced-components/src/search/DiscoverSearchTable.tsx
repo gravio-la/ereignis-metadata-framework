@@ -3,7 +3,6 @@ import { Entity } from "@graviola/edb-core-types";
 import {
   useAdbContext,
   useDataStore,
-  useGlobalCRUDOptions,
   useQueryClient,
 } from "@graviola/edb-state-hooks";
 import { List } from "@mui/material";

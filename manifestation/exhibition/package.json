@@ -33,6 +33,8 @@
     "schema2typebox": "^1.7.5"
   },
   "dependencies": {
-    "@rdfjs/namespace": "^2.0.0"
+    "@rdfjs/namespace": "^2.0.0",
+    "@graviola/edb-wikidata-utils": "workspace:*",
+    "@graviola/edb-authorities": "workspace:*"
   }
 }

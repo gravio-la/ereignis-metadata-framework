@@ -10,7 +10,6 @@ import {
 import { ModRouter } from "@graviola/semantic-jsonform-types";
 import { Edit } from "@mui/icons-material";
 import {
-  Box,
   Button,
   Card,
   CardActionArea,
@@ -25,7 +24,7 @@ import { useTranslation } from "next-i18next";
 import React, { FunctionComponent, useCallback } from "react";
 import { JsonView } from "react-json-view-lite";
 
-import { AllPropTableProps, LobidAllPropTable } from "../table";
+import { AllPropTableProps, AllPropTable } from "./AllPropsTable";
 
 type OwnProps = {
   typeIRI: string;
@@ -142,17 +141,11 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
             )}
           </CardActions>
         )}
-        <Box>
-          {/*
-        <MarkdownContent mdDocument={cardInfo.description} />
-          */}
-        </Box>
       </Card>
-      <LobidAllPropTable
+      <AllPropTable
         allProps={data}
         disableContextMenu
         inlineEditing={true}
-        disableLoad={disableLoad}
         {...tableProps}
       />
       {enableDebug && (

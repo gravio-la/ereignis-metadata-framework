@@ -1,7 +1,7 @@
 import { QueryEngine } from "@comunica/query-sparql";
-import { BindingsStream, SourceType } from "@comunica/types";
+import type { BindingsStream, SourceType } from "@comunica/types";
 import { prefixes2sparqlPrefixDeclaration } from "@graviola/sparql-schema";
-import { Literal } from "@rdfjs/types";
+import type { Literal } from "@rdfjs/types";
 import isNil from "lodash-es/isNil";
 
 import { wikidataPrefixes } from "./prefixes";

@@ -7,6 +7,7 @@ import {
 } from "./formConfigs";
 import { BASE_IRI } from "./paths";
 import {
+  authorityAccess,
   availableAuthorityMappings,
   makeStubSchema,
   schema,
@@ -36,6 +37,7 @@ export const exhibitionConfig: GlobalAppConfig<DeclarativeMapping> = {
     allowUnsafeSourceIRIs: false,
   },
   normDataMapping: availableAuthorityMappings,
+  authorityAccess: authorityAccess,
   schema: schema as JSONSchema7,
   makeStubSchema: makeStubSchema,
   uiSchemaDefaultRegistry: makeDefaultUiSchemaForAllDefinitions(

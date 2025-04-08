@@ -2,12 +2,12 @@ import { mapByConfigFlat } from "@graviola/edb-data-mapping";
 import type { DeclarativeFlatMappings } from "@graviola/edb-data-mapping";
 import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
 import { CRUDFunctions } from "@graviola/edb-core-types";
-import { useAdbContext, useQuery } from "@graviola/edb-state-hooks";
+import { useAdbContext, useDataStore, useQuery } from "@graviola/edb-state-hooks";
 import React, { useCallback } from "react";
 import { useTranslation } from "next-i18next";
 import { CircularProgress, List } from "@mui/material";
 import { TypedListItem } from "@graviola/edb-advanced-components";
-import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
+import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
 
 export type MappedItemProps<CellType extends CellTypeLike> = {
   path: string;
@@ -28,10 +28,10 @@ export const MappedItem = <CellType extends CellTypeLike>({
     createEntityIRI,
     typeNameToTypeIRI,
     typeIRIToTypeName,
-    jsonLDConfig: { defaultPrefix },
-    components: { EntityDetailModal },
     normDataMapping,
+    authorityAccess,
   } = useAdbContext();
+  const { dataStore } = useDataStore();
   const mapData = useCallback(async () => {
     console.log("will map row", index);
     try {
@@ -49,15 +49,12 @@ export const MappedItem = <CellType extends CellTypeLike>({
         targetData,
         spreadSheetMapping,
         makeDefaultMappingStrategyContext(
-          crudOptions?.selectFetch,
-          {
-            defaultPrefix,
-            prefixes,
-          },
+          dataStore,
           createEntityIRI,
           typeIRIToTypeName,
           primaryFields,
           normDataMapping,
+          authorityAccess,
         ),
       );
       return mappedData;
@@ -67,15 +64,13 @@ export const MappedItem = <CellType extends CellTypeLike>({
     return null;
   }, [
     workSheet,
-    crudOptions,
     spreadSheetMapping,
     primaryFields,
     index,
     createEntityIRI,
-    defaultPrefix,
-    prefixes,
     typeIRIToTypeName,
     normDataMapping,
+    authorityAccess,
   ]);
 
   const { data, isLoading } = useQuery({

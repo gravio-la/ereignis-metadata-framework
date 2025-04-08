@@ -39,7 +39,7 @@ import {
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ColumnChip } from "./ColumnChip";
 import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
-import { makeDefaultMappingStrategyContext } from "@graviola/edb-ui-utils";
+import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,
@@ -62,6 +62,7 @@ export const SpreadSheetWorkSheetView = <
     createEntityIRI,
     jsonLDConfig: { defaultPrefix },
     normDataMapping,
+    authorityAccess,
   } = useAdbContext();
   const workSheet = useCashedWorkSheet<CellType, RemoteWorksheet>({
     workSheet: workSheetOriginal,
@@ -241,6 +242,7 @@ export const SpreadSheetWorkSheetView = <
     loadQueryKey: "importsave",
     allowUnsafeSourceIRIs: true,
   });
+  const { dataStore } = useDataStore();
   const handleMapAndImport = useCallback(async () => {
     const rows = [...Array(pagination.pageSize)].map(
       (_, index) => index + pagination.pageIndex * pagination.pageSize + 1,
@@ -263,15 +265,12 @@ export const SpreadSheetWorkSheetView = <
           targetData,
           spreadSheetMapping.mapping,
           makeDefaultMappingStrategyContext(
-            crudOptions?.selectFetch,
-            {
-              defaultPrefix,
-              prefixes,
-            },
+            dataStore,
             createEntityIRI,
             typeIRIToTypeName,
             primaryFields,
             normDataMapping,
+            authorityAccess,
           ),
         );
       } catch (e) {
