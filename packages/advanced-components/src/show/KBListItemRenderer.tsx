@@ -22,7 +22,6 @@ export const KBListItemRenderer = ({
 }: ListItemRendererProps) => {
   const { id, label, avatar, secondary } = data;
   const {
-    jsonLDConfig: { defaultPrefix },
     typeIRIToTypeName,
   } = useAdbContext();
 
