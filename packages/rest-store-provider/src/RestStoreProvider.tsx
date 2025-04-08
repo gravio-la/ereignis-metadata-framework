@@ -7,11 +7,13 @@ export type RestStoreProviderProps = {
   children: ReactNode;
   endpoint: SparqlEndpoint;
   defaultLimit: number;
+  requestOptions?: RequestInit;
 };
 export const RestStoreProvider: FunctionComponent<RestStoreProviderProps> = ({
   children,
   endpoint,
   defaultLimit,
+  requestOptions,
 }) => {
   const {
     schema,
@@ -25,8 +27,9 @@ export const RestStoreProvider: FunctionComponent<RestStoreProviderProps> = ({
       typeNameToTypeIRI,
       schema,
       defaultLimit,
+      requestOptions,
     });
-  }, [endpoint, defaultLimit, defaultPrefix, typeNameToTypeIRI, schema]);
+  }, [endpoint, defaultLimit, defaultPrefix, typeNameToTypeIRI, schema, requestOptions]);
   return (
     <CrudProviderContext.Provider
       value={{ crudOptions: null, dataStore, isReady: Boolean(dataStore) }}

@@ -13,6 +13,7 @@ export type RestfullDataStoreConfig = {
   defaultPrefix: string;
   typeNameToTypeIRI: StringToIRIFn;
   defaultLimit?: number;
+  requestOptions?: RequestInit;
 } & DatastoreBaseConfig;
 
 const decodeURIWithHash = (iri: string) => {
@@ -22,7 +23,7 @@ const decodeURIWithHash = (iri: string) => {
 export const initRestfullStore: InitDatastoreFunction<
   RestfullDataStoreConfig
 > = (dataStoreConfig) => {
-  const { apiURL, defaultPrefix, typeNameToTypeIRI, defaultLimit } =
+  const { apiURL, defaultPrefix, typeNameToTypeIRI, defaultLimit, requestOptions } =
     dataStoreConfig;
   const loadDocument = async (typeName: string, entityIRI: string) => {
     return await fetch(
@@ -42,6 +43,7 @@ export const initRestfullStore: InitDatastoreFunction<
     const queryString = qs.stringify(q);
     const items = await fetch(
       `${apiURL}/findDocuments/${typeName}?${queryString}`,
+      requestOptions,
     ).then((res) => res.json());
     if (!items || !Array.isArray(items)) return [];
     return await Promise.all(
@@ -69,6 +71,7 @@ export const initRestfullStore: InitDatastoreFunction<
     const queryString = qs.stringify(q);
     const items = await fetch(
       `${apiURL}/findDocuments/${typeName}?${queryString}`,
+      requestOptions,
     ).then((res) => res.json());
     let currentIndex = 0;
     const asyncIterator = {
@@ -101,6 +104,7 @@ export const initRestfullStore: InitDatastoreFunction<
     existsDocument: async (typeName, entityIRI) => {
       return await fetch(
         `${apiURL}/existsDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
+        requestOptions,
       )
         .then((res) => res.text())
         .then((res) => res === "true");
@@ -109,14 +113,17 @@ export const initRestfullStore: InitDatastoreFunction<
       return await fetch(
         `${apiURL}/removeDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
         {
+          ...(requestOptions || {}),
           method: "DELETE",
         },
       ).then((res) => res.json());
     },
     upsertDocument: async (typeName, entityIRI, document) => {
       return await fetch(`${apiURL}/upsertDocument/${typeName}`, {
+        ...(requestOptions || {}),
         method: "PUT",
         headers: {
+          ...(requestOptions?.headers || {}),
           "Content-Type": "application/json",
         },
         body: JSON.stringify(document),
@@ -130,6 +137,7 @@ export const initRestfullStore: InitDatastoreFunction<
       const queryString = qs.stringify({ label, limit });
       return await fetch(
         `${apiURL}/findDocumentsByLabel/${typeName}?${queryString}`,
+        requestOptions,
       ).then((res) => res.json());
     },
     findDocumentsByAuthorityIRI: async (
@@ -147,6 +155,7 @@ export const initRestfullStore: InitDatastoreFunction<
       });
       return await fetch(
         `${apiURL}/findDocumentsByAuthorityIRI/${typeName}?${queryString}`,
+        requestOptions,
       ).then((res) => res.json());
     },
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
@@ -162,12 +171,14 @@ export const initRestfullStore: InitDatastoreFunction<
 
       return await fetch(
         `${apiURL}/findDocumentsAsFlat/${typeName}?${queryString}`,
+        requestOptions,
       ).then((res) => res.json());
     },
     getClasses: (entityIRI: string) => {
-      return fetch(`${apiURL}/classes?id=${decodeURIWithHash(entityIRI)}`).then(
-        (res) => res.json(),
-      );
+      return fetch(
+        `${apiURL}/classes?id=${decodeURIWithHash(entityIRI)}`,
+        requestOptions,
+      ).then((res) => res.json());
     },
     iterableImplementation: {
       listDocuments: (typeName, limit) => {
