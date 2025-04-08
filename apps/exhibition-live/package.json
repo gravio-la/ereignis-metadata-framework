@@ -1,6 +1,6 @@
 {
   "name": "adb-next",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -27,7 +27,8 @@
     "lint:fix": "next lint --fix && eslint --fix ./components ./pages",
     "lint:check": "next lint && eslint ./components ./pages",
     "docker:build": "docker build -t adb-next .",
-    "docker:run": "docker run -p 3000:3000 adb-next"
+    "docker:run": "docker run -p 3000:3000 adb-next",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@comunica/query-sparql": "^2.5.2",
@@ -215,6 +216,7 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "mermaid": "^10.9.1",
     "mdx-mermaid": "^2.0.0",
-    "rollup-plugin-visualizer": "^5.14.0"
+    "rollup-plugin-visualizer": "^5.14.0",
+    "husky": "^8.0.0"
   }
 }

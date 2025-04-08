@@ -1,5 +1,19 @@
 # @slub/edb-prisma-cli
 
+## 1.2.1
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @graviola/json-schema-prisma-utils@1.2.1
+  - @graviola/json-schema-utils@1.2.1
+  - @graviola/edb-graph-traversal@1.2.1
+  - @graviola/sparql-schema@1.2.2
+  - @graviola/remote-query-implementations@1.2.1
+  - @graviola/edb-core-utils@1.2.1
+  - @slub/exhibition-schema@1.3.0
+
 ## 1.2.0
 
 ### Minor Changes

@@ -1,5 +1,19 @@
 # @graviola/edb-solr-cli
 
+## 1.1.2
+
+### Patch Changes
+
+- updated to react-query version 5 and fixes
+- Updated dependencies
+  - @slub/exhibition-sparql-config@1.2.1
+  - @graviola/edb-graph-traversal@1.2.1
+  - @graviola/sparql-db-impl@1.2.3
+  - @graviola/sparql-schema@1.2.2
+  - @graviola/remote-query-implementations@1.2.1
+  - @graviola/edb-core-utils@1.2.1
+  - @slub/exhibition-schema@1.3.0
+
 ## 1.1.1
 
 ### Patch Changes
