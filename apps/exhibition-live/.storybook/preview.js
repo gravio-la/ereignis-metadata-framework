@@ -35,15 +35,18 @@ export const parameters = {
 const queryClient = new QueryClient();
 
 const LocalStoreWithExampleDataProvider = ({ children }) => {
-  const { data } = useQuery(["exampleData"], async () => {
-    const basePath = PUBLIC_BASE_PATH || "";
-    const data = await fetch(basePath + "/example-exhibitions.ttl").then(
-      (res) => res.text(),
-    );
-    const ontology = await fetch(
-      basePath + "/ontology/exhibition-info.owl.ttl",
-    ).then((res) => res.text());
-    return [data, ontology];
+  const { data } = useQuery({
+    queryKey: ["exampleData"],
+    queryFn: async () => {
+      const basePath = PUBLIC_BASE_PATH || "";
+      const data = await fetch(basePath + "/example-exhibitions.ttl").then(
+        (res) => res.text(),
+      );
+      const ontology = await fetch(
+        basePath + "/ontology/exhibition-info.owl.ttl",
+      ).then((res) => res.text());
+      return [data, ontology];
+    }
   });
   return (
     <LocalOxigraphStoreProvider
