@@ -1,9 +1,8 @@
-import config from "@slub/exhibition-sparql-config";
+import config, { initSPARQLDataStoreFromConfig } from "@slub/exhibition-sparql-config";
 import {
   getProviderOrDefault,
   getSPARQLFlavour,
 } from "@graviola/remote-query-implementations";
-import { initSPARQLDataStoreFromConfig } from "@graviola/sparql-db-impl";
 import { extendSchemaShortcut } from "@graviola/json-schema-utils";
 import { primaryFields, schema } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";

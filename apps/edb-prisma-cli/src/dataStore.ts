@@ -1,9 +1,8 @@
-import config from "@slub/exhibition-sparql-config";
+import config, { initSPARQLDataStoreFromConfig } from "@slub/exhibition-sparql-config";
 import {
   getProviderOrDefault,
   getSPARQLFlavour,
 } from "@graviola/remote-query-implementations";
-import { initSPARQLDataStoreFromConfig } from "@graviola/sparql-db-impl";
 
 const worker = getProviderOrDefault(config.sparqlEndpoint);
 
