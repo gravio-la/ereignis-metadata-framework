@@ -41,8 +41,7 @@ to: packages/<%= name.split("/")[1] %>/package.json
     "@graviola/edb-tsconfig": "workspace:*",
     "@graviola/edb-tsup-config": "workspace:*",
     "eslint-config-edb": "workspace:*",
-    "tsup": "^8.0.0",
-    "typescript": "^5.8.2"
+    "tsup": "^8.0.0"
   },
   "clean-package": {
     "extends": "../../../clean-package.config.cjs"
