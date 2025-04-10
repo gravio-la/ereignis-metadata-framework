@@ -47,7 +47,7 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   loadQueryKey: presetLoadQueryKey,
   allowUnsafeSourceIRIs,
 }) => {
-  const { jsonLDConfig } = useAdbContext();
+  const { jsonLDConfig, createEntityIRI } = useAdbContext();
   const { dataStore, ready } = useDataStore();
   const loadQueryKey = presetLoadQueryKey || "load";
   const { defaultPrefix, jsonldContext } = jsonLDConfig;
@@ -86,28 +86,28 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   });
 
   const saveMutation = useMutation({
-    mutationKey: ["save", entityIRI],
+    mutationKey: ["save", typeIRI, entityIRI || "create"],
     mutationFn: async (data: Record<string, any>) => {
       if (!Boolean(allowUnsafeSourceIRIs)) {
-        if (!entityIRI || !typeIRI || !ready)
+        if (!typeIRI || !ready)
           throw new Error(
-            "entryIRI or typeIRI not defined, will continue anyway",
+            "typeIRI not defined",
           );
       }
-      const dataWithId: NamedAndTypedEntity = {
+      const typeName = dataStore.typeIRItoTypeName(typeIRI);
+      const _entityIRI = entityIRI || createEntityIRI(typeName);
+      const dataWithType: NamedAndTypedEntity = {
         ...data,
-        ...(entityIRI ? { "@id": entityIRI } : {}),
+        "@id": _entityIRI,
         ...(typeIRI ? { "@type": typeIRI } : {}),
       } as NamedAndTypedEntity;
-      const { "@id": _entityIRI, "@type": _typeIRI } = dataWithId;
-      const cleanData = await cleanJSONLD(dataWithId, schema, {
+      const cleanData = await cleanJSONLD(dataWithType, schema, {
         jsonldContext,
         defaultPrefix,
         keepContext: true,
       });
-      const typeName = dataStore.typeIRItoTypeName(_typeIRI);
-      await dataStore.upsertDocument(typeName, _entityIRI, cleanData);
-      const { "@context": context, ...cleanDataWithoutContext } = cleanData;
+      const result = await dataStore.upsertDocument(typeName, _entityIRI, cleanData);
+      const { "@context": context, ...cleanDataWithoutContext } = result;
       return cleanDataWithoutContext;
     },
     onSuccess: async () => {
