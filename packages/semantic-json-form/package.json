@@ -43,7 +43,9 @@
     "@graviola/json-schema-utils": "workspace:*",
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/edb-basic-components": "workspace:*",
-    "@graviola/jsonld-utils": "workspace:*"
+    "@graviola/edb-advanced-components": "workspace:*",
+    "@graviola/edb-linked-data-renderer": "workspace:*",
+    "@graviola/entity-finder": "workspace:*"
   },
   "devDependencies": {
     "@graviola/edb-core-types": "workspace:*",
@@ -64,4 +66,3 @@
     "extends": ["eslint-config-edb"]
   }
 }
-
