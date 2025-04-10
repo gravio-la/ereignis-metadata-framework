@@ -1,7 +1,5 @@
 import { JsonView } from "react-json-view-lite";
 import { Divider, Grid, Typography } from "@mui/material";
-import React from "react";
-import { useSettings } from "@graviola/edb-state-hooks";
 import { useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import { SPARQLLocalOxigraphToolkit } from "./SPARQLLocalOxigraphToolkit";
 
@@ -9,9 +7,7 @@ type FormDebuggingToolsProps = {
   jsonData?: Record<string, any>;
 };
 export const FormDebuggingTools = ({ jsonData }: FormDebuggingToolsProps) => {
-  const { features } = useSettings();
   const { crudOptions } = useGlobalCRUDOptions();
-  if (!features?.enableDebug) return null;
 
   return (
     <Grid container direction={"column"} spacing={2}>
