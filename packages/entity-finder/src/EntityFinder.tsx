@@ -262,7 +262,7 @@ export const EntityFinder = <
     debouncedSearch.cancel();
     if (!searchString || searchString.length < 1) return;
     doSearch(searchString);
-  }, [searchString, doSearch, debouncedSearch]);
+  }, [searchString]);
 
   useEffect(() => {
     if (globalTypeName) setTypeName(globalTypeName);
@@ -454,7 +454,7 @@ export const EntityFinder = <
               <SearchFieldWithBadges
                 onCreateNew={showEditDialog}
                 disabled={Boolean(dataPathSearch)}
-                searchString={searchString || ""}
+                searchString={searchString}
                 typeIRI={classIRI}
                 onSearchStringChange={handleSearchStringChange}
                 selectedKnowledgeSources={selectedKnowledgeSources}
