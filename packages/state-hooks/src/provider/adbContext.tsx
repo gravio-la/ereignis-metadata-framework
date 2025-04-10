@@ -6,6 +6,7 @@ import type {
   ModRouter,
   SemanticJsonFormNoOpsProps,
   SimilarityFinderProps,
+  SnackbarFacade,
 } from "@graviola/semantic-jsonform-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
 import { SparqlEndpoint } from "@graviola/edb-core-types";
@@ -18,7 +19,7 @@ import { SparqlEndpoint } from "@graviola/edb-core-types";
  * @param lockedSPARQLEndpoint Optional locked SPARQL endpoint
  * @param useRouterHook Pass the hook needed for your framework specific routing (next router, react-router-dom,...)
  */
-type AdbContextValue<DeclarativeMappingType> =
+export type AdbContextValue<DeclarativeMappingType> =
   GlobalAppConfig<DeclarativeMappingType> & {
     lockedSPARQLEndpoint?: SparqlEndpoint;
     env: {
@@ -31,21 +32,27 @@ type AdbContextValue<DeclarativeMappingType> =
       SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
       SimilarityFinder: React.FC<SimilarityFinderProps>;
     };
+    useSnackbar: () => SnackbarFacade;
     useRouterHook: () => ModRouter;
   };
 
-type EdbGlobalContextProps<DeclarativeMappingType> =
-  AdbContextValue<DeclarativeMappingType> & {
+export type EdbGlobalContextProps<DeclarativeMappingType> =
+  Omit<AdbContextValue<DeclarativeMappingType>, "useSnackbar"> & {
     children: React.ReactNode;
+    useSnackbar?: () => SnackbarFacade;
   };
 
 export const AdbContext = createContext<AdbContextValue<any>>(null);
+
+const useSnackbarFallback: () => SnackbarFacade = () => {
+  return { enqueueSnackbar: (_1, _2) => {return null}, closeSnackbar: (_) => {} };
+};
 
 export const AdbProvider = <DeclarativeMappingType,>({
   children,
   ...rest
 }: EdbGlobalContextProps<DeclarativeMappingType>) => {
-  return <AdbContext.Provider value={rest}>{children}</AdbContext.Provider>;
+  return <AdbContext.Provider value={{...rest, useSnackbar: rest.useSnackbar ?? useSnackbarFallback}}>{children}</AdbContext.Provider>;
 };
 
 export const useAdbContext = <DeclarativeMappingType,>() =>

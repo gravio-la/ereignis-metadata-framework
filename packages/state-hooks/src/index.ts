@@ -25,7 +25,5 @@ export * from "./reducer";
 export * from "./provider";
 export * from "./useCRUDWithQueryClient";
 export * from "./useGlobalCRUDOptions";
-export * from "./useLocalSettings";
 export * from "./useModifiedRouter";
 export * from "./useExtendedSchema";
-export * from "./helper";

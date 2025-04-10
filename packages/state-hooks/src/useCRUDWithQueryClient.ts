@@ -44,12 +44,12 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   typeIRI,
   schema,
   queryOptions,
-  loadQueryKey,
+  loadQueryKey: presetLoadQueryKey,
   allowUnsafeSourceIRIs,
 }) => {
   const { jsonLDConfig } = useAdbContext();
   const { dataStore, ready } = useDataStore();
-
+  const loadQueryKey = presetLoadQueryKey || "load";
   const { defaultPrefix, jsonldContext } = jsonLDConfig;
   //const { resolveSourceIRIs } = useQueryKeyResolver();
   const { enabled, ...queryOptionsRest } = queryOptions || {};
@@ -78,7 +78,6 @@ export const useCRUDWithQueryClient: UseCRUDHook<
       return await dataStore.removeDocument(typeName, entityIRI);
     },
     onSuccess: async () => {
-      console.log("invalidateQueries");
       queryClient.invalidateQueries({ queryKey: ["list"] });
       queryClient.invalidateQueries({
         queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
@@ -112,12 +111,8 @@ export const useCRUDWithQueryClient: UseCRUDHook<
       return cleanDataWithoutContext;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["load", entityIRI] });
+      await queryClient.invalidateQueries({ queryKey: [loadQueryKey, entityIRI] });
       await queryClient.invalidateQueries({ queryKey: ["show", entityIRI] });
-      /*for (const sourceIRI of resolveSourceIRIs(entityIRI)) {
-        console.log('invalidateQueries', sourceIRI)
-        await queryClient.invalidateQueries({ queryKey: ["load", sourceIRI] });
-      }*/
     },
   });
 
