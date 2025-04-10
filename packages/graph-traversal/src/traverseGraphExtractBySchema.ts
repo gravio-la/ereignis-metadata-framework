@@ -7,8 +7,7 @@ import {
 } from "@graviola/json-schema-utils";
 import ds from "@rdfjs/data-model";
 import namespace from "@rdfjs/namespace";
-import type { Dataset } from "@rdfjs/types";
-import type { DatasetCore } from "@rdfjs/types";
+import type { Dataset, DatasetCore } from "@rdfjs/types";
 import { rdf } from "@tpluscode/rdf-ns-builders";
 import clownface from "clownface";
 import type { JSONSchema7, JSONSchema7Definition } from "json-schema";

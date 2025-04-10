@@ -141,7 +141,7 @@ export const EntityFinder = <
 }: EntityFinderProps<FindResultType, FullEntityType, SourceType>) => {
   const {
     queryBuildOptions,
-    normDataMapping,
+    normDataMapping = {},
     createEntityIRI,
     typeNameToTypeIRI,
     typeIRIToTypeName,

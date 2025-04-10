@@ -34,7 +34,7 @@ export const useDeclarativeMapper = () => {
     typeIRIToTypeName,
     queryBuildOptions,
     createEntityIRI,
-    normDataMapping,
+    normDataMapping = {},
     authorityAccess,
   } = useAdbContext<DeclarativeMapping>();
   const { primaryFields } = queryBuildOptions;

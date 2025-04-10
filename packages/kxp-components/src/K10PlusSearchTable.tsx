@@ -2,7 +2,7 @@ import { Button, List } from "@mui/material";
 import { dcterms } from "@tpluscode/rdf-ns-builders";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 
-import { useLocalHistory, useSettings } from "@graviola/edb-state-hooks";
+import { useLocalHistory } from "@graviola/edb-state-hooks";
 import { findFirstInProps } from "@graviola/edb-graph-traversal";
 import { useTranslation } from "next-i18next";
 import { findEntityWithinK10Plus } from "@graviola/edb-kxp-utils";
@@ -14,11 +14,19 @@ import {
 import { KXPAllPropTable } from "./KXPAllPropTable";
 import type { RootNode } from "@graviola/edb-global-types";
 
+
+export type KXPOptions = {
+    endpoint?: string;
+    baseURL?: string;
+    recordSchema?: string;
+};
+
 type Props = {
   searchString: string;
   typeName?: string;
   onSelect?: (id: string | undefined) => void;
   onAcceptItem?: (id: string | undefined, data: any) => void;
+  kxpOptions?: KXPOptions;
 };
 
 export const K10PlusSearchTable: FunctionComponent<Props> = ({
@@ -26,17 +34,17 @@ export const K10PlusSearchTable: FunctionComponent<Props> = ({
   typeName = "Person",
   onSelect,
   onAcceptItem,
+  kxpOptions,
 }) => {
   const { t } = useTranslation();
   const [resultTable, setResultTable] = useState<RootNode[] | undefined>();
-  const { history, pushHistory, popHistory } = useLocalHistory();
+  const { pushHistory, popHistory } = useLocalHistory();
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [selectedEntry, setSelectedEntry] = useState<RootNode | undefined>();
-  const { externalAuthority } = useSettings();
-  const k10PlusEndpointURL =
-      externalAuthority.kxp?.endpoint || "https://sru.bsz-bw.de/swbtest",
-    k10PlusBaseURL = externalAuthority.kxp?.baseURL || "https://kxp.k10plus.de",
-    k10PlusDetailURL = `${k10PlusBaseURL}/DB=2.1/PPNSET?PPN=`;
+  const k10PlusEndpointURL = kxpOptions?.endpoint || "https://sru.bsz-bw.de/swbtest",
+    k10PlusBaseURL = kxpOptions?.baseURL || "https://kxp.k10plus.de",
+    k10PlusDetailURL = `${k10PlusBaseURL}/DB=2.1/PPNSET?PPN=`,
+    recordSchema = kxpOptions?.recordSchema || "marcxmlk10os";
 
   const fetchData = useCallback(async () => {
     if (!searchString || searchString.length < 1) return;
@@ -46,7 +54,7 @@ export const K10PlusSearchTable: FunctionComponent<Props> = ({
       typeName,
       k10PlusEndpointURL,
       10,
-      externalAuthority.kxp?.recordSchema,
+      recordSchema,
     );
     if (!mappedFields) return;
     setResultTable(mappedFields);
@@ -54,7 +62,7 @@ export const K10PlusSearchTable: FunctionComponent<Props> = ({
     searchString,
     typeName,
     k10PlusEndpointURL,
-    externalAuthority.kxp?.recordSchema,
+    recordSchema,
     setResultTable,
   ]);
 
