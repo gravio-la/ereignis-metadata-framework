@@ -5,7 +5,6 @@ import {
   FormControl,
   FormLabel,
   Grid,
-  Hidden,
   IconButton,
 } from "@mui/material";
 import merge from "lodash-es/merge";
@@ -43,7 +42,6 @@ const TypeOfRendererComponent = (props: ControlProps) => {
   }, [schema, data, handleChange_]);
 
   return (
-    <Hidden xsUp={true}>
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
@@ -70,7 +68,6 @@ const TypeOfRendererComponent = (props: ControlProps) => {
           )}
         </Grid>
       </FormControl>
-    </Hidden>
   );
 };
 

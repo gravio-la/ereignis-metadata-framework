@@ -5,12 +5,10 @@ import {
   FormControl,
   FormLabel,
   Grid,
-  Hidden,
   IconButton,
 } from "@mui/material";
 import merge from "lodash-es/merge";
-import React, { useCallback, useState } from "react";
-import { useSettings } from "@graviola/edb-state-hooks";
+import { useCallback, useState } from "react";
 
 const AutoIdentifierRendererComponent = (props: ControlProps) => {
   const {
@@ -29,19 +27,8 @@ const AutoIdentifierRendererComponent = (props: ControlProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [editMode, setEditMode] = useState(false);
 
-  const handleChange_ = useCallback(
-    (v?: string) => {
-      handleChange(path, v);
-    },
-    [path, handleChange],
-  );
-
-  const {
-    features: { enableDebug },
-  } = useSettings();
 
   return (
-    <Hidden xsUp={!enableDebug}>
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
@@ -68,7 +55,6 @@ const AutoIdentifierRendererComponent = (props: ControlProps) => {
           )}
         </Grid>
       </FormControl>
-    </Hidden>
   );
 };
 
