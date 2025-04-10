@@ -45,6 +45,7 @@ export interface ArrayLayoutToolbarProps {
   onCreate?: () => void;
   isReifiedStatement?: boolean;
   additionalKnowledgeSources?: string[];
+
 }
 
 const getDefaultLabelKey = (
@@ -67,6 +68,7 @@ export const ArrayLayoutToolbar = ({
   isReifiedStatement,
   formsPath,
   additionalKnowledgeSources,
+  typeIRI: _typeIRI
 }: ArrayLayoutToolbarProps & {
   schema?: JsonSchema7;
   formsPath?: string;
@@ -78,7 +80,7 @@ export const ArrayLayoutToolbar = ({
     components: { SimilarityFinder },
   } = useAdbContext();
   const { t } = useTranslation();
-  const typeIRI = useMemo(() => schema?.properties?.["@type"]?.const, [schema]);
+  const typeIRI = useMemo(() => _typeIRI ?? schema?.properties?.["@type"]?.const, [schema, _typeIRI]);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],

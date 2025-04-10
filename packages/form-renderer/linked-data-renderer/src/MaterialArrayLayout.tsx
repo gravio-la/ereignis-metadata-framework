@@ -109,13 +109,14 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     typeNameToTypeIRI,
     queryBuildOptions: { primaryFields, primaryFieldExtracts },
   } = useAdbContext();
+  const { context } = useMemo(() =>  merge({}, config, props.uischema?.options), [config, props.uischema?.options])
   const typeIRI = useMemo(() => {
     const lastScopeSegement = path.split("/").pop();
+    if(context?.typeIRI) return context.typeIRI
     let iri = schema.properties?.["@type"]?.const;
     try {
       if (!iri) {
-        const type =
-          rootSchema.properties?.[lastScopeSegement]?.items?.["$ref"];
+        const type = rootSchema.properties?.[lastScopeSegement]?.items?.["$ref"];
         const lastSegment = type?.split("/").pop();
         iri = lastSegment ? typeNameToTypeIRI(lastSegment) : "";
       }
@@ -123,7 +124,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       console.error(e);
     }
     return iri;
-  }, [schema, rootSchema, path, typeNameToTypeIRI]);
+  }, [schema, rootSchema, path, typeNameToTypeIRI, context]);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
@@ -242,9 +243,10 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       uniqBy(
         realData?.map((childData, index) => {
           const fieldDecl = primaryFieldExtracts[typeName];
+          const id = context?.getID ? context.getID(childData) : childData?.["@id"]
           if (childData && fieldDecl) {
             let label =
-              childData.label || childData.__label || childData["@id"];
+              childData.label || childData.__label || id;
             const extractedInfo = applyToEachField(
               childData,
               fieldDecl,
@@ -255,7 +257,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
             }
           }
           return {
-            id: childData?.["@id"],
+            id,
             childData,
             index,
             label,
@@ -265,7 +267,15 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       ),
       ["label", "asc"],
     );
-  }, [realData, orderByPropertyPath, primaryFieldExtracts, typeIRI, typeName]);
+  }, [realData, orderByPropertyPath, primaryFieldExtracts, typeIRI, typeName, context?.getID]);
+
+  const handleAddItem = useCallback((path: string, data: any) => {
+    let _data = data
+    if(context?.mapData) {
+      _data = context.mapData(data)
+    }
+    return addItem(path, _data);
+  }, [addItem, context?.mapData]);
 
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
 
@@ -282,13 +292,14 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
         errors={errors}
         path={path}
         schema={schema as JsonSchema7 | undefined}
-        addItem={addItem}
+        addItem={handleAddItem}
         onCreate={handleCreateNew}
         createDefault={innerCreateDefaultValue}
         readonly={readonly}
         isReifiedStatement={isReifiedStatement}
         formsPath={makeFormsPath(config?.formsPath, path)}
         additionalKnowledgeSources={additionalKnowledgeSources}
+        typeIRI={typeIRI}
       />
       {modalIsOpen && (
         <SemanticFormsModal
@@ -387,6 +398,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
                     elementLabelProp={elementLabelProp}
                     formsPath={formsPath}
                     primaryFields={primaryFields}
+                    mapData={context?.mapData}
                   />
                 );
               },

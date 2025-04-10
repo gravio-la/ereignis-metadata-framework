@@ -52,13 +52,14 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
     additionalKnowledgeSources,
     elementLabelTemplate,
     elementLabelProp = "label",
+    context
   } = useMemo(
     () => merge({}, config, props.uischema.options),
     [config, props.uischema.options],
   );
   const { readonly, core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
-  const typeIRI = schema.properties?.["@type"]?.const;
+  const typeIRI = context?.typeIRI ?? schema.properties?.["@type"]?.const;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
