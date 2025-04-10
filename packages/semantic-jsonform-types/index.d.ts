@@ -41,6 +41,12 @@ export type SemanticJsonFormProps = {
   wrapWithinCard?: boolean;
 };
 
+export type LoadResult = {
+    subjects: string[];
+    document: any;
+};
+
+
 export type SemanticJsonFormNoOpsProps = {
   typeIRI: string;
   data: any;
@@ -92,8 +98,24 @@ export type GlobalSemanticConfig = {
   queryBuildOptions: SparqlBuildOptions;
 };
 
+type SnackbarKey = string | number;
+
+type SnackbarOptions = {
+  variant: "error" | "success" | "warning" | "info";
+  autoHideDuration?: number;
+  anchorOrigin?: {
+    vertical: "top" | "bottom";
+    horizontal: "left" | "center" | "right";
+  };
+};
+
+export type SnackbarFacade = {
+  enqueueSnackbar: (message: string, options?: SnackbarOptions) => SnackbarKey;
+  closeSnackbar: (key?: SnackbarKey) => void;
+}
+
 export type GlobalAppConfig<DeclarativeMappingType> = GlobalSemanticConfig & {
-  normDataMapping: Record<string, NormDataMapping<DeclarativeMappingType>>;
+  normDataMapping?: Record<string, NormDataMapping<DeclarativeMappingType>>;
   authorityAccess?: Record<string, AuthorityConfiguration>;
   schema: JSONSchema7;
   makeStubSchema?: (schema: JSONSchema7) => JSONSchema7;
