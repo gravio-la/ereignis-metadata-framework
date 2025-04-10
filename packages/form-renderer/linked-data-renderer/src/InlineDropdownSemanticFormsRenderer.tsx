@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react";
 import {
   DiscoverAutocompleteInput,
   EntityDetailListItem,
@@ -10,8 +11,10 @@ import { extractFieldIfString } from "@graviola/edb-data-mapping";
 import {
   useAdbContext,
   useGlobalSearchWithHelper,
+  useModalRegistry,
   useRightDrawerState,
 } from "@graviola/edb-state-hooks";
+import { hidden } from "@graviola/edb-ui-utils";
 import {
   ControlProps,
   JsonSchema,
@@ -22,14 +25,13 @@ import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
 import {
   Box,
   FormControl,
-  Hidden,
   List,
   Theme,
   Typography,
 } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   const {
@@ -47,11 +49,14 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   } = props;
   const {
     typeIRIToTypeName,
+    createEntityIRI,
     queryBuildOptions: { primaryFields },
-    components: { SimilarityFinder },
+    components: { SimilarityFinder, EditEntityModal },
   } = useAdbContext();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const { $ref, typeIRI } = appliedUiSchemaOptions.context || {};
+  const enableFinder = appliedUiSchemaOptions.enableFinder || false;
+  const { registerModal } = useModalRegistry(NiceModal);
   const typeName = useMemo(
     () => typeIRI && typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
@@ -170,6 +175,41 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     handleMappedDataAccepted,
   );
 
+
+  const showEditDialog = useCallback(() => {
+
+    const fieldDefinitions = primaryFields[typeName] as
+      | PrimaryField
+      | undefined;
+    const defaultLabelKey = fieldDefinitions?.label || "title";
+    const newItem = {
+      "@id": createEntityIRI(typeIRI),
+      "@type": typeIRI,
+      [defaultLabelKey]: searchString,
+    };
+    const modalID = `edit-${newItem["@type"]}-${newItem["@id"]}`;
+    registerModal(modalID, EditEntityModal);
+    NiceModal.show(modalID, {
+      entityIRI: newItem["@id"],
+      typeIRI: newItem["@type"],
+      data: newItem,
+      disableLoad: true,
+    }).then(({ entityIRI, data }: { entityIRI: string; data: any }) => {
+      handleSelectedChange({
+        value: entityIRI,
+        label: data.label || entityIRI,
+      });
+    });
+  }, [
+    registerModal,
+    typeIRI,
+    handleSelectedChange,
+    createEntityIRI,
+    EditEntityModal,
+    primaryFields,
+    searchString,
+  ]);
+
   const handleMappedDataIntermediate = useCallback(
     (d: any) => {
       handleMappedData(d);
@@ -201,66 +241,68 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   }, [selected, labelKey]);
 
   return (
-    <Hidden xsUp={!visible}>
-      <Box sx={{ position: "relative" }}>
-        <Typography
-          variant={"h5"}
-          sx={{
-            transform: !hasValue ? "translateY(2.9em)" : "translateY(0)",
-            position: "absolute",
-            opacity: hasValue ? 1.0 : 0.0,
-            transition: "transform 0.2s ease-out, opacity 0.2s ease-out",
-            color: (theme: Theme) => theme.palette.grey[500],
-          }}
-        >
-          {label}
-        </Typography>
-      </Box>
-      <Box>
-        {!hasValue ? (
-          <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
-            <DiscoverAutocompleteInput
-              loadOnStart={true}
-              readonly={Boolean(ctx.readonly)}
-              typeIRI={typeIRI}
-              typeName={typeName || ""}
-              selected={selected}
-              title={label || ""}
-              onSelectionChange={handleSelectedChange}
-              onSearchValueChange={handleSearchStringChange}
-              searchString={searchString || ""}
-              inputProps={{
-                onFocus: handleFocus,
-                ...(showAsFocused && { focused: true }),
-              }}
-            />
-          </FormControl>
-        ) : (
-          <List sx={{ marginTop: "1em" }} dense>
-            <EntityDetailListItem
-              entityIRI={selected.value}
-              typeIRI={typeIRI}
-              onClear={!ctx.readOnly && handleClear}
-              data={detailsData}
-            />
-          </List>
-        )}
-        {!ctx.readonly && globalPath === formsPath && (
-          <SearchbarWithFloatingButton>
-            <SimilarityFinder
-              finderId={`${formsPath}_${path}`}
-              search={searchString}
-              data={data}
-              classIRI={typeIRI}
-              jsonSchema={schema as JSONSchema7}
-              onExistingEntityAccepted={handleExistingEntityAccepted}
-              searchOnDataPath={searchOnDataPath}
-              onMappedDataAccepted={handleMappedDataIntermediate}
-            />
-          </SearchbarWithFloatingButton>
-        )}
-      </Box>
-    </Hidden>
+    <Box sx={{
+      ...hidden(visible, "flex"),
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: theme => theme.spacing(1),
+    }}>
+      <Typography
+        variant={"h5"}
+        sx={{
+          ...hidden(hasValue),
+          color: (theme: Theme) => theme.palette.grey[500],
+          textAlign: "left",
+        }}
+      >
+        {label}
+      </Typography>
+      {!hasValue ? (
+        <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
+          <DiscoverAutocompleteInput
+            onCreateNew={showEditDialog}
+            onEnterSearch={showEditDialog}
+            loadOnStart={true}
+            readonly={Boolean(ctx.readonly)}
+            typeIRI={typeIRI}
+            typeName={typeName || ""}
+            selected={selected}
+            title={label || ""}
+            onSelectionChange={handleSelectedChange}
+            onSearchValueChange={handleSearchStringChange}
+            searchString={searchString || ""}
+            inputProps={{
+              onFocus: handleFocus,
+              ...(showAsFocused && { focused: true }),
+            }}
+          />
+        </FormControl>
+      ) : (
+        <List sx={{ marginTop: "1em" }} dense>
+          <EntityDetailListItem
+            entityIRI={selected.value}
+            typeIRI={typeIRI}
+            onClear={!ctx.readOnly && handleClear}
+            data={detailsData}
+          />
+        </List>
+      )}
+      {!ctx.readonly && globalPath === formsPath && enableFinder && (
+        <SearchbarWithFloatingButton>
+          <SimilarityFinder
+            finderId={`${formsPath}_${path}`}
+            search={searchString}
+            data={data}
+            classIRI={typeIRI}
+            jsonSchema={schema as JSONSchema7}
+            onExistingEntityAccepted={handleExistingEntityAccepted}
+            searchOnDataPath={searchOnDataPath}
+            onMappedDataAccepted={handleMappedDataIntermediate}
+          />
+        </SearchbarWithFloatingButton>
+      )}
+    </Box>
   );
 };
 
