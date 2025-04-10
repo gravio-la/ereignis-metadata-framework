@@ -177,6 +177,8 @@ export type NormDataMappings<MappingType> = Record<
 export type AutocompleteSuggestion = {
   label: string;
   value: string | null;
+  image?: string;
+  description?: string;
 };
 
 export type ColumnDesc<T> = {
