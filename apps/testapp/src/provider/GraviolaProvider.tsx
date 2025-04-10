@@ -1,53 +1,33 @@
 'use client';
 
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { AdbProvider, store } from '@graviola/edb-state-hooks'
-import { SparqlEndpoint } from '@graviola/edb-core-types';
+import { PrimaryFieldDeclaration, SparqlEndpoint } from '@graviola/edb-core-types';
 import NiceModal from '@ebay/nice-modal-react';
 import { RestStoreProvider } from '@graviola/rest-store-provider';
-import { makeStubSchema, uiSchemata } from './schemaHelper';
 import { Provider } from "react-redux"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { EditEntityModal, EntityDetailModal } from '@graviola/edb-advanced-components';
-import { createSemanticConfig, SemanticJsonFormNoOps, SimilarityFinder } from '@graviola/semantic-json-form';
-import { BASE_IRI, entities } from './config';
+import { createSemanticConfig, SemanticJsonFormNoOps, SimilarityFinder, createUISchemata, createStubSchema } from '@graviola/semantic-json-form';
 import { GlobalSemanticConfig, ModRouter } from '@graviola/semantic-jsonform-types';
 import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 import { JSONSchema7 } from 'json-schema';
+import { allRenderers } from './config';
 
 
 type GraviolaProviderProps = {
   apiBaseUrl: string,
+  baseIRI: string,
+  entityBaseIRI: string,
   children: React.ReactNode,
   schema: JSONSchema7,
-  renderers: JsonFormsRendererRegistryEntry[],
-  authBearerToken?: string
+  renderers?: JsonFormsRendererRegistryEntry[],
+  authBearerToken?: string,
+  typeNameLabelMap: Record<string, string>,
+  typeNameUiSchemaOptionsMap: Record<string, any>,
+  primaryFields: PrimaryFieldDeclaration
 }
 
-const semanticConfig = createSemanticConfig({
-  baseIRI: BASE_IRI
-})
-
-const realSemanticConfig: GlobalSemanticConfig = {
-  ...semanticConfig,
-  createEntityIRI: (_: string, id?: string) => {
-    return `${entities}${id ?? Math.random().toString(36).substring(2, 15)}`;
-  },
-  queryBuildOptions: {
-    ...semanticConfig.queryBuildOptions,
-    primaryFields: {
-      "Category": {
-        "label": "name",
-        "description": "description"
-      },
-      "Item": {
-        "label": "name",
-        "description": "description",
-        "image": "photos"
-      }
-    }
-  }
-}
 
 export const useRouterMock = () => {
   return {
@@ -64,7 +44,18 @@ export const useRouterMock = () => {
   } as ModRouter;
 };
 
-export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({ children, schema, renderers, apiBaseUrl, authBearerToken }: GraviolaProviderProps) => {
+export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({
+  children,
+  baseIRI,
+  entityBaseIRI,
+  schema,
+  primaryFields,
+  renderers,
+  apiBaseUrl,
+  authBearerToken,
+  typeNameLabelMap,
+  typeNameUiSchemaOptionsMap,
+}: GraviolaProviderProps) => {
 
   const endpoint: SparqlEndpoint = useMemo(() => {
     return {
@@ -75,13 +66,44 @@ export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({ children, sc
     }
   }, [apiBaseUrl, authBearerToken])
 
+  const definitionToTypeIRI = (definitionName: string) => `${baseIRI}${definitionName}`;
+
+  const { registry } = useMemo(() => createUISchemata(schema as JSONSchema7, {
+    typeNameLabelMap,
+    typeNameUiSchemaOptionsMap,
+    definitionToTypeIRI,
+  }), [schema, typeNameLabelMap, typeNameUiSchemaOptionsMap, definitionToTypeIRI]);
+
+
+  const config = useMemo<GlobalSemanticConfig>(() => {
+    const c = createSemanticConfig({ baseIRI })
+    return ({
+      ...c,
+      queryBuildOptions: {
+        ...c.queryBuildOptions,
+        primaryFields
+      }
+    });
+  }, [baseIRI, entityBaseIRI, primaryFields])
+
+
+  const makeStubSchema = useCallback((schema: JSONSchema7) => createStubSchema(schema, {
+    entityBaseIRI,
+    definitionToTypeIRI,
+  }), [definitionToTypeIRI, entityBaseIRI]);
+
+  const rendererRegistry = useMemo(() => [
+    ...allRenderers,
+    ...(renderers || [])
+  ], [renderers])
+
   // @ts-ignore
   return <Provider store={store}>
     <AdbProvider
-      {...realSemanticConfig}
+      {...config}
       env={{
         publicBasePath: '',
-        baseIRI: BASE_IRI,
+        baseIRI,
       }}
       components={{
         EditEntityModal: EditEntityModal,
@@ -92,8 +114,8 @@ export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({ children, sc
       useRouterHook={useRouterMock}
       schema={schema}
       makeStubSchema={makeStubSchema}
-      uiSchemaDefaultRegistry={uiSchemata.registry}
-      rendererRegistry={renderers}
+      uiSchemaDefaultRegistry={registry}
+      rendererRegistry={rendererRegistry}
     >
       <RestStoreProvider
         endpoint={endpoint}

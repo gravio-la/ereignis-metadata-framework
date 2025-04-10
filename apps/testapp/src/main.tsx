@@ -40,6 +40,29 @@ createRoot(document.getElementById('root')!).render(
           apiBaseUrl="http://localhost:3000/api/datastore" 
           schema={schema as any} 
           renderers={allRenderers}
+          baseIRI={"https://ausleihe.freie-theater-sachsen.de/"}
+          entityBaseIRI={"https://entities.freie-theater-sachsen.de/"}
+          primaryFields={{
+            "Category": {
+              "label": "name",
+              "description": "description"
+            },
+            "Item": {
+              "label": "name",
+              "description": "description",
+              "image": "photos"
+            }
+          }}
+          typeNameLabelMap={{
+            Category: "Kategorie",
+            Item: "Artikel",
+          }}
+          typeNameUiSchemaOptionsMap={{
+            Category: {
+              dropdown: true,
+            },
+          }}
+  
         >
           <App />
         </GraviolaProvider>
