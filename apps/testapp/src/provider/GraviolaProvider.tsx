@@ -4,19 +4,16 @@ import React, { useMemo } from 'react'
 import { AdbProvider, store } from '@graviola/edb-state-hooks'
 import { SparqlEndpoint } from '@graviola/edb-core-types';
 import NiceModal from '@ebay/nice-modal-react';
-import { SimilarityFinder } from './SimilarityFinder';
-import { GlobalSemanticConfig, ModRouter } from '@graviola/semantic-jsonform-types';
-import type { JSONSchema7 } from 'json-schema';
-import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 import { RestStoreProvider } from '@graviola/rest-store-provider';
 import { makeStubSchema, uiSchemata } from './schemaHelper';
 import { Provider } from "react-redux"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { EditEntityModal, EntityDetailModal } from '@graviola/edb-advanced-components';
-import { createSemanticConfig, SemanticJsonFormNoOps } from '@graviola/semantic-json-form';
+import { createSemanticConfig, SemanticJsonFormNoOps, SimilarityFinder } from '@graviola/semantic-json-form';
 import { BASE_IRI, entities } from './config';
-
-
+import { GlobalSemanticConfig, ModRouter } from '@graviola/semantic-jsonform-types';
+import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
+import { JSONSchema7 } from 'json-schema';
 
 
 type GraviolaProviderProps = {
