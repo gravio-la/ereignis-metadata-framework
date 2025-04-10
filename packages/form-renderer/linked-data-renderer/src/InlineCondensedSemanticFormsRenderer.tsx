@@ -28,6 +28,7 @@ import {
 } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
+import isEqual from "lodash-es/isEqual";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
@@ -50,7 +51,12 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     components: { SimilarityFinder },
   } = useAdbContext();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const { $ref, typeIRI } = appliedUiSchemaOptions.context || {};
+  const { $ref, typeIRI, mapData, getID } = appliedUiSchemaOptions.context || {};
+  const entityIRI = useMemo(() => {
+    if (!data) return null;
+    return getID ? getID(data) : (data["@id"] || data);
+  }, [data, getID]);
+
   const typeName = useMemo(
     () => typeIRI && typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
@@ -63,10 +69,10 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
   );
   const selected = useMemo(
     () =>
-      data
-        ? { value: data || null, label: realLabel }
+      entityIRI
+        ? { value: entityIRI || null, label: realLabel }
         : { value: null, label: null },
-    [data, realLabel],
+    [entityIRI, realLabel],
   );
   const subSchema = useMemo(() => {
     if (!$ref) return;
@@ -86,8 +92,8 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
   }, [$ref, schema, rootSchema]);
 
   useEffect(() => {
-    if (!data) setRealLabel("");
-  }, [data, setRealLabel]);
+    if (!entityIRI) setRealLabel("");
+  }, [entityIRI, setRealLabel]);
 
   const { closeDrawer } = useRightDrawerState();
   const handleSelectedChange = useCallback(
@@ -97,15 +103,16 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
         closeDrawer();
         return;
       }
-      if (v.value !== data) handleChange(path, v.value);
+      const _data = mapData ? mapData(v.value) : v.value
+      if (!isEqual(_data, data)) handleChange(path, _data);
       setRealLabel(v.label);
     },
-    [path, handleChange, data, setRealLabel, closeDrawer],
+    [path, handleChange, data, setRealLabel, closeDrawer, mapData],
   );
 
   useEffect(() => {
     setRealLabel((_old) => {
-      if ((_old && _old.length > 0) || !data) return _old;
+      if ((_old && _old.length > 0) || !entityIRI) return _old;
       const parentData = Resolve.data(
         ctx?.core?.data,
         path.substring(0, path.length - ("@id".length + 1)),
@@ -119,13 +126,13 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
       }
       return label;
     });
-  }, [data, ctx?.core?.data, path, setRealLabel]);
+  }, [entityIRI, ctx?.core?.data, path, setRealLabel]);
 
   const handleExistingEntityAccepted = useCallback(
-    (entityIRI: string, data: any) => {
+    (entityIRI: string, _data: any) => {
       handleSelectedChange({
         value: entityIRI,
-        label: data.label || entityIRI,
+        label: _data.label || entityIRI,
       });
       closeDrawer();
     },
@@ -153,7 +160,6 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     },
     [handleSelectedChange],
   );
-  const { open: sidebarOpen } = useRightDrawerState();
   const {
     path: globalPath,
     searchString,
