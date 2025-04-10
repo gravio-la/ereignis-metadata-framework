@@ -213,17 +213,17 @@ export const SemanticTable = ({
     [displayColumns],
   );
 
-  const router = useModifiedRouter();
-  const locale = (router.query.locale || "en") as string;
+  const { push, query } = useModifiedRouter();
+  const locale = (query.locale || "en") as string;
   const localization = useMemo(
     () => (locale === "de" ? MRT_Localization_DE : MRT_Localization_EN),
     [locale],
   );
   const editEntry = useCallback(
     (id: string) => {
-      router.push(`/create/${typeName}?encID=${encodeIRI(id)}`);
+      push(`/create/${typeName}?encID=${encodeIRI(id)}`);
     },
-    [router, typeName],
+    [push, typeName],
   );
   const showEntry = useCallback(
     (id: string) => {

@@ -29,56 +29,25 @@ export const NavItem = ({
   open = true,
 }: NavItemProps) => {
   const theme = useTheme();
-  const router = useModifiedRouter();
+  const { push } = useModifiedRouter();
   const { createEntityIRI } = useAdbContext();
-  const { pathname } = router;
 
   const create = useCallback(
     (typeName: string) => {
       const newEncodedURI = encodeIRI(createEntityIRI(typeName));
-      router.push(`/create/${typeName}?encID=${newEncodedURI}`);
+      push(`/create/${typeName}?encID=${newEncodedURI}`);
     },
-    [router, createEntityIRI],
+    [push, createEntityIRI],
   );
   const list = useCallback(
     (typeName: any) => {
-      router.push(`/list/${typeName}`);
+      push(`/list/${typeName}`);
     },
-    [router],
+    [push],
   );
 
   const Icon = item.icon as React.FC<{ stroke: number; size: string }>;
   const itemIcon = item?.icon ? <Icon stroke={1.5} size="1.3rem" /> : null;
-
-  let itemTarget = "_self";
-  if (item.target) {
-    itemTarget = "_blank";
-  }
-
-  /*
-  let listItemProps = {
-    component: forwardRef<>((props, ref) => <Link {...props} to={item.url} target={itemTarget} />)
-  }
-  if (item?.external) {
-    listItemProps = {  href: item.url, target: itemTarget }
-  }*/
-
-  const itemHandler = (id) => {
-    //dispatch({ type: MENU_OPEN, id })
-    //if (matchesSM) dispatch({ type: SET_MENU, opened: false })
-  };
-
-  // active menu item on page load
-  useEffect(() => {
-    const currentIndex = document.location.pathname
-      .toString()
-      .split("/")
-      .findIndex((id) => id === item.id);
-    if (currentIndex > -1) {
-      //dispatch({ type: MENU_OPEN, id: item.id })
-    }
-    // eslint-disable-next-line
-  }, [pathname]);
 
   return (
     <>
@@ -163,7 +132,7 @@ export const NavItem = ({
             justifyContent: open ? "initial" : "center",
           }}
           selected={false}
-          onClick={() => (onClick ? onClick() : itemHandler(item.id))}
+          onClick={() => onClick?.()}
         >
           {itemIcon && (
             <ListItemIcon sx={{ my: "auto", minWidth: !item?.icon ? 18 : 36 }}>

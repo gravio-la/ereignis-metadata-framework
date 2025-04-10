@@ -56,7 +56,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
     components: { EditEntityModal },
   } = useAdbContext();
 
-  const router: ModRouter = useModifiedRouter();
+  const { push } = useModifiedRouter();
 
   const { registerModal } = useModalRegistry(NiceModal);
   const editEntry = useCallback(() => {
@@ -71,7 +71,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
       });
     } else {
       const typeName = typeIRIToTypeName(typeIRI);
-      router.push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
+      push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
     }
     onEditClicked?.();
   }, [
@@ -83,7 +83,7 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
     data,
     onEditClicked,
     EditEntityModal,
-    router,
+    push,
   ]);
 
 

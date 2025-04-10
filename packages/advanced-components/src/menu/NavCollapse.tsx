@@ -24,7 +24,7 @@ type NavCollapseProps = {
 };
 export const NavCollapse = ({ menu, level }) => {
   const theme = useTheme();
-  const { push: navigate, pathname } = useModifiedRouter();
+  const { pathname } = useModifiedRouter();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
