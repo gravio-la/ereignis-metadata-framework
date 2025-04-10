@@ -12,7 +12,8 @@ import {
 import {
   useAdbContext,
   useCRUDWithQueryClient,
-  useQueryKeyResolver 
+  useDataStore,
+  useQueryKeyResolver
 } from "@graviola/edb-state-hooks";
 import { SemanticJsonFormToolbar } from "./SemanticJsonFormToolbar";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
@@ -61,6 +62,7 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
     queryOptions: { enabled: false },
     loadQueryKey: "rootLoad",
   });
+
 
   const { updateSourceToTargets, removeSource } = useQueryKeyResolver();
   const [isSaving, setIsSaving] = useState(false);
@@ -122,20 +124,25 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
 
   const handleSave = useCallback(async () => {
     setIsSaving(true);
-    
     saveMutation
       .mutateAsync(data)
-      .then(async () => {
+      .then(async (result) => {
         //TODO should we clear and refetch? or just refetch?
-        onChange({});
-        setTimeout(() => {
-          refetch().finally(() => {
-            setTimeout(() => {
-              enqueueSnackbar("Saved", { variant: "success" });
-              setIsSaving(false);
-            }, 10);
-          });
-        }, 10);
+        if (entityIRI) {
+          onChange({});
+          setTimeout(() => {
+            refetch().finally(() => {
+              setTimeout(() => {
+                enqueueSnackbar("Saved", { variant: "success" });
+                setIsSaving(false);
+              }, 10);
+            });
+          }, 10);
+        } else {
+          onChange(result);
+          enqueueSnackbar("Created", { variant: "success" });
+          setIsSaving(false);
+        }
       })
       .catch((e) => {
         setIsSaving(false);
@@ -143,7 +150,7 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
           variant: "error",
         });
       });
-  }, [setIsSaving, enqueueSnackbar, saveMutation, refetch, data, onChange]);
+  }, [setIsSaving, enqueueSnackbar, saveMutation, refetch, data, onChange, entityIRI]);
 
   const handleRemove = useCallback(async () => {
     NiceModal.show(GenericModal, {
@@ -224,9 +231,9 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
               onEditModeToggle={handleToggleEditMode}
               onReset={handleReset}
               onSave={handleSave}
-              onRemove={handleRemove}
-              onReload={handleReload}
-              onShow={handleShowEntry}
+              onRemove={entityIRI ? handleRemove : undefined}
+              onReload={entityIRI ? handleReload : undefined}
+              onShow={entityIRI ? handleShowEntry : undefined}
             >
               {toolbarChildren}
             </SemanticJsonFormToolbar>
