@@ -28,7 +28,14 @@ export const initRestfullStore: InitDatastoreFunction<
   const loadDocument = async (typeName: string, entityIRI: string) => {
     return await fetch(
       `${apiURL}/loadDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
-    ).then((res) => res.json());
+    ).then((res) =>  {
+      try {
+        return res.json();
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
+    });
   };
   const findDocuments = async (
     typeName: string,
