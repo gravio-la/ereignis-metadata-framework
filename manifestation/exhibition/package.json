@@ -18,7 +18,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "schema:export": "bun ./schemas/exportSchema.ts > ./schemas/jsonschema/Exhibition.schema.json",
-    "build:prisma": "bun ./src/createPrismaSchemal.ts > ../../prisma/exhibition.prisma",
+    "build:prisma": "bun ./src/createPrismaSchema.ts > ../../prisma/exhibition.prisma",
     "build:doc": "mkdir -p docs/reference && jsonschema2md -o docs/reference -d schemas/jsonschema",
     "build:typebox": "mkdir -p typebox && schema2typebox --input schemas/jsonschema/Exhibition.schema.json --output typebox/generated-typebox.ts"
   },
