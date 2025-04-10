@@ -9,9 +9,9 @@ import {
   useAdbContext,
   useFormEditor,
   useModifiedRouter,
-  useSettings,
 } from "@graviola/edb-state-hooks";
 import NiceModal from "@ebay/nice-modal-react";
+import { useSettings } from "../../components/state";
 
 export const CreatePage = () => {
   const [searchParam] = useSearchParams();

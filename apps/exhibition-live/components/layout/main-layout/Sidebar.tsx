@@ -5,7 +5,6 @@ import React, { useCallback, useMemo } from "react";
 import SettingsModal from "../../content/settings/SettingsModal";
 import {
   useAdbContext,
-  useLocalSettings,
   useModifiedRouter,
 } from "@graviola/edb-state-hooks";
 import { Drawer } from "./menu";
@@ -13,6 +12,7 @@ import { useTranslation } from "next-i18next";
 import { useGlobalAuth } from "../../state/useGlobalAuth";
 import { createMenuListFromSchema } from "./createMenuListFromSchema";
 import { MenuGroup, NavGroup, NavItem } from "@graviola/edb-advanced-components";
+import { useLocalSettings } from "../../state";
 
 type SidebarProps = {
   open?: boolean;

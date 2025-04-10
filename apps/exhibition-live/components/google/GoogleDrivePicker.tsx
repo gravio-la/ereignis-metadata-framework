@@ -21,13 +21,13 @@ import {
 import { useQuery } from "@graviola/edb-state-hooks";
 import { useGoogleToken } from "./useGoogleToken";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { useSettings } from "@graviola/edb-state-hooks";
 import { useGoogleOAuth } from "@react-oauth/google";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { GenericMaterialListItem } from "@graviola/edb-virtualized-components";
 import { useGoogleSpreadSheet } from "./useGoogleSpreadSheet";
 import { mappingsAvailable } from "./mappingsAvailable";
 import { useTranslation } from "next-i18next";
+import { useSettings } from "../state";
 
 const googleApiURL = "https://content.googleapis.com/drive/v3/files";
 const mimeIconsBase =

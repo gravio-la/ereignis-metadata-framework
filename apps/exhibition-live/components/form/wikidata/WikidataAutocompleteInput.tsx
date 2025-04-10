@@ -7,16 +7,13 @@ import React, {
   useState,
 } from "react";
 
-import {
-  findWithinWikidataUsingREST,
-  wikidataPrefixes,
-} from "@graviola/edb-ui-utils";
 import WikidataHumanCard from "./WikidataHumanCard";
 import WikidataThingCard from "./WikidataThingCard";
 import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
 import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
 import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
 import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { findWithinWikidataUsingREST, wikidataPrefixes } from "@graviola/edb-wikidata-utils";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;

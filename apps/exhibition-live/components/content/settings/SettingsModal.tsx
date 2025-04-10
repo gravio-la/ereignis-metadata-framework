@@ -17,12 +17,12 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { FunctionComponent, useCallback, useState } from "react";
 
-import { useLocalSettings } from "@graviola/edb-state-hooks";
 import AuthorityConfigForm from "./AuthorityConfigForm";
 import EndpointChooser from "./EndpointChooser";
 import FeatureForm from "./FeatureForm";
 import OpenAISettingsForm from "./OpenAISettingsForm";
 import GoogleDriveSettingsForm from "./GoogleDriveSettingsForm";
+import { useLocalSettings } from "../../state";
 
 interface OwnProps {}
 

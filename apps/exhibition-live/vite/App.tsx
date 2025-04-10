@@ -1,20 +1,18 @@
-import { AdbProvider, store } from "@graviola/edb-state-hooks";
+import { AdbProvider, EdbGlobalContextProps, store } from "@graviola/edb-state-hooks";
 import { Provider } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
 import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
-import { EditEntityModal } from "../components/form/edit/EditEntityModal";
-import { SnackbarProvider } from "notistack";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import { useRouterHook } from "./useRouterHook";
 import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { kulinarikAppConfig } from "../components/config/kulinarikAppConfig";
 import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
-import { EntityDetailModal } from "@graviola/edb-advanced-components";
+import { EditEntityModal, EntityDetailModal } from "@graviola/edb-advanced-components";
 import { SimilarityFinder } from "../components/form/similarity-finder";
-import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import NiceModal from "@ebay/nice-modal-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -25,6 +23,7 @@ import "@triply/yasgui/build/yasgui.min.css";
 import { availableAuthorityMappings } from "@slub/exhibition-schema";
 import { Box, CircularProgress } from "@mui/material";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { SemanticJsonFormNoOps } from "@graviola/semantic-json-form";
 
 export const queryClient = new QueryClient();
 
@@ -72,6 +71,7 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
                   SemanticJsonForm: SemanticJsonFormNoOps,
                   SimilarityFinder: SimilarityFinder,
                 }}
+                useSnackbar={useSnackbar}
                 useRouterHook={useRouterHook}
                 normDataMapping={availableAuthorityMappings}
               >

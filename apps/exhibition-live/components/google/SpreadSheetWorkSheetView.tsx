@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useAdbContext,
   useCRUDWithQueryClient,
+  useDataStore,
   useExtendedSchema,
   useGlobalCRUDOptions,
   useModifiedRouter,
@@ -19,6 +20,7 @@ import {
 import { OwnColumnDesc } from "./types";
 import {
   DeclarativeFlatMappings,
+  DeclarativeMapping,
   DeclarativeMatchBasedFlatMappings,
   mapByConfigFlat,
 } from "@graviola/edb-data-mapping";
@@ -40,6 +42,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ColumnChip } from "./ColumnChip";
 import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
 import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
+import { NormDataMappings } from "@graviola/edb-core-types";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,
@@ -61,7 +64,7 @@ export const SpreadSheetWorkSheetView = <
     typeIRIToTypeName,
     createEntityIRI,
     jsonLDConfig: { defaultPrefix },
-    normDataMapping,
+    normDataMapping = {},
     authorityAccess,
   } = useAdbContext();
   const workSheet = useCashedWorkSheet<CellType, RemoteWorksheet>({
@@ -269,7 +272,7 @@ export const SpreadSheetWorkSheetView = <
             createEntityIRI,
             typeIRIToTypeName,
             primaryFields,
-            normDataMapping,
+            normDataMapping as NormDataMappings<DeclarativeMapping>,
             authorityAccess,
           ),
         );
@@ -361,15 +364,12 @@ export const SpreadSheetWorkSheetView = <
             targetData,
             spreadSheetMapping.mapping,
             makeDefaultMappingStrategyContext(
-              crudOptions?.selectFetch,
-              {
-                defaultPrefix,
-                prefixes,
-              },
+              dataStore,
               createEntityIRI,
               typeNameToTypeIRI,
               primaryFields,
-              normDataMapping,
+              normDataMapping as NormDataMappings<DeclarativeMapping>,
+              authorityAccess,
             ),
           );
           allMappedData.push(mappedData);
@@ -393,6 +393,7 @@ export const SpreadSheetWorkSheetView = <
     prefixes,
     primaryFields,
     normDataMapping,
+    authorityAccess,
   ]);
 
   return loaded ? (

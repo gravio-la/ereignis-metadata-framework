@@ -9,7 +9,7 @@ import { Box } from "@mui/system";
 import { JSONSchema7 } from "json-schema";
 import React, { FunctionComponent, useCallback, useMemo } from "react";
 
-import { useSettings } from "@graviola/edb-state-hooks";
+import { useSettings } from "../../state";
 
 interface OwnProps {}
 

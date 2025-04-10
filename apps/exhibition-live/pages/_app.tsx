@@ -13,7 +13,7 @@ import "react-json-view-lite/dist/index.css";
 import type { AppProps } from "next/app";
 
 import NiceModal from "@ebay/nice-modal-react";
-import { SnackbarProvider } from "notistack";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import { appWithTranslation, UserConfig, useTranslation } from "next-i18next";
 import nextI18NextConfig from "../next-i18next.config";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -29,21 +29,21 @@ import getConfig from "next/config";
 import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
 import {
   AdbProvider,
+  EdbGlobalContextProps,
   QueryClient,
   QueryClientProvider,
   store,
 } from "@graviola/edb-state-hooks";
-import { EditEntityModal } from "../components/form/edit/EditEntityModal";
 import { useRouter } from "next/router";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
 import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
-import { EntityDetailModal } from "@graviola/edb-advanced-components";
-import { SemanticJsonFormNoOps } from "@graviola/edb-linked-data-renderer";
+import { EditEntityModal, EntityDetailModal } from "@graviola/edb-advanced-components";
 import { SimilarityFinder } from "../components/form/similarity-finder";
 import { useSearchParams } from "next/navigation";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeComponent } from "@graviola/edb-default-theme";
 import { ModRouter } from "@graviola/semantic-jsonform-types";
+import { SemanticJsonFormNoOps } from "@graviola/semantic-json-form";
 
 export const queryClient = new QueryClient();
 const QueryClientProviderWrapper = ({
@@ -88,6 +88,7 @@ function App({ Component, pageProps }: AppProps) {
                   SemanticJsonForm: SemanticJsonFormNoOps,
                   SimilarityFinder: SimilarityFinder,
                 }}
+                useSnackbar={useSnackbar}
                 useRouterHook={useNextRouterHook}
               >
                 <GoogleOAuthProvider
