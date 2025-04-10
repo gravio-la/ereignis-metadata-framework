@@ -1,5 +1,5 @@
-import { SemanticJsonFormProps } from "@graviola/edb-global-types";
 import { useAdbContext } from "@graviola/edb-state-hooks";
+import { SemanticJsonFormProps } from "@graviola/semantic-jsonform-types";
 import { JsonSchema } from "@jsonforms/core";
 import { useControlled } from "@mui/material";
 import { ErrorObject } from "ajv";
