@@ -126,6 +126,7 @@ export const EditEntityModal = NiceModal.create(
     );
 
     const handleClose = useCallback(() => {
+      modal.reject();
       modal.remove();
     }, [modal]);
 

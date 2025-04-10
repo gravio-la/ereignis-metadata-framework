@@ -45,6 +45,12 @@ export const EntityDetailModal = NiceModal.create(
       typeIRIToTypeName,
     } = useAdbContext();
     const modal = useModal();
+
+    const handleClose = useCallback(() => {
+      modal.reject();
+      modal.remove();
+    }, [modal]);
+
     const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
     const typeName = useMemo(
       () => typeIRIToTypeName(classIRI),
@@ -81,7 +87,10 @@ export const EntityDetailModal = NiceModal.create(
     const removeSlowly = useCallback(() => {
       if (aboutToRemove) return;
       setAboutToRemove(true);
-      setTimeout(() => modal.remove(), 500);
+      setTimeout(() => {
+        handleClose();
+        setAboutToRemove(false);
+      }, 500);
     }, [modal, setAboutToRemove, aboutToRemove]);
 
     const fieldDeclaration = useMemo(
@@ -96,7 +105,7 @@ export const EntityDetailModal = NiceModal.create(
     return (
       <Dialog
         open={modal.visible}
-        onClose={() => modal.remove()}
+        onClose={handleClose}
         scroll={"paper"}
         disableScrollLock={false}
         maxWidth={false}
@@ -115,7 +124,7 @@ export const EntityDetailModal = NiceModal.create(
               <IconButton
                 size="large"
                 aria-label={t("close")}
-                onClick={() => modal.remove()}
+                onClick={handleClose}
                 color="inherit"
               >
                 <CloseIcon />
@@ -136,7 +145,7 @@ export const EntityDetailModal = NiceModal.create(
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => modal.remove()}>{t("cancel")}</Button>
+          <Button onClick={handleClose}>{t("cancel")}</Button>
         </DialogActions>
       </Dialog>
     );

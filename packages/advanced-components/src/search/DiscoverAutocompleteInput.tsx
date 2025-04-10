@@ -1,8 +1,8 @@
 import { AutocompleteSuggestion, PrimaryField } from "@graviola/edb-core-types";
-import { useAdbContext, useDataStore, useModalRegistry } from "@graviola/edb-state-hooks";
+import { useAdbContext, useDataStore } from "@graviola/edb-state-hooks";
 import { useQuery } from "@graviola/edb-state-hooks";
 import { Avatar, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextFieldProps, useControlled } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import { Add as AddIcon } from '@mui/icons-material';
 import React, { FunctionComponent, useCallback } from "react";
 import parse from "html-react-parser";
 import { DebouncedAutocomplete } from "../form";
@@ -74,17 +74,21 @@ export const DiscoverAutocompleteInput: FunctionComponent<
     });
     const handleChange = useCallback(
       (e: React.SyntheticEvent, item: AutocompleteSuggestion | null) => {
-        e.stopPropagation();
-        e.preventDefault();
+        //e.stopPropagation();
+        //e.preventDefault();
         onSelectionChange?.(item);
         setSelectedUncontrolled(item);
         onSearchValueChange?.(null);
         setSearchString(null);
+        if(item?.value === null) {
+          onEnterSearch?.();
+        }
       },
       [
         onSelectionChange,
         setSelectedUncontrolled,
         onSearchValueChange,
+        onEnterSearch,
         setSearchString,
       ],
     );
@@ -131,16 +135,6 @@ export const DiscoverAutocompleteInput: FunctionComponent<
       ),
     });
 
-    const handleEnter = useCallback(
-      (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === "Enter" && onEnterSearch) {
-          e.preventDefault();
-          e.stopPropagation();
-          onEnterSearch();
-        }
-      },
-      [onEnterSearch],
-    );
 
     const handleSearchValueChange = useCallback(
       (value: string | undefined) => {
@@ -205,7 +199,6 @@ export const DiscoverAutocompleteInput: FunctionComponent<
         onChange={handleChange}
         onDebouncedSearchChange={onDebouncedSearchChange}
         condensed={condensed}
-        onKeyDown={handleEnter}
         onSearchValueChange={handleSearchValueChange}
         inputProps={inputProps}
         autocompleteDisabled={autocompleteDisabled}
