@@ -31,7 +31,7 @@
     "@mui/material": "^5",
     "@mui/icons-material": "^5",
     "@ebay/nice-modal-react": "^1.2",
-    "html-react-parser": "^5.2.2",
+    "html-react-parser": "^5.2.3",
     "react": "^18"
   },
   "dependencies": {
@@ -40,7 +40,7 @@
     "@graviola/edb-basic-components": "workspace:*",
     "@graviola/edb-data-mapping": "workspace:*",
     "@graviola/edb-core-utils": "workspace:*",
-    "react-json-view-lite": "^2.3.0",
+    "@graviola/jsonld-utils": "workspace:*",
     "next-i18next": "^15",
     "lodash-es": "^4.17.21"
   },
@@ -55,6 +55,7 @@
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@storybook/react": "^8.1.5",
     "eslint-config-edb": "workspace:*",
+    "json-schema": "^0.4.0",
     "tsup": "^8.0.0",
     "typescript": "^5.8.2"
   },

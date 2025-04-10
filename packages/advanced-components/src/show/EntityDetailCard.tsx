@@ -5,7 +5,6 @@ import {
   useAdbContext,
   useModalRegistry,
   useModifiedRouter,
-  useSettings,
 } from "@graviola/edb-state-hooks";
 import { ModRouter } from "@graviola/semantic-jsonform-types";
 import { Edit } from "@mui/icons-material";
@@ -22,7 +21,6 @@ import {
 import isString from "lodash-es/isString";
 import { useTranslation } from "next-i18next";
 import React, { FunctionComponent, useCallback } from "react";
-import { JsonView } from "react-json-view-lite";
 
 import { AllPropTableProps, AllPropTable } from "./AllPropsTable";
 
@@ -88,9 +86,6 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
     router,
   ]);
 
-  const {
-    features: { enableDebug },
-  } = useSettings();
 
   return (
     <>
@@ -148,12 +143,6 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
         inlineEditing={true}
         {...tableProps}
       />
-      {enableDebug && (
-        <>
-          <JsonView data={cardInfo} shouldExpandNode={(lvl) => lvl < 3} />
-          <JsonView data={data} shouldExpandNode={(lvl) => lvl < 3} />
-        </>
-      )}
     </>
   );
 };

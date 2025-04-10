@@ -1,4 +1,5 @@
 export * from "./show";
+export * from "./edit";
 export * from "./form";
 export * from "./search";
 export * from "./menu";
