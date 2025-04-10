@@ -109,6 +109,7 @@ export const DebouncedAutocomplete: FunctionComponent<
   return (
     <Autocomplete
       noOptionsText={t("no suggestions")}
+      filterOptions={x => x}
       readOnly={readOnly}
       open={autocompleteDisabled ? false : undefined}
       openOnFocus={!autocompleteDisabled}

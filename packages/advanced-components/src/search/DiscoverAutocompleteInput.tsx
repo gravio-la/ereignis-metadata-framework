@@ -1,12 +1,13 @@
 import { AutocompleteSuggestion, PrimaryField } from "@graviola/edb-core-types";
-import { useAdbContext, useDataStore, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { useAdbContext, useDataStore, useModalRegistry } from "@graviola/edb-state-hooks";
 import { useQuery } from "@graviola/edb-state-hooks";
-import { TextFieldProps, useControlled } from "@mui/material";
-import parse from "html-react-parser";
+import { Avatar, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextFieldProps, useControlled } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import React, { FunctionComponent, useCallback } from "react";
-
+import parse from "html-react-parser";
 import { DebouncedAutocomplete } from "../form";
 import { applyToEachField, extractFieldIfString } from "@graviola/edb-data-mapping";
+import { useTranslation } from "next-i18next";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;
@@ -20,12 +21,14 @@ interface OwnProps {
   limit?: number;
   onDebouncedSearchChange?: (value: string | undefined) => void;
   condensed?: boolean;
-  onEnterSearch?: (value: string | undefined) => void;
+  onEnterSearch?: () => void;
   inputProps?: TextFieldProps;
   onSearchValueChange?: (value: string | undefined) => void;
+  onCreateNew?: (value: string | undefined) => void;
   searchString?: string;
   autocompleteDisabled?: boolean;
   disabled?: boolean;
+  allowHtmlLabel?: boolean;
 }
 
 export type DiscoverAutocompleteInputProps = OwnProps;
@@ -40,6 +43,7 @@ export const DiscoverAutocompleteInput: FunctionComponent<
   selected,
   onEnterSearch,
   onSelectionChange,
+  onCreateNew,
   typeIRI,
   loadOnStart,
   limit,
@@ -50,11 +54,11 @@ export const DiscoverAutocompleteInput: FunctionComponent<
   searchString: searchStringProp,
   autocompleteDisabled,
   disabled,
+  allowHtmlLabel = false,
 }) => {
     const {
       queryBuildOptions: { primaryFields, typeIRItoTypeName },
     } = useAdbContext();
-    const { crudOptions } = useGlobalCRUDOptions();
     const { dataStore } = useDataStore();
     const [selectedValue, setSelectedUncontrolled] =
       useControlled<AutocompleteSuggestion | null>({
@@ -88,15 +92,25 @@ export const DiscoverAutocompleteInput: FunctionComponent<
     const load = useCallback(
       async (searchString?: string) =>
         typeIRI
-          ? (await dataStore.findDocumentsByLabel(searchString || null, typeIRI, limit))
-            .map(({ label = "", entityIRI }) => {
-              return {
+          ? (await dataStore.findDocuments(typeName, {
+            search: searchString || null,
+          }, limit))
+            .map((doc) => {
+              const { label, image, description } = applyToEachField(
+                doc,
+                primaryFields[typeName] as PrimaryField,
+                extractFieldIfString,
+              );
+              const suggestion = {
                 label,
-                value: entityIRI,
-              };
+                description,
+                image,
+                value: doc['@id'],
+              } as AutocompleteSuggestion;
+              return suggestion
             })
           : [],
-      [typeIRI, limit, dataStore],
+      [typeIRI, limit, dataStore, primaryFields],
     );
 
     const { data: basicFields } = useQuery({
@@ -112,7 +126,6 @@ export const DiscoverAutocompleteInput: FunctionComponent<
         return null;
       },
       enabled: Boolean(
-        crudOptions?.selectFetch &&
         typeof selected?.value === "string" &&
         (!selected?.label || selected?.label?.length === 0),
       ),
@@ -120,11 +133,13 @@ export const DiscoverAutocompleteInput: FunctionComponent<
 
     const handleEnter = useCallback(
       (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === "Enter" && searchString?.length > 0) {
-          onEnterSearch?.(searchString);
+        if (e.key === "Enter" && onEnterSearch) {
+          e.preventDefault();
+          e.stopPropagation();
+          onEnterSearch();
         }
       },
-      [onEnterSearch, searchString],
+      [onEnterSearch],
     );
 
     const handleSearchValueChange = useCallback(
@@ -141,6 +156,8 @@ export const DiscoverAutocompleteInput: FunctionComponent<
       },
       [basicFields],
     );
+    const { t } = useTranslation();
+
 
     return (
       <DebouncedAutocomplete
@@ -148,25 +165,47 @@ export const DiscoverAutocompleteInput: FunctionComponent<
         title={title}
         readOnly={readonly}
         loadOnStart={true}
-        ready={Boolean(typeIRI && crudOptions)}
+        ready={Boolean(typeIRI)}
         // @ts-ignore
         load={load}
         initialQueryKey={typeIRI}
         value={selectedValue || { label: searchString, value: null }}
         getOptionLabel={handleGetOptionLabel}
-        placeholder={`Suche nach ${typeName} in der aktuellen Datenbank`}
-        renderOption={(props, option: any) => (
-          <li {...props} key={option.value}>
-            {parse(
-              `<span class="debounced_autocomplete_option_label">${option.label}</span>`,
-            )}
-          </li>
+        placeholder={t("search for", { typeName })}
+        renderOption={(props, option: AutocompleteSuggestion) => (
+          !option.value && onCreateNew ? (
+            <ListItem disablePadding {...props} key="create-new">
+              <ListItemButton onClick={() => onCreateNew(searchString)}>
+                <AddIcon />
+                <ListItemText
+                  primary={t("Create new entity", { typeName })}
+                />
+              </ListItemButton>
+            </ListItem>
+          ) : (
+            <ListItem disablePadding {...props} key={option.value}>
+              {option.image && (
+                <ListItemAvatar>
+                  <Avatar src={option.image} alt={option.label} />
+                </ListItemAvatar>
+              )}
+              <ListItemText
+                sx={{
+                  '& .MuiListItemText-primary .searchmatch': {
+                    fontWeight: 'bold',
+                  },
+                }}
+                primary={allowHtmlLabel ? parse(option.label) : option.label}
+                secondary={option.description}
+              />
+            </ListItem>
+          )
         )}
         // @ts-ignore
         onChange={handleChange}
         onDebouncedSearchChange={onDebouncedSearchChange}
         condensed={condensed}
-        onKeyUp={handleEnter}
+        onKeyDown={handleEnter}
         onSearchValueChange={handleSearchValueChange}
         inputProps={inputProps}
         autocompleteDisabled={autocompleteDisabled}
