@@ -1,20 +1,21 @@
 'use client';
 
 import React, { useMemo } from 'react'
-import { AdbProvider, createSemanticConfig } from '@graviola/edb-state-hooks'
+import { AdbProvider, store } from '@graviola/edb-state-hooks'
 import { SparqlEndpoint } from '@graviola/edb-core-types';
 import NiceModal from '@ebay/nice-modal-react';
 import { SimilarityFinder } from './SimilarityFinder';
 import { GlobalSemanticConfig, ModRouter } from '@graviola/semantic-jsonform-types';
 import type { JSONSchema7 } from 'json-schema';
-import { EditEntityModal } from './EditEntityModal';
-import { SemanticJsonFormNoOps } from '@graviola/edb-linked-data-renderer';
 import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 import { RestStoreProvider } from '@graviola/rest-store-provider';
-import { makeDefaultUiSchemaForAllDefinitions, makeStubSchema } from './makeDefaultUiSchemaForAllDefinitions';
+import { makeStubSchema, uiSchemata } from './schemaHelper';
+import { Provider } from "react-redux"
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { EditEntityModal, EntityDetailModal } from '@graviola/edb-advanced-components';
+import { createSemanticConfig, SemanticJsonFormNoOps } from '@graviola/semantic-json-form';
+import { BASE_IRI, entities } from './config';
 
-export const BASE_IRI = 'https://test.example.org/';
-export const entities = 'https://entities.example.org/';
 
 
 
@@ -32,18 +33,6 @@ const semanticConfig = createSemanticConfig({
 
 const realSemanticConfig: GlobalSemanticConfig = {
   ...semanticConfig,
-  typeIRIToTypeName: (iri: string | undefined) => {
-    if (!iri) {
-      return '';
-    }
-    return semanticConfig.typeIRIToTypeName(iri);
-  },
-  typeNameToTypeIRI: (name: string | undefined) => {
-    if (!name) {
-      return '';
-    }
-    return semanticConfig.typeNameToTypeIRI(name);
-  },
   createEntityIRI: (_: string, id?: string) => {
     return `${entities}${id ?? Math.random().toString(36).substring(2, 15)}`;
   },
@@ -52,6 +41,7 @@ const realSemanticConfig: GlobalSemanticConfig = {
     primaryFields: {
       "Category": {
         "label": "name",
+        "description": "description"
       },
       "Item": {
         "label": "name",
@@ -87,39 +77,42 @@ export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({ children, sc
       active: true
     }
   }, [apiBaseUrl, authBearerToken])
-  
+
   // @ts-ignore
-  return <AdbProvider
+  return <Provider store={store}>
+    <AdbProvider
       {...realSemanticConfig}
       env={{
         publicBasePath: '',
         baseIRI: BASE_IRI,
       }}
-      lockedSPARQLEndpoint={endpoint}
-      normDataMapping={{}}
       components={{
-        EditEntityModal: EditEntityModal(renderers),
-        EntityDetailModal: () => null,
+        EditEntityModal: EditEntityModal,
+        EntityDetailModal: EntityDetailModal,
         SemanticJsonForm: SemanticJsonFormNoOps,
         SimilarityFinder: SimilarityFinder,
       }}
       useRouterHook={useRouterMock}
       schema={schema}
       makeStubSchema={makeStubSchema}
-      uiSchemaDefaultRegistry={makeDefaultUiSchemaForAllDefinitions(schema)}
+      uiSchemaDefaultRegistry={uiSchemata.registry}
+      rendererRegistry={renderers}
     >
-        <RestStoreProvider
-          endpoint={endpoint}
-          defaultLimit={20}
-          requestOptions={authBearerToken ? {
-            headers: {
-              Authorization: `Bearer ${authBearerToken}`
-            }
-          } : undefined}
-        >
-          <NiceModal.Provider>
-            {children}
-          </NiceModal.Provider>
-        </RestStoreProvider>
+      <RestStoreProvider
+        endpoint={endpoint}
+        defaultLimit={20}
+        requestOptions={authBearerToken ? {
+          headers: {
+            Authorization: `Bearer ${authBearerToken}`
+          }
+        } : undefined}
+      >
+        <NiceModal.Provider>
+          {children}
+        </NiceModal.Provider>
+      </RestStoreProvider>
+      <ReactQueryDevtools initialIsOpen={true} />
     </AdbProvider>
+
+  </Provider>
 }
