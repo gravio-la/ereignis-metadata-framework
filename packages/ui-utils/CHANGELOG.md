@@ -1,5 +1,13 @@
 # @graviola/edb-ui-utils
 
+## 0.2.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+- Updated dependencies
+  - @graviola/edb-core-utils@1.2.2
+
 ## 0.2.1
 
 ### Patch Changes

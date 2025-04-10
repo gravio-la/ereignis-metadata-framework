@@ -1,5 +1,14 @@
 # @graviola/edb-basic-renderer
 
+## 1.1.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+- Updated dependencies
+  - @graviola/edb-state-hooks@1.2.2
+  - @graviola/edb-core-utils@1.2.2
+
 ## 1.1.1
 
 ### Patch Changes

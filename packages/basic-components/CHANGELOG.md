@@ -1,5 +1,13 @@
 # @graviola/edb-basic-components
 
+## 1.1.5
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+- Updated dependencies
+  - @graviola/edb-state-hooks@1.2.2
+
 ## 1.1.1
 
 ### Patch Changes

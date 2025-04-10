@@ -1,5 +1,11 @@
 # @slub/remote-query-implementations
 
+## 1.2.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 1.2.1
 
 ### Patch Changes

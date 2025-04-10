@@ -28,7 +28,9 @@
     "jsonld-context-parser": "^2.4.0"
   },
   "typedocOptions": {
-    "entryPoints": ["index.d.ts"],
+    "entryPoints": [
+      "index.d.ts"
+    ],
     "skipErrorChecking": true
   },
   "clean-package": {

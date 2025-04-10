@@ -1,5 +1,23 @@
 # @slub/edb-cli
 
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-cli-creator@1.2.2
+  - @graviola/edb-graph-traversal@1.2.2
+  - @graviola/prisma-db-impl@1.3.4
+  - @graviola/sparql-db-impl@1.2.4
+  - @graviola/sparql-schema@1.2.3
+  - @graviola/edb-data-mapping@0.2.2
+  - @graviola/remote-query-implementations@1.2.2
+  - @graviola/edb-authorities@0.2.2
+  - @graviola/edb-file-import@1.0.2
+  - @graviola/edb-core-utils@1.2.2
+  - @slub/exhibition-schema@1.3.1
+  - @slub/exhibition-sparql-config@1.2.2
+
 ## 1.1.2
 
 ### Patch Changes

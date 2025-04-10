@@ -1,5 +1,18 @@
 # @graviola/edb-solr-cli
 
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-graph-traversal@1.2.2
+  - @graviola/sparql-db-impl@1.2.4
+  - @graviola/sparql-schema@1.2.3
+  - @graviola/remote-query-implementations@1.2.2
+  - @graviola/edb-core-utils@1.2.2
+  - @slub/exhibition-schema@1.3.1
+  - @slub/exhibition-sparql-config@1.2.2
+
 ## 1.1.2
 
 ### Patch Changes

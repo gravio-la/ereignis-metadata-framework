@@ -1,5 +1,11 @@
 # @graviola/edb-resizable-drawer
 
+## 0.2.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 0.2.1
 
 ### Patch Changes

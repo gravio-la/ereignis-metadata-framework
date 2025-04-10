@@ -1,5 +1,19 @@
 # @slub/edb-prisma-cli
 
+## 1.2.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+- Updated dependencies
+  - @graviola/json-schema-prisma-utils@1.2.2
+  - @graviola/json-schema-utils@1.2.2
+  - @graviola/edb-graph-traversal@1.2.2
+  - @graviola/sparql-schema@1.2.3
+  - @graviola/remote-query-implementations@1.2.2
+  - @graviola/edb-core-utils@1.2.2
+  - @slub/exhibition-schema@1.3.1
+
 ## 1.2.1
 
 ### Patch Changes

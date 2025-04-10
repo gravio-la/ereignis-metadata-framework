@@ -1,5 +1,11 @@
 # @slub/sparql-db-impl
 
+## 1.2.3
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 1.2.1
 
 ### Patch Changes

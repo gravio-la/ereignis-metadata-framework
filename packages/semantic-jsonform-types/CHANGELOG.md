@@ -1,5 +1,11 @@
 # @graviola/semantic-jsonform-types
 
+## 1.1.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 1.1.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @graviola/async-oxigraph
 
+## 0.1.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @graviola/edb-file-import
 
+## 1.0.2
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+- Updated dependencies
+  - @graviola/edb-maintenance-utils@1.1.2
+
 ## 1.0.1
 
 ### Patch Changes
