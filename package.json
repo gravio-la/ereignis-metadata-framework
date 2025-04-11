@@ -41,6 +41,7 @@
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,md}\"",
     "prepare": "husky install",
+    "precommit": "lint-staged",
     "changeset:init": "changeset init",
     "changeset": "changeset",
     "publish": "turbo run publish-clean --continue --concurrency 2; bun run restore",
