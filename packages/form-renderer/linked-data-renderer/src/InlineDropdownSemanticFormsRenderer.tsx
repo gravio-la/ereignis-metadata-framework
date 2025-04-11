@@ -22,13 +22,7 @@ import {
   resolveSchema,
 } from "@jsonforms/core";
 import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
-import {
-  Box,
-  FormControl,
-  List,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Box, FormControl, List, Theme, Typography } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -175,9 +169,8 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     handleMappedDataAccepted,
   );
 
-
+  const [disabled, setDisabled] = useState(false);
   const showEditDialog = useCallback(() => {
-
     const fieldDefinitions = primaryFields[typeName] as
       | PrimaryField
       | undefined;
@@ -189,17 +182,25 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     };
     const modalID = `edit-${newItem["@type"]}-${newItem["@id"]}`;
     registerModal(modalID, EditEntityModal);
+    setDisabled(true);
     NiceModal.show(modalID, {
       entityIRI: newItem["@id"],
       typeIRI: newItem["@type"],
       data: newItem,
       disableLoad: true,
-    }).then(({ entityIRI, data }: { entityIRI: string; data: any }) => {
-      handleSelectedChange({
-        value: entityIRI,
-        label: data.label || entityIRI,
+    })
+      .then(
+        ({ entityIRI, data }: { entityIRI: string; data: any }) => {
+          handleSelectedChange({
+            value: entityIRI,
+            label: data.label || entityIRI,
+          });
+        },
+        () => {},
+      )
+      .finally(() => {
+        setDisabled(false);
       });
-    });
   }, [
     registerModal,
     typeIRI,
@@ -208,6 +209,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     EditEntityModal,
     primaryFields,
     searchString,
+    setDisabled,
   ]);
 
   const handleMappedDataIntermediate = useCallback(
@@ -241,13 +243,15 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   }, [selected, labelKey]);
 
   return (
-    <Box sx={{
-      ...hidden(visible, "flex"),
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: theme => theme.spacing(1),
-    }}>
+    <Box
+      sx={{
+        ...hidden(visible, "flex"),
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: (theme) => theme.spacing(1),
+      }}
+    >
       <Typography
         variant={"h5"}
         sx={{
@@ -269,6 +273,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
             typeName={typeName || ""}
             selected={selected}
             title={label || ""}
+            disabled={disabled}
             onSelectionChange={handleSelectedChange}
             onSearchValueChange={handleSearchStringChange}
             searchString={searchString || ""}
