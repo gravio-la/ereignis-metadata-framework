@@ -55,6 +55,30 @@ module.exports = {
   ],
   onClean: () => {
     const pckg = JSON.parse(fs.readFileSync('./package.json'));
+    
+    // Move workspace dependencies from dependencies to peerDependencies
+    if (pckg.dependencies) {
+      const workspaceDeps = {};
+      const nonWorkspaceDeps = {};
+      
+      for (const [dep, version] of Object.entries(pckg.dependencies)) {
+        if (version === 'workspace:*') {
+          workspaceDeps[dep] = version;
+        } else {
+          nonWorkspaceDeps[dep] = version;
+        }
+      }
+      
+      // Update dependencies with only non-workspace deps
+      pckg.dependencies = nonWorkspaceDeps;
+      
+      // Add workspace deps to peerDependencies
+      if (!pckg.peerDependencies) {
+        pckg.peerDependencies = {};
+      }
+      Object.assign(pckg.peerDependencies, workspaceDeps);
+    }
+
     if(pckg.peerDependencies) {
       pckg.peerDependencies = replaceWorkspaceReferences(pckg.peerDependencies);
     }
