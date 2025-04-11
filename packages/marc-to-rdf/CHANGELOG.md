@@ -1,5 +1,13 @@
 # @graviola/edb-marc-to-rdf
 
+## 1.1.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-core-utils@1.2.3
+
 ## 1.1.2
 
 ### Patch Changes

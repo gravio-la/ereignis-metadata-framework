@@ -1,5 +1,17 @@
 # @graviola/edb-kxp-components
 
+## 1.0.5
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-basic-components@1.1.7
+  - @graviola/edb-graph-traversal@1.2.4
+  - @graviola/edb-marc-to-rdf@1.1.3
+  - @graviola/edb-state-hooks@1.2.4
+  - @graviola/edb-kxp-utils@1.1.4
+
 ## 1.0.4
 
 ### Patch Changes

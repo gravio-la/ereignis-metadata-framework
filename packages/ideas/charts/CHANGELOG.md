@@ -1,5 +1,11 @@
 # @graviola/edb-charts
 
+## 0.2.2
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 0.2.1
 
 ### Patch Changes

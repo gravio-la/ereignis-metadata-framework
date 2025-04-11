@@ -1,5 +1,14 @@
 # @graviola/jsonld-utils
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-graph-traversal@1.2.4
+  - @graviola/edb-core-utils@1.2.3
+
 ## 1.1.3
 
 ### Patch Changes

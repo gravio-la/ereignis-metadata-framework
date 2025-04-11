@@ -1,5 +1,13 @@
 # @graviola/edb-cli-creator
 
+## 1.2.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-core-utils@1.2.3
+
 ## 1.2.2
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @slub/exhibition-sparql-config
 
+## 1.2.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @slub/exhibition-schema@1.3.3
+  - @graviola/sparql-db-impl@1.2.6
+
 ## 1.2.3
 
 ### Patch Changes

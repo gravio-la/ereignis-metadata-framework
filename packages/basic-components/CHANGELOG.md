@@ -1,5 +1,13 @@
 # @graviola/edb-basic-components
 
+## 1.1.7
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.6
 
 ### Patch Changes

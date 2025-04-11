@@ -1,5 +1,16 @@
 # @graviola/local-oxigraph-store-provider
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/async-oxigraph@0.1.3
+  - @graviola/sparql-db-impl@1.2.6
+  - @graviola/remote-query-implementations@1.2.4
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.3
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @graviola/edb-file-import
 
+## 1.0.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-maintenance-utils@1.1.4
+
 ## 1.0.3
 
 ### Patch Changes

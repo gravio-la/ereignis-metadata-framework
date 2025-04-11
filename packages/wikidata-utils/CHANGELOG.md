@@ -1,5 +1,13 @@
 # @graviola/edb-wikidata-utils
 
+## 1.0.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/sparql-schema@1.2.5
+
 ## 1.0.2
 
 ### Patch Changes

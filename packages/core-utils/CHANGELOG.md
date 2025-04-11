@@ -1,5 +1,11 @@
 # @slub/edb-core-utils
 
+## 1.2.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 1.2.2
 
 ### Patch Changes

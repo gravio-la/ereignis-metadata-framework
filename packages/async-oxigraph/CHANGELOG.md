@@ -1,5 +1,11 @@
 # @graviola/async-oxigraph
 
+## 0.1.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 0.1.2
 
 ### Patch Changes

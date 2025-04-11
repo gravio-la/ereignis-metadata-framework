@@ -1,5 +1,11 @@
 # @slub/sparql-db-impl
 
+## 1.2.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 1.2.3
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @graviola/edb-maintenance-utils
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.4
+  - @graviola/edb-graph-traversal@1.2.4
+
 ## 1.1.3
 
 ### Patch Changes

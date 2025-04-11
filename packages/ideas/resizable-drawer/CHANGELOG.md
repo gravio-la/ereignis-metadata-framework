@@ -1,5 +1,11 @@
 # @graviola/edb-resizable-drawer
 
+## 0.2.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 0.2.2
 
 ### Patch Changes

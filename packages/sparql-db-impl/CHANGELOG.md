@@ -1,5 +1,15 @@
 # @slub/sparql-db-impl
 
+## 1.2.6
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.4
+  - @graviola/sparql-schema@1.2.5
+  - @graviola/jsonld-utils@1.1.4
+
 ## 1.2.5
 
 ### Patch Changes

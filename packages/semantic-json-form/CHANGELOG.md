@@ -1,5 +1,19 @@
 # @graviola/semantic-json-form
 
+## 1.1.2
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-linked-data-renderer@1.1.5
+  - @graviola/semantic-jsonform-types@1.1.4
+  - @graviola/edb-advanced-components@1.1.11
+  - @graviola/json-schema-utils@1.2.4
+  - @graviola/edb-basic-components@1.1.7
+  - @graviola/entity-finder@1.1.4
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.1
 
 ### Patch Changes

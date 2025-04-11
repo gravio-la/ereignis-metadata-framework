@@ -1,5 +1,11 @@
 # @graviola/semantic-jsonform-types
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 1.1.3
 
 ### Patch Changes

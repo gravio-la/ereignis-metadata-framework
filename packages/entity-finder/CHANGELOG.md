@@ -1,5 +1,15 @@
 # @graviola/entity-finder
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/data-mapping-hooks@1.1.4
+  - @graviola/edb-basic-components@1.1.7
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.3
 
 ### Patch Changes

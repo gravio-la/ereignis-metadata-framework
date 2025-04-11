@@ -1,5 +1,11 @@
 # @graviola/edb-config-helper
 
+## 1.1.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@slub/exhibition-schema",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Schema for the exhibition database",
   "type": "module",
   "main": "./dist/index.cjs",

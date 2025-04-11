@@ -1,5 +1,13 @@
 # @graviola/edb-virtualized-components
 
+## 1.0.5
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-ui-utils@0.2.4
+
 ## 1.0.4
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @graviola/rest-store-provider
 
+## 1.1.5
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/restfull-fetch-db-impl@1.2.4
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.4
 
 ### Patch Changes

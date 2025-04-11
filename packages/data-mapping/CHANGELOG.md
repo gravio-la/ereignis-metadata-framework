@@ -1,5 +1,14 @@
 # @graviola/edb-data-mapping
 
+## 0.2.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-core-types@1.1.2
+  - @graviola/edb-core-utils@1.2.3
+
 ## 0.2.3
 
 ### Patch Changes

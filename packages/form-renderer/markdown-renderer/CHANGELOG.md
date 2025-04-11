@@ -1,5 +1,13 @@
 # @graviola/edb-markdown-renderer
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-layout-renderer@1.1.4
+
 ## 1.1.3
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @graviola/data-mapping-hooks
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-data-mapping@0.2.4
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.3
 
 ### Patch Changes

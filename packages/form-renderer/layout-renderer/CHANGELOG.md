@@ -1,5 +1,13 @@
 # @graviola/edb-layout-renderer
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-ui-utils@0.2.4
+
 ## 1.1.3
 
 ### Patch Changes

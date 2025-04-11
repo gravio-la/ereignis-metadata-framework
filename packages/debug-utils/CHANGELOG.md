@@ -1,5 +1,13 @@
 # @graviola/edb-debug-utils
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-state-hooks@1.2.4
+
 ## 1.1.3
 
 ### Patch Changes

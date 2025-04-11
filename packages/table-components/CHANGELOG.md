@@ -1,5 +1,20 @@
 # @graviola/edb-table-components
 
+## 1.1.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.4
+  - @graviola/edb-basic-components@1.1.7
+  - @graviola/sparql-schema@1.2.5
+  - @graviola/edb-data-mapping@0.2.4
+  - @graviola/edb-state-hooks@1.2.4
+  - @graviola/edb-core-types@1.1.2
+  - @graviola/edb-core-utils@1.2.3
+  - @graviola/edb-ui-utils@0.2.4
+
 ## 1.1.3
 
 ### Patch Changes

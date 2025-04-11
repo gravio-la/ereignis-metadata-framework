@@ -1,6 +1,6 @@
 {
   "name": "@graviola/edb-core-utils",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Core utilities for EDB",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -1,5 +1,13 @@
 # @graviola/edb-ui-utils
 
+## 0.2.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-core-utils@1.2.3
+
 ## 0.2.3
 
 ### Patch Changes

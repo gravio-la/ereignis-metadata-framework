@@ -1,5 +1,14 @@
 # @slub/exhibition-schema
 
+## 1.3.3
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/edb-wikidata-utils@1.0.3
+  - @graviola/edb-authorities@0.2.3
+
 ## 1.3.2
 
 ### Patch Changes

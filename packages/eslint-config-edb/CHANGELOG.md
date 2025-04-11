@@ -1,5 +1,11 @@
 # eslint-config-edb
 
+## 0.1.2
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 0.1.1
 
 ### Patch Changes
