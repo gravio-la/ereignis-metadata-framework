@@ -23,12 +23,17 @@ const decodeURIWithHash = (iri: string) => {
 export const initRestfullStore: InitDatastoreFunction<
   RestfullDataStoreConfig
 > = (dataStoreConfig) => {
-  const { apiURL, defaultPrefix, typeNameToTypeIRI, defaultLimit, requestOptions } =
-    dataStoreConfig;
+  const {
+    apiURL,
+    defaultPrefix,
+    typeNameToTypeIRI,
+    defaultLimit,
+    requestOptions,
+  } = dataStoreConfig;
   const loadDocument = async (typeName: string, entityIRI: string) => {
     return await fetch(
       `${apiURL}/loadDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
-    ).then((res) =>  {
+    ).then((res) => {
       try {
         return res.json();
       } catch (e) {
@@ -186,6 +191,19 @@ export const initRestfullStore: InitDatastoreFunction<
         `${apiURL}/classes?id=${decodeURIWithHash(entityIRI)}`,
         requestOptions,
       ).then((res) => res.json());
+    },
+    countDocuments: async (typeName, query) => {
+      const queryString = qs.stringify(query);
+      return await fetch(
+        `${apiURL}/countDocuments/${typeName}?${queryString}`,
+        requestOptions,
+      ).then(async (res) => {
+        const text = await res.text();
+        if (text.match(/^\d+$/)) {
+          return parseInt(text);
+        }
+        return 0;
+      });
     },
     iterableImplementation: {
       listDocuments: (typeName, limit) => {

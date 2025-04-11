@@ -279,6 +279,24 @@ export const initPrismaStore: (
       }
       return classes;
     },
+    countDocuments: async (typeName: string, query: { search?: string }) => {
+      const prim = primaryFields[typeName];
+      if (!prim) {
+        throw new Error("No primary field found for type " + typeName);
+      }
+
+      if (query.search && query.search.length > 0) {
+        return await prisma[typeName].count({
+          where: {
+            [prim.label]: {
+              contains: query.search,
+            },
+          },
+        });
+      }
+
+      return await prisma[typeName].count();
+    },
   };
 
   return dataStore;
