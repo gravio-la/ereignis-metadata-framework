@@ -1,5 +1,12 @@
 # @graviola/edb-kxp-utils
 
+## 1.1.5
+
+### Patch Changes
+
+- @graviola/edb-graph-traversal@1.2.5
+- @graviola/edb-marc-to-rdf@1.1.4
+
 ## 1.1.4
 
 ### Patch Changes

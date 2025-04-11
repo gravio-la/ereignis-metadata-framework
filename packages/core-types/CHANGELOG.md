@@ -1,5 +1,11 @@
 # @slub/edb-core-types
 
+## 1.1.3
+
+### Patch Changes
+
+- adding paginated generic list items
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @graviola/edb-maintenance-utils
 
+## 1.1.5
+
+### Patch Changes
+
+- @graviola/edb-graph-traversal@1.2.5
+
 ## 1.1.4
 
 ### Patch Changes

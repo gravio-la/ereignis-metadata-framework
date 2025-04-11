@@ -1,5 +1,20 @@
 # @slub/prisma-db-impl
 
+## 1.4.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-core-utils@1.3.0
+  - @graviola/json-schema-prisma-utils@1.2.5
+  - @graviola/jsonld-utils@1.1.5
+
+## 1.4.0
+
+### Minor Changes
+
+- adding count functionality
+
 ## 1.3.6
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @graviola/edb-marc-to-rdf
 
+## 1.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-core-utils@1.3.0
+
 ## 1.1.3
 
 ### Patch Changes

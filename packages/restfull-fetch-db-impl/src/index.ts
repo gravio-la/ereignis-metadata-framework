@@ -5,6 +5,7 @@ import type {
   CountAndIterable,
   DatastoreBaseConfig,
   InitDatastoreFunction,
+  QueryType,
 } from "@graviola/edb-global-types";
 import qs from "qs";
 
@@ -18,6 +19,24 @@ export type RestfullDataStoreConfig = {
 
 const decodeURIWithHash = (iri: string) => {
   return decodeURIComponent(iri).replace(/#/g, "%23");
+};
+
+const buildQueryString = (
+  baseQuery: Record<string, any>,
+  query?: QueryType,
+  limit?: number,
+) => {
+  const q = {
+    ...baseQuery,
+    limit,
+    ...(query?.pagination
+      ? {
+          pageIndex: query.pagination.pageIndex,
+          pageSize: query.pagination.pageSize,
+        }
+      : {}),
+  };
+  return qs.stringify(q);
 };
 
 export const initRestfullStore: InitDatastoreFunction<
@@ -48,11 +67,11 @@ export const initRestfullStore: InitDatastoreFunction<
     searchString?: string | null,
     cb?: (document: any) => Promise<any>,
   ) => {
-    const q = {
-      search: searchString,
+    const queryString = buildQueryString(
+      { search: searchString },
+      undefined,
       limit,
-    };
-    const queryString = qs.stringify(q);
+    );
     const items = await fetch(
       `${apiURL}/findDocuments/${typeName}?${queryString}`,
       requestOptions,
@@ -76,11 +95,11 @@ export const initRestfullStore: InitDatastoreFunction<
     limit?: number,
     searchString?: string | null,
   ) => {
-    const q = {
-      search: searchString,
+    const queryString = buildQueryString(
+      { search: searchString },
+      undefined,
       limit,
-    };
-    const queryString = qs.stringify(q);
+    );
     const items = await fetch(
       `${apiURL}/findDocuments/${typeName}?${queryString}`,
       requestOptions,
@@ -143,10 +162,28 @@ export const initRestfullStore: InitDatastoreFunction<
     },
     listDocuments: async (typeName, limit, cb) =>
       findDocuments(typeName, limit, null, cb),
-    findDocuments: async (typeName, query, limit, cb) =>
-      findDocuments(typeName, limit, query.search, cb),
+    findDocuments: async (typeName, query, limit, cb) => {
+      const queryString = buildQueryString(
+        { search: query.search },
+        query,
+        limit,
+      );
+      const items = await fetch(
+        `${apiURL}/findDocuments/${typeName}?${queryString}`,
+        requestOptions,
+      ).then((res) => res.json());
+      if (!items || !Array.isArray(items)) return [];
+      return await Promise.all(
+        items.map(async (doc) => {
+          if (cb) {
+            return await cb(doc);
+          }
+          return doc;
+        }),
+      );
+    },
     findDocumentsByLabel: async (typeName, label, limit) => {
-      const queryString = qs.stringify({ label, limit });
+      const queryString = buildQueryString({ label }, undefined, limit);
       return await fetch(
         `${apiURL}/findDocumentsByLabel/${typeName}?${queryString}`,
         requestOptions,
@@ -158,13 +195,16 @@ export const initRestfullStore: InitDatastoreFunction<
       repositoryIRI,
       limit,
     ) => {
-      const queryString = qs.stringify({
-        authorityIRI: decodeURIWithHash(authorityIRI),
-        repositoryIRI: repositoryIRI
-          ? decodeURIWithHash(repositoryIRI)
-          : undefined,
+      const queryString = buildQueryString(
+        {
+          authorityIRI: decodeURIWithHash(authorityIRI),
+          repositoryIRI: repositoryIRI
+            ? decodeURIWithHash(repositoryIRI)
+            : undefined,
+        },
+        undefined,
         limit,
-      });
+      );
       return await fetch(
         `${apiURL}/findDocumentsByAuthorityIRI/${typeName}?${queryString}`,
         requestOptions,
@@ -174,12 +214,14 @@ export const initRestfullStore: InitDatastoreFunction<
       const sorting =
         query.sorting?.map(({ id, desc }) => `${id}${desc ? " desc" : ""}`) ||
         [];
-      const q = {
-        search: query.search,
-        sorting,
+      const queryString = buildQueryString(
+        {
+          search: query.search,
+          sorting,
+        },
+        query,
         limit,
-      };
-      const queryString = qs.stringify(q);
+      );
 
       return await fetch(
         `${apiURL}/findDocumentsAsFlat/${typeName}?${queryString}`,

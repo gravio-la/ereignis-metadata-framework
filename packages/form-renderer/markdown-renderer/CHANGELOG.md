@@ -1,5 +1,11 @@
 # @graviola/edb-markdown-renderer
 
+## 1.1.5
+
+### Patch Changes
+
+- @graviola/edb-layout-renderer@1.1.5
+
 ## 1.1.4
 
 ### Patch Changes

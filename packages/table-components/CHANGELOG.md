@@ -1,5 +1,18 @@
 # @graviola/edb-table-components
 
+## 1.1.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-core-utils@1.3.0
+  - @graviola/edb-core-types@1.1.3
+  - @graviola/edb-data-mapping@0.2.5
+  - @graviola/sparql-schema@1.2.6
+  - @graviola/edb-state-hooks@1.2.5
+  - @graviola/edb-ui-utils@0.2.5
+  - @graviola/edb-basic-components@1.1.8
+
 ## 1.1.4
 
 ### Patch Changes

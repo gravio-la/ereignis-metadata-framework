@@ -1,5 +1,11 @@
 # @graviola/edb-file-import
 
+## 1.0.5
+
+### Patch Changes
+
+- @graviola/edb-maintenance-utils@1.1.5
+
 ## 1.0.4
 
 ### Patch Changes

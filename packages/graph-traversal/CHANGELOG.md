@@ -1,5 +1,12 @@
 # @slub/edb-graph-traversal
 
+## 1.2.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-core-utils@1.3.0
+
 ## 1.2.4
 
 ### Patch Changes

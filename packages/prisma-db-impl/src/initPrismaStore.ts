@@ -4,7 +4,7 @@ import {
 } from "@graviola/json-schema-prisma-utils";
 import type { JSONSchema7 } from "json-schema";
 import { toJSONLD } from "./helper";
-import type { AbstractDatastore } from "@graviola/edb-global-types";
+import type { AbstractDatastore, QueryType } from "@graviola/edb-global-types";
 import { importAllDocuments, importSingleDocument } from "./import";
 import type {
   IRIToStringFn,
@@ -90,6 +90,7 @@ export const initPrismaStore: (
 
   const loadManyFlat = async (
     typeName: string,
+    queryOptions: QueryType,
     limit?: number,
     innerLimit?: number,
   ) => {
@@ -100,7 +101,11 @@ export const initPrismaStore: (
       { takeLimit: innerLimit ?? limit ?? 0 },
     );
     const entries = await prisma[typeName].findMany({
-      take: limit,
+      take: queryOptions.pagination?.pageSize ?? limit,
+      skip: queryOptions.pagination?.pageIndex
+        ? queryOptions.pagination.pageIndex *
+          (queryOptions.pagination.pageSize ?? limit ?? 0)
+        : 0,
       ...query,
     });
     return entries;
@@ -218,7 +223,7 @@ export const initPrismaStore: (
       return entries;
     },
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
-      const bindings = await loadManyFlat(typeName, limit, 2);
+      const bindings = await loadManyFlat(typeName, query, limit, 2);
       return bindings2RDFResultSet(bindings);
     },
     findDocumentsByAuthorityIRI: async (

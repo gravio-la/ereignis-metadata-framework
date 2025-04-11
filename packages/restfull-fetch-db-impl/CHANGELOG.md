@@ -1,5 +1,11 @@
 # @slub/sparql-db-impl
 
+## 1.3.0
+
+### Minor Changes
+
+- adding count functionality
+
 ## 1.2.4
 
 ### Patch Changes
