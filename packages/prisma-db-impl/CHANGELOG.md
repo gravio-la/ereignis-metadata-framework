@@ -1,5 +1,14 @@
 # @slub/prisma-db-impl
 
+## 1.3.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.3
+  - @graviola/jsonld-utils@1.1.3
+  - @graviola/json-schema-prisma-utils@1.2.3
+
 ## 1.3.4
 
 ### Patch Changes

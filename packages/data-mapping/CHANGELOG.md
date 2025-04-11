@@ -1,5 +1,11 @@
 # @graviola/edb-data-mapping
 
+## 0.2.3
+
+### Patch Changes
+
+- better linked data handling
+
 ## 0.2.2
 
 ### Patch Changes

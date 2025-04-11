@@ -1,5 +1,35 @@
 # adb-next
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-linked-data-renderer@1.1.4
+  - @graviola/edb-markdown-renderer@1.1.3
+  - @graviola/edb-layout-renderer@1.1.3
+  - @graviola/edb-basic-renderer@1.1.3
+  - @graviola/edb-advanced-components@1.1.10
+  - @graviola/data-mapping-hooks@1.1.3
+  - @graviola/semantic-json-form@1.1.1
+  - @graviola/edb-basic-components@1.1.6
+  - @graviola/edb-table-components@1.1.3
+  - @graviola/entity-finder@1.1.3
+  - @graviola/sparql-schema@1.2.4
+  - @graviola/edb-data-mapping@0.2.3
+  - @graviola/remote-query-implementations@1.2.3
+  - @graviola/edb-state-hooks@1.2.3
+  - @graviola/edb-ui-utils@0.2.3
+  - @graviola/edb-graph-traversal@1.2.3
+  - @graviola/sparql-db-impl@1.2.5
+  - @graviola/edb-wikidata-utils@1.0.2
+  - @slub/exhibition-schema@1.3.2
+  - @slub/kulinarik-schema@1.0.0
+  - @graviola/sparql-store-provider@1.1.3
+  - @graviola/edb-debug-utils@1.1.3
+  - @graviola/edb-virtualized-components@1.0.4
+  - @graviola/edb-kxp-utils@1.1.3
+
 ## 0.2.3
 
 ### Patch Changes

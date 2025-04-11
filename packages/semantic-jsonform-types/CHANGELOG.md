@@ -1,5 +1,11 @@
 # @graviola/semantic-jsonform-types
 
+## 1.1.3
+
+### Patch Changes
+
+- better linked data handling
+
 ## 1.1.2
 
 ### Patch Changes

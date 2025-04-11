@@ -1,5 +1,17 @@
 # @slub/edb-surreal-api
 
+## 1.2.3
+
+### Patch Changes
+
+- better linked data handling
+- Updated dependencies
+  - @graviola/json-schema-utils@1.2.3
+  - @graviola/remote-query-implementations@1.2.3
+  - @graviola/sparql-db-impl@1.2.5
+  - @slub/exhibition-schema@1.3.2
+  - @slub/exhibition-sparql-config@1.2.3
+
 ## 1.2.2
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @graviola/edb-advanced-components
 
+## 1.1.10
+
+### Patch Changes
+
+- better linked data handling
+- Updated dependencies
+  - @graviola/edb-basic-components@1.1.6
+  - @graviola/edb-data-mapping@0.2.3
+  - @graviola/jsonld-utils@1.1.3
+  - @graviola/edb-state-hooks@1.2.3
+  - @graviola/edb-ui-utils@0.2.3
+
 ## 1.1.9
 
 ### Patch Changes

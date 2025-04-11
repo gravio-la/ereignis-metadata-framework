@@ -1,5 +1,11 @@
 # @slub/json-schema-utils
 
+## 1.2.3
+
+### Patch Changes
+
+- better linked data handling
+
 ## 1.2.2
 
 ### Patch Changes

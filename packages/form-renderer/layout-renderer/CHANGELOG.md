@@ -1,5 +1,13 @@
 # @graviola/edb-layout-renderer
 
+## 1.1.3
+
+### Patch Changes
+
+- better linked data handling
+- Updated dependencies
+  - @graviola/edb-ui-utils@0.2.3
+
 ## 1.1.2
 
 ### Patch Changes
