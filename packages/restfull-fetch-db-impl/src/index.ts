@@ -15,6 +15,11 @@ export type RestfullDataStoreConfig = {
   typeNameToTypeIRI: StringToIRIFn;
   defaultLimit?: number;
   requestOptions?: RequestInit;
+  buildEndpointURL?: (
+    operation: string,
+    typeName: string,
+    queryString?: string,
+  ) => string;
 } & DatastoreBaseConfig;
 
 const decodeURIWithHash = (iri: string) => {
@@ -39,6 +44,12 @@ const buildQueryString = (
   return qs.stringify(q);
 };
 
+const defaultBuildEndpointURL =
+  (apiURL: string) =>
+  (operation: string, typeName: string, queryString?: string) => {
+    return `${apiURL}/${operation}/${typeName}${queryString ? `?${queryString}` : ""}`;
+  };
+
 export const initRestfullStore: InitDatastoreFunction<
   RestfullDataStoreConfig
 > = (dataStoreConfig) => {
@@ -48,10 +59,15 @@ export const initRestfullStore: InitDatastoreFunction<
     typeNameToTypeIRI,
     defaultLimit,
     requestOptions,
+    buildEndpointURL = defaultBuildEndpointURL(apiURL),
   } = dataStoreConfig;
   const loadDocument = async (typeName: string, entityIRI: string) => {
     return await fetch(
-      `${apiURL}/loadDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
+      buildEndpointURL(
+        "loadDocument",
+        typeName,
+        `id=${decodeURIWithHash(entityIRI)}`,
+      ),
     ).then((res) => {
       try {
         return res.json();
@@ -73,7 +89,7 @@ export const initRestfullStore: InitDatastoreFunction<
       limit,
     );
     const items = await fetch(
-      `${apiURL}/findDocuments/${typeName}?${queryString}`,
+      buildEndpointURL("findDocuments", typeName, queryString),
       requestOptions,
     ).then((res) => res.json());
     if (!items || !Array.isArray(items)) return [];
@@ -101,7 +117,7 @@ export const initRestfullStore: InitDatastoreFunction<
       limit,
     );
     const items = await fetch(
-      `${apiURL}/findDocuments/${typeName}?${queryString}`,
+      buildEndpointURL("findDocuments", typeName, queryString),
       requestOptions,
     ).then((res) => res.json());
     let currentIndex = 0;
@@ -134,7 +150,11 @@ export const initRestfullStore: InitDatastoreFunction<
     loadDocument,
     existsDocument: async (typeName, entityIRI) => {
       return await fetch(
-        `${apiURL}/existsDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
+        buildEndpointURL(
+          "existsDocument",
+          typeName,
+          `id=${decodeURIWithHash(entityIRI)}`,
+        ),
         requestOptions,
       )
         .then((res) => res.text())
@@ -142,7 +162,11 @@ export const initRestfullStore: InitDatastoreFunction<
     },
     removeDocument: async (typeName, entityIRI) => {
       return await fetch(
-        `${apiURL}/removeDocument/${typeName}?id=${decodeURIWithHash(entityIRI)}`,
+        buildEndpointURL(
+          "removeDocument",
+          typeName,
+          `id=${decodeURIWithHash(entityIRI)}`,
+        ),
         {
           ...(requestOptions || {}),
           method: "DELETE",
@@ -150,7 +174,7 @@ export const initRestfullStore: InitDatastoreFunction<
       ).then((res) => res.json());
     },
     upsertDocument: async (typeName, entityIRI, document) => {
-      return await fetch(`${apiURL}/upsertDocument/${typeName}`, {
+      return await fetch(buildEndpointURL("upsertDocument", typeName), {
         ...(requestOptions || {}),
         method: "PUT",
         headers: {
@@ -169,7 +193,7 @@ export const initRestfullStore: InitDatastoreFunction<
         limit,
       );
       const items = await fetch(
-        `${apiURL}/findDocuments/${typeName}?${queryString}`,
+        buildEndpointURL("findDocuments", typeName, queryString),
         requestOptions,
       ).then((res) => res.json());
       if (!items || !Array.isArray(items)) return [];
@@ -185,7 +209,7 @@ export const initRestfullStore: InitDatastoreFunction<
     findDocumentsByLabel: async (typeName, label, limit) => {
       const queryString = buildQueryString({ label }, undefined, limit);
       return await fetch(
-        `${apiURL}/findDocumentsByLabel/${typeName}?${queryString}`,
+        buildEndpointURL("findDocumentsByLabel", typeName, queryString),
         requestOptions,
       ).then((res) => res.json());
     },
@@ -206,7 +230,7 @@ export const initRestfullStore: InitDatastoreFunction<
         limit,
       );
       return await fetch(
-        `${apiURL}/findDocumentsByAuthorityIRI/${typeName}?${queryString}`,
+        buildEndpointURL("findDocumentsByAuthorityIRI", typeName, queryString),
         requestOptions,
       ).then((res) => res.json());
     },
@@ -224,20 +248,20 @@ export const initRestfullStore: InitDatastoreFunction<
       );
 
       return await fetch(
-        `${apiURL}/findDocumentsAsFlat/${typeName}?${queryString}`,
+        buildEndpointURL("findDocumentsAsFlat", typeName, queryString),
         requestOptions,
       ).then((res) => res.json());
     },
     getClasses: (entityIRI: string) => {
       return fetch(
-        `${apiURL}/classes?id=${decodeURIWithHash(entityIRI)}`,
+        buildEndpointURL("classes", "", `id=${decodeURIWithHash(entityIRI)}`),
         requestOptions,
       ).then((res) => res.json());
     },
     countDocuments: async (typeName, query) => {
       const queryString = qs.stringify(query);
       return await fetch(
-        `${apiURL}/countDocuments/${typeName}?${queryString}`,
+        buildEndpointURL("countDocuments", typeName, queryString),
         requestOptions,
       ).then(async (res) => {
         const text = await res.text();
