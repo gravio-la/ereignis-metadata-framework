@@ -8,12 +8,18 @@ export type RestStoreProviderProps = {
   endpoint: SparqlEndpoint;
   defaultLimit: number;
   requestOptions?: RequestInit;
+  buildEndpointURL?: (
+    operation: string,
+    typeName: string,
+    queryString?: string,
+  ) => string;
 };
 export const RestStoreProvider: FunctionComponent<RestStoreProviderProps> = ({
   children,
   endpoint,
   defaultLimit,
   requestOptions,
+  buildEndpointURL,
 }) => {
   const {
     schema,
@@ -28,8 +34,16 @@ export const RestStoreProvider: FunctionComponent<RestStoreProviderProps> = ({
       schema,
       defaultLimit,
       requestOptions,
+      buildEndpointURL,
     });
-  }, [endpoint, defaultLimit, defaultPrefix, typeNameToTypeIRI, schema, requestOptions]);
+  }, [
+    endpoint,
+    defaultLimit,
+    defaultPrefix,
+    typeNameToTypeIRI,
+    schema,
+    requestOptions,
+  ]);
   return (
     <CrudProviderContext.Provider
       value={{ crudOptions: null, dataStore, isReady: Boolean(dataStore) }}
