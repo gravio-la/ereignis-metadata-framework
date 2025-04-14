@@ -1,5 +1,11 @@
 # @slub/prisma-db-impl
 
+## 1.5.0
+
+### Minor Changes
+
+- adding nested element creation and fixing issues
+
 ## 1.4.3
 
 ### Patch Changes
