@@ -205,14 +205,6 @@ export const initPrismaStore: (
         typeNameToTypeIRI,
         typeIsNotIRI,
       });
-      console.dir(
-        {
-          result,
-        },
-        {
-          depth: null,
-        },
-      );
       if (error.size > 0) {
         throw new Error("Error while saving data");
       }
