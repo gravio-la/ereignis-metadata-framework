@@ -63,5 +63,4 @@ export const save = async (
     console.error(JSON.stringify(connects, null, 2));
     console.error(error);
   }
-  return null;
 };

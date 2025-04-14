@@ -64,16 +64,22 @@ export const getPropertiesAndConnects = async (
           } else {
             connectsTemp.push({ id: item["@id"] });
           }
+        } else if (typeof item !== "object") {
+          // Handle primitive values
+          if (!properties[key]) {
+            properties[key] = [item];
+          } else if (Array.isArray(properties[key])) {
+            properties[key].push(item);
+          } else {
+            properties[key] = [properties[key], item];
+          }
         } else {
           //console.log("not implemented")
         }
       }
       if (connectsTemp.length > 0) connects[key] = connectsTemp;
     } else {
-      if (
-        typeof value["@type"] === "string" &&
-        typeof value["@id"] === "string"
-      ) {
+      if (typeof value["@id"] === "string") {
         if (middleware) {
           const success = await middleware(
             value["@type"],
@@ -85,7 +91,7 @@ export const getPropertiesAndConnects = async (
         } else {
           connects[key] = { id: value["@id"] };
         }
-      } else if (!value["@id"] && !value["@type"]) {
+      } else if (!value["@id"]) {
         const { properties: subProperties, connects: subConnects } =
           await getPropertiesAndConnects(
             typeNameOrigin,
