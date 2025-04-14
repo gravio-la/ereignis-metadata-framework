@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { PropertiesAndConnects } from "../types";
 import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
+import { PrismaClient } from "@prisma/client";
+
+import { PropertiesAndConnects } from "../types";
 
 export const getPropertiesAndConnects = async (
   typeNameOrigin: string,
@@ -12,6 +13,7 @@ export const getPropertiesAndConnects = async (
     IRItoId?: IRIToStringFn;
     typeNameToTypeIRI?: StringToIRIFn;
     typeIsNotIRI?: boolean;
+    debug?: boolean;
   },
   middleware?: (
     typeIRI: string | undefined,

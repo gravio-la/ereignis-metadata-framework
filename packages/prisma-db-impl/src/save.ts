@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { getPropertiesAndConnects } from "./helper";
 import { StringToIRIFn } from "@graviola/edb-core-types";
+import { PrismaClient } from "@prisma/client";
+
+import { getPropertiesAndConnects } from "./helper";
 
 export const save = async (
   typeNameOrigin: string,
@@ -11,6 +12,7 @@ export const save = async (
     idToIRI?: StringToIRIFn;
     typeNameToTypeIRI?: StringToIRIFn;
     typeIsNotIRI?: boolean;
+    debug?: boolean;
   },
 ) => {
   const { id, properties, connects } = await getPropertiesAndConnects(
@@ -71,9 +73,11 @@ export const save = async (
 
     return result;
   } catch (error) {
-    console.error("could not save document", typeNameOrigin, id);
-    console.error(JSON.stringify(connects, null, 2));
-    console.error(error);
+    if (options.debug) {
+      console.error("could not save document", typeNameOrigin, id);
+      console.error(JSON.stringify(connects, null, 2));
+      console.error(error);
+    }
 
     throw error;
   }

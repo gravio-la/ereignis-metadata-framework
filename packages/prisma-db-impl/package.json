@@ -70,6 +70,9 @@
     "root": true,
     "extends": [
       "eslint-config-edb"
-    ]
+    ],
+    "rules": {
+      "no-console": "off"
+    }
   }
 }

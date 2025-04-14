@@ -1,8 +1,9 @@
+import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
 import { AbstractDatastore } from "@graviola/edb-global-types";
 import { PrismaClient } from "@prisma/client";
-import { startBulkImport } from "./startBulkImport";
+
 import { importDocument } from "./importDocument";
-import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
+import { startBulkImport } from "./startBulkImport";
 
 /**
  * Import all documents of a given type, will either use the iterable implementation if implemented within the importStore implementation

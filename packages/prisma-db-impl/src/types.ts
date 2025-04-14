@@ -17,4 +17,7 @@ export type PrismaStoreOptions = {
   idToIRI?: StringToIRIFn;
   IRItoId?: IRIToStringFn;
   typeIsNotIRI?: boolean;
+  allowUnknownNestedElementCreation?: boolean;
+  isAllowedNestedElement?: (element: any) => boolean;
+  debug?: boolean;
 };

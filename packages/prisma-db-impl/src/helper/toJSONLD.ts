@@ -1,7 +1,8 @@
+import { StringToIRIFn } from "@graviola/edb-core-types";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import merge from "lodash-es/merge";
+
 import { PrismaStoreOptions } from "../types";
-import { StringToIRIFn } from "@graviola/edb-core-types";
 
 export const splitUpLoDashConnectedEntry = (str: string, value: any) => {
   const parts = str.split("_");

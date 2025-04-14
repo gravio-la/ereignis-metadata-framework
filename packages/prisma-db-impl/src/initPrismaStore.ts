@@ -1,25 +1,17 @@
+import type { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import type { AbstractDatastore, QueryType } from "@graviola/edb-global-types";
 import {
   jsonSchema2PrismaFlatSelect,
   jsonSchema2PrismaSelect,
 } from "@graviola/json-schema-prisma-utils";
+import { defs } from "@graviola/json-schema-utils";
 import type { JSONSchema7 } from "json-schema";
+
 import { toJSONLD } from "./helper";
-import type { AbstractDatastore, QueryType } from "@graviola/edb-global-types";
-import { importAllDocuments, importSingleDocument } from "./import";
-import type {
-  IRIToStringFn,
-  PrimaryFieldDeclaration,
-  StringToIRIFn,
-} from "@graviola/edb-core-types";
-import {
-  bringDefinitionToTop,
-  defs,
-  prepareStubbedSchema,
-} from "@graviola/json-schema-utils";
-import { save } from "./save";
 import { bindings2RDFResultSet } from "./helper/bindings2RDFResultSet";
-import { cleanJSONLD } from "@graviola/jsonld-utils";
+import { importAllDocuments, importSingleDocument } from "./import";
 import type { PrismaStoreOptions } from "./types";
+import { upsert } from "./upsert";
 /**
  * Initialize a prisma store with the given prisma client
  *
@@ -38,6 +30,8 @@ import type { PrismaStoreOptions } from "./types";
  * @param options.typeIRItoTypeName A function to convert a type IRI to a type name
  * @param options.idToIRI A function to convert an id to an IRI (if empty it is assumed that the id is already an IRI)
  * @param options.IRItoId A function to convert an IRI to an id (if empty it is assumed that the id is already an id)
+ * @param options.allowUnknownNestedElementCreation Whether to allow unknown nested elements to be created
+ * @param options.isAllowedNestedElement A function to check if a nested element is allowed to be created
  */
 export const initPrismaStore: (
   prisma: any,
@@ -56,6 +50,9 @@ export const initPrismaStore: (
     idToIRI,
     IRItoId,
     typeIsNotIRI,
+    allowUnknownNestedElementCreation,
+    isAllowedNestedElement,
+    debug,
   },
 ) => {
   const toJSONLDWithOptions = (entry: any) => {
@@ -183,35 +180,24 @@ export const initPrismaStore: (
       });
     },
     upsertDocument: async (typeName: string, entityIRI, document: any) => {
-      const schema = bringDefinitionToTop(
-        prepareStubbedSchema(rootSchema),
-        typeName,
-      );
       const doc = {
         ...document,
         "@id": entityIRI,
         "@type": typeNameToTypeIRI(typeName),
       };
-      const cleanData = await cleanJSONLD(doc, schema, {
+      return await upsert(typeName, doc, {
+        prisma,
+        schema: rootSchema,
         jsonldContext,
         defaultPrefix,
         keepContext: false,
-      });
-
-      const error = new Set<string>();
-
-      const result = await save(typeName, cleanData, prisma, error, {
+        allowUnknownNestedElementCreation,
+        isAllowedNestedElement,
         idToIRI,
         typeNameToTypeIRI,
+        typeIRItoTypeName,
         typeIsNotIRI,
       });
-      if (error.size > 0) {
-        throw new Error("Error while saving data");
-      }
-      return {
-        "@context": jsonldContext,
-        ...cleanData,
-      };
     },
     listDocuments: async (typeName: string, limit: number = 10, cb) => {
       const entries = await loadMany(typeName, limit);
@@ -279,7 +265,9 @@ export const initPrismaStore: (
             classes.push(typeNameToTypeIRI(typeName));
           }
         } catch (e) {
-          console.error("Error while trying to get class for", e);
+          if (debug) {
+            console.error("Error while trying to get class for", e);
+          }
         }
       }
       return classes;

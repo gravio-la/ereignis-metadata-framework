@@ -1,6 +1,7 @@
-import { BindingValue, CountValue } from "../types";
 import isNil from "lodash-es/isNil";
 import uniq from "lodash-es/uniq";
+
+import { BindingValue, CountValue } from "../types";
 import { bindingValue2RDFLiteral } from "./bindingValue2RDFLiteral";
 
 /**

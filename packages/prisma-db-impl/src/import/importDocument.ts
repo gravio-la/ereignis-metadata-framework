@@ -1,7 +1,8 @@
+import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
 import { AbstractDatastore } from "@graviola/edb-global-types";
 import type { PrismaClient } from "@prisma/client";
+
 import { getPropertiesAndConnects } from "../helper";
-import { IRIToStringFn, StringToIRIFn } from "@graviola/edb-core-types";
 
 /**
  * Import a document into the prisma store and connect it to other documents
