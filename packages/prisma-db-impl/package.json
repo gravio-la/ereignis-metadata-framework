@@ -1,6 +1,6 @@
 {
   "name": "@graviola/prisma-db-impl",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "A set of store specific implementations of PRISMA query builders",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -16,9 +16,6 @@
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     }
-  },
-  "bin": {
-    "jsonSchema2Prisma": "./dist/jsonSchema2Prisma-cli.js"
   },
   "files": [
     "dist",
