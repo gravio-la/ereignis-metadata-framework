@@ -1,0 +1,70 @@
+{
+  "name": "@graviola/color-picker-renderer",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "depcheck": "depcheck",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix src/**/*.{ts,tsx}",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
+  },
+  "peerDependencies": {
+    "@graviola/edb-state-hooks": "workspace:*",
+    "@mui/material": "^5",
+    "@mui/icons-material": "^5",
+    "@jsonforms/material-renderers": "^3",
+    "@jsonforms/core": "^3",
+    "@jsonforms/react": "^3",
+    "react": "^18",
+    "@mui/lab": "^5"
+  },
+  "dependencies": {
+    "@graviola/edb-core-utils": "workspace:*",
+    "lodash-es": "^4.17.21",
+    "next-i18next": "^15",
+    "react-color": "^2.19.3"
+  },
+  "devDependencies": {
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@jsonforms/core": "^3",
+    "@jsonforms/react": "^3",
+    "@storybook/react": "^8.1.5",
+    "@types/ajv": "^1.0.4",
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "~18.3",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "eslint-config-edb": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.8.2"
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint-config-edb"
+    ]
+  }
+}
