@@ -40,17 +40,22 @@ const renderers = [
 
 const JsonFormsFor<%= ComponentName %> = () => {
   const [data, setData] = useState({});
-  const handleChange = (data: any) => {
+  const [error, setError] = useState({});
+  const handleChange = ({data, error}: {data: any, error: any}) => {
     setData(data);
+    setError(error);
   };
   return (
-    <JsonForms
-      schema={schema}
-      uischema={uischema}
-      renderers={renderers}
-      data={data}
-      onChange={handleChange}
-    />
+    <>
+      <JsonForms
+        schema={schema}
+        uischema={uischema}
+        renderers={renderers}
+        data={data}
+        onChange={handleChange}
+      />
+      <pre>{JSON.stringify(error, null, 2)}</pre>
+    </>
   )
 }
 
