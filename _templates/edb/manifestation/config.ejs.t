@@ -88,7 +88,5 @@ export const <%= name %>AppConfig = {
   ),
   rendererRegistry: rendererRegistry,
   cellRendererRegistry: materialCells,
-  primaryFieldRendererRegistry: (typeIRI: string) =>
-    primaryFieldsRegistry(typeIRI, someIRIToTypeName),
   uischemata: undefined,
 };

@@ -39,13 +39,16 @@ const <%= ComponentName %>Component = (props: ControlProps) => {
     [path, handleChange],
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
     <FormControl
       fullWidth={!appliedUiSchemaOptions.trim}
       id={id}
       sx={(theme) => ({
         marginBottom: theme.spacing(2),
-        visibility: visible ? "visible" : "hidden",
       })}
     >
        <TextField
