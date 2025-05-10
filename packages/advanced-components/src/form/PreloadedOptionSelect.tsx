@@ -3,6 +3,7 @@ import { useQuery } from "@graviola/edb-state-hooks";
 import { ClearSharp } from "@mui/icons-material";
 import {
   CircularProgress,
+  InputAdornment,
   InputLabel,
   ListItemIcon,
   ListItemText,
@@ -11,13 +12,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useTranslation } from "next-i18next";
-import React, {
-  FunctionComponent,
-  use,
-  useCallback,
-  useId,
-  useMemo,
-} from "react";
+import React, { FunctionComponent, useCallback, useId, useMemo } from "react";
 
 export type PreloadedOptionSelect = {
   title: string;
@@ -28,24 +23,18 @@ export type PreloadedOptionSelect = {
     e: React.SyntheticEvent,
     value: AutocompleteSuggestion | null,
   ) => void;
-  readOnly?: boolean;
+  disabled?: boolean;
 };
 
-const emptySuggestions: AutocompleteSuggestion[] = [
-  {
-    label: "",
-    value: null,
-  },
-];
 export const PreloadedOptionSelect: FunctionComponent<
   PreloadedOptionSelect
-> = ({ load, title, readOnly, value, typeIRI, onChange }) => {
+> = ({ load, title, value, typeIRI, onChange, disabled }) => {
   const { data: suggestions, isLoading } = useQuery({
     queryKey: ["suggestions", typeIRI],
     queryFn: () => {
       return load();
     },
-    enabled: true,
+    enabled: !disabled,
     refetchOnWindowFocus: true,
   });
 
@@ -72,14 +61,17 @@ export const PreloadedOptionSelect: FunctionComponent<
 
   return (
     <>
-      {isLoading && <CircularProgress size={"1em"} />}
       <InputLabel id={selectID}>{title}</InputLabel>
       <Select
         labelId={selectID}
+        endAdornment={isLoading ? <CircularProgress size={"2em"} /> : undefined}
         value={v || ""}
         label={title}
-        disabled={readOnly}
+        disabled={disabled}
         onChange={handleOnChange}
+        inputProps={{
+          disabled: disabled,
+        }}
       >
         {(suggestions || []).map((suggestion) => (
           <MenuItem key={suggestion.value} value={suggestion.value}>

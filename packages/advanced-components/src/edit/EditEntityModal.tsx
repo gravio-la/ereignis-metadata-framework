@@ -138,11 +138,13 @@ export const EditEntityModal = NiceModal.create(
         title={cardInfo.label}
         editMode={true}
         actions={
-          <Stack>
-            <Button onClick={handleAccept}>
+          <Stack direction="row" spacing={2}>
+            <Button onClick={handleClose} color="error">
+              {t("cancel")}
+            </Button>
+            <Button onClick={handleAccept} variant="contained">
               {isStale || !firstTimeSaved ? t("save and accept") : t("accept")}
             </Button>
-            <Button onClick={handleClose}>{t("cancel")}</Button>
           </Stack>
         }
       >
@@ -159,7 +161,7 @@ export const EditEntityModal = NiceModal.create(
           }}
           enableSidebar={false}
           disableSimilarityFinder={true}
-          wrapWithinCard={true}
+          wrapWithinCard={false}
         />
       </MuiEditDialog>
     );
