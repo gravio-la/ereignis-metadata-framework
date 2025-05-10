@@ -23,8 +23,10 @@ import {
   DialogActions,
   DialogContent,
   IconButton,
+  Theme,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import { useCallback, useMemo, useState } from "react";
@@ -101,7 +103,9 @@ export const EntityDetailModal = NiceModal.create(
       () => filterUndefOrNull(Object.values(fieldDeclaration || {})),
       [fieldDeclaration],
     );
-
+    const xsDown = useMediaQuery((theme: Theme) =>
+      theme.breakpoints.down("sm"),
+    );
     return (
       <Dialog
         open={modal.visible}
@@ -109,6 +113,7 @@ export const EntityDetailModal = NiceModal.create(
         scroll={"paper"}
         disableScrollLock={false}
         maxWidth={false}
+        fullScreen={xsDown}
         sx={{
           transition: "opacity 0.5s",
           opacity: aboutToRemove ? 0 : 1,
@@ -116,7 +121,7 @@ export const EntityDetailModal = NiceModal.create(
       >
         <AppBar position="static">
           <Toolbar variant="dense">
-            <Typography variant="h6" color="inherit" component="div">
+            <Typography variant="h4" color="inherit" component="div">
               {cardInfo.label}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
@@ -132,20 +137,69 @@ export const EntityDetailModal = NiceModal.create(
             </Box>
           </Toolbar>
         </AppBar>
-        <DialogContent>
-          <EntityDetailCard
-            typeIRI={classIRI}
-            entityIRI={entityIRI}
-            data={data}
-            cardInfo={cardInfo}
-            disableInlineEditing={disableInlineEditing}
-            readonly={readonly}
-            onEditClicked={removeSlowly}
-            tableProps={{ disabledProperties }}
-          />
+        <DialogContent
+          sx={{
+            p: 0,
+            position: "relative",
+            height: {
+              xs: "100%",
+              md: cardInfo.image ? "calc(100vh - 120px)" : "100%",
+            },
+          }}
+        >
+          {cardInfo.image && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" },
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: "33%",
+                minWidth: "200px",
+                borderRight: "1px solid",
+                borderColor: "divider",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                component="img"
+                src={cardInfo.image}
+                alt={cardInfo.label || ""}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
+          )}
+          <Box
+            sx={{
+              ml: { xs: 0, md: cardInfo.image ? "33%" : 0 },
+              height: "100%",
+              overflow: "auto",
+              p: 2,
+            }}
+          >
+            <EntityDetailCard
+              typeIRI={classIRI}
+              entityIRI={entityIRI}
+              data={data}
+              cardInfo={cardInfo}
+              disableInlineEditing={disableInlineEditing}
+              readonly={readonly}
+              onEditClicked={removeSlowly}
+              tableProps={{ disabledProperties }}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>{t("cancel")}</Button>
+        <DialogActions
+          sx={{ position: "absolute", bottom: 0, width: "100%", padding: 2 }}
+        >
+          <Button onClick={handleClose} color="primary" variant="contained">
+            {t("close")}
+          </Button>
         </DialogActions>
       </Dialog>
     );

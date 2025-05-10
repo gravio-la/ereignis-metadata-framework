@@ -86,34 +86,38 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
     push,
   ]);
 
-
   return (
     <>
       <Card>
-        <CardActionArea>
-          {cardInfo.image && (
-            <CardMedia
-              component="img"
-              sx={{ maxHeight: "24em", objectFit: "contain" }}
-              image={cardInfo.image}
-              alt={cardInfo.label}
-            />
-          )}
-          <CardContent>
-            <Typography gutterBottom variant="h1" component="div">
-              {cardInfo.label}
-            </Typography>
-            {isString(data?.originalTitle) ||
-              isString(data?.subtitle) ||
-              (cardInfo.description?.length < 300 && (
-                <Typography variant="body2" color="text.secondary">
-                  {data?.subtitle ||
-                    data?.originalTitle ||
-                    cardInfo.description}
-                </Typography>
-              ))}
-          </CardContent>
-        </CardActionArea>
+        {cardInfo.image && (
+          <CardMedia
+            component="img"
+            sx={{
+              maxHeight: "24em",
+              objectFit: "cover",
+              display: { md: "none", xs: "block" },
+            }}
+            image={cardInfo.image}
+            alt={cardInfo.label}
+          />
+        )}
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            sx={{ fontWeight: "bold" }}
+          >
+            {cardInfo.label}
+          </Typography>
+          {isString(data?.originalTitle) ||
+            isString(data?.subtitle) ||
+            (cardInfo.description?.length < 300 && (
+              <Typography variant="body2" color="text.secondary">
+                {data?.subtitle || data?.originalTitle || cardInfo.description}
+              </Typography>
+            ))}
+        </CardContent>
         {cardActionChildren !== null && (
           <CardActions>
             {typeof cardActionChildren !== "undefined" ? (
@@ -121,16 +125,15 @@ export const EntityDetailCard: FunctionComponent<EntityDetailCardProps> = ({
             ) : (
               <>
                 {!readonly && (
-                  <IconButton
-                    component={Button}
+                  <Button
                     size="small"
                     color="primary"
-                    variant={"outlined"}
+                    variant="outlined"
                     onClick={editEntry}
                     startIcon={<Edit />}
                   >
                     {!disableInlineEditing ? t("edit inline") : t("edit")}
-                  </IconButton>
+                  </Button>
                 )}
               </>
             )}
