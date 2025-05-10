@@ -1,12 +1,7 @@
 import { ControlProps, showAsRequired } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  FormControl,
-  FormLabel,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { FormControl, FormLabel, Grid, IconButton } from "@mui/material";
 import merge from "lodash-es/merge";
 import { useCallback, useState } from "react";
 
@@ -27,8 +22,8 @@ const AutoIdentifierRendererComponent = (props: ControlProps) => {
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [editMode, setEditMode] = useState(false);
 
-
   return (
+    config?.debug && (
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
@@ -55,6 +50,7 @@ const AutoIdentifierRendererComponent = (props: ControlProps) => {
           )}
         </Grid>
       </FormControl>
+    )
   );
 };
 

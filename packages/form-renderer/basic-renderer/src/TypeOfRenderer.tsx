@@ -1,12 +1,7 @@
 import { ControlProps, showAsRequired } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import { Edit, EditOff } from "@mui/icons-material";
-import {
-  FormControl,
-  FormLabel,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { FormControl, FormLabel, Grid, IconButton } from "@mui/material";
 import merge from "lodash-es/merge";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -42,6 +37,7 @@ const TypeOfRendererComponent = (props: ControlProps) => {
   }, [schema, data, handleChange_]);
 
   return (
+    config?.debug && (
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
@@ -68,6 +64,7 @@ const TypeOfRendererComponent = (props: ControlProps) => {
           )}
         </Grid>
       </FormControl>
+    )
   );
 };
 

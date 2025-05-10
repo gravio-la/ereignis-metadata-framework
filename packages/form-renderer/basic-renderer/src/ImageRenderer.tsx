@@ -1,16 +1,18 @@
 import { ControlProps } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
-import { ImageNotSupported, Image as ImageIcon } from "@mui/icons-material";
+import { Edit as EditIcon, ImageNotSupported } from "@mui/icons-material";
 import {
+  Box,
   FormControl,
-  Grid,
-  Hidden,
   IconButton,
+  Paper,
   TextField,
+  Tooltip,
+  useTheme,
 } from "@mui/material";
 import merge from "lodash-es/merge";
-import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
+import { useCallback, useState } from "react";
 
 const ImageRendererComponent = (props: ControlProps) => {
   const {
@@ -27,6 +29,7 @@ const ImageRendererComponent = (props: ControlProps) => {
   } = props;
   const isValid = errors.length === 0;
   const { t } = useTranslation();
+  const theme = useTheme();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [editMode, setEditMode] = useState(false);
 
@@ -37,43 +40,132 @@ const ImageRendererComponent = (props: ControlProps) => {
     [path, handleChange],
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={false}>
+    <Box>
       <FormControl
         fullWidth={!appliedUiSchemaOptions.trim}
         id={id}
         sx={(theme) => ({ marginBottom: theme.spacing(2) })}
       >
-        <Grid container direction={"column"} alignItems="center">
-          {
-            <Grid item>
-              <IconButton onClick={() => setEditMode((prev) => !prev)}>
-                {editMode ? <ImageNotSupported /> : <ImageIcon />}
-              </IconButton>
-            </Grid>
-          }
-          {editMode && (
-            <Grid item>
-              <TextField
-                label={schema.title || t("image url")}
-                onChange={(e) => handleChange_(e.target.value)}
-                value={data}
-                fullWidth={true}
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: "300px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor:
+              theme.palette.mode === "dark" ? "grey.900" : "grey.100",
+            border: `2px dashed ${theme.palette.mode === "dark" ? "grey.700" : "grey.400"}`,
+            borderRadius: 1,
+            overflow: "hidden",
+          }}
+        >
+          {data ? (
+            <img
+              src={data}
+              alt={data}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <ImageNotSupported
+                sx={{ fontSize: 40, color: "text.secondary" }}
               />
-            </Grid>
+              <Box sx={{ color: "text.secondary" }}>
+                {t("No image selected")}
+              </Box>
+            </Box>
           )}
-          {data && (
-            <Grid item>
-              <img
-                src={data}
-                alt={data}
-                style={{ maxWidth: "200px", width: "100%" }}
-              />
-            </Grid>
-          )}
-        </Grid>
+          <Tooltip
+            open={editMode}
+            title={
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 1,
+                  backgroundColor: "background.paper",
+                }}
+              >
+                <TextField
+                  label={schema.title || t("image url")}
+                  onChange={(e) => handleChange_(e.target.value)}
+                  value={data || ""}
+                  fullWidth={true}
+                  size="small"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setEditMode(false);
+                    }
+                  }}
+                />
+              </Paper>
+            }
+            placement="top"
+            arrow
+            PopperProps={{
+              sx: {
+                "& .MuiTooltip-tooltip": {
+                  backgroundColor: "transparent",
+                  p: 0,
+                },
+                "& .MuiTooltip-arrow": {
+                  color: "background.paper",
+                },
+              },
+              modifiers: [
+                {
+                  name: "offset",
+                  options: {
+                    offset: [0, 8],
+                  },
+                },
+                {
+                  name: "preventOverflow",
+                  options: {
+                    padding: 8,
+                  },
+                },
+              ],
+            }}
+          >
+            <IconButton
+              onClick={() => setEditMode((prev) => !prev)}
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                backgroundColor: "background.paper",
+                border: "1px solid",
+                borderColor: "divider",
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </FormControl>
-    </Hidden>
+    </Box>
   );
 };
 
