@@ -8,6 +8,7 @@ import { ReactNode, useMemo } from "react";
 import theme from "./berry-theme";
 // ** Global Styles
 import GlobalStyling from "./globalStyles";
+import { ThemeExtended } from "./berry-theme/themeType";
 // ** Theme Override Imports
 // ** Theme
 
@@ -19,7 +20,7 @@ const themeSettings = {
   isOpen: [], // for active default menu
   defaultId: "default",
   fontFamily: "sans-serif",
-  borderRadius: 12,
+  borderRadius: 3,
   opened: true,
   navType: "light",
 } as const;

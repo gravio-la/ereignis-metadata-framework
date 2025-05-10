@@ -1,4 +1,6 @@
-export interface ThemeExtended {
+import type { Theme } from "@mui/material/styles";
+
+export interface ThemeExtended extends Theme {
   colors?: Partial<{
     primaryLight: string;
     primaryMain: string;
