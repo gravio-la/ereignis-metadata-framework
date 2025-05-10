@@ -1,7 +1,14 @@
 import { ControlProps, isDescriptionHidden } from "@jsonforms/core";
 import { useFocus } from "@jsonforms/material-renderers";
 import { withJsonFormsControlProps } from "@jsonforms/react";
-import { FormControl, FormHelperText, FormLabel, Hidden } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Hidden,
+} from "@mui/material";
+import merge from "lodash-es/merge";
 import React, { useMemo } from "react";
 
 import { AdbSpecialDateFormGroup } from "./AdbSpecialDateFormGroup";
@@ -17,9 +24,11 @@ const AdbSpecialDateControlComponent = (props: ControlProps) => {
     path,
     handleChange,
     data,
+    config,
+    uischema,
   } = props;
   const isValid = errors.length === 0;
-  //const appliedUiSchemaOptions = merge({}, config, uischema.options)
+  const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const showDescription = !isDescriptionHidden(
     visible,
     description,
@@ -39,21 +48,37 @@ const AdbSpecialDateControlComponent = (props: ControlProps) => {
     return isNaN(num) ? undefined : num;
   }, [data]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <Box>
       <FormControl>
-        {label && label.length > 0 && <FormLabel>{label}</FormLabel>}
-        <AdbSpecialDateFormGroup
-          data={numberData}
-          handleChange={(value) => handleChange(path, value)}
-          disabled={!enabled}
-        />
+        {label &&
+          label.length > 0 &&
+          appliedUiSchemaOptions.labelPlacement !== "left" && (
+            <FormLabel>{label}</FormLabel>
+          )}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {label &&
+            label.length > 0 &&
+            appliedUiSchemaOptions.labelPlacement === "left" && (
+              <FormLabel>{label}</FormLabel>
+            )}
+          <AdbSpecialDateFormGroup
+            data={numberData}
+            handleChange={(value) => handleChange(path, value)}
+            disabled={!enabled}
+            fullWidth={Boolean(appliedUiSchemaOptions.fullWidth)}
+          />
+        </Box>
         <FormHelperText error={!isValid && !showDescription}>
           {firstFormHelperText}
         </FormHelperText>
         <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
       </FormControl>
-    </Hidden>
+    </Box>
   );
 };
 

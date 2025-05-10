@@ -11,11 +11,13 @@ export type AdbSpecialDateFormGroupProps = {
   data?: number;
   handleChange: (value: number) => void;
   disabled?: boolean;
+  fullWidth?: boolean;
 };
 export const AdbSpecialDateFormGroup = ({
   data,
   handleChange,
   disabled,
+  fullWidth,
   ...props
 }: AdbSpecialDateFormGroupProps & FormGroupProps) => {
   const handleTextFieldChange = useCallback(
@@ -65,11 +67,27 @@ export const AdbSpecialDateFormGroup = ({
   );
 
   return (
-    <FormGroup row={true} {...props}>
+    <FormGroup
+      row={true}
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        width: fullWidth ? "100%" : "auto",
+      }}
+      {...props}
+    >
       <TextField
         disabled={disabled}
         sx={{
-          width: "5em",
+          ...(fullWidth
+            ? {
+                width: "29%",
+                minWidth: "4em",
+              }
+            : {
+                width: "4em",
+              }),
           "& .MuiOutlinedInput-root": {
             "& .MuiOutlinedInput-notchedOutline": {
               borderTopRightRadius: "0",
@@ -84,7 +102,14 @@ export const AdbSpecialDateFormGroup = ({
       <TextField
         disabled={disabled}
         sx={{
-          width: "5em",
+          ...(fullWidth
+            ? {
+                width: "29%",
+                minWidth: "4em",
+              }
+            : {
+                width: "4em",
+              }),
           "& .MuiOutlinedInput-root": {
             "& .MuiOutlinedInput-notchedOutline": {
               borderRadius: "0",
@@ -98,7 +123,14 @@ export const AdbSpecialDateFormGroup = ({
       <TextField
         disabled={disabled}
         sx={{
-          width: "8em",
+          ...(fullWidth
+            ? {
+                width: "42%",
+                minWidth: "6em",
+              }
+            : {
+                width: "6em",
+              }),
           "& .MuiOutlinedInput-root": {
             "& .MuiOutlinedInput-notchedOutline": {
               borderTopLeftRadius: "0",
