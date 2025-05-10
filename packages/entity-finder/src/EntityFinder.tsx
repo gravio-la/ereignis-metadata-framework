@@ -4,7 +4,6 @@ import { ClassicResultListWrapper } from "@graviola/edb-basic-components";
 import { PrimaryField } from "@graviola/edb-core-types";
 import {
   useAdbContext,
-  useGlobalSearch,
   useModalRegistry,
   useSimilarityFinderState,
 } from "@graviola/edb-state-hooks";
@@ -12,20 +11,24 @@ import {
   FinderKnowledgeBaseDescription,
   FindOptions,
   KnowledgeSources,
-  SimilarityFinderProps,
+  EntityFinderProps,
 } from "@graviola/semantic-jsonform-types";
 import { Resolve } from "@jsonforms/core";
 import { NoteAdd } from "@mui/icons-material";
-import { Button, CircularProgress, Grid, List, Menu, MenuItem, TextField } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  List,
+  Menu,
+  MenuItem,
+  TextField,
+  useControlled,
+} from "@mui/material";
 import { debounce, uniq } from "lodash-es";
 import { useTranslation } from "next-i18next";
 import * as React from "react";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 
@@ -62,9 +65,12 @@ const performSearch = (
 type AdvancedFilterSettingsMenuProps = {
   onLimitChange: (limit: number) => void;
   limit: number;
-}
+};
 
-const AdvancedFilterSettingsMenu = ({ onLimitChange, limit }: AdvancedFilterSettingsMenuProps) => {
+const AdvancedFilterSettingsMenu = ({
+  onLimitChange,
+  limit,
+}: AdvancedFilterSettingsMenuProps) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const handleLimitChange = useCallback(
@@ -72,52 +78,42 @@ const AdvancedFilterSettingsMenu = ({ onLimitChange, limit }: AdvancedFilterSett
     [onLimitChange],
   );
 
-  return (<Grid container alignItems="center">
-    <Grid item>
-      <Button
-        size="small"
-        variant="outlined"
-        aria-haspopup="true"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-        title={t("limit")}
-      >
-        {t("limit")}: {limit}
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-      >
-        <MenuItem sx={{ p: 2 }}>
-          <TextField
-            label={t("limit")}
-            type="number"
-            value={limit}
-            onChange={handleLimitChange}
-            inputProps={{
-              min: 1,
-              max: 100,
-              step: 1
-            }}
-            size="small"
-            sx={{ width: "100px" }}
-          />
-        </MenuItem>
-      </Menu>
+  return (
+    <Grid container alignItems="center">
+      <Grid item>
+        <Button
+          size="small"
+          variant="outlined"
+          aria-haspopup="true"
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          title={t("limit")}
+        >
+          {t("limit")}: {limit}
+        </Button>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem sx={{ p: 2 }}>
+            <TextField
+              label={t("limit")}
+              type="number"
+              value={limit}
+              onChange={handleLimitChange}
+              inputProps={{
+                min: 1,
+                max: 100,
+                step: 1,
+              }}
+              size="small"
+              sx={{ width: "100px" }}
+            />
+          </MenuItem>
+        </Menu>
+      </Grid>
     </Grid>
-  </Grid>
   );
-};
-type EntityFinderProps<
-  FindResultType,
-  FullEntityType,
-  SourceType extends string,
-> = SimilarityFinderProps<FindResultType, FullEntityType, SourceType> & {
-  allKnowledgeBases: FinderKnowledgeBaseDescription<
-    FindResultType,
-    FullEntityType,
-    SourceType
-  >[];
 };
 
 export const EntityFinder = <
@@ -126,14 +122,13 @@ export const EntityFinder = <
   SourceType extends string = string,
 >({
   finderId,
-  data,
-  classIRI: preselectedClassIRI,
+  classIRI: typeIRI,
   onEntityIRIChange,
   onExistingEntityAccepted,
   onMappedDataAccepted,
   onSelectedEntityChange,
-  searchOnDataPath,
   search,
+  onSearchChange,
   hideFooter,
   knowledgeSources,
   additionalKnowledgeSources,
@@ -143,13 +138,26 @@ export const EntityFinder = <
     queryBuildOptions,
     normDataMapping = {},
     createEntityIRI,
-    typeNameToTypeIRI,
     typeIRIToTypeName,
     components: { EditEntityModal },
   } = useAdbContext();
-  const [typeName, setTypeName] = useState(
-    typeIRIToTypeName(preselectedClassIRI),
+
+  const [localSearch, setSearchString] = useState<string | undefined>();
+  const searchString = localSearch || search;
+
+  const handleSearchStringChange = useCallback(
+    (value: string) => {
+      setSearchString(value);
+      onSearchChange?.(value);
+    },
+    [setSearchString, onSearchChange],
   );
+
+  const typeName = useMemo(
+    () => typeIRIToTypeName(typeIRI),
+    [typeIRI, typeIRIToTypeName],
+  );
+
   const selectedKnowledgeSources = useMemo(() => {
     const preselectedKnowledgeSources =
       knowledgeSources ||
@@ -167,15 +175,9 @@ export const EntityFinder = <
     knowledgeSources,
     normDataMapping,
     allKnowledgeBases,
-    typeName,
   ]);
 
   const { primaryFields } = queryBuildOptions;
-  const {
-    search: globalSearch,
-    typeName: globalTypeName,
-    setSearch,
-  } = useGlobalSearch();
 
   const [limit, setLimit] = useState(20);
   const handleLimitChange = useCallback(
@@ -200,26 +202,11 @@ export const EntityFinder = <
   }, [resetElementIndex, addActiveFinder, removeActiveFinder, finderId]);
 
   const { t } = useTranslation();
-  const handleSearchStringChange = useCallback(
-    (value: string) => {
-      setSearch(value);
-    },
-    [setSearch],
-  );
-  const dataPathSearch = useMemo<string | undefined>(
-    () => searchOnDataPath && Resolve.data(data, searchOnDataPath),
-    [data, searchOnDataPath],
-  );
-  const searchString: string | undefined = useMemo<string | null>(
-    () => dataPathSearch || globalSearch || search || null,
-    [dataPathSearch, search, globalSearch],
-  );
   const knowledgeBases = useMemo(
     () =>
-      (allKnowledgeBases || [])
-        .filter(({ id }) =>
-          selectedKnowledgeSources.includes(id),
-        ),
+      (allKnowledgeBases || []).filter(({ id }) =>
+        selectedKnowledgeSources.includes(id),
+      ),
     [allKnowledgeBases, selectedKnowledgeSources],
   );
 
@@ -238,8 +225,8 @@ export const EntityFinder = <
     (search: string) =>
       debouncedSearch(
         search,
-        preselectedClassIRI,
-        typeIRIToTypeName(preselectedClassIRI),
+        typeIRI,
+        typeIRIToTypeName(typeIRI),
         { limit },
         knowledgeBases,
         setSearchResults,
@@ -247,7 +234,7 @@ export const EntityFinder = <
       ),
     [
       knowledgeBases,
-      preselectedClassIRI,
+      typeIRI,
       limit,
       setSearchResults,
       setElementCount,
@@ -264,17 +251,6 @@ export const EntityFinder = <
     doSearch(searchString);
   }, [searchString]);
 
-  useEffect(() => {
-    if (globalTypeName) setTypeName(globalTypeName);
-  }, [globalTypeName, setTypeName]);
-  useEffect(() => {
-    setTypeName(typeIRIToTypeName(preselectedClassIRI));
-  }, [preselectedClassIRI, setTypeName, typeIRIToTypeName]);
-  const classIRI = useMemo(
-    () => typeNameToTypeIRI(typeName),
-    [typeName, typeNameToTypeIRI],
-  );
-
   const { mapData } = useDeclarativeMapper();
   const handleManuallyMapData = useCallback(
     async (id: string | undefined, entryData: any, source: string) => {
@@ -284,7 +260,7 @@ export const EntityFinder = <
         const knowledgeBase = knowledgeBases.find((kb) => kb.id === source);
         const finalData = await mapData(
           id,
-          classIRI,
+          typeIRI,
           entryData,
           knowledgeBase.authorityIRI,
         );
@@ -296,7 +272,7 @@ export const EntityFinder = <
     },
     [
       mapData,
-      classIRI,
+      typeIRI,
       onMappedDataAccepted,
       knowledgeBases,
       setMappingInProgress,
@@ -351,8 +327,8 @@ export const EntityFinder = <
   const showEditDialog = useCallback(() => {
     const defaultLabelKey = getDefaultLabelKey();
     const newItem = {
-      "@id": createEntityIRI(preselectedClassIRI),
-      "@type": preselectedClassIRI,
+      "@id": createEntityIRI(typeName),
+      "@type": typeIRI,
       [defaultLabelKey]: searchString,
     };
     const modalID = `edit-${newItem["@type"]}-${newItem["@id"]}`;
@@ -367,7 +343,8 @@ export const EntityFinder = <
     });
   }, [
     registerModal,
-    preselectedClassIRI,
+    typeName,
+    typeIRI,
     searchString,
     handleEntityChange,
     createEntityIRI,
@@ -453,15 +430,18 @@ export const EntityFinder = <
             <Grid item sx={{ width: "100%" }}>
               <SearchFieldWithBadges
                 onCreateNew={showEditDialog}
-                disabled={Boolean(dataPathSearch)}
+                disabled={false}
                 searchString={searchString}
-                typeIRI={classIRI}
+                typeIRI={typeIRI}
                 onSearchStringChange={handleSearchStringChange}
                 selectedKnowledgeSources={selectedKnowledgeSources}
                 knowledgeBases={knowledgeBases}
                 onKeyUp={handleKeyUp}
                 advancedConfigChildren={
-                  <AdvancedFilterSettingsMenu onLimitChange={handleLimitChange} limit={limit} />
+                  <AdvancedFilterSettingsMenu
+                    onLimitChange={handleLimitChange}
+                    limit={limit}
+                  />
                 }
               />
             </Grid>
@@ -488,7 +468,7 @@ export const EntityFinder = <
                           kb.listItemRenderer(
                             entry,
                             idx,
-                            classIRI,
+                            typeIRI,
                             elementIndex === idx,
                             (id, index) => handleSelectEntity(id, index, kb),
                             (id, data) => handleAccept(id, data, kb.id),
