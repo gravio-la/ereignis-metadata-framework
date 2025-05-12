@@ -33,7 +33,13 @@ export const SemanticJsonFormToolbar = ({
 }: SemanticJsonFormsToolbarProps) => {
   const { t } = useTranslation();
   return (
-    <Toolbar>
+    <Toolbar
+      sx={{
+        p: 0,
+        "&.MuiToolbar-root": { padding: 0 },
+        borderBottom: (theme) => "1px solid " + theme.palette.divider,
+      }}
+    >
       <IconButton onClick={onShow}>
         <OpenInNew />
       </IconButton>

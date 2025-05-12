@@ -6,7 +6,11 @@ import {
   useRightDrawerState,
 } from "@graviola/edb-state-hooks";
 import { SemanticJsonFormNoOpsProps } from "@graviola/semantic-jsonform-types";
-import { JsonFormsCore, JsonSchema } from "@jsonforms/core";
+import {
+  generateDefaultUISchema,
+  JsonFormsCore,
+  JsonSchema,
+} from "@jsonforms/core";
 import { JsonForms } from "@jsonforms/react";
 import { Card, CardContent, Grid } from "@mui/material";
 import { merge } from "lodash-es";
@@ -46,32 +50,22 @@ export const SemanticJsonFormNoOps: FunctionComponent<
   enableSidebar,
   wrapWithinCard,
   formsPath,
+  disabled,
 }) => {
   const {
-    queryBuildOptions: { primaryFields },
-    typeIRIToTypeName,
     createEntityIRI,
     uiSchemaDefaultRegistry,
     rendererRegistry,
     cellRendererRegistry,
-    primaryFieldRendererRegistry,
+    uischemata,
     components: { SimilarityFinder },
+    queryBuildOptions: { typeIRItoTypeName },
   } = useAdbContext();
-  const searchOnDataPath = useMemo(() => {
-    const typeName = typeIRIToTypeName(typeIRI);
-    return primaryFields[typeName]?.label;
-  }, [typeIRI, typeIRIToTypeName, primaryFields]);
-  const primaryFieldRenderer = useMemo(
-    () =>
-      primaryFieldRendererRegistry ? primaryFieldRendererRegistry(typeIRI) : [],
-    [typeIRI, primaryFieldRendererRegistry],
-  );
 
   const handleFormChange = useCallback(
     (state: Pick<JsonFormsCore, "data" | "errors">) => {
       onChange?.(state.data, "user");
-      if (onError)
-        onError(state.errors);
+      if (onError) onError(state.errors);
     },
     [onChange, onError],
   );
@@ -136,20 +130,28 @@ export const SemanticJsonFormNoOps: FunctionComponent<
     return {
       ...jfpProps,
       uischemas: uiSchemaDefaultRegistry,
+      uischema:
+        jfpProps.uischema ||
+        uischemata?.[typeIRItoTypeName(typeIRI)] ||
+        undefined,
       config: {
         ...config,
         formsPath,
         typeIRI,
       },
     };
-  }, [jfpProps, uiSchemaDefaultRegistry, config, formsPath, typeIRI]);
+  }, [
+    jfpProps,
+    uiSchemaDefaultRegistry,
+    config,
+    formsPath,
+    typeIRI,
+    uischemata,
+    typeIRItoTypeName,
+  ]);
   const allRenderer = useMemo(
-    () => [
-      ...(rendererRegistry || []),
-      ...(jfpRenderers || []),
-      ...primaryFieldRenderer,
-    ],
-    [jfpRenderers, primaryFieldRenderer, rendererRegistry],
+    () => [...(rendererRegistry || []), ...(jfpRenderers || [])],
+    [jfpRenderers, rendererRegistry],
   );
   const allCellRenderer = useMemo(
     () => [...(cellRendererRegistry || []), ...(jfpCells || [])],
@@ -175,6 +177,7 @@ export const SemanticJsonFormNoOps: FunctionComponent<
                 cells={allCellRenderer}
                 onChange={handleFormChange}
                 schema={schema as JsonSchema}
+                readonly={disabled}
                 {...finalJsonFormsProps}
               />
             </WithCard>
@@ -188,7 +191,6 @@ export const SemanticJsonFormNoOps: FunctionComponent<
                 classIRI={typeIRI}
                 jsonSchema={schema}
                 onEntityIRIChange={handleEntityIRIChange}
-                searchOnDataPath={searchOnDataPath}
                 onMappedDataAccepted={handleMappedData}
               />
             </Grid>
@@ -205,7 +207,6 @@ export const SemanticJsonFormNoOps: FunctionComponent<
               classIRI={typeIRI}
               jsonSchema={schema}
               onEntityIRIChange={handleEntityIRIChange}
-              searchOnDataPath={searchOnDataPath}
               onMappedDataAccepted={handleMappedData}
               hideFooter
             />

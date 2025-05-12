@@ -1,5 +1,3 @@
-import "react-json-view-lite/dist/index.css";
-
 import NiceModal from "@ebay/nice-modal-react";
 import {
   FunctionComponent,
@@ -13,7 +11,7 @@ import {
   useAdbContext,
   useCRUDWithQueryClient,
   useDataStore,
-  useQueryKeyResolver
+  useQueryKeyResolver,
 } from "@graviola/edb-state-hooks";
 import { SemanticJsonFormToolbar } from "./SemanticJsonFormToolbar";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
@@ -62,7 +60,6 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
     queryOptions: { enabled: false },
     loadQueryKey: "rootLoad",
   });
-
 
   const { updateSourceToTargets, removeSource } = useQueryKeyResolver();
   const [isSaving, setIsSaving] = useState(false);
@@ -150,7 +147,15 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
           variant: "error",
         });
       });
-  }, [setIsSaving, enqueueSnackbar, saveMutation, refetch, data, onChange, entityIRI]);
+  }, [
+    setIsSaving,
+    enqueueSnackbar,
+    saveMutation,
+    refetch,
+    data,
+    onChange,
+    entityIRI,
+  ]);
 
   const handleRemove = useCallback(async () => {
     NiceModal.show(GenericModal, {
@@ -178,7 +183,6 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
   const handleToggleEditMode = useCallback(() => {
     setEditMode((prev) => !prev);
   }, [setEditMode]);
-
 
   const handleShowEntry = useCallback(() => {
     NiceModal.show(EntityDetailModal, {
