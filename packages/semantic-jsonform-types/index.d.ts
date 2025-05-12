@@ -42,10 +42,9 @@ export type SemanticJsonFormProps = {
 };
 
 export type LoadResult = {
-    subjects: string[];
-    document: any;
+  subjects: string[];
+  document: any;
 };
-
 
 export type SemanticJsonFormNoOpsProps = {
   typeIRI: string;
@@ -64,28 +63,34 @@ export type SemanticJsonFormNoOpsProps = {
   enableSidebar?: boolean;
   wrapWithinCard?: boolean;
   formsPath?: string;
+  disabled?: boolean;
 };
 
 export type KnowledgeSources = "kb" | "gnd" | "wikidata" | "k10plus" | "ai";
 
-export type SimilarityFinderProps<
+export type EntityFinderProps<
   FindResultType = any,
   FullEntityType = any,
   SourceType extends string = string,
 > = {
   finderId: string;
-  data: any;
   classIRI: string;
   jsonSchema: JSONSchema7;
   onEntityIRIChange?: (entityIRI: string | undefined) => void;
   onMappedDataAccepted?: (data: any) => void;
   onExistingEntityAccepted?: (entityIRI: string, data: any) => void;
   onSelectedEntityChange?: (id: string, authorityIRI: string) => void;
-  searchOnDataPath?: string;
   search?: string;
+  data?: any;
+  onSearchChange?: (search: string) => void;
   hideFooter?: boolean;
   knowledgeSources?: SourceType[];
   additionalKnowledgeSources?: SourceType[];
+  allKnowledgeBases?: FinderKnowledgeBaseDescription<
+    FindResultType,
+    FullEntityType,
+    SourceType
+  >[];
 };
 
 export type GlobalSemanticConfig = {
@@ -112,7 +117,7 @@ type SnackbarOptions = {
 export type SnackbarFacade = {
   enqueueSnackbar: (message: string, options?: SnackbarOptions) => SnackbarKey;
   closeSnackbar: (key?: SnackbarKey) => void;
-}
+};
 
 export type GlobalAppConfig<DeclarativeMappingType> = GlobalSemanticConfig & {
   normDataMapping?: Record<string, NormDataMapping<DeclarativeMappingType>>;
@@ -121,9 +126,6 @@ export type GlobalAppConfig<DeclarativeMappingType> = GlobalSemanticConfig & {
   makeStubSchema?: (schema: JSONSchema7) => JSONSchema7;
   uiSchemaDefaultRegistry?: JsonFormsUISchemaRegistryEntry[];
   rendererRegistry?: JsonFormsRendererRegistryEntry[];
-  primaryFieldRendererRegistry?: (
-    typeIRI: string,
-  ) => JsonFormsRendererRegistryEntry[];
   cellRendererRegistry?: JsonFormsCellRendererRegistryEntry[];
   uischemata?: Record<string, any>;
 };
@@ -205,5 +207,10 @@ export type FinderKnowledgeBaseDescription<
   ) => React.ReactNode;
 };
 
-export type MapDataFromAuthorityFn = (id: string | undefined, classIRI: string, entryData: any, authorityIRI: string, limit?: number) => Promise<any>;
-
+export type MapDataFromAuthorityFn = (
+  id: string | undefined,
+  classIRI: string,
+  entryData: any,
+  authorityIRI: string,
+  limit?: number,
+) => Promise<any>;
