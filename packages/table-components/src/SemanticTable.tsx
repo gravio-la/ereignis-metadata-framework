@@ -130,7 +130,7 @@ export const SemanticTable = ({
       const typeName = typeIRIToTypeName(typeIRI);
       if (dataStore.countDocuments) {
         try {
-          const amount = await dataStore.countDocuments(typeName, { sorting });
+          const amount = await dataStore.countDocuments(typeName);
           return amount;
         } catch (e) {
           console.error(e);
