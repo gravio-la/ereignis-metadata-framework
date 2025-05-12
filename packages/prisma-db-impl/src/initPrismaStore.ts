@@ -231,7 +231,7 @@ export const initPrismaStore: (
       return entries.map((e) => e.id);
     },
     findDocumentsByLabel: async (typeName, label, limit) => {
-      const primaryFieldDeclaration = primaryFields[typeName];
+      const primaryFieldDeclaration = (primaryFields as any)?.[typeName];
       if (!primaryFieldDeclaration?.label) {
         throw new Error("No primary field found for type " + typeName);
       }
@@ -272,7 +272,10 @@ export const initPrismaStore: (
       }
       return classes;
     },
-    countDocuments: async (typeName: string, query: { search?: string }) => {
+    countDocuments: async (
+      typeName: string,
+      query: { search?: string } = {},
+    ) => {
       const prim = primaryFields[typeName];
       if (!prim) {
         throw new Error("No primary field found for type " + typeName);
