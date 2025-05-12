@@ -1,14 +1,14 @@
 import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
-import { EntityFinder, EntityFinderProps } from "./EntityFinder";
+import { EntityFinder } from "./EntityFinder";
+
+const sladb = (name: string) =>
+  `http://ontologies.slub-dresden.de/exhibition#${name}`;
 
 const meta: Meta<typeof EntityFinder> = {
   component: EntityFinder,
   title: "Components/EntityFinder",
-  argTypes: {
-    name: { control: "text" },
-  },
 };
 
 export default meta;
@@ -16,18 +16,12 @@ type Story = StoryObj<typeof EntityFinder>;
 
 export const Default: Story = {
   args: {
-    name: "World",
+    classIRI: sladb("Exhibition"),
   },
 };
 
-export const CustomName: Story = {
+export const PersonFinder: Story = {
   args: {
-    name: "Storybook",
-  },
-};
-
-export const LongName: Story = {
-  args: {
-    name: "This is a very long name to test wrapping",
+    classIRI: sladb("Person"),
   },
 };
