@@ -21,9 +21,9 @@ import type { JSONSchema7 } from "json-schema";
 
 import type { SPARQLDataStoreConfig } from "./SPARQLDataStoreConfig";
 
-export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
+export const initSPARQLStore = <S extends AbstractDatastore>(
   dataStoreConfig,
-) => {
+): S => {
   const {
     defaultPrefix,
     jsonldContext,
@@ -294,5 +294,5 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         return findDocumentsIterable(typeName, limit, query.search);
       },
     },
-  } as AbstractDatastore;
+  } as unknown as S;
 };
