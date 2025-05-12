@@ -3,6 +3,8 @@ import {
   RankedTester,
   rankWith,
   isStringControl,
+  isDescriptionHidden,
+  ControlElement,
 } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import {
@@ -11,6 +13,7 @@ import {
   IconButton,
   Popover,
   Box,
+  FormHelperText,
 } from "@mui/material";
 import merge from "lodash-es/merge";
 import React, { useCallback, useState } from "react";
@@ -31,6 +34,7 @@ import {
 } from "react-color";
 import { COLOR_FORMATS } from "./ajvColorFormats";
 import { type ColorFormat, formatColor } from "./formatColor";
+import { useFocus } from "@jsonforms/material-renderers";
 
 type PickerComponent =
   | typeof AlphaPicker
@@ -46,9 +50,27 @@ type PickerComponent =
   | typeof SwatchesPicker
   | typeof TwitterPicker;
 
-interface PickerConfig {
-  component: string;
-  props?: Record<string, any>;
+type PickerComponentName = keyof typeof PICKER_COMPONENTS;
+
+type PickerProps<T extends PickerComponentName> =
+  T extends keyof typeof PICKER_COMPONENTS
+    ? ConstructorParameters<(typeof PICKER_COMPONENTS)[T]>[0]
+    : never;
+
+export type PickerComponentControlElement<
+  T extends PickerComponentName = PickerComponentName,
+> = ControlElement & {
+  options?: {
+    picker: {
+      component: T;
+      props?: PickerProps<T>;
+    };
+  };
+};
+
+interface PickerConfig<T extends PickerComponentName = PickerComponentName> {
+  component: T;
+  props?: PickerProps<T>;
 }
 
 const PICKER_COMPONENTS: Record<string, PickerComponent> = {
@@ -83,6 +105,7 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
     errors,
     schema,
     label,
+    description,
     uischema,
     visible,
     enabled,
@@ -96,6 +119,7 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
   const { t } = useTranslation();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [focused, onFocus, onBlur] = useFocus();
 
   // Determine the color format from schema
   const colorFormat =
@@ -130,6 +154,20 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
   };
 
   const open = Boolean(anchorEl);
+
+  const showDescription = !isDescriptionHidden(
+    visible,
+    description,
+    focused,
+    appliedUiSchemaOptions.showUnfocusedDescription,
+  );
+
+  const firstFormHelperText = showDescription
+    ? description
+    : !isValid
+      ? errors
+      : null;
+  const secondFormHelperText = showDescription && !isValid ? errors : null;
 
   if (!visible) {
     return null;
@@ -168,7 +206,13 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
           disabled={!enabled}
           onChange={(e) => handleChange_(e.target.value)}
           value={data}
+          error={!isValid}
           fullWidth={true}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          InputLabelProps={{
+            shrink: Boolean(data),
+          }}
         />
       </Box>
       <Popover
@@ -180,12 +224,17 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
           horizontal: "left",
         }}
       >
+        {/* @ts-ignore */}
         <PickerComponent
           color={data}
           onChange={handleColorChange}
           {...pickerConfig.props}
         />
       </Popover>
+      <FormHelperText error={!isValid && !showDescription}>
+        {firstFormHelperText}
+      </FormHelperText>
+      <FormHelperText error={!isValid}>{secondFormHelperText}</FormHelperText>
     </FormControl>
   );
 };

@@ -5,7 +5,10 @@ import { materialRenderers } from "@jsonforms/material-renderers";
 import {
   AdvancedColorPickerRenderer,
   AdvancedColorPickerRendererTester,
+  PickerComponentControlElement,
 } from "./AdvancedColorPickerRenderer";
+import { addColorFormatsToAjv } from "./ajvColorFormats";
+import Ajv from "ajv";
 
 const meta: Meta<typeof AdvancedColorPickerRenderer> = {
   component: AdvancedColorPickerRenderer,
@@ -37,7 +40,12 @@ const schema = {
   },
 };
 
-const uischema = {
+type UISchema = {
+  type: "VerticalLayout";
+  elements: Array<PickerComponentControlElement>;
+};
+
+const uischema: UISchema = {
   type: "VerticalLayout",
   elements: [
     // Color format examples
@@ -75,9 +83,8 @@ const uischema = {
         picker: {
           component: "alpha",
           props: {
-            width: "316px",
-            height: "16px",
-            direction: "horizontal",
+            width: 316,
+            height: 16,
           },
         },
       },
@@ -245,9 +252,8 @@ const uischema = {
         picker: {
           component: "hue",
           props: {
-            width: "316px",
-            height: "16px",
-            direction: "horizontal",
+            width: 316,
+            height: 16,
           },
         },
       },
@@ -302,6 +308,11 @@ const uischema = {
       options: {
         picker: {
           component: "slider",
+          props: {
+            sx: {
+              width: "316px",
+            },
+          },
         },
       },
     },
@@ -390,6 +401,9 @@ const renderers = [
   },
 ];
 
+const ajv = new Ajv();
+addColorFormatsToAjv(ajv);
+
 const JsonFormsForAdvancedColorPickerRenderer = () => {
   const [data, setData] = useState({});
   const [error, setError] = useState({});
@@ -397,6 +411,7 @@ const JsonFormsForAdvancedColorPickerRenderer = () => {
     setData(data);
     setError(error);
   };
+
   return (
     <>
       <JsonForms
@@ -405,6 +420,7 @@ const JsonFormsForAdvancedColorPickerRenderer = () => {
         renderers={renderers}
         data={data}
         onChange={handleChange}
+        ajv={ajv}
       />
       <pre>{JSON.stringify(error, null, 2)}</pre>
     </>

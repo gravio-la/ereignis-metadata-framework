@@ -77,9 +77,6 @@ const ColorPickerRendererComponent = (props: ControlProps) => {
         visibility: visible ? "visible" : "hidden",
       })}
     >
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <IconButton
           onClick={handleClick}
@@ -106,6 +103,9 @@ const ColorPickerRendererComponent = (props: ControlProps) => {
           value={data}
           fullWidth={true}
           disabled={!enabled}
+          InputLabelProps={{
+            shrink: Boolean(data),
+          }}
         />
       </Box>
       <Popover
