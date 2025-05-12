@@ -37,108 +37,186 @@ export type PaginationState = {
   pageSize: number;
 };
 
-export type QueryType = {
-  sorting?: {
+export type QueryPagination = {
+  pagination: PaginationState;
+};
+
+export type QuerySorting = {
+  sorting: {
     id: string;
     desc?: boolean;
   }[];
-  search?: string;
-  pagination?: PaginationState;
-  fields?: string[];
 };
+
+export type QuerySearch = {
+  search: string;
+};
+
+export type QueryFields = {
+  fields: string[];
+};
+
+export type QueryType = Partial<
+  QueryPagination & QuerySorting & QuerySearch & QueryFields
+>;
 
 export type DatastoreBaseConfig = {
   schema: JSONSchema7;
 };
 
-export type InitDatastoreFunction<T extends DatastoreBaseConfig> = (
-  dataStoreConfig: T,
-) => AbstractDatastore;
+export type InitDatastoreFunction<
+  T extends DatastoreBaseConfig,
+  S extends AbstractDatastore = AbstractDatastore,
+> = (dataStoreConfig: T) => S;
 
 export type CountAndIterable<DocumentResult> = {
   amount: number;
   iterable: AsyncIterable<DocumentResult>;
 };
 
-export type AbstractDatastoreIterable<DocumentResult> = {
-  listDocuments: (
-    typeName: string,
+export type AbstractDatastoreIterable<
+  TypeName extends string = string,
+  DocumentResultTypeMap extends Record<string, any> = Record<string, any>,
+  DocumentResult = any,
+> = {
+  listDocuments: <T extends TypeName>(
+    typeName: T,
     limit?: number,
-  ) => Promise<CountAndIterable<DocumentResult>>;
-  findDocuments: (
-    typeName: string,
+  ) => Promise<
+    CountAndIterable<
+      DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T]
+    >
+  >;
+  findDocuments: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
-  ) => Promise<CountAndIterable<DocumentResult>>;
+  ) => Promise<
+    CountAndIterable<
+      DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T]
+    >
+  >;
 };
 
 export type AbstractDatastore<
+  TypeName extends string = string,
+  DocumentResultTypeMap extends Record<string, any> = Record<string, any>,
+  FindResultTypeMap extends Record<
+    string,
+    any[]
+  > = DocumentResultTypeMap extends undefined
+    ? Record<string, any[]>
+    : { [K in keyof DocumentResultTypeMap]: DocumentResultTypeMap[K][] },
+  UpsertResultTypeMap extends Record<string, any> = DocumentResultTypeMap,
+  UpsertDocumentTypeMap extends Record<string, any> = DocumentResultTypeMap,
+  RemoveResultTypeMap extends Record<string, any> = DocumentResultTypeMap,
   UpsertResult = any,
   LoadResult = any,
   FindResult = any[],
   RemoveResult = any,
   DocumentResult = LoadResult,
+  UpsertDocument = any,
   ImportResult = any,
   BulkImportResult = any,
 > = {
   typeNameToTypeIRI: StringToIRIFn;
   typeIRItoTypeName: IRIToStringFn;
   removeDocument: (
-    typeName: string,
+    typeName: TypeName,
     entityIRI: string,
   ) => Promise<RemoveResult>;
   importDocument: (
-    typeName: string,
+    typeName: TypeName,
     entityIRI: any,
     importStore: AbstractDatastore,
   ) => Promise<ImportResult>;
   importDocuments: (
-    typeName: string,
+    typeName: TypeName,
     importStore: AbstractDatastore,
     limit: number,
   ) => Promise<BulkImportResult>;
-  loadDocument: (typeName: string, entityIRI: string) => Promise<LoadResult>;
-  existsDocument: (typeName: string, entityIRI: string) => Promise<boolean>;
-  upsertDocument: (
-    typeName: string,
+  loadDocument: <T extends TypeName>(
+    typeName: T,
     entityIRI: string,
-    document: any,
-  ) => Promise<UpsertResult>;
-  listDocuments: (
-    typeName: string,
+  ) => Promise<
+    DocumentResultTypeMap[T] extends undefined
+      ? LoadResult
+      : DocumentResultTypeMap[T] | undefined | null
+  >;
+  existsDocument: (typeName: TypeName, entityIRI: string) => Promise<boolean>;
+  upsertDocument: (
+    typeName: TypeName,
+    entityIRI: string,
+    document: UpsertDocumentTypeMap[T] extends undefined
+      ? UpsertDocument
+      : UpsertDocumentTypeMap[T],
+  ) => Promise<
+    UpsertResultTypeMap[T] extends undefined
+      ? UpsertResult
+      : UpsertResultTypeMap[T]
+  >;
+  listDocuments: <T extends TypeName>(
+    typeName: T,
     limit?: number,
-    cb?: (document: any) => Promise<any>,
-  ) => Promise<FindResult>;
-  findDocuments: (
-    typeName: string,
+    cb?: (
+      document: DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T],
+    ) => Promise<any>,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocuments: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
-    cb?: (document: any) => Promise<DocumentResult>,
-  ) => Promise<FindResult>;
+    cb?: (
+      document: DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T],
+    ) => Promise<any>,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
   findEntityByTypeName?: (
-    typeName: string,
+    typeName: TypeName,
     searchString: string,
     limit?: number,
   ) => Promise<Entity[]>;
-  findDocumentsByLabel?: (
-    typeName: string,
+  findDocumentsByLabel?: <T extends TypeName>(
+    typeName: T,
     label: string,
     limit?: number,
-  ) => Promise<FindResult>;
-  findDocumentsByAuthorityIRI?: (
-    typeName: string,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocumentsByAuthorityIRI?: <T extends TypeName>(
+    typeName: T,
     authorityIRI: string,
     repositoryIRI?: string,
     limit?: number,
-  ) => Promise<FindResult>;
-  findDocumentsAsFlatResultSet?: (
-    typeName: string,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocumentsAsFlatResultSet?: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
   ) => Promise<any>;
-  countDocuments?: (typeName: string, query: QueryType) => Promise<number>;
+  countDocuments?: (
+    typeName: TypeName,
+    query?: Partial<QuerySearch>,
+  ) => Promise<number>;
   getClasses?: (entityIRI: string) => Promise<string[]>;
-  iterableImplementation?: AbstractDatastoreIterable<DocumentResult>;
+  iterableImplementation?: AbstractDatastoreIterable<
+    TypeName,
+    DocumentResultTypeMap,
+    DocumentResult
+  >;
 };
 
 export type JSONLDConfig = {
