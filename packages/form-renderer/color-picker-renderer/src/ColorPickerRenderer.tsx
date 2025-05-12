@@ -27,6 +27,7 @@ const ColorPickerRendererComponent = (props: ControlProps) => {
     schema,
     uischema,
     visible,
+    enabled,
     required,
     label,
     config,
@@ -100,14 +101,15 @@ const ColorPickerRendererComponent = (props: ControlProps) => {
           />
         </IconButton>
         <TextField
-          label={schema.title}
+          label={label}
           onChange={(e) => handleChange_(e.target.value)}
           value={data}
           fullWidth={true}
+          disabled={!enabled}
         />
       </Box>
       <Popover
-        open={open}
+        open={open && enabled}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{

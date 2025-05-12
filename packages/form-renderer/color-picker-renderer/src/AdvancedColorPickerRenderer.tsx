@@ -82,8 +82,10 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
     id,
     errors,
     schema,
+    label,
     uischema,
     visible,
+    enabled,
     required,
     config,
     data,
@@ -129,13 +131,16 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
 
   const open = Boolean(anchorEl);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
     <FormControl
       fullWidth={!appliedUiSchemaOptions.trim}
       id={id}
       sx={(theme) => ({
         marginBottom: theme.spacing(2),
-        visibility: visible ? "visible" : "hidden",
       })}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -159,14 +164,15 @@ const AdvancedColorPickerRendererComponent = (props: ControlProps) => {
           />
         </IconButton>
         <TextField
-          label={schema.title}
+          label={label}
+          disabled={!enabled}
           onChange={(e) => handleChange_(e.target.value)}
           value={data}
           fullWidth={true}
         />
       </Box>
       <Popover
-        open={open}
+        open={open && enabled}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
