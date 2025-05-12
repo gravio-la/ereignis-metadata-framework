@@ -2,10 +2,10 @@ import { createContext, useContext } from "react";
 import type {
   EditEntityModalProps,
   EntityDetailModalProps,
+  EntityFinderProps,
   GlobalAppConfig,
   ModRouter,
   SemanticJsonFormNoOpsProps,
-  SimilarityFinderProps,
   SnackbarFacade,
 } from "@graviola/semantic-jsonform-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
@@ -30,29 +30,42 @@ export type AdbContextValue<DeclarativeMappingType> =
       EditEntityModal: React.FC<EditEntityModalProps & NiceModalHocProps>;
       EntityDetailModal: React.FC<EntityDetailModalProps & NiceModalHocProps>;
       SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
-      SimilarityFinder: React.FC<SimilarityFinderProps>;
+      SimilarityFinder: React.FC<EntityFinderProps>;
     };
     useSnackbar: () => SnackbarFacade;
     useRouterHook: () => ModRouter;
   };
 
-export type EdbGlobalContextProps<DeclarativeMappingType> =
-  Omit<AdbContextValue<DeclarativeMappingType>, "useSnackbar"> & {
-    children: React.ReactNode;
-    useSnackbar?: () => SnackbarFacade;
-  };
+export type EdbGlobalContextProps<DeclarativeMappingType> = Omit<
+  AdbContextValue<DeclarativeMappingType>,
+  "useSnackbar"
+> & {
+  children: React.ReactNode;
+  useSnackbar?: () => SnackbarFacade;
+};
 
 export const AdbContext = createContext<AdbContextValue<any>>(null);
 
 const useSnackbarFallback: () => SnackbarFacade = () => {
-  return { enqueueSnackbar: (_1, _2) => {return null}, closeSnackbar: (_) => {} };
+  return {
+    enqueueSnackbar: (_1, _2) => {
+      return null;
+    },
+    closeSnackbar: (_) => {},
+  };
 };
 
 export const AdbProvider = <DeclarativeMappingType,>({
   children,
   ...rest
 }: EdbGlobalContextProps<DeclarativeMappingType>) => {
-  return <AdbContext.Provider value={{...rest, useSnackbar: rest.useSnackbar ?? useSnackbarFallback}}>{children}</AdbContext.Provider>;
+  return (
+    <AdbContext.Provider
+      value={{ ...rest, useSnackbar: rest.useSnackbar ?? useSnackbarFallback }}
+    >
+      {children}
+    </AdbContext.Provider>
+  );
 };
 
 export const useAdbContext = <DeclarativeMappingType,>() =>
