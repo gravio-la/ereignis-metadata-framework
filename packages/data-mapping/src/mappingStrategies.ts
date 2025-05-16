@@ -388,8 +388,7 @@ export const createEntityWithAuthoritativeLink = async (
       const newEntity = onNewDocument
         ? await onNewDocument(targetData)
         : targetData;
-
-      newDataElements.push(newEntity);
+      if (newEntity) newDataElements.push(newEntity);
     }
 
     if (single) return newDataElements[0];
@@ -556,6 +555,7 @@ export const createEntityFromString = async (
     typeIRItoTypeName,
     primaryFields,
     onNewDocument,
+    logger,
   } = context;
   const isArray = Array.isArray(sourceData);
   const sourceDataArray = isArray ? sourceData : [sourceData];
@@ -582,9 +582,10 @@ export const createEntityFromString = async (
         [labelField]: trimmedSourceDataElement,
         __draft: true,
       };
-      newDataElements.push(
-        onNewDocument ? await onNewDocument(targetData) : targetData,
-      );
+      const newEntity = onNewDocument
+        ? await onNewDocument(targetData)
+        : targetData;
+      if (newEntity) newDataElements.push(newEntity);
     } else {
       newDataElements.push({
         "@id": primaryIRI,
