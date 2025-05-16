@@ -34,10 +34,10 @@ export const defaultWalkerOptions: Partial<WalkerOptions> = {
   doNotRecurseNamedNodes: true,
 };
 
-const cleanProperty = (data: any) => {
+export const cleanProperty = (data: any) => {
   return Array.isArray(data)
     ? filterUndefOrNull(data).map(cleanProperty)
-    : typeof data === "object"
+    : typeof data === "object" && data !== null
       ? Object.keys(data).reduce((acc, key) => {
           const prop = data[key];
           if (typeof prop === "object") {
@@ -45,6 +45,7 @@ const cleanProperty = (data: any) => {
             if (Array.isArray(cleanedProp) && prop.length === 0) return acc;
             if (
               !Array.isArray(cleanedProp) &&
+              cleanedProp !== null &&
               (Object.keys(cleanedProp).length === 0 ||
                 (Object.keys(cleanedProp).length === 1 && cleanedProp["@type"]))
             ) {
