@@ -3,10 +3,7 @@ import {
   type DeclarativeMapping,
   mapByConfig,
 } from "@graviola/edb-data-mapping";
-import {
-  useAdbContext,
-  useDataStore,
-} from "@graviola/edb-state-hooks";
+import { useAdbContext, useDataStore } from "@graviola/edb-state-hooks";
 import type { MapDataFromAuthorityFn } from "@graviola/semantic-jsonform-types";
 import { useCallback } from "react";
 
@@ -77,7 +74,11 @@ export const useDeclarativeMapper = () => {
                 entityIRI,
                 doc,
               );
-              return newDoc;
+              return {
+                ...newDoc,
+                "@id": entityIRI,
+                "@type": typeName_,
+              };
             } catch (e) {
               console.error("could not create document", e);
             }
@@ -122,14 +123,20 @@ export const useDeclarativeMapper = () => {
 
         const inject = {
           "@type": classIRI,
+          "@id": createEntityIRI(typeIRIToTypeName(classIRI)),
           idAuthority: {
             authority: authorityIRI,
             id: id,
           },
           lastNormUpdate: new Date().toISOString(),
         };
-        const finalData = { ...dataFromAuthority, ...inject };
-        return finalData;
+        const result = mappingContext.onNewDocument
+          ? await mappingContext.onNewDocument({
+              ...dataFromAuthority,
+              ...inject,
+            })
+          : { ...dataFromAuthority, ...inject };
+        return result;
       } catch (e) {
         console.error("could not map from authority", e);
       }
