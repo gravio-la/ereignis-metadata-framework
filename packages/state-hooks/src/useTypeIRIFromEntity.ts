@@ -9,7 +9,7 @@ export const useTypeIRIFromEntity = (
 ) => {
   const { dataStore, ready } = useDataStore();
   const { data: typeIRIs } = useQuery({
-    queryKey: ["classes", entityIRI],
+    queryKey: ["entity", entityIRI, "classes"],
     queryFn: async () => {
       return await dataStore.getClasses(entityIRI);
     },

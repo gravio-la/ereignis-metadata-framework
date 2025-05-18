@@ -31,40 +31,11 @@ export const useGlobalSearchWithHelper = (
   );
   const { keepMounted, setOpen } = useRightDrawerState();
 
-  const { saveMutation } = useCRUDWithQueryClient({
-    typeIRI,
-    schema,
-    queryOptions: { enabled: false },
-    allowUnsafeSourceIRIs: true,
-  });
-
   const handleMappedData = useCallback(
     (newData: any) => {
-      const newIRI = createEntityIRI(typeName);
-      const finalData = {
-        ...newData,
-        "@id": newIRI,
-        "@type": typeIRI,
-      };
-      console.log("will save", finalData);
-
-      saveMutation.mutate(finalData);
-      const labelField = primaryFields[typeName]?.label;
-      const label = labelField ? get(newData, labelField) : "";
-      onDataAccepted &&
-        onDataAccepted({
-          "@id": newIRI,
-          __label: label,
-        });
+      onDataAccepted && onDataAccepted(newData);
     },
-    [
-      onDataAccepted,
-      saveMutation,
-      typeIRI,
-      typeName,
-      createEntityIRI,
-      primaryFields,
-    ],
+    [onDataAccepted, typeIRI, typeName, createEntityIRI, primaryFields],
   );
 
   const handleFocus = useCallback(() => {
