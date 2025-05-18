@@ -22,6 +22,7 @@ export const SparqlStoreProvider: FunctionComponent<
     typeNameToTypeIRI,
     queryBuildOptions,
     jsonLDConfig: { defaultPrefix, jsonldContext },
+    makeStubSchema,
   } = useAdbContext();
 
   const dataStore = useMemo(() => {
@@ -34,6 +35,7 @@ export const SparqlStoreProvider: FunctionComponent<
       sparqlQueryFunctions: crudOptions,
       schema,
       defaultLimit,
+      makeStubSchema,
     });
   }, [
     crudOptions,
