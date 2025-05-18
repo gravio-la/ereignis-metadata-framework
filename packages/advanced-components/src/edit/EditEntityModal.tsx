@@ -106,7 +106,7 @@ export const EditEntityModal = NiceModal.create(
         let cleanedData = await cleanJSONLD(formData, loadedSchema, {
           jsonldContext: jsonLDConfig.jsonldContext,
           defaultPrefix: jsonLDConfig.defaultPrefix,
-          keepContext: true,
+          keepContext: false,
         });
         modal.resolve({
           entityIRI: formData["@id"],
