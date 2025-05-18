@@ -19,7 +19,6 @@ const propertiesContainStopSymbol = (
 
 const MAX_RECURSION = 4;
 const makePrefixed = (key: string) => (key.includes(":") ? key : `:${key}`);
-const doNotFollowItemsRefs = false;
 const mkSubject = (subjectURI: string) =>
   subjectURI.startsWith("?") ? subjectURI : `<${subjectURI}>`;
 export const jsonSchema2construct: (
@@ -98,7 +97,6 @@ export const jsonSchema2construct: (
             propertiesToSPARQLPatterns(o, schema.items, level + 1);
           }
           if (
-            !doNotFollowItemsRefs &&
             isJSONSchemaDefinition(schema.items) &&
             isJSONSchema(schema.items) &&
             schema.items.$ref
