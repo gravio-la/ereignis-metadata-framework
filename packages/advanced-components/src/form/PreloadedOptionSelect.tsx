@@ -30,7 +30,7 @@ export const PreloadedOptionSelect: FunctionComponent<
   PreloadedOptionSelect
 > = ({ load, title, value, typeIRI, onChange, disabled }) => {
   const { data: suggestions, isLoading } = useQuery({
-    queryKey: ["suggestions", typeIRI],
+    queryKey: ["type", typeIRI, "suggestions"],
     queryFn: () => {
       return load();
     },

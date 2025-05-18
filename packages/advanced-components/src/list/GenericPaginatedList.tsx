@@ -77,7 +77,7 @@ export const GenericPaginatedList: FunctionComponent<
   );
 
   const { data: countData } = useQuery({
-    queryKey: ["count", typeIRI],
+    queryKey: ["type", typeIRI, "count"],
     queryFn: async () => {
       if (dataStore.countDocuments) {
         try {
@@ -92,7 +92,7 @@ export const GenericPaginatedList: FunctionComponent<
   });
 
   const { data: results, refetch } = useQuery<ListItemType[]>({
-    queryKey: ["list", typeIRI, page],
+    queryKey: ["type", typeIRI, "list", page],
     queryFn: async () => {
       const primaryFieldDeclaration = primaryFields[typeName] || {};
 
@@ -131,8 +131,7 @@ export const GenericPaginatedList: FunctionComponent<
       return await dataStore.removeDocument(typeName, entityIRI);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["list", typeIRI] });
-      await queryClient.invalidateQueries({ queryKey: ["count", typeIRI] });
+      await queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
     },
   });
 
