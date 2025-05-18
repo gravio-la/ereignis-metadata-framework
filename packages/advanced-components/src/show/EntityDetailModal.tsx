@@ -1,6 +1,6 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
-import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   applyToEachField,
   extractFieldIfString,
@@ -8,13 +8,15 @@ import {
 import {
   useAdbContext,
   useCRUDWithQueryClient,
+  useModalRegistry,
+  useModifiedRouter,
 } from "@graviola/edb-state-hooks";
 import {
   useExtendedSchema,
   useTypeIRIFromEntity,
 } from "@graviola/edb-state-hooks";
 import { EntityDetailModalProps } from "@graviola/semantic-jsonform-types";
-import { Close as CloseIcon } from "@mui/icons-material";
+import { Close as CloseIcon, Edit } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -45,6 +47,7 @@ export const EntityDetailModal = NiceModal.create(
     const {
       queryBuildOptions: { primaryFields },
       typeIRIToTypeName,
+      components: { EditEntityModal },
     } = useAdbContext();
     const modal = useModal();
 
@@ -73,7 +76,36 @@ export const EntityDetailModal = NiceModal.create(
       loadQueryKey: "show",
     });
     const { t } = useTranslation();
+
     const data = rawData?.document || defaultData;
+
+    const { push } = useModifiedRouter();
+    const { registerModal } = useModalRegistry(NiceModal);
+    const handleEdit = useCallback(() => {
+      if (!disableInlineEditing) {
+        const modalID = `edit-${typeIRI}-${entityIRI}`;
+        registerModal(modalID, EditEntityModal);
+        NiceModal.show(modalID, {
+          entityIRI: entityIRI,
+          typeIRI: typeIRI,
+          data,
+          disableLoad: true,
+        });
+      } else {
+        const typeName = typeIRIToTypeName(typeIRI);
+        push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
+      }
+    }, [
+      typeIRI,
+      entityIRI,
+      disableInlineEditing,
+      typeIRIToTypeName,
+      registerModal,
+      data,
+      EditEntityModal,
+      push,
+    ]);
+
     const cardInfo = useMemo<PrimaryFieldResults<string>>(() => {
       const fieldDecl = primaryFields[typeName];
       if (data && fieldDecl)
@@ -84,16 +116,6 @@ export const EntityDetailModal = NiceModal.create(
         image: null,
       };
     }, [typeName, data, primaryFields]);
-
-    const [aboutToRemove, setAboutToRemove] = useState(false);
-    const removeSlowly = useCallback(() => {
-      if (aboutToRemove) return;
-      setAboutToRemove(true);
-      setTimeout(() => {
-        handleClose();
-        setAboutToRemove(false);
-      }, 500);
-    }, [modal, setAboutToRemove, aboutToRemove]);
 
     const fieldDeclaration = useMemo(
       () => primaryFields[typeName] as PrimaryField,
@@ -115,8 +137,8 @@ export const EntityDetailModal = NiceModal.create(
         maxWidth={false}
         fullScreen={xsDown}
         sx={{
-          transition: "opacity 0.5s",
-          opacity: aboutToRemove ? 0 : 1,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <AppBar position="static">
@@ -137,25 +159,11 @@ export const EntityDetailModal = NiceModal.create(
             </Box>
           </Toolbar>
         </AppBar>
-        <DialogContent
-          sx={{
-            p: 0,
-            position: "relative",
-            height: {
-              xs: "100%",
-              md: cardInfo.image ? "calc(100vh - 120px)" : "100%",
-            },
-          }}
-        >
+        <Box sx={{ flexGrow: 1, display: "flex" }}>
           {cardInfo.image && (
             <Box
               sx={{
                 display: { xs: "none", md: "block" },
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "33%",
                 minWidth: "200px",
                 borderRight: "1px solid",
                 borderColor: "divider",
@@ -174,33 +182,47 @@ export const EntityDetailModal = NiceModal.create(
               />
             </Box>
           )}
-          <Box
-            sx={{
-              ml: { xs: 0, md: cardInfo.image ? "33%" : 0 },
-              height: "100%",
-              overflow: "auto",
-              p: 2,
-            }}
-          >
-            <EntityDetailCard
-              typeIRI={classIRI}
-              entityIRI={entityIRI}
-              data={data}
-              cardInfo={cardInfo}
-              disableInlineEditing={disableInlineEditing}
-              readonly={readonly}
-              onEditClicked={removeSlowly}
-              tableProps={{ disabledProperties }}
-            />
+          <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+            <DialogContent
+              sx={{
+                p: 0,
+                position: "relative",
+              }}
+            >
+              <Box
+                sx={{
+                  height: "100%",
+                  overflow: "auto",
+                  p: 2,
+                }}
+              >
+                <EntityDetailCard
+                  typeIRI={classIRI}
+                  entityIRI={entityIRI}
+                  data={data}
+                  cardInfo={cardInfo}
+                  readonly={readonly}
+                  tableProps={{ disabledProperties }}
+                  cardProps={{ elevation: 0 }}
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              {!readonly && (
+                <Button
+                  variant="outlined"
+                  onClick={handleEdit}
+                  startIcon={<Edit />}
+                >
+                  {!disableInlineEditing ? t("edit inline") : t("edit")}
+                </Button>
+              )}
+              <Button onClick={handleClose} color="primary" variant="contained">
+                {t("close")}
+              </Button>
+            </DialogActions>
           </Box>
-        </DialogContent>
-        <DialogActions
-          sx={{ position: "absolute", bottom: 0, width: "100%", padding: 2 }}
-        >
-          <Button onClick={handleClose} color="primary" variant="contained">
-            {t("close")}
-          </Button>
-        </DialogActions>
+        </Box>
       </Dialog>
     );
   },
