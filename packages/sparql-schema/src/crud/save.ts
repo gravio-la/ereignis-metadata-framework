@@ -3,11 +3,11 @@ import {
   SPARQLCRUDOptions,
 } from "@graviola/edb-core-types";
 import { dataset2NTriples, jsonld2DataSet } from "@graviola/jsonld-utils";
-import { INSERT } from "@tpluscode/sparql-builder";
+import { DELETE, INSERT } from "@tpluscode/sparql-builder";
 import { JSONSchema7 } from "json-schema";
 
-import { makeSPARQLDeleteQuery } from "@/crud/makeSPARQLDeleteQuery";
-import { withDefaultPrefix } from "@/crud/makeSPARQLWherePart";
+import { makeSPARQLWherePart, withDefaultPrefix } from "@/crud";
+import { jsonSchema2construct } from "@/schema2sparql";
 
 type SaveOptions = SPARQLCRUDOptions & {
   skipRemove?: boolean;
@@ -23,27 +23,37 @@ export const save = async (
   const typeIRI = dataToBeSaved["@type"];
   const ds = await jsonld2DataSet(dataToBeSaved);
   const ntriples = await dataset2NTriples(ds);
-  const insertQuery = withDefaultPrefix(
-    defaultPrefix,
-    INSERT.DATA` ${ntriples} `.build(queryBuildOptions),
-  );
 
   if (skipRemove) {
+    const insertQuery = withDefaultPrefix(
+      defaultPrefix,
+      INSERT.DATA` ${ntriples} `.build(queryBuildOptions),
+    );
     return await updateFetch(insertQuery);
   }
 
-  const deleteQuery = makeSPARQLDeleteQuery(
+  // Get the construct and where parts needed for the DELETE operation
+  const { construct, whereRequired, whereOptionals } = jsonSchema2construct(
     entityIRI,
-    typeIRI,
     schema,
-    options,
+    ["@id"],
+    ["@id", "@type"],
   );
+
+  // Combined DELETE and INSERT in one atomic operation
+  const deleteInsertQuery = withDefaultPrefix(
+    defaultPrefix,
+    DELETE` ${construct} `.INSERT` ${ntriples} `
+      .WHERE`OPTIONAL { ${makeSPARQLWherePart(entityIRI, typeIRI)} ${whereRequired}\n${whereOptionals} }`.build(
+      queryBuildOptions,
+    ),
+  );
+
   try {
-    await updateFetch(deleteQuery);
+    return await updateFetch(deleteInsertQuery);
   } catch (e) {
-    throw new Error("unable to delete the entry - DELETE query failed", {
+    throw new Error("Failed to save data - DELETE/INSERT operation failed", {
       cause: e,
     });
   }
-  return await updateFetch(insertQuery);
 };
