@@ -10,8 +10,17 @@ import merge from "lodash-es/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const InlineDropdownRendererComponent = (props: ControlProps) => {
-  const { id, uischema, visible, config, data, handleChange, path, label } =
-    props;
+  const {
+    id,
+    uischema,
+    visible,
+    config,
+    data,
+    handleChange,
+    path,
+    label,
+    enabled,
+  } = props;
   const { typeIRIToTypeName, queryBuildOptions } = useAdbContext();
   const { primaryFields } = queryBuildOptions;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
@@ -120,27 +129,22 @@ const InlineDropdownRendererComponent = (props: ControlProps) => {
     [primaryFields, typeName, ready, dataStore, limit],
   );
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        fullWidth={!appliedUiSchemaOptions.trim}
-        id={id}
-        sx={{
-          marginTop: (theme) => theme.spacing(2),
-          marginBottom: (theme) => theme.spacing(1),
-        }}
-      >
-        <PreloadedOptionSelect
-          title={label}
-          readOnly={Boolean(ctx.readonly)}
-          // @ts-ignore
-          load={load}
-          typeIRI={typeIRI}
-          value={selected}
-          onChange={handleOptionChange}
-        />
-      </FormControl>
-    </Hidden>
+    <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
+      <PreloadedOptionSelect
+        title={label}
+        disabled={!enabled}
+        // @ts-ignore
+        load={load}
+        typeIRI={typeIRI}
+        value={selected}
+        onChange={handleOptionChange}
+      />
+    </FormControl>
   );
 };
 

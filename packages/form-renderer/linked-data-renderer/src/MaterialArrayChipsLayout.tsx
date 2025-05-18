@@ -25,9 +25,6 @@ import { SemanticFormsInline } from "./SemanticFormsInline";
 import { SemanticFormsModal } from "./SemanticFormsModal";
 import { SimpleChipRenderer } from "./SimpleChipRenderer";
 
-type OwnProps = {
-  removeItems(path: string, toDelete: number[]): () => void;
-};
 const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
   const innerCreateDefaultValue = useCallback(
     () => createDefaultValue(props.schema, props.rootSchema),
@@ -40,6 +37,7 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
     schema,
     errors,
     addItem,
+    enabled,
     label,
     required,
     rootSchema,
@@ -51,13 +49,14 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
     hideRequiredAsterisk,
     additionalKnowledgeSources,
     elementLabelTemplate,
-    elementLabelProp = "label",
-    context
+    elementLabelProp,
+    dropdown,
+    context,
   } = useMemo(
     () => merge({}, config, props.uischema.options),
     [config, props.uischema.options],
   );
-  const { readonly, core } = useJsonForms();
+  const { core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
   const typeIRI = context?.typeIRI ?? schema.properties?.["@type"]?.const;
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -127,11 +126,7 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
   }, [formsPath, typeIRI, typeName, setFormData]);
 
   return (
-    <Box
-      sx={(theme) => ({
-        marginBottom: theme.spacing(2),
-      })}
-    >
+    <Box>
       <ArrayLayoutToolbar
         label={computeLabel(
           label,
@@ -144,7 +139,8 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
         addItem={addItem}
         onCreate={handleCreateNew}
         createDefault={innerCreateDefaultValue}
-        readonly={readonly}
+        enabled={enabled}
+        dropdown={dropdown}
         isReifiedStatement={Boolean(isReifiedStatement)}
         formsPath={makeFormsPath(config?.formsPath, path)}
         additionalKnowledgeSources={additionalKnowledgeSources}
@@ -210,6 +206,7 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
               return (
                 <Box key={expandID}>
                   <SimpleChipRenderer
+                    typeIRI={typeIRI}
                     onRemove={removeItems(path, [index])}
                     schema={schema}
                     onChange={() => {}}
@@ -222,9 +219,6 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
                     childLabelTemplate={elementLabelTemplate}
                     elementLabelProp={elementLabelProp}
                     formsPath={makeFormsPath(config?.formsPath, childPath)}
-                    sx={{
-                      margin: 0.5,
-                    }}
                   />
                 </Box>
               );

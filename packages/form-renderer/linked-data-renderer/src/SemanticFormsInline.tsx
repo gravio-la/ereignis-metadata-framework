@@ -17,6 +17,7 @@ type SemanticFormsInlineProps = {
   formData?: any;
   onFormDataChange?: (data: any) => void;
   formsPath?: string;
+  enabled?: boolean;
 };
 export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
   const {
@@ -30,6 +31,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
     formData: formDataProp,
     onFormDataChange,
     formsPath,
+    enabled,
   } = props;
   const [formData, setFormData] = useControlled({
     name: "FormData",
@@ -60,6 +62,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
       {schema && (
         <SemanticJsonForm
           {...semanticJsonFormsProps}
+          disabled={!enabled}
           data={formData}
           forceEditMode={true}
           onChange={handleDataChange}

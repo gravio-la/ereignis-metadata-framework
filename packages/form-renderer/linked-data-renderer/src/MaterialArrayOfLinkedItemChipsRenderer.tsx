@@ -27,27 +27,28 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
     (p: string, value: any) => addItem(p, value),
     [addItem],
   );
+  if (!visible) {
+    return null;
+  }
   return (
-    <Hidden xsUp={!visible}>
-      <MaterialArrayChipsLayout
-        label={label}
-        uischema={uischema}
-        schema={schema}
-        id={id}
-        rootSchema={rootSchema}
-        errors={errors}
-        enabled={enabled}
-        visible={visible}
-        data={data}
-        path={path}
-        addItem={addItemCb}
-        removeItems={removeItems}
-        renderers={renderers}
-        cells={cells}
-        uischemas={uischemas}
-        arraySchema={arraySchema}
-      />
-    </Hidden>
+    <MaterialArrayChipsLayout
+      label={label}
+      uischema={uischema}
+      schema={schema}
+      id={id}
+      rootSchema={rootSchema}
+      errors={errors}
+      enabled={enabled}
+      visible={visible}
+      data={data}
+      path={path}
+      addItem={addItemCb}
+      removeItems={removeItems}
+      renderers={renderers}
+      cells={cells}
+      uischemas={uischemas}
+      arraySchema={arraySchema}
+    />
   );
 };
 

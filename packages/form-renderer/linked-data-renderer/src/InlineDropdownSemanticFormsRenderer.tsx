@@ -40,6 +40,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     path,
     rootSchema,
     label,
+    enabled,
   } = props;
   const {
     typeIRIToTypeName,
@@ -132,11 +133,6 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     [handleSelectedChange, closeDrawer],
   );
 
-  const searchOnDataPath = useMemo(() => {
-    const typeName = typeIRIToTypeName(typeIRI);
-    return primaryFields[typeName]?.label;
-  }, [typeIRI, typeIRIToTypeName]);
-
   const labelKey = useMemo(() => {
     const fieldDecl = primaryFields[typeName] as PrimaryField | undefined;
     return fieldDecl?.label || "title";
@@ -175,18 +171,18 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
       | PrimaryField
       | undefined;
     const defaultLabelKey = fieldDefinitions?.label || "title";
-    const newItem = {
-      "@id": createEntityIRI(typeIRI),
-      "@type": typeIRI,
-      [defaultLabelKey]: searchString,
-    };
-    const modalID = `edit-${newItem["@type"]}-${newItem["@id"]}`;
+    const entityIRI = createEntityIRI(typeName);
+    const modalID = `edit-${typeIRI}-${entityIRI}`;
     registerModal(modalID, EditEntityModal);
     setDisabled(true);
     NiceModal.show(modalID, {
-      entityIRI: newItem["@id"],
-      typeIRI: newItem["@type"],
-      data: newItem,
+      entityIRI,
+      typeIRI,
+      data: {
+        "@id": entityIRI,
+        "@type": typeIRI,
+        [defaultLabelKey]: searchString,
+      },
       disableLoad: true,
     })
       .then(
@@ -204,6 +200,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   }, [
     registerModal,
     typeIRI,
+    typeName,
     handleSelectedChange,
     createEntityIRI,
     EditEntityModal,
@@ -266,9 +263,8 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
         <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
           <DiscoverAutocompleteInput
             onCreateNew={showEditDialog}
-            onEnterSearch={showEditDialog}
             loadOnStart={true}
-            readonly={Boolean(ctx.readonly)}
+            readonly={!enabled}
             typeIRI={typeIRI}
             typeName={typeName || ""}
             selected={selected}
@@ -288,12 +284,12 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
           <EntityDetailListItem
             entityIRI={selected.value}
             typeIRI={typeIRI}
-            onClear={!ctx.readOnly && handleClear}
+            onClear={enabled && handleClear}
             data={detailsData}
           />
         </List>
       )}
-      {!ctx.readonly && globalPath === formsPath && enableFinder && (
+      {globalPath === formsPath && enableFinder && (
         <SearchbarWithFloatingButton>
           <SimilarityFinder
             finderId={`${formsPath}_${path}`}
@@ -302,7 +298,6 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
             classIRI={typeIRI}
             jsonSchema={schema as JSONSchema7}
             onExistingEntityAccepted={handleExistingEntityAccepted}
-            searchOnDataPath={searchOnDataPath}
             onMappedDataAccepted={handleMappedDataIntermediate}
           />
         </SearchbarWithFloatingButton>

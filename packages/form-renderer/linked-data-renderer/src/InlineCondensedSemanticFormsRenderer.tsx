@@ -44,6 +44,7 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     path,
     rootSchema,
     label,
+    enabled,
   } = props;
   const {
     typeIRIToTypeName,
@@ -51,10 +52,11 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     components: { SimilarityFinder },
   } = useAdbContext();
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const { $ref, typeIRI, mapData, getID } = appliedUiSchemaOptions.context || {};
+  const { $ref, typeIRI, mapData, getID } =
+    appliedUiSchemaOptions.context || {};
   const entityIRI = useMemo(() => {
     if (!data) return null;
-    return getID ? getID(data) : (data["@id"] || data);
+    return getID ? getID(data) : data["@id"] || data;
   }, [data, getID]);
 
   const typeName = useMemo(
@@ -103,7 +105,7 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
         closeDrawer();
         return;
       }
-      const _data = mapData ? mapData(v.value) : v.value
+      const _data = mapData ? mapData(v.value) : v.value;
       if (!isEqual(_data, data)) handleChange(path, _data);
       setRealLabel(v.label);
     },
@@ -138,11 +140,6 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     },
     [handleSelectedChange, closeDrawer],
   );
-
-  const searchOnDataPath = useMemo(() => {
-    const typeName = typeIRIToTypeName(typeIRI);
-    return primaryFields[typeName]?.label;
-  }, [typeIRI, typeIRIToTypeName]);
 
   const labelKey = useMemo(() => {
     const fieldDecl = primaryFields[typeName] as PrimaryField | undefined;
@@ -201,8 +198,12 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     };
   }, [selected, labelKey]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
+    <>
       <Box sx={{ position: "relative" }}>
         <Typography
           variant={"h5"}
@@ -222,14 +223,10 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
           <FormControl fullWidth={!appliedUiSchemaOptions.trim} id={id}>
             <TextField
               fullWidth
-              disabled={Boolean(ctx.readonly)}
+              disabled={!enabled}
               onChange={(ev) => handleSearchStringChange(ev.target.value)}
               value={searchString || ""}
               label={label}
-              sx={(theme) => ({
-                marginTop: theme.spacing(1),
-                marginBottom: theme.spacing(1),
-              })}
               inputProps={{
                 onFocus: handleFocus,
                 onKeyUp: handleKeyUp,
@@ -237,16 +234,16 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
             />
           </FormControl>
         ) : (
-          <List sx={{ marginTop: "1em" }} dense>
+          <List sx={{ marginTop: (theme) => theme.spacing(1) }} dense>
             <EntityDetailListItem
               entityIRI={selected.value}
               typeIRI={typeIRI}
-              onClear={!ctx.readOnly && handleClear}
+              onClear={enabled && handleClear}
               data={detailsData}
             />
           </List>
         )}
-        {!ctx.readonly && globalPath === formsPath && (
+        {globalPath === formsPath && enabled && (
           <SearchbarWithFloatingButton>
             <SimilarityFinder
               finderId={`${formsPath}_${path}`}
@@ -255,13 +252,12 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
               classIRI={typeIRI}
               jsonSchema={schema as JSONSchema7}
               onExistingEntityAccepted={handleExistingEntityAccepted}
-              searchOnDataPath={searchOnDataPath}
               onMappedDataAccepted={handleMappedDataIntermediate}
             />
           </SearchbarWithFloatingButton>
         )}
       </Box>
-    </Hidden>
+    </>
   );
 };
 

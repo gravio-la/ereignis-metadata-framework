@@ -56,18 +56,19 @@ const MaterialLinkedObjectRendererComponent = ({
     ) as UISchemaElement;
   }, [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <JsonFormsDispatch
-        visible={visible}
-        enabled={enabled}
-        schema={schema}
-        uischema={detailUiSchema}
-        path={path}
-        renderers={renderers}
-        cells={cells}
-      />
-    </Hidden>
+    <JsonFormsDispatch
+      enabled={enabled}
+      schema={schema}
+      uischema={detailUiSchema}
+      path={path}
+      renderers={renderers}
+      cells={cells}
+    />
   );
 };
 

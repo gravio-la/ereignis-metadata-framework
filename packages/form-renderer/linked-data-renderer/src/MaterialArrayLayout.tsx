@@ -101,7 +101,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     uischema,
     enabled,
   } = props;
-  const { readonly, core } = useJsonForms();
+  const { core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
   const {
     createEntityIRI,
@@ -109,14 +109,18 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     typeNameToTypeIRI,
     queryBuildOptions: { primaryFields, primaryFieldExtracts },
   } = useAdbContext();
-  const { context } = useMemo(() =>  merge({}, config, props.uischema?.options), [config, props.uischema?.options])
+  const { context } = useMemo(
+    () => merge({}, config, props.uischema?.options),
+    [config, props.uischema?.options],
+  );
   const typeIRI = useMemo(() => {
     const lastScopeSegement = path.split("/").pop();
-    if(context?.typeIRI) return context.typeIRI
+    if (context?.typeIRI) return context.typeIRI;
     let iri = schema.properties?.["@type"]?.const;
     try {
       if (!iri) {
-        const type = rootSchema.properties?.[lastScopeSegement]?.items?.["$ref"];
+        const type =
+          rootSchema.properties?.[lastScopeSegement]?.items?.["$ref"];
         const lastSegment = type?.split("/").pop();
         iri = lastSegment ? typeNameToTypeIRI(lastSegment) : "";
       }
@@ -243,10 +247,11 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       uniqBy(
         realData?.map((childData, index) => {
           const fieldDecl = primaryFieldExtracts[typeName];
-          const id = context?.getID ? context.getID(childData) : childData?.["@id"]
+          const id = context?.getID
+            ? context.getID(childData)
+            : childData?.["@id"];
           if (childData && fieldDecl) {
-            let label =
-              childData.label || childData.__label || id;
+            let label = childData.label || childData.__label || id;
             const extractedInfo = applyToEachField(
               childData,
               fieldDecl,
@@ -267,15 +272,25 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       ),
       ["label", "asc"],
     );
-  }, [realData, orderByPropertyPath, primaryFieldExtracts, typeIRI, typeName, context?.getID]);
+  }, [
+    realData,
+    orderByPropertyPath,
+    primaryFieldExtracts,
+    typeIRI,
+    typeName,
+    context?.getID,
+  ]);
 
-  const handleAddItem = useCallback((path: string, data: any) => {
-    let _data = data
-    if(context?.mapData) {
-      _data = context.mapData(data)
-    }
-    return addItem(path, _data);
-  }, [addItem, context?.mapData]);
+  const handleAddItem = useCallback(
+    (path: string, data: any) => {
+      let _data = data;
+      if (context?.mapData) {
+        _data = context.mapData(data);
+      }
+      return addItem(path, _data);
+    },
+    [addItem, context?.mapData],
+  );
 
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
 
@@ -295,7 +310,6 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
         addItem={handleAddItem}
         onCreate={handleCreateNew}
         createDefault={innerCreateDefaultValue}
-        readonly={readonly}
         isReifiedStatement={isReifiedStatement}
         formsPath={makeFormsPath(config?.formsPath, path)}
         additionalKnowledgeSources={additionalKnowledgeSources}
@@ -333,6 +347,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
                 typeIRI={typeIRI}
                 onError={handleErrors}
                 formData={formData}
+                enabled={enabled}
                 onFormDataChange={handleInlineFormDataChange}
                 semanticJsonFormsProps={{
                   disableSimilarityFinder: true,
