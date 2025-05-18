@@ -11,7 +11,7 @@ import {
   useExtendedSchema,
 } from "@graviola/edb-state-hooks";
 import { Avatar, Chip, ChipProps, Tooltip } from "@mui/material";
-import React, { MouseEvent, useCallback, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
 
 export type EntityChipProps = {
   index?: number;
@@ -30,7 +30,7 @@ export const EntityChip = ({
 }: EntityChipProps) => {
   const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
   const {
-    queryBuildOptions: { primaryFieldExtracts },
+    queryBuildOptions: { primaryFieldExtracts, primaryFields },
     typeIRIToTypeName,
     components: { EntityDetailModal },
   } = useAdbContext();
@@ -51,7 +51,7 @@ export const EntityChip = ({
 
   const data = rawData?.document?.["@type"] ? rawData?.document : defaultData;
   const cardInfo = useMemo<PrimaryFieldResults<string>>(() => {
-    const fieldDecl = primaryFieldExtracts[typeName];
+    const fieldDecl = primaryFieldExtracts[typeName] || primaryFields[typeName];
     if (data && fieldDecl) {
       const { label, image, description } = applyToEachField(
         data,
@@ -69,7 +69,7 @@ export const EntityChip = ({
       description: null,
       image: null,
     };
-  }, [typeName, data, primaryFieldExtracts]);
+  }, [typeName, data, primaryFieldExtracts, primaryFields]);
   const { label, image, description } = cardInfo;
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
   const showDetailModal = useCallback(
@@ -77,10 +77,11 @@ export const EntityChip = ({
       e.preventDefault();
       NiceModal.show(EntityDetailModal, {
         entityIRI,
+        typeIRI: classIRI,
         data: {},
       });
     },
-    [entityIRI, EntityDetailModal],
+    [entityIRI, classIRI, EntityDetailModal],
   );
   const handleShouldShow = useCallback(
     (e: MouseEvent<Element>) => {
@@ -90,26 +91,24 @@ export const EntityChip = ({
   );
 
   return (
-    <>
-      <Tooltip
-        title={description}
-        open={Boolean(description && description.length > 0 && tooltipEnabled)}
-        onClose={() => setTooltipEnabled(false)}
-      >
-        <Chip
-          {...chipProps}
-          avatar={
-            image ? (
-              <Avatar alt={label} src={image} />
-            ) : typeof index !== "undefined" ? (
-              <Avatar>{index}</Avatar>
-            ) : null
-          }
-          onMouseEnter={handleShouldShow}
-          label={label}
-          onClick={showDetailModal}
-        />
-      </Tooltip>
-    </>
+    <Tooltip
+      title={description}
+      open={Boolean(description && description.length > 0 && tooltipEnabled)}
+      onClose={() => setTooltipEnabled(false)}
+    >
+      <Chip
+        {...chipProps}
+        avatar={
+          image ? (
+            <Avatar alt={label} src={image} />
+          ) : typeof index !== "undefined" ? (
+            <Avatar>{index}</Avatar>
+          ) : null
+        }
+        onMouseEnter={handleShouldShow}
+        label={label}
+        onClick={showDetailModal}
+      />
+    </Tooltip>
   );
 };
