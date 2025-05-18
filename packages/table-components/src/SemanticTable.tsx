@@ -125,7 +125,7 @@ export const SemanticTable = ({
   const { dataStore, ready } = useDataStore();
 
   const { data: countData, isLoading: countLoading } = useQuery({
-    queryKey: ["count", typeIRI, sorting],
+    queryKey: ["type", typeIRI, "count"],
     queryFn: async () => {
       const typeName = typeIRIToTypeName(typeIRI);
       if (dataStore.countDocuments) {
@@ -159,8 +159,9 @@ export const SemanticTable = ({
 
   const { data: resultListData, isLoading } = useQuery({
     queryKey: [
-      "allEntries",
+      "type",
       typeIRI,
+      "list",
       sorting,
       loadAllAtOnce ? undefined : pagination,
     ],
@@ -248,10 +249,7 @@ export const SemanticTable = ({
         });
       },
       onSuccess: async () => {
-        queryClient.invalidateQueries({ queryKey: ["list"] });
-        queryClient.invalidateQueries({
-          queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
-        });
+        queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
       },
     });
   const { mutateAsync: removeEntity, isPending: aboutToRemove } = useMutation({
@@ -262,10 +260,7 @@ export const SemanticTable = ({
       return dataStore.removeDocument(typeName, id);
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["list"] });
-      queryClient.invalidateQueries({
-        queryKey: filterUndefOrNull(["allEntries", typeIRI || undefined]),
-      });
+      queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
     },
   });
   const { enqueueSnackbar } = useSnackbar();
