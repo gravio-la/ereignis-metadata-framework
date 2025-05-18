@@ -25,7 +25,7 @@ const defaultMakeStubSchema = (
         type: "string",
       },
     }),
-    () => ["@type", "@id"],
+    () => ["@id"],
   );
 };
 
