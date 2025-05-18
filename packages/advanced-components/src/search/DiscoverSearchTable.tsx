@@ -46,7 +46,7 @@ export const DiscoverSearchTable: FunctionComponent<
   const fetchData = useCallback(async () => {
     if (!searchString || searchString.length < 1 || !typeIRI || !ready) return;
     const result = await queryClient.fetchQuery<Entity[]>({
-      queryKey: ["discover-search", typeName, searchString],
+      queryKey: ["type", typeIRI, "search", searchString],
       queryFn: () =>
         dataStore?.findEntityByTypeName(typeName, searchString, limit),
     });
