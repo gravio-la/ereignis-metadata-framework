@@ -57,7 +57,7 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
     entityIRI,
     typeIRI,
     schema,
-    queryOptions: { enabled: false },
+    queryOptions: { enabled: true },
     loadQueryKey: "rootLoad",
   });
 
@@ -76,7 +76,6 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
           const data = loadResult.document;
           updateSourceToTargets(entityIRI, loadResult.subjects);
           onChange(data);
-          return data;
         }
       },
     );
@@ -126,15 +125,16 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
       .then(async (result) => {
         //TODO should we clear and refetch? or just refetch?
         if (entityIRI) {
-          onChange({});
-          setTimeout(() => {
-            refetch().finally(() => {
-              setTimeout(() => {
-                enqueueSnackbar("Saved", { variant: "success" });
-                setIsSaving(false);
-              }, 10);
+          loadEntity(entityIRI, typeIRI)
+            .then((data) => {
+              if (data?.document) {
+                return onChange(data.document);
+              }
+            })
+            .finally(() => {
+              enqueueSnackbar("Saved", { variant: "success" });
+              setIsSaving(false);
             });
-          }, 10);
         } else {
           onChange(result);
           enqueueSnackbar("Created", { variant: "success" });
@@ -151,9 +151,10 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
     setIsSaving,
     enqueueSnackbar,
     saveMutation,
-    refetch,
     data,
     onChange,
+    loadEntity,
+    typeIRI,
     entityIRI,
   ]);
 
@@ -171,12 +172,18 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
     }).then(() => {
       setIsReloading(true);
       onChange({});
-      refetch().finally(() => {
-        setTimeout(() => {
+      refetch()
+        .then(() => {
           enqueueSnackbar(t("reloaded"), { variant: "success" });
+        })
+        .catch((error) => {
+          enqueueSnackbar(t("reload_failed") + ": " + error.message, {
+            variant: "error",
+          });
+        })
+        .finally(() => {
           setIsReloading(false);
-        }, 1000);
-      });
+        });
     });
   }, [refetch, onChange, setIsReloading, enqueueSnackbar, t]);
 
@@ -194,11 +201,11 @@ export const SemanticJsonForm: FunctionComponent<SemanticJsonFormProps> = ({
 
   const handleOnChange = useCallback(
     (data: any, reason: ChangeCause) => {
-      if (reason === "user" && editMode && !isLoading) {
-        onChange(data);
-      } else if (reason === "mapping" && !isLoading) {
-        onChange(data);
-      } else if (reason === "reload" && isReloading) {
+      if (
+        (reason === "user" && editMode && !isLoading) ||
+        (reason === "mapping" && !isLoading) ||
+        (reason === "reload" && isReloading)
+      ) {
         onChange(data);
       }
     },

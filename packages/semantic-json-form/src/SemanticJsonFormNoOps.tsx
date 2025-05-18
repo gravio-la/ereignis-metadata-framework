@@ -18,6 +18,7 @@ import { useTranslation } from "next-i18next";
 import React, { FunctionComponent, useCallback, useMemo } from "react";
 
 import { OptionsModal } from "./OptionsModal";
+import { cleanProperty } from "@graviola/jsonld-utils";
 
 const WithCard = ({
   children,
@@ -64,7 +65,8 @@ export const SemanticJsonFormNoOps: FunctionComponent<
 
   const handleFormChange = useCallback(
     (state: Pick<JsonFormsCore, "data" | "errors">) => {
-      onChange?.(state.data, "user");
+      const cleaned = cleanProperty(state.data);
+      onChange?.(cleaned, "user");
       if (onError) onError(state.errors);
     },
     [onChange, onError],
