@@ -1,4 +1,5 @@
 import Image, { ImageProps } from "next/image";
+
 import { PUBLIC_BASE_PATH } from "../config";
 
 export const Img = ({ src, alt, ...rest }: ImageProps) => (
