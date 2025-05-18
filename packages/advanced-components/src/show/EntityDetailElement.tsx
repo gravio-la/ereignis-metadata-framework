@@ -91,10 +91,8 @@ export const EntityDetailElement = ({
         data={data}
         cardInfo={cardInfo}
         cardActionChildren={cardActionChildren}
-        disableInlineEditing={disableInlineEditing}
         readonly={readonly}
         tableProps={{ disabledProperties }}
-        disableLoad={disableLoad}
       />
     </Box>
   );
