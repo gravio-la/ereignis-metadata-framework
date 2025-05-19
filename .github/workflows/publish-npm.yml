@@ -30,6 +30,7 @@ jobs:
           name: build-artifacts
           path: |
             packages/**/dist/
+
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
@@ -52,6 +53,10 @@ jobs:
           name: build-artifacts
           path: .
       - run: bun i
-      - run: bun run publish
+      - name: Configure npm authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+      - name: Publish packages
+        run: bun run publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
