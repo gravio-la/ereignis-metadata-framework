@@ -1,47 +1,94 @@
-The adb-next project is an exhibition-catalog, that uses [Next.js](https://nextjs.org/).
+# Graviola CRUD EDB Framework
 
-# Documentation
+A flexible, form-centric data management framework for working with linked data.
 
-## Exhibition Catalog Live
+## Overview
 
-A live demo of the exhibition catalog is available here: [https://slub.github.io/exhibition-live/](https://slub.github.io/exhibition-live/)
+The Graviola CRUD EDB Framework is a comprehensive solution for building applications that manage linked data through intuitive form-based interfaces. The project originated as a framework for managing metadata in cultural heritage institutions using semantic web technologies, focusing on performances, exhibitions, and collections involving geo-spatial event-centered entities and norm data mappings. It has since matured into a generic data management framework suitable for a wide range of applications.
 
-You might want to set your own storage backend(s) within the settings modal.
+The framework is built with a "convention before configuration" approach, making it flexible for various web applications with complex data models. Users can choose to use just the form-renderers with their own storage layer, or build a frontend application that works with a SPARQL endpoint. Backend engineers can use triple stores or other storage options like Prisma with JSON-schema, which still produces valid JSON-LD.
 
-## Development Documentation
+The Graviola framework enables:
 
-Please have a look at the **[Storybook of the EDB Framework](https://slub.github.io/exhibition-live/storybook/)** for an indepth documentation of the frontend components, th cli
-and the overall architecture of the exhibition catalog and the EDB framework.
+- **Schema-driven development**: Define your data model once in JSON Schema and automatically generate forms, validation, queries, and more
+- **Linked data management**: Seamlessly work with RDF data using familiar JSON structures
+- **Flexible storage options**: Use in-memory stores for development or connect to any SPARQL 1.1 endpoint, Prisma-based relational databases, or custom REST backends
+- **Composable UI components**: Build rich interfaces with specialized form renderers and components
+- **Client-first architecture**: Run entirely in the browser or with optional server integration
+- **Norm Data and secondary Data Sources**: The framework supports the use of norm data and secondary data sources to enrich the data model and link to entities in public linked data repositories (Wikidata, GND, DBpedia, etc.).
+- **Declarative Mapping**: The framework supports the use of declarative mapping to map the data coming from secondary data sources to the current data model.
 
-# Development
+## Live Demo
+
+A live demo of the exhibition catalog application (built with the Graviola framework) is available here: [https://slub.github.io/exhibition-live/](https://slub.github.io/exhibition-live/)
+
+You can set your own storage backend(s) within the settings modal.
+
+## Documentation
+
+Please check the **[Storybook of the Graviola Framework](https://slub.github.io/exhibition-live/storybook/)** for in-depth documentation of the frontend components, CLI tools, and the overall architecture of the framework.
 
 ## Getting Started
 
-For a quick start install all dependencies initially build the packages and start the development server of the nextjs exhibition-live application.
+For a quick start, install all dependencies, build the packages, and start the development server of the exhibition-live application:
 
 ```bash
-bun i && bun build:packages && bun run dev:exhibition
+bun i && bun build:packages && (cd apps/exhibition-live && bun run dev:vite)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173/de/list/Exhibition](http://localhost:5173/de/list/Exhibition) with your browser to see the result.
 
-## Committing and Contributing
+## Framework Architecture
 
-### Formatter
+The Graviola framework is structured as a monorepo with multiple packages that can be used independently or together:
 
-please only commit linted and formatted code by using husky
+### Core Packages
 
-```bash
-bun run prepare
-```
+- **core-types**: Essential TypeScript type definitions
+- **core-utils**: Common utility functions
+- **sparql-schema**: Converts JSON Schema to SPARQL queries
+- **state-hooks**: React hooks for state management
+- **json-schema-utils**: Utilities for working with JSON Schema
+
+### Form Rendering
+
+- **semantic-json-form**: Main form component with JSON Schema support
+- **form-renderer/**: Specialized form renderers for different data types
+  - basic-renderer: Core form field renderers
+  - color-picker-renderer: Color picker components
+  - layout-renderer: Advanced layout renderers
+  - linked-data-renderer: Renderers for linked data
+  - map-libre-gl-renderer: Map integration
+  - markdown-renderer: Markdown editing and preview
+
+### Components
+
+- **basic-components**: Fundamental UI components
+- **advanced-components**: Complex UI components
+- **table-components**: Data table components
+- **virtualized-components**: Performance-optimized list components
+
+### Data Management
+
+- **data-mapping**: Utilities for data transformation
+- **entity-finder**: Components for finding and selecting entities
+- **sparql-db-impl**: SPARQL database implementation
+- **prisma-db-impl**: Relational database implementation using Prisma ORM
+- **simple-local-data-store**: In-memory data store
+- **rest-store-provider**: REST interface for arbitrary backend implementations
+- **local-oxigraph-store-provider**: Client-side Oxigraph implementation in a WebWorker
 
 ## Storage Endpoints
 
-The project can operate on a variety of storage endpoints. The default is a temporary in memory DB within the browser,
-which is sufficient for testing purposes. The application can also be configured to use any SPARQL 1.1 endpoint.
-Either provide an initial config or use the settings modal within the application to configure the endpoints.
+The framework can operate on a variety of storage endpoints:
 
-You can quickly launch an Oxigraph SPARQL 1.1 endpoint with docker:
+- **Browser memory**: Default in-memory DB for testing and development
+- **Oxigraph**: Lightweight SPARQL 1.1 endpoint that can run in a WebWorker for client-side storage
+- **Other SPARQL 1.1 endpoints**: Jena Fuseki, Virtuoso, Blazegraph, GraphDB, etc.
+- **Relational databases**: Via Prisma ORM integration
+- **REST APIs**: Through the REST store provider for custom backend implementations
+
+You can quickly launch an Oxigraph SPARQL 1.1 endpoint with Docker:
 
 ```bash
 docker run -p 7878:7878 -v $(pwd)/data:/data -it ghcr.io/oxigraph/oxigraph:latest
@@ -49,115 +96,92 @@ docker run -p 7878:7878 -v $(pwd)/data:/data -it ghcr.io/oxigraph/oxigraph:lates
 
 Consult the [Oxigraph GitHub repository](https://github.com/oxigraph/oxigraph) for further information.
 
-### Other SPARQL 1.1 endpoints
-
-Other SPARQL Endpoints, like Jena Fuseki, Virtuoso, Blazegraph or GraphDB can be used as well.
-Additional effort might be needed to configure CORS and authentication and to get along with some
-Endpoints not beeing fully SPARQL 1.1 compliant.
-
 ### Endpoint Configuration
 
-The configuration of endpoints within the `exhibition-live` application can either be done dynamically at runtime using
-the settings modal or by providing a `SPARQL_ENDPOINT` environment variable at build time, which disables setting the endpoint
-within the modal and is especially suitable for production deployments, where one wants to make sure all users operate on the same endpoint.
+Storage endpoints can be configured either dynamically at runtime using the settings modal or by providing a `SPARQL_ENDPOINT` environment variable at build time.
 
-## Storybook
+## Development
 
-This project uses [Storybooks](https://storybook.js.org/) to enforce reusable component based development and to document them with
-all of their props and options. It also gives an overview over the frontend components used for this project.
+### Committing and Contributing
+
+Please only commit linted and formatted code by using husky:
 
 ```bash
-cd app/exhibition-live
+bun run prepare
+```
+
+### Storybook
+
+This project uses [Storybook](https://storybook.js.org/) to document components and provide development examples:
+
+```bash
+cd apps/exhibition-live
 bun i && bun run storybook
 ```
 
 Open [http://localhost:6006](http://localhost:6006) with your browser to see the storybook.
 
-## Testing
+### Testing
 
-Unit tests of core functionality is done by `jest`. For integration tests of the frontend `Cypress` is being used.
+Unit tests of core functionality are done with `jest`. For integration tests of the frontend, `Cypress` is used.
 
-### Trouble Shooting
-
-Cypress under Nix:
-it might be necessary to delete `~/.cache/Cypress`
-
-```
-rm -rf ~/.cache/Cypress
-```
-
-## Using Docker
+### Using Docker
 
 1. [Install Docker](https://docs.docker.com/get-docker/) on your machine.
-1. Build your container: `docker build -t exhibition-docker .`.
-1. Run your container: `docker run -p 3000:3000 exhibition-docker`.
+2. Build your container: `docker build -t graviola-docker .`.
+3. Run your container: `docker run -p 3000:3000 graviola-docker`.
 
-### develop within docker
+#### Develop within Docker
 
-1. `docker compose up -d`
-2. `docker compose  exec exhibition-live /bin/bash`
+```bash
+docker compose up -d
+docker compose exec exhibition-live /bin/bash
+```
 
-## Technologies
+## Core Technologies
 
-### NextJS
+### JSON Schema and JSON Forms
 
-To learn more about Next.js, take a look at the following resources:
+The architecture is based on JSON-Forms with a flexible tester and renderer concept. JSON Schema is the foundation of the framework, used for:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-  You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-### @rdfjs and SPARQL related packages
-
-The project uses the [RDFJS](https://rdf.js.org/) stack for RDF processing.This choice does also offer the
-ability to use the same code for both the browser and the server. The project uses the following packages:
-
-Some of the following libraries are being used within this project:
-
-- @rdfjs/parser-n3 for RDF parsing and serialisation of turtle and ntriples
-- @rdfjs/parser-jsonld for RDF parsing and serialisation of JSON-LD
-- @rdfjs/dataset as a temporary in memory RDF store
-- oxigraph for SPARQL 1.1 compliant RDF storage within a ServiceWorker (browser) or on the server
-- RDF/JS for RDF processing
-- @tpluscode/rdfine for common RDF Vocabularies and typesafe namespaces
-- SPARQL.js for SPARQL query generation
-- sparql-http-client for SPARQL compliant query execution and easier triple streaming
-- clownface for RDF graph traversal
-- openAI for optional AI based data mapping from unknown sources (complementary to manual declaration based mapping)
-
-### LinkML
-
-LinkML was used for the initial data schemata and schema-conversion. Nevertheless the single source of truth for the data schemata
-is the JSON Schema located within the public directory.
-
-The main schema is located within the `schema/exhibition-info.yml` directory
-
-### JSON Schema
-
-The JSON Schema ist the basis for:
-
-- Form generation
-- Form validation
+- Form generation and validation
 - Data conversion
 - Query generation
 - Document extraction
-- Ontology generation and Semantic-Mapping
+- Ontology generation and semantic mapping
 
-Alongside the core Exhibition Schema, there are complementary declaration files referring to elements from the core schema,
-that provide additional information for the frontend, like:
+### RDF and SPARQL
 
-- the UI-Schemata for form layout and style hints
-- data mapping declarations for data conversion from and to norm data repositories
+The framework uses the [RDFJS](https://rdf.js.org/) stack for RDF processing, enabling the same code to run in both browser and server environments:
 
-# Helpful Commands
+- **@rdfjs/parser-n3**: RDF parsing and serialization of Turtle and N-Triples
+- **@rdfjs/parser-jsonld**: RDF parsing and serialization of JSON-LD
+- **@rdfjs/dataset**: Temporary in-memory RDF store
+- **oxigraph**: SPARQL 1.1 compliant RDF storage in browser (WebWorker) or server
+- **@tpluscode/rdfine**: Common RDF vocabularies and typesafe namespaces
+- **SPARQL.js**: SPARQL query generation
+- **sparql-http-client**: SPARQL query execution and triple streaming
+- **clownface**: RDF graph traversal
 
-Complete rebuild without cache:
+### Database Implementations
 
-```
-docker compose down
-docker compose rm -f
-docker compose pull
-docker compose up --build -d
-```
+- **Triple/Quad Stores**: SPARQL 1.1 endpoints like Oxigraph, Jena Fuseki, Virtuoso, Blazegraph, GraphDB
+- **Relational Databases**: Via Prisma ORM integration that produces valid JSON-LD
+- **REST APIs**: Custom backend implementations through the REST store provider
+- **In-memory Stores**: For development and testing
 
-Deletes all images, reloads all images from repository, starts all images with building in daemon-mode, may add `docker compose logs -f` for output in following mode.
+### React and UI
+
+- **React**: UI component library
+- **Material UI**: Component design system
+- **JSON Forms**: Form generation from JSON Schema
+- **React Query**: Data fetching and caching
+- **Zustand**: State management
+- **Next.js**: Application framework (for the exhibition-live app)
+
+## Copyright and License
+
+- Copyright © 2022-2025 Sebastian Tilsch
+- Copyright © 2024 SLUB Dresden
+
+This project is licensed under the GNU General Public License - see the LICENSE file for details.
