@@ -1,20 +1,19 @@
-import { Avatar, OutlinedInput, Popper } from "@mui/material";
-// material-ui
-import { styled } from "@mui/material/styles";
-import { shouldForwardProp } from "@mui/system";
-// assets
-import React, { useCallback, useMemo } from "react";
-import { useTranslation } from "next-i18next";
-
+import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
+import { encodeIRI } from "@graviola/edb-core-utils";
 // third-party
 // project imports
 import {
   useAdbContext,
   useGlobalSearch,
   useModifiedRouter,
-} from "@slub/edb-state-hooks";
-import { encodeIRI } from "@slub/edb-ui-utils";
-import { DiscoverAutocompleteInput } from "@slub/edb-advanced-components";
+} from "@graviola/edb-state-hooks";
+import { Avatar, OutlinedInput, Popper } from "@mui/material";
+// material-ui
+import { styled } from "@mui/material/styles";
+import { shouldForwardProp } from "@mui/system";
+import { useTranslation } from "next-i18next";
+// assets
+import React, { useCallback, useMemo } from "react";
 
 // styles
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({

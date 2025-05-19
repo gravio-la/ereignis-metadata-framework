@@ -1,3 +1,16 @@
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldResults } from "@graviola/edb-core-types";
+import { ellipsis } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { useAdbContext, useTypeIRIFromEntity } from "@graviola/edb-state-hooks";
+import {
+  useCRUDWithQueryClient,
+  useExtendedSchema,
+} from "@graviola/edb-state-hooks";
+import { Clear, HideImage } from "@mui/icons-material";
 import {
   Avatar,
   IconButton,
@@ -8,16 +21,6 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
-import { useAdbContext, useTypeIRIFromEntity } from "@slub/edb-state-hooks";
-import {
-  useCRUDWithQueryClient,
-  useExtendedSchema,
-} from "@slub/edb-state-hooks";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import NiceModal from "@ebay/nice-modal-react";
-import { Clear, HideImage } from "@mui/icons-material";
-import { ellipsis } from "@slub/edb-ui-utils";
-import { PrimaryFieldResults } from "@slub/edb-core-types";
 
 export type EntityDetailListItemProps = {
   entityIRI: string;
@@ -36,8 +39,7 @@ export const EntityDetailListItem = ({
     typeIRIToTypeName,
     components: { EntityDetailModal },
   } = useAdbContext();
-  const typeIRIs = useTypeIRIFromEntity(entityIRI);
-  const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+  const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI);
   const typeName = useMemo(
     () => typeIRIToTypeName(classIRI),
     [classIRI, typeIRIToTypeName],

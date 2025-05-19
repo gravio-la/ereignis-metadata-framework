@@ -3,9 +3,8 @@ import {
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
-} from "@slub/json-schema-utils";
-import { JSONSchema7 } from "json-schema";
-import { schemaName } from "@slub/exhibition-schema/src";
+} from "@graviola/json-schema-utils";
+import type { JSONSchema7 } from "json-schema";
 
 const primitiveToPrisma = (type: string, requiredQM: string): string => {
   switch (type) {

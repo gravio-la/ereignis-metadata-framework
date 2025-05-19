@@ -1,8 +1,8 @@
+import { defs } from "@graviola/json-schema-utils";
 import { JsonFormsUISchemaRegistryEntry } from "@jsonforms/core";
+import { JSONSchema7 } from "json-schema";
 
 import { BASE_IRI } from "./index";
-import { defs } from "@slub/json-schema-utils";
-import { JSONSchema7 } from "json-schema";
 
 const labels: Record<string, string> = {
   Person: "Person",

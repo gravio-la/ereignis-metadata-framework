@@ -1,5 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react";
-import type { FC } from "react";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { GenericMaterialListItem } from "@graviola/edb-virtualized-components";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -18,16 +20,15 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@slub/edb-state-hooks";
-import { useGoogleToken } from "./useGoogleToken";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { useSettings } from "@slub/edb-state-hooks";
 import { useGoogleOAuth } from "@react-oauth/google";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import { GenericMaterialListItem } from "@slub/edb-virtualized-components";
-import { useGoogleSpreadSheet } from "./useGoogleSpreadSheet";
-import { mappingsAvailable } from "./mappingsAvailable";
 import { useTranslation } from "next-i18next";
+import type { FC } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+
+import { useSettings } from "../state";
+import { mappingsAvailable } from "./mappingsAvailable";
+import { useGoogleSpreadSheet } from "./useGoogleSpreadSheet";
+import { useGoogleToken } from "./useGoogleToken";
 
 const googleApiURL = "https://content.googleapis.com/drive/v3/files";
 const mimeIconsBase =
@@ -62,9 +63,9 @@ export const GoogleDrivePicker: FC<GoogleDrivePickerProps> = ({
   const { googleDrive } = useSettings();
   const { clientId } = useGoogleOAuth();
   const { t } = useTranslation();
-  const { data: files } = useQuery(
-    ["files"],
-    async () => {
+  const { data: files } = useQuery({
+    queryKey: ["google", "files"],
+    queryFn: async () => {
       const key = clientId || googleDrive?.apiKey;
       if (!key) {
         throw new Error("No API Key provided");
@@ -90,8 +91,8 @@ export const GoogleDrivePicker: FC<GoogleDrivePickerProps> = ({
       });
       return response.json();
     },
-    { enabled: !!credentials?.access_token },
-  );
+    enabled: !!credentials?.access_token,
+  });
 
   const fileList = useMemo(() => {
     return files?.files?.map((file: any) => ({

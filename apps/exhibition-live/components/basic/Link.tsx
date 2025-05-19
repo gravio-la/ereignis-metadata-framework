@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
 import NextLink, { LinkProps } from "next/link";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
+import React, { useMemo } from "react";
 
 type ExtendedLinkProps = Omit<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,

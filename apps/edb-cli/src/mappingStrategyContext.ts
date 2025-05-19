@@ -3,16 +3,16 @@ import {
   Prefixes,
   PrimaryFieldDeclaration,
   QueryBuilderOptions,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import {
   createLogger,
   makeCreateDeeperContextFn,
   StrategyContext,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 import {
   findEntityByAuthorityIRI,
   searchEntityByLabel,
-} from "@slub/sparql-schema";
+} from "@graviola/sparql-schema";
 import config, { slent } from "@slub/exhibition-sparql-config";
 import { v4 as uuidv4 } from "uuid";
 import {

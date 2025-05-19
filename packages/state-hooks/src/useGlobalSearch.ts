@@ -14,6 +14,6 @@ export const useGlobalSearch = create<GlobalSearchState>((set, get) => ({
   path: undefined,
   setPath: (path: string) => set({ path }),
   setSearch: (search: string) => set({ search }),
-  typeName: "Exhibition",
+  typeName: "",
   setTypeName: (typeName: string) => set({ typeName }),
 }));

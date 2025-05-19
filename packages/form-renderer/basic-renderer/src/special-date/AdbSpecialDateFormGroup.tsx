@@ -1,21 +1,23 @@
-import { FormGroup, FormGroupProps, TextField } from "@mui/material";
-import React, { useCallback } from "react";
 import {
   getDatePart,
   getDatePartAsString,
   getPaddedDatePart,
   leftpad,
-} from "@slub/edb-core-utils";
+} from "@graviola/edb-core-utils";
+import { FormGroup, FormGroupProps, TextField } from "@mui/material";
+import React, { useCallback } from "react";
 
 export type AdbSpecialDateFormGroupProps = {
   data?: number;
   handleChange: (value: number) => void;
   disabled?: boolean;
+  fullWidth?: boolean;
 };
 export const AdbSpecialDateFormGroup = ({
   data,
   handleChange,
   disabled,
+  fullWidth,
   ...props
 }: AdbSpecialDateFormGroupProps & FormGroupProps) => {
   const handleTextFieldChange = useCallback(
@@ -65,24 +67,77 @@ export const AdbSpecialDateFormGroup = ({
   );
 
   return (
-    <FormGroup row={true} {...props}>
+    <FormGroup
+      row={true}
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        width: fullWidth ? "100%" : "auto",
+      }}
+      {...props}
+    >
       <TextField
         disabled={disabled}
-        sx={{ width: "5em" }}
+        sx={{
+          ...(fullWidth
+            ? {
+                width: "29%",
+                minWidth: "4em",
+              }
+            : {
+                width: "4em",
+              }),
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderTopRightRadius: "0",
+              borderBottomRightRadius: "0",
+            },
+          },
+        }}
         label={"Tag"}
         value={getDatePartAsString(data ?? 0, "day")}
         onChange={(e) => handleTextFieldChange(e, "day")}
       />
       <TextField
         disabled={disabled}
-        sx={{ width: "5em" }}
+        sx={{
+          ...(fullWidth
+            ? {
+                width: "29%",
+                minWidth: "4em",
+              }
+            : {
+                width: "4em",
+              }),
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderRadius: "0",
+            },
+          },
+        }}
         onChange={(e) => handleTextFieldChange(e, "month")}
         label={"Monat"}
         value={getDatePartAsString(data ?? 0, "month")}
       />
       <TextField
         disabled={disabled}
-        sx={{ width: "8em" }}
+        sx={{
+          ...(fullWidth
+            ? {
+                width: "42%",
+                minWidth: "6em",
+              }
+            : {
+                width: "6em",
+              }),
+          "& .MuiOutlinedInput-root": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderTopLeftRadius: "0",
+              borderBottomLeftRadius: "0",
+            },
+          },
+        }}
         onChange={(e) => handleTextFieldChange(e, "year")}
         label={"Jahr"}
         value={getDatePartAsString(data ?? 0, "year")}

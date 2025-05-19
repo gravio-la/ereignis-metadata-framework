@@ -36,7 +36,7 @@ import {
   useGlobalSearch,
   useKeyEventForSimilarityFinder,
   useRightDrawerState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { primaryFields } from "@slub/exhibition-schema";
 import { useInputComponent, useInputVariant } from "./helper";
 

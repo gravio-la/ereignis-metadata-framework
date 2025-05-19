@@ -18,3 +18,4 @@ export * from "./index2letter";
 export * from "./makeColumnDesc";
 export * from "./formatJSONResult";
 export * from "./replaceJSONLD";
+export * from "./flatResultExtractor";

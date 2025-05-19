@@ -1,6 +1,6 @@
+import { Container } from "@mui/material";
 import React, { useEffect } from "react";
 import { useRemark } from "react-remark";
-import { Container } from "@mui/material";
 import rehypeDocument from "rehype-document";
 import rehypeStringify from "rehype-stringify";
 import rehypeVideo from "rehype-video";

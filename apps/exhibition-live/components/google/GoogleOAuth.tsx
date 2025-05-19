@@ -1,11 +1,12 @@
+import { Button } from "@mui/material";
 import {
   hasGrantedAnyScopeGoogle,
   TokenResponse,
   useGoogleLogin,
   useGoogleOneTapLogin,
 } from "@react-oauth/google";
-import { Button } from "@mui/material";
 import { FC, useCallback, useEffect, useMemo } from "react";
+
 import { useGoogleToken } from "./useGoogleToken";
 
 type LoginProps = {

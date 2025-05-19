@@ -1,5 +1,5 @@
 import { JSONSchema7 } from "json-schema";
-import { extendDefinitionsWithProperties } from "@slub/json-schema-utils";
+import { extendDefinitionsWithProperties } from "@graviola/json-schema-utils";
 import { schemaExpander } from "./makeStubSchema";
 
 export const schemaName = "kulinarik";

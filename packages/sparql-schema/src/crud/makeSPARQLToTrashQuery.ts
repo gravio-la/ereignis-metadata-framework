@@ -1,7 +1,11 @@
-import { JSONSchema7 } from "json-schema";
-import { makeSPARQLWherePart, withDefaultPrefix } from "./makeSPARQLWherePart";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import { DELETE } from "@tpluscode/sparql-builder";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
+import { JSONSchema7 } from "json-schema";
+
+import {
+  makeSPARQLWherePart,
+  withDefaultPrefix,
+} from "@/crud/makeSPARQLWherePart";
 
 /**
  * Will move the entity to trash by renaming the classIRI to classIRI_trash

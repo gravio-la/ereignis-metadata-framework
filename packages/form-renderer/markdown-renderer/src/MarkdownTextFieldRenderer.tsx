@@ -1,8 +1,4 @@
-import {
-  ControlProps,
-  OwnPropsOfControl,
-  showAsRequired,
-} from "@jsonforms/core";
+import { ControlProps, showAsRequired } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import { Edit, EditOff } from "@mui/icons-material";
 import {
@@ -16,9 +12,9 @@ import merge from "lodash-es/merge";
 import React, { useCallback, useMemo, useState } from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSanitize from "rehype-sanitize";
+import TurndownService from "turndown";
 
 import MDEditor, { MDEditorMarkdown } from "./MDEditor";
-import TurndownService from "turndown";
 
 const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
   const {
@@ -98,7 +94,7 @@ const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
               id: id + "-input",
               onPaste: handlePaste,
             }}
-            value={data as string}
+            value={(data || "") as string}
             onChange={handleChange_}
             previewOptions={{
               rehypePlugins: rehypePlugins as any,
@@ -114,7 +110,7 @@ const MarkdownTextFieldRendererComponent = (props: ControlProps) => {
             wrapperElement={{
               "data-color-mode": "light",
             }}
-            source={data as string}
+            source={(data || "") as string}
             rehypePlugins={rehypePlugins as any}
           />
         )}

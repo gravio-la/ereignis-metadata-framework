@@ -1,5 +1,5 @@
 import namespace from "@rdfjs/namespace";
-import { Config } from "@slub/edb-global-types";
+import { Config } from "@graviola/edb-global-types";
 
 const BASE_IRI = "http://ontologies.slub-dresden.de/exhibition#";
 export const sladb = namespace(BASE_IRI);
@@ -40,3 +40,5 @@ export default {
     active: true,
   },
 } as Config;
+
+export * from "./initSPARQLDataStoreFromConfig";

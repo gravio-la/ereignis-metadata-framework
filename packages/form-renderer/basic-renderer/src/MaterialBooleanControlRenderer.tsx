@@ -1,10 +1,10 @@
-import isEmpty from "lodash/isEmpty";
-import React, { useCallback } from "react";
 import { CellProps, ControlProps, WithClassname } from "@jsonforms/core";
 import { withJsonFormsControlProps } from "@jsonforms/react";
 import { Checkbox, FormControlLabel, Hidden } from "@mui/material";
-import merge from "lodash/merge";
-import isNil from "lodash/isNil";
+import isEmpty from "lodash-es/isEmpty";
+import isNil from "lodash-es/isNil";
+import merge from "lodash-es/merge";
+import React, { useCallback } from "react";
 
 const MuiCheckbox = React.memo((props: CellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange, config } =

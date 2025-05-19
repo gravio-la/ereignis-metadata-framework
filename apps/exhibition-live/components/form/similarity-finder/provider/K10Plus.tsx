@@ -1,11 +1,12 @@
-import { KnowledgeBaseDescription } from "../types";
-import { Img } from "../../../basic";
-import { findEntityWithinK10Plus } from "@slub/edb-kxp-utils";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
+import type { RootNode } from "@graviola/edb-global-types";
+import { findFirstInProps } from "@graviola/edb-graph-traversal";
+import { findEntityWithinK10Plus } from "@graviola/edb-kxp-utils";
+import { fabio } from "@graviola/edb-marc-to-rdf";
 import { dcterms } from "@tpluscode/rdf-ns-builders";
-import { findFirstInProps, RootNode } from "@slub/edb-graph-traversal";
-import { fabio } from "@slub/edb-marc-to-rdf";
 
+import { Img } from "../../../basic";
+import { KnowledgeBaseDescription } from "../types";
 export const K10Plus: KnowledgeBaseDescription = {
   id: "k10plus",
   label: "K10plus",

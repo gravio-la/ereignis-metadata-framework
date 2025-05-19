@@ -1,13 +1,14 @@
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import dot from "dot";
+import type { JSONSchema7 } from "json-schema";
+import flatten from "lodash-es/flatten";
+import uniq from "lodash-es/uniq";
+
 import {
   AnyFlatStrategy,
   DeclarativeFlatMapping,
   DeclarativeFlatMappings,
 } from "./mappingStrategies";
-import flatten from "lodash/flatten";
-import uniq from "lodash/uniq";
-import dot from "dot";
-import { JSONSchema7 } from "json-schema";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
 
 type OwnColumnDesc = {
   index: number;
@@ -117,6 +118,11 @@ export type DeclarativeMatchBasedFlatMapping = {
 };
 export type DeclarativeMatchBasedFlatMappings =
   DeclarativeMatchBasedFlatMapping[];
+
+export type AvailableFlatMappings = Record<
+  string,
+  { mapping: DeclarativeMatchBasedFlatMappings; typeName: string }
+>;
 
 /**
  * Converts a match based flat mapping to a declarative flat mapping

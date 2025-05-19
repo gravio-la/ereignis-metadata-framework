@@ -1,7 +1,7 @@
 import {
   DeclarativeMapping,
   DeclarativeMappings,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 import { sladb } from "./lobidMappings";
 
 const createWikidataMappings = (

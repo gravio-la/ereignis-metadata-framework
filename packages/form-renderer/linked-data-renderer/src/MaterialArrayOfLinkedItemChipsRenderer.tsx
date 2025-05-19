@@ -1,7 +1,7 @@
-import { ArrayLayoutProps } from "@jsonforms/core";
+import type { ArrayLayoutProps } from "@jsonforms/core";
 import { withJsonFormsArrayLayoutProps } from "@jsonforms/react";
 import { Hidden } from "@mui/material";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 import { MaterialArrayChipsLayout } from "./MaterialArrayChipsLayout";
 
@@ -21,31 +21,34 @@ const MaterialArrayOfLinkedItemChipsRendererComponent = ({
   uischemas,
   addItem,
   removeItems,
+  arraySchema,
 }: ArrayLayoutProps) => {
   const addItemCb = useCallback(
     (p: string, value: any) => addItem(p, value),
     [addItem],
   );
+  if (!visible) {
+    return null;
+  }
   return (
-    <Hidden xsUp={!visible}>
-      <MaterialArrayChipsLayout
-        label={label}
-        uischema={uischema}
-        schema={schema}
-        id={id}
-        rootSchema={rootSchema}
-        errors={errors}
-        enabled={enabled}
-        visible={visible}
-        data={data}
-        path={path}
-        addItem={addItemCb}
-        removeItems={removeItems}
-        renderers={renderers}
-        cells={cells}
-        uischemas={uischemas}
-      />
-    </Hidden>
+    <MaterialArrayChipsLayout
+      label={label}
+      uischema={uischema}
+      schema={schema}
+      id={id}
+      rootSchema={rootSchema}
+      errors={errors}
+      enabled={enabled}
+      visible={visible}
+      data={data}
+      path={path}
+      addItem={addItemCb}
+      removeItems={removeItems}
+      renderers={renderers}
+      cells={cells}
+      uischemas={uischemas}
+      arraySchema={arraySchema}
+    />
   );
 };
 

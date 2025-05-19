@@ -1,5 +1,6 @@
-import { ColumnDefMatcher } from "./listHelper";
 import { VisibilityState } from "@tanstack/table-core";
+
+import { ColumnDefMatcher } from "./listHelper";
 
 export type ListConfigType = {
   columnVisibility: VisibilityState;

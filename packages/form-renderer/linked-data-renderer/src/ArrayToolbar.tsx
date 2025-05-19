@@ -1,29 +1,25 @@
+import NiceModal from "@ebay/nice-modal-react";
+import { DiscoverAutocompleteInput } from "@graviola/edb-advanced-components";
+import { SearchbarWithFloatingButton } from "@graviola/edb-basic-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import {
-  Box,
-  Grid,
-  IconButton,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import * as React from "react";
-import { useTranslation } from "next-i18next";
-
-import { useCallback, useMemo } from "react";
-import { JsonSchema7 } from "@jsonforms/core";
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
 import {
   useAdbContext,
   useGlobalSearchWithHelper,
   useKeyEventForSimilarityFinder,
+  useModalRegistry,
   useRightDrawerState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
+import { KnowledgeSources } from "@graviola/semantic-jsonform-types";
+import { JsonSchema7 } from "@jsonforms/core";
+import { Box, FormControl, TextField, Typography } from "@mui/material";
 import { JSONSchema7 } from "json-schema";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { NoteAdd } from "@mui/icons-material";
-import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { SearchbarWithFloatingButton } from "@slub/edb-basic-components";
-import { DiscoverAutocompleteInput } from "@slub/edb-advanced-components";
-import { KnowledgeSources } from "@slub/edb-global-types";
+import { useTranslation } from "next-i18next";
+import * as React from "react";
+import { useCallback, useMemo } from "react";
 
 export interface ArrayLayoutToolbarProps {
   label: string;
@@ -38,7 +34,6 @@ export interface ArrayLayoutToolbarProps {
 
   createDefault(): any;
 
-  readonly?: boolean;
   typeIRI?: string;
   onCreate?: () => void;
   isReifiedStatement?: boolean;
@@ -50,7 +45,7 @@ const getDefaultLabelKey = (
   primaryFields: PrimaryFieldDeclaration,
 ) => {
   const fieldDefinitions = primaryFields[typeName] as PrimaryField | undefined;
-  return fieldDefinitions?.label || "title";
+  return fieldDefinitions?.label;
 };
 export const ArrayLayoutToolbar = ({
   label,
@@ -60,66 +55,50 @@ export const ArrayLayoutToolbar = ({
   enabled,
   path,
   schema,
-  readonly,
   onCreate,
   isReifiedStatement,
   formsPath,
   additionalKnowledgeSources,
+  typeIRI: _typeIRI,
+  dropdown,
 }: ArrayLayoutToolbarProps & {
   schema?: JsonSchema7;
   formsPath?: string;
+  dropdown?: boolean;
 }) => {
   const {
     createEntityIRI,
     queryBuildOptions: { primaryFields },
     typeIRIToTypeName,
-    components: { SimilarityFinder },
+    components: { SimilarityFinder, EditEntityModal },
   } = useAdbContext();
-  const { t } = useTranslation();
-  const typeIRI = useMemo(() => schema?.properties?.["@type"]?.const, [schema]);
+  const typeIRI = useMemo(
+    () => _typeIRI ?? schema?.properties?.["@type"]?.const,
+    [schema, _typeIRI],
+  );
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
   );
   const handleSelectedChange = React.useCallback(
     (v: AutocompleteSuggestion) => {
-      if (!v) return;
+      if (!v || !v.value) return;
       addItem(path, {
         "@id": v.value,
+        "@type": typeIRI,
         __label: v.label,
       })();
     },
     [addItem, path],
   );
-  const handleCreateNewFromSearch = React.useCallback(
-    (value?: string) => {
-      if (!value) return;
-      addItem(path, {
-        "@id": createEntityIRI(typeName),
-        "@type": typeIRI,
-        __draft: true,
-        [getDefaultLabelKey(typeName, primaryFields)]: value,
-      })();
-    },
-    [addItem, path, typeName, typeIRI, primaryFields],
-  );
-  const handleEntityIRIChange = useCallback(
-    (iri: string) => {
-      handleSelectedChange({ value: iri, label: iri });
-    },
-    [handleSelectedChange],
-  );
 
   const handleExistingEntityAccepted = useCallback(
     (iri: string, data: any) => {
-      console.log("onExistingEntityAccepted", { iri, data });
-      const label =
-        data[getDefaultLabelKey(typeName, primaryFields)] || data.label || iri;
-      //handleSelectedChange({ value: iri, label });
       addItem(path, data)();
+      handleSelectedChange({ value: undefined, label: "" });
       inputRef.current?.focus();
     },
-    [addItem, typeName],
+    [addItem, path, handleSelectedChange],
   );
 
   const handleMappedDataAccepted = useCallback(
@@ -151,6 +130,50 @@ export const ArrayLayoutToolbar = ({
   const handleKeyUp = useKeyEventForSimilarityFinder();
   const { keepMounted } = useRightDrawerState();
 
+  const [disabled, setDisabled] = React.useState(false);
+  const { registerModal } = useModalRegistry(NiceModal);
+  const showEditDialog = useCallback(() => {
+    const fieldDefinitions = primaryFields[typeName] as
+      | PrimaryField
+      | undefined;
+    const defaultLabelKey = fieldDefinitions?.label || "title";
+    const entityIRI = createEntityIRI(typeName);
+    const modalID = `edit-${typeIRI}-${entityIRI}`;
+    registerModal(modalID, EditEntityModal);
+    setDisabled(true);
+    NiceModal.show(modalID, {
+      entityIRI,
+      typeIRI,
+      data: {
+        "@id": entityIRI,
+        "@type": typeIRI,
+        [defaultLabelKey]: searchString,
+      },
+      disableLoad: true,
+    })
+      .then(
+        ({ entityIRI, data }: { entityIRI: string; data: any }) => {
+          addItem(path, {
+            ...data,
+            "@id": entityIRI,
+            "@type": typeIRI,
+          })();
+        },
+        () => {},
+      )
+      .finally(() => {
+        setDisabled(false);
+      });
+  }, [
+    registerModal,
+    typeIRI,
+    typeName,
+    createEntityIRI,
+    EditEntityModal,
+    primaryFields,
+    searchString,
+    setDisabled,
+  ]);
   return (
     <Box>
       {(isReifiedStatement || labelAsHeadline) && (
@@ -159,10 +182,10 @@ export const ArrayLayoutToolbar = ({
         </Box>
       )}
       <Box>
-        {(keepMounted || sidebarOpen) && !isReifiedStatement ? (
+        {!dropdown && (keepMounted || sidebarOpen) && !isReifiedStatement ? (
           <TextField
             fullWidth
-            disabled={Boolean(readonly) || enabled === false}
+            disabled={!enabled}
             label={labelAsHeadline ? typeName : label}
             onChange={(ev) => handleSearchStringChange(ev.target.value)}
             value={searchString || ""}
@@ -177,60 +200,33 @@ export const ArrayLayoutToolbar = ({
             }}
           />
         ) : (
-          <Grid container direction={"column"}>
-            {!isReifiedStatement && (
-              <Grid item>
-                <Grid
-                  container
-                  sx={{
-                    alignItems: "center",
-                    visibility: readonly ? "hidden" : "visible",
-                  }}
-                >
-                  <Grid
-                    item
-                    flex={1}
-                    sx={{
-                      minWidth: "25em",
-                      transition: "all 0.3s ease-in-out",
-                    }}
-                  >
-                    <DiscoverAutocompleteInput
-                      disabled={Boolean(readonly || enabled === false)}
-                      typeIRI={typeIRI}
-                      typeName={typeName}
-                      title={label || ""}
-                      onEnterSearch={handleCreateNewFromSearch}
-                      searchString={searchString || ""}
-                      onSearchValueChange={handleSearchStringChange}
-                      onSelectionChange={handleSelectedChange}
-                      autocompleteDisabled={sidebarOpen}
-                      inputProps={{
-                        onFocus: handleFocus,
-                      }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Tooltip
-                      id="tooltip-add"
-                      title={t("create new", { item: label }) || ""}
-                      placement="bottom"
-                    >
-                      <IconButton
-                        aria-label={t("create new", { item: label })}
-                        onClick={onCreate}
-                        size="large"
-                      >
-                        <NoteAdd />
-                      </IconButton>
-                    </Tooltip>
-                  </Grid>
-                </Grid>
-              </Grid>
-            )}
-          </Grid>
+          !isReifiedStatement && (
+            <FormControl
+              fullWidth
+              sx={{
+                marginTop: (theme) => theme.spacing(2),
+                marginBottom: (theme) => theme.spacing(1),
+              }}
+            >
+              <DiscoverAutocompleteInput
+                onCreateNew={showEditDialog}
+                loadOnStart={true}
+                readonly={!enabled}
+                typeIRI={typeIRI}
+                typeName={typeName || ""}
+                title={label || ""}
+                disabled={disabled}
+                onSelectionChange={handleSelectedChange}
+                onSearchValueChange={handleSearchStringChange}
+                searchString={searchString || ""}
+                inputProps={{
+                  onFocus: handleFocus,
+                }}
+              />
+            </FormControl>
+          )
         )}
-        {globalPath === formsPath && (
+        {globalPath === formsPath && !dropdown && (
           <SearchbarWithFloatingButton>
             <SimilarityFinder
               finderId={`${formsPath}_${path}`}

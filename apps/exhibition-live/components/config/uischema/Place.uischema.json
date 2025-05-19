@@ -2,38 +2,43 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Control",
-      "scope": "#/properties/image"
-    },
-    {
-      "type": "Group",
-      "label": "Allgemeines Daten zur Stätte",
+      "type": "HorizontalLayout",
       "elements": [
         {
-          "type": "HorizontalLayout",
+          "type": "Group",
+          "label": "Allgemeines Daten zur Stätte",
           "elements": [
             {
-              "type": "Control",
-              "scope": "#/properties/title",
-              "label": "Bezeichnung",
-              "options": {
-                "focus": true
-              }
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/title",
+                  "label": "Bezeichnung",
+                  "options": {
+                    "focus": true
+                  }
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/titleVariants",
+                  "label": "Alternative Bezeichnungen"
+                }
+              ]
             },
             {
               "type": "Control",
-              "scope": "#/properties/titleVariants",
-              "label": "Alternative Bezeichnungen"
+              "scope": "#/properties/description",
+              "label": "Beschreibung",
+              "options": {
+                "multi": true
+              }
             }
           ]
         },
         {
           "type": "Control",
-          "scope": "#/properties/description",
-          "label": "Beschreibung",
-          "options": {
-            "multi": true
-          }
+          "scope": "#/properties/image"
         }
       ]
     },

@@ -1,5 +1,5 @@
 import { QueryEngine } from "@comunica/query-sparql";
-import { IDataSource } from "@comunica/types";
+import type { IDataSource } from "@comunica/types";
 
 export const remoteSparqlQuery = async (
   sparqlQuery: string,

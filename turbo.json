@@ -1,8 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDotEnv": [".env"],
-  "pipeline": {
-    "demo": {
+  "globalDependencies": [".env"],
+  "tasks": {
+    "storybook": {
+      "dependsOn": ["^build:packages"]
     },
     "build": {
       "dependsOn": ["^build"],
@@ -23,10 +24,19 @@
     "build:prisma": {
       "cache": false
     },
+    "publish-clean": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
     "docs": {},
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "depcheck": {
+      "outputs": ["reports/**"],
+      "cache": false,
+      "persistent": false
     }
   }
 }

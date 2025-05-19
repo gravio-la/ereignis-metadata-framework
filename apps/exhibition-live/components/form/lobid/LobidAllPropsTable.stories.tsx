@@ -1,9 +1,9 @@
+import { AllPropTable } from "@graviola/edb-advanced-components";
 import React from "react";
-import { LobidAllPropTable } from "@slub/edb-advanced-components";
 
 export default {
   title: "ui/view/LobidAllPropsTable",
-  component: LobidAllPropTable,
+  component: AllPropTable,
 };
 
 const exampleAllProps = {
@@ -124,5 +124,5 @@ const exampleAllProps = {
   ],
 };
 export const LobidAllPropTableDefault = () => (
-  <LobidAllPropTable allProps={exampleAllProps} />
+  <AllPropTable allProps={exampleAllProps} />
 );

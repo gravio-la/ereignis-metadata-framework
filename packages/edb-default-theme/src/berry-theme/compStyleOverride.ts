@@ -1,10 +1,11 @@
 import { Padding } from "@mui/icons-material";
 import { ThemeExtended } from "./themeType";
+import { Components } from "@mui/material";
 
 export default function componentStyleOverrides(theme: ThemeExtended) {
   const bgColor = theme.colors?.grey50;
   const variant = theme.variant || "outlined";
-  return {
+  const components: Components<ThemeExtended> = {
     MuiTextField: {
       defaultProps: {
         variant,
@@ -15,18 +16,22 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
         variant,
       },
     },
-    // avoid jammed look of input fields when variant is not 'standard'
-    ...(variant !== "standard"
-      ? {
-          MuiFormControl: {
-            styleOverrides: {
-              root: {
-                marginTop: "8px",
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          variants: [
+            {
+              // avoid jammed look of input fields when variant is not 'standard'
+              props: ({ variant }) => variant !== "standard",
+              style: {
+                marginTop: (theme) => theme.spacing(1),
+                marginBottom: (theme) => theme.spacing(1),
               },
             },
-          },
-        }
-      : {}),
+          ],
+        },
+      },
+    },
     MuiAppBar: {
       styleOverrides: {
         root: {
@@ -37,7 +42,7 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
         },
       },
     },
-    MuiToolBar: {
+    MuiToolbar: {
       styleOverrides: {
         root: {
           paddingTop: "12px",
@@ -78,17 +83,28 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
       styleOverrides: {
         root: {
           color: theme.colors?.textDark,
-          padding: "0",
+          paddingTop: 0,
+          paddingBottom: (theme) => theme.spacing(1),
+          paddingLeft: 0,
+          paddingRight: 0,
         },
         title: {
-          fontSize: "1.5rem",
+          fontSize: "1rem",
+          fontWeight: 600,
+          lineHeight: "1.235",
         },
       },
     },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: "0",
+          paddingTop: (theme) => theme.spacing(1),
+          paddingBottom: (theme) => theme.spacing(1),
+          paddingLeft: 0,
+          paddingRight: 0,
+          "&:last-child": {
+            paddingBottom: "0",
+          },
         },
       },
     },
@@ -270,4 +286,5 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
       },
     },
   };
+  return components;
 }

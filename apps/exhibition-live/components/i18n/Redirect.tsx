@@ -1,6 +1,7 @@
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
 import { useEffect } from "react";
+
 import languageDetector from "./languageDetector";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
 
 export const useRedirect = (to?: string) => {
   const router = useModifiedRouter();

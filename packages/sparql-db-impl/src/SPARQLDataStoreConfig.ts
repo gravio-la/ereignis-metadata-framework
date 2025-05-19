@@ -1,11 +1,11 @@
-import {
+import type {
   CRUDFunctions,
   SparqlBuildOptions,
   StringToIRIFn,
-} from "@slub/edb-core-types";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
-import { JSONSchema7 } from "json-schema";
-import { DatastoreBaseConfig } from "@slub/edb-global-types";
+  WalkerOptions,
+} from "@graviola/edb-core-types";
+import type { DatastoreBaseConfig } from "@graviola/edb-global-types";
+import type { JSONSchema7 } from "json-schema";
 
 export type SPARQLDataStoreConfig = {
   defaultPrefix: string;

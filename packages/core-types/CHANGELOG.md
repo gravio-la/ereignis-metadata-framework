@@ -1,5 +1,23 @@
 # @slub/edb-core-types
 
+## 1.1.3
+
+### Patch Changes
+
+- adding paginated generic list items
+
+## 1.1.2
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
+## 1.1.1
+
+### Patch Changes
+
+- cleaned up interfaces and simplified initialization of provider and initial setup
+
 ## 1.1.0
 
 ### Minor Changes

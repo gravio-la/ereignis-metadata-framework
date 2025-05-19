@@ -1,5 +1,8 @@
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import merge from "lodash/merge";
+import { StringToIRIFn } from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import merge from "lodash-es/merge";
+
+import { PrismaStoreOptions } from "../types";
 
 export const splitUpLoDashConnectedEntry = (str: string, value: any) => {
   const parts = str.split("_");
@@ -14,14 +17,21 @@ export const splitUpLoDashConnectedEntry = (str: string, value: any) => {
  * @param obj the object to convert
  * @param visited due to the possibility of circular references, this function uses a WeakSet to keep track of visited objects
  */
-export const toJSONLD = (obj: any, visited = new WeakSet()): any => {
+export const toJSONLD = (
+  obj: any,
+  visited = new WeakSet(),
+  options: {
+    idToIRI?: StringToIRIFn;
+    typeNameToTypeIRI?: StringToIRIFn;
+  },
+): any => {
   if (obj && typeof obj === "object") {
     if (visited.has(obj)) {
       return obj; // Avoid infinite recursion by returning already visited objects
     }
     visited.add(obj);
     if (Array.isArray(obj)) {
-      return obj.map((item) => toJSONLD(item, visited));
+      return obj.map((item) => toJSONLD(item, visited, options));
     }
 
     const specialEntries = Object.entries(obj)
@@ -34,10 +44,14 @@ export const toJSONLD = (obj: any, visited = new WeakSet()): any => {
         Object.entries(obj)
           .filter(([key, value]) => !key.includes("_") && value !== null)
           .map(([key, value]: [string, any]) => {
-            if (key === "id" || key === "type") {
+            if (key === "id" && options.idToIRI) {
+              return ["@id", options.idToIRI(value)];
+            } else if (key === "type" && options.typeNameToTypeIRI) {
+              return ["@type", options.typeNameToTypeIRI(value)];
+            } else if (key === "id" || key === "type") {
               return [`@${key}`, value];
             } else {
-              return [key, toJSONLD(value, visited)];
+              return [key, toJSONLD(value, visited, options)];
             }
           }),
       ),

@@ -2,7 +2,7 @@ import {
   DeclarativeMatchBasedFlatMappings,
   mapFromFlatResource,
   StrategyContext,
-} from "@slub/edb-data-mapping";
+} from "@graviola/edb-data-mapping";
 import { v3 as uuidv3 } from "uuid";
 import { slent } from "@slub/exhibition-sparql-config";
 import { processCSV } from "./mapping";

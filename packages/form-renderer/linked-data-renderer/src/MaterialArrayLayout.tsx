@@ -1,3 +1,16 @@
+import { Pulse } from "@graviola/edb-basic-components";
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+  useFormDataStore,
+} from "@graviola/edb-state-hooks";
+import { validate } from "@graviola/edb-ui-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import {
   ArrayLayoutProps,
   composePaths,
@@ -7,7 +20,16 @@ import {
   JsonSchema7,
   Resolve,
 } from "@jsonforms/core";
-import merge from "lodash/merge";
+import { useJsonForms } from "@jsonforms/react";
+import CheckIcon from "@mui/icons-material/Check";
+import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
+import { ErrorObject } from "ajv";
+import { JSONSchema7 } from "json-schema";
+import { JSONSchema } from "json-schema-to-ts";
+import { orderBy, uniqBy } from "lodash-es";
+import merge from "lodash-es/merge";
+import { useTranslation } from "next-i18next";
+import { useSnackbar } from "notistack";
 import React, {
   useCallback,
   useEffect,
@@ -17,27 +39,9 @@ import React, {
 } from "react";
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
-import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash";
-import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
-import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath, validate } from "@slub/edb-ui-utils";
-import { JSONSchema7 } from "json-schema";
-import { Box, Grid, IconButton, List, Paper, Tooltip } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
-import CheckIcon from "@mui/icons-material/Check";
-import {
-  useAdbContext,
-  useCRUDWithQueryClient,
-  useFormDataStore,
-} from "@slub/edb-state-hooks";
-import { useSnackbar } from "notistack";
-import { ErrorObject } from "ajv";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { JSONSchema } from "json-schema-to-ts";
-import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { Pulse } from "@slub/edb-basic-components";
+import { SemanticFormsModal } from "./SemanticFormsModal";
+import { SimpleExpandPanelRenderer } from "./SimpleExpandPanelRenderer";
 
 const uiSchemaOptionsSchema = {
   type: "object",
@@ -97,7 +101,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     uischema,
     enabled,
   } = props;
-  const { readonly, core } = useJsonForms();
+  const { core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
   const {
     createEntityIRI,
@@ -105,8 +109,13 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
     typeNameToTypeIRI,
     queryBuildOptions: { primaryFields, primaryFieldExtracts },
   } = useAdbContext();
+  const { context } = useMemo(
+    () => merge({}, config, props.uischema?.options),
+    [config, props.uischema?.options],
+  );
   const typeIRI = useMemo(() => {
     const lastScopeSegement = path.split("/").pop();
+    if (context?.typeIRI) return context.typeIRI;
     let iri = schema.properties?.["@type"]?.const;
     try {
       if (!iri) {
@@ -119,7 +128,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       console.error(e);
     }
     return iri;
-  }, [schema, rootSchema, path, typeNameToTypeIRI]);
+  }, [schema, rootSchema, path, typeNameToTypeIRI, context]);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
     [typeIRI, typeIRIToTypeName],
@@ -238,9 +247,11 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       uniqBy(
         realData?.map((childData, index) => {
           const fieldDecl = primaryFieldExtracts[typeName];
+          const id = context?.getID
+            ? context.getID(childData)
+            : childData?.["@id"];
           if (childData && fieldDecl) {
-            let label =
-              childData.label || childData.__label || childData["@id"];
+            let label = childData.label || childData.__label || id;
             const extractedInfo = applyToEachField(
               childData,
               fieldDecl,
@@ -251,7 +262,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
             }
           }
           return {
-            id: childData?.["@id"],
+            id,
             childData,
             index,
             label,
@@ -261,7 +272,25 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
       ),
       ["label", "asc"],
     );
-  }, [realData, orderByPropertyPath, primaryFieldExtracts, typeIRI, typeName]);
+  }, [
+    realData,
+    orderByPropertyPath,
+    primaryFieldExtracts,
+    typeIRI,
+    typeName,
+    context?.getID,
+  ]);
+
+  const handleAddItem = useCallback(
+    (path: string, data: any) => {
+      let _data = data;
+      if (context?.mapData) {
+        _data = context.mapData(data);
+      }
+      return addItem(path, _data);
+    },
+    [addItem, context?.mapData],
+  );
 
   const [tooltipEnabled, setTooltipEnabled] = useState(false);
 
@@ -278,13 +307,13 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
         errors={errors}
         path={path}
         schema={schema as JsonSchema7 | undefined}
-        addItem={addItem}
+        addItem={handleAddItem}
         onCreate={handleCreateNew}
         createDefault={innerCreateDefaultValue}
-        readonly={readonly}
         isReifiedStatement={isReifiedStatement}
         formsPath={makeFormsPath(config?.formsPath, path)}
         additionalKnowledgeSources={additionalKnowledgeSources}
+        typeIRI={typeIRI}
       />
       {modalIsOpen && (
         <SemanticFormsModal
@@ -318,6 +347,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
                 typeIRI={typeIRI}
                 onError={handleErrors}
                 formData={formData}
+                enabled={enabled}
                 onFormDataChange={handleInlineFormDataChange}
                 semanticJsonFormsProps={{
                   disableSimilarityFinder: true,
@@ -383,6 +413,7 @@ export const MaterialArrayLayout = (props: ArrayLayoutProps) => {
                     elementLabelProp={elementLabelProp}
                     formsPath={formsPath}
                     primaryFields={primaryFields}
+                    mapData={context?.mapData}
                   />
                 );
               },

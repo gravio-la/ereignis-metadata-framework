@@ -1,4 +1,4 @@
-import { useRightDrawerState } from "@slub/edb-state-hooks";
+import { useRightDrawerState } from "@graviola/edb-state-hooks";
 import React, { useCallback } from "react";
 import { FloatingButton } from "./FloatingButton";
 import { Searchbar } from "./Searchbar";

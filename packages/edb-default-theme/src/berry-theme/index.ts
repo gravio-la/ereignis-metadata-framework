@@ -1,4 +1,4 @@
-import { TextFieldProps, ThemeOptions } from "@mui/material";
+import { ThemeOptions } from "@mui/material";
 import { createTheme, Theme } from "@mui/material/styles";
 
 // assets
@@ -12,9 +12,9 @@ import themeTypography from "./typography";
 
 let variant: "outlined" | "standard" | "filled" = "outlined";
 export const theme = (customization: ThemeExtended["customization"]) => {
-  const color = colors;
+  const color = colors as any;
 
-  const themeOption: ThemeExtended = {
+  const theme = {
     colors: color,
     heading: color.grey900,
     paper: color.paper,
@@ -28,12 +28,12 @@ export const theme = (customization: ThemeExtended["customization"]) => {
     divider: color.grey200,
     variant,
     customization,
-  };
+  } as ThemeExtended;
 
   // @ts-ignore
   const themeOptions: ThemeOptions = {
     direction: "ltr",
-    palette: themePalette(themeOption),
+    palette: themePalette(theme),
     mixins: {
       toolbar: {
         minHeight: "48px",
@@ -42,11 +42,11 @@ export const theme = (customization: ThemeExtended["customization"]) => {
         },
       },
     },
-    typography: themeTypography(themeOption),
+    typography: themeTypography(theme),
   };
 
   const themes = createTheme(themeOptions);
-  themes.components = componentStyleOverrides(themeOption);
+  themes.components = componentStyleOverrides(theme);
 
   return themes;
 };

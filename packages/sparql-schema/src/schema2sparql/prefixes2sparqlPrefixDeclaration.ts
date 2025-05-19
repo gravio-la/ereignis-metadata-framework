@@ -1,4 +1,4 @@
-import { Prefixes } from "@slub/edb-core-types";
+import { Prefixes } from "@graviola/edb-core-types";
 
 export const prefixes2sparqlPrefixDeclaration = (prefixes: Prefixes) =>
   Object.entries(prefixes)

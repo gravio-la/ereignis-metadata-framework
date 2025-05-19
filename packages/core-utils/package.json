@@ -1,36 +1,60 @@
 {
-  "name": "@slub/edb-core-utils",
-  "version": "1.1.0",
-  "description": "Core utils for EDB",
+  "name": "@graviola/edb-core-utils",
+  "version": "1.3.0",
+  "description": "Core utilities for EDB",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
     "test": "jest",
     "test:watch": "jest --watch --color",
     "test:coverage": "jest --coverage",
-    "doc": "typedoc"
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "doc": "typedoc",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore"
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
-    "@types/jest": "^29.5.12",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5"
+    "@types/jest": "^29.0.0",
+    "jest": "^29.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.8.2"
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/index.ts"
+    ],
+    "skipErrorChecking": true
+  },
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint-config-edb"
+    ]
   }
 }

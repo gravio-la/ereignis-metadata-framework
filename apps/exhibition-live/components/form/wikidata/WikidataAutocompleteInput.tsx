@@ -1,3 +1,11 @@
+import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import {
+  findWithinWikidataUsingREST,
+  wikidataPrefixes,
+} from "@graviola/edb-wikidata-utils";
+import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
+import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
 import parse from "html-react-parser";
 import React, {
   FunctionComponent,
@@ -7,16 +15,8 @@ import React, {
   useState,
 } from "react";
 
-import {
-  findWithinWikidataUsingREST,
-  wikidataPrefixes,
-} from "@slub/edb-ui-utils";
 import WikidataHumanCard from "./WikidataHumanCard";
 import WikidataThingCard from "./WikidataThingCard";
-import { sparqlSelectViaFieldMappings } from "@slub/sparql-schema";
-import { remoteSparqlQuery } from "@slub/remote-query-implementations";
-import { DebouncedAutocomplete } from "@slub/edb-advanced-components";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;

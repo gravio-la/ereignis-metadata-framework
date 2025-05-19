@@ -1,14 +1,13 @@
+import { MenuGroup, MenuItem } from "@graviola/edb-advanced-components";
+import { Permission } from "@graviola/edb-core-types";
 import {
+  CorporateFare as IconCorporation,
   Face as IconFaceId,
   FormatPaint as IconPaint,
   Theaters as IconDots,
-  CorporateFare as IconCorporation,
 } from "@mui/icons-material";
-import { JSONSchema7 } from "json-schema";
-
 import { TFunction } from "i18next";
-import { Permission } from "@slub/edb-core-types";
-import { MenuGroup, MenuItem } from "@slub/edb-advanced-components";
+import { JSONSchema7 } from "json-schema";
 
 const icons = { IconFaceId, IconPaint, IconDots, IconCorporation };
 

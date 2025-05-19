@@ -1,6 +1,7 @@
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import { JSONSchema7 } from "json-schema";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
-import { makeSPARQLRestoreFromTrashQuery } from "./makeSPARQLRestoreFromTrashQuery";
+
+import { makeSPARQLRestoreFromTrashQuery } from "@/crud/makeSPARQLRestoreFromTrashQuery";
 
 export const restoreFromTrash = async (
   entityIRI: string | string[],

@@ -2,7 +2,7 @@ import { csvToModel } from "./csvToModel";
 import { getDefaultMappingStrategyContext } from "./mappingStrategyContext";
 import { dataStore } from "./dataStore";
 import { availableFlatMappings } from "@slub/exhibition-schema";
-import { FlatImportHandler } from "@slub/edb-cli-creator";
+import { FlatImportHandler } from "@graviola/edb-cli-creator";
 
 export const flatImportHandler: FlatImportHandler = async ({
   file,

@@ -1,5 +1,5 @@
-import { NamedNode } from "@rdfjs/types";
-import { NodePropertyTree } from "./nodeToPropertyTree";
+import { NodePropertyTree } from "@graviola/edb-global-types";
+import type { NamedNode } from "@rdfjs/types";
 
 /**
  * Find the first value of a property in a property tree.

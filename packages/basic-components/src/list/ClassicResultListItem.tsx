@@ -13,7 +13,7 @@ import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import {
   useKeyEventForSimilarityFinder,
   useSimilarityFinderState,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
 import { OverflowChip, OverflowContainer } from "../overflow";
 import { ClassicResultPopperItem } from "../entity";
 
@@ -48,7 +48,7 @@ export const ClassicResultListItem: FunctionComponent<
   altAvatar,
   selected,
   popperChildren,
-  listItemProps = {},
+  listItemProps,
   onEnter,
   popperClosed,
   onClose,
@@ -92,7 +92,7 @@ export const ClassicResultListItem: FunctionComponent<
       sx={{ p: 0 }}
       alignItems="flex-start"
       ref={anchorRef}
-      {...listItemProps}
+      {...(listItemProps || {})}
     >
       <ListItemButton
         onClick={handleSelect}

@@ -1,29 +1,14 @@
-import {
+import type {
   IRIToStringFn,
-  NormDataMapping,
-  SparqlBuildOptions,
   SparqlEndpoint,
   StringToIRIFn,
-} from "@slub/edb-core-types";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
-import { NamespaceBuilder } from "@rdfjs/namespace";
-import { JSONSchema7 } from "json-schema";
-import { UrlObject } from "url";
-import { ParsedUrlQuery } from "querystring";
-import {
-  JsonFormsCellRendererRegistryEntry,
-  JsonFormsRendererRegistryEntry,
-  JsonFormsUISchemaRegistryEntry,
-} from "@jsonforms/core";
-import { JSONLDConfig } from "@slub/edb-state-hooks/src";
-import { ErrorObject } from "ajv";
-import { JsonFormsInitStateProps } from "@jsonforms/react";
-import React from "react";
-import {
-  DeclarativeMapping,
-  DeclarativeMappings,
-  DeclarativeMatchBasedFlatMappings,
-} from "@slub/edb-data-mapping";
+  WalkerOptions,
+  Entity,
+} from "@graviola/edb-core-types";
+import type { NamespaceBuilder } from "@rdfjs/namespace";
+import type { JsonLdContext } from "jsonld-context-parser";
+import type { JSONSchema7 } from "json-schema";
+import type { Term } from "@rdfjs/types";
 
 export type EdbConfRaw = {
   BASE_IRI: string;
@@ -47,213 +32,211 @@ export type SimplifiedEndpointConfig = {
   jsonldContext?: object;
 };
 
-export type QueryType = {
-  sorting?: {
+export type PaginationState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
+export type QueryPagination = {
+  pagination: PaginationState;
+};
+
+export type QuerySorting = {
+  sorting: {
     id: string;
     desc?: boolean;
   }[];
-  search?: string;
 };
+
+export type QuerySearch = {
+  search: string;
+};
+
+export type QueryFields = {
+  fields: string[];
+};
+
+export type QueryType = Partial<
+  QueryPagination & QuerySorting & QuerySearch & QueryFields
+>;
 
 export type DatastoreBaseConfig = {
   schema: JSONSchema7;
 };
 
-export type InitDatastoreFunction<T extends DatastoreBaseConfig> = (
-  dataStoreConfig: T,
-) => AbstractDatastore;
+export type InitDatastoreFunction<
+  T extends DatastoreBaseConfig,
+  S extends AbstractDatastore = AbstractDatastore,
+> = (dataStoreConfig: T) => S;
 
 export type CountAndIterable<DocumentResult> = {
   amount: number;
   iterable: AsyncIterable<DocumentResult>;
 };
 
-export type AbstractDatastoreIterable<DocumentResult> = {
-  listDocuments: (
-    typeName: string,
+export type AbstractDatastoreIterable<
+  TypeName extends string = string,
+  DocumentResultTypeMap extends Record<string, any> = Record<string, any>,
+  DocumentResult = any,
+> = {
+  listDocuments: <T extends TypeName>(
+    typeName: T,
     limit?: number,
-  ) => Promise<CountAndIterable<DocumentResult>>;
-  findDocuments: (
-    typeName: string,
+  ) => Promise<
+    CountAndIterable<
+      DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T]
+    >
+  >;
+  findDocuments: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
-  ) => Promise<CountAndIterable<DocumentResult>>;
+  ) => Promise<
+    CountAndIterable<
+      DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T]
+    >
+  >;
 };
 
 export type AbstractDatastore<
+  TypeName extends string = string,
+  DocumentResultTypeMap extends Record<string, any> = Record<string, any>,
+  FindResultTypeMap extends Record<
+    string,
+    any[]
+  > = DocumentResultTypeMap extends undefined
+    ? Record<string, any[]>
+    : { [K in keyof DocumentResultTypeMap]: DocumentResultTypeMap[K][] },
+  UpsertResultTypeMap extends Record<string, any> = DocumentResultTypeMap,
+  UpsertDocumentTypeMap extends Record<string, any> = DocumentResultTypeMap,
+  RemoveResultTypeMap extends Record<string, any> = DocumentResultTypeMap,
   UpsertResult = any,
   LoadResult = any,
   FindResult = any[],
   RemoveResult = any,
   DocumentResult = LoadResult,
+  UpsertDocument = any,
   ImportResult = any,
   BulkImportResult = any,
 > = {
   typeNameToTypeIRI: StringToIRIFn;
   typeIRItoTypeName: IRIToStringFn;
   removeDocument: (
-    typeName: string,
+    typeName: TypeName,
     entityIRI: string,
   ) => Promise<RemoveResult>;
   importDocument: (
-    typeName: string,
+    typeName: TypeName,
     entityIRI: any,
     importStore: AbstractDatastore,
   ) => Promise<ImportResult>;
   importDocuments: (
-    typeName: string,
+    typeName: TypeName,
     importStore: AbstractDatastore,
     limit: number,
   ) => Promise<BulkImportResult>;
-  loadDocument: (typeName: string, entityIRI: string) => Promise<LoadResult>;
-  existsDocument: (typeName: string, entityIRI: string) => Promise<boolean>;
-  upsertDocument: (
-    typeName: string,
+  loadDocument: <T extends TypeName>(
+    typeName: T,
     entityIRI: string,
-    document: any,
-  ) => Promise<UpsertResult>;
-  listDocuments: (
-    typeName: string,
+  ) => Promise<
+    DocumentResultTypeMap[T] extends undefined
+      ? LoadResult
+      : DocumentResultTypeMap[T] | undefined | null
+  >;
+  existsDocument: (typeName: TypeName, entityIRI: string) => Promise<boolean>;
+  upsertDocument: (
+    typeName: TypeName,
+    entityIRI: string,
+    document: UpsertDocumentTypeMap[T] extends undefined
+      ? UpsertDocument
+      : UpsertDocumentTypeMap[T],
+  ) => Promise<
+    UpsertResultTypeMap[T] extends undefined
+      ? UpsertResult
+      : UpsertResultTypeMap[T]
+  >;
+  listDocuments: <T extends TypeName>(
+    typeName: T,
     limit?: number,
-    cb?: (document: any) => Promise<any>,
-  ) => Promise<FindResult>;
-  findDocuments: (
-    typeName: string,
+    cb?: (
+      document: DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T],
+    ) => Promise<any>,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocuments: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
-    cb?: (document: any) => Promise<DocumentResult>,
-  ) => Promise<FindResult>;
-  findDocumentsByLabel?: (
-    typeName: string,
+    cb?: (
+      document: DocumentResultTypeMap[T] extends undefined
+        ? DocumentResult
+        : DocumentResultTypeMap[T],
+    ) => Promise<any>,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findEntityByTypeName?: (
+    typeName: TypeName,
+    searchString: string,
+    limit?: number,
+  ) => Promise<Entity[]>;
+  findDocumentsByLabel?: <T extends TypeName>(
+    typeName: T,
     label: string,
     limit?: number,
-  ) => Promise<FindResult>;
-  findDocumentsByAuthorityIRI?: (
-    typeName: string,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocumentsByAuthorityIRI?: <T extends TypeName>(
+    typeName: T,
     authorityIRI: string,
     repositoryIRI?: string,
     limit?: number,
-  ) => Promise<FindResult>;
-  findDocumentsAsFlatResultSet?: (
-    typeName: string,
+  ) => Promise<
+    FindResultTypeMap[T] extends undefined ? FindResult : FindResultTypeMap[T]
+  >;
+  findDocumentsAsFlatResultSet?: <T extends TypeName>(
+    typeName: T,
     query: QueryType,
     limit?: number,
   ) => Promise<any>;
+  countDocuments?: (
+    typeName: TypeName,
+    query?: Partial<QuerySearch>,
+  ) => Promise<number>;
   getClasses?: (entityIRI: string) => Promise<string[]>;
-  iterableImplementation?: AbstractDatastoreIterable<DocumentResult>;
+  iterableImplementation?: AbstractDatastoreIterable<
+    TypeName,
+    DocumentResultTypeMap,
+    DocumentResult
+  >;
 };
 
-export type EditEntityModalProps = {
-  typeIRI: string | undefined;
-  entityIRI: string;
-  data: any;
-  disableLoad?: boolean;
-};
-
-export type EntityDetailModalProps = EditEntityModalProps & {
-  readonly?: boolean;
-  disableInlineEditing?: boolean;
-};
-export type Url = UrlObject | string;
-
-export type ModRouter = {
-  query: ParsedUrlQuery;
-  asPath: string;
-  replace: (url: Url, as?: Url) => Promise<void | boolean>;
-  push: (url: Url, as?: Url) => Promise<void | boolean>;
-  pathname: string;
-  searchParams: URLSearchParams;
-  setSearchParams?: (searchParams: URLSearchParams) => void;
-};
-
-export type SemanticJsonFormProps = {
-  entityIRI?: string | undefined;
-  data: any;
-  onChange: (data: any) => void;
-  shouldLoadInitially?: boolean;
-  typeIRI: string;
-  schema: JSONSchema7;
-  jsonldContext: JsonLdContext;
-  debugEnabled?: boolean;
-  jsonFormsProps?: Partial<JsonFormsInitStateProps>;
-  onEntityChange?: (entityIRI: string | undefined) => void;
-  onEntityDataChange?: (entityData: any) => void;
+export type JSONLDConfig = {
   defaultPrefix: string;
-  hideToolbar?: boolean;
-  forceEditMode?: boolean;
-  defaultEditMode?: boolean;
-  searchText?: string;
-  toolbarChildren?: React.ReactNode;
-  disableSimilarityFinder?: boolean;
-  enableSidebar?: boolean;
-  wrapWithinCard?: boolean;
+  jsonldContext?: JsonLdContext;
+  allowUnsafeSourceIRIs?: boolean;
 };
 
-export type SemanticJsonFormNoOpsProps = {
-  typeIRI: string;
-  data: any;
-  onChange?: (data: any, reason: ChangeCause) => void;
-  onError?: (errors: ErrorObject[]) => void;
-  schema: JSONSchema7;
-  jsonFormsProps?: Partial<JsonFormsInitStateProps>;
-  onEntityChange?: (entityIRI: string | undefined) => void;
-  onEntityDataChange?: (entityData: any) => void;
-  toolbar?: React.ReactNode;
-  forceEditMode?: boolean;
-  defaultEditMode?: boolean;
-  searchText?: string;
-  disableSimilarityFinder?: boolean;
-  enableSidebar?: boolean;
-  wrapWithinCard?: boolean;
-  formsPath?: string;
+export type RootNode = {
+  id: string | number;
+  properties: NodePropertyTree;
 };
 
-export type KnowledgeSources = "kb" | "gnd" | "wikidata" | "k10plus" | "ai";
-
-export type SimilarityFinderProps = {
-  finderId: string;
-  data: any;
-  classIRI: string;
-  jsonSchema: JSONSchema7;
-  onEntityIRIChange?: (entityIRI: string | undefined) => void;
-  onMappedDataAccepted?: (data: any) => void;
-  onExistingEntityAccepted?: (entityIRI: string, data: any) => void;
-  onSelectedEntityChange?: (id: string, authorityIRI: string) => void;
-  searchOnDataPath?: string;
-  search?: string;
-  hideFooter?: boolean;
-  knowledgeSources?: KnowledgeSources[];
-  additionalKnowledgeSources?: KnowledgeSources[];
+export type NodePropertyTree = {
+  [key: string]: NodePropertyItem[];
 };
 
-export type GlobalAppConfig = {
-  queryBuildOptions: SparqlBuildOptions;
-  typeNameToTypeIRI: StringToIRIFn;
-  typeIRIToTypeName: IRIToStringFn;
-  createEntityIRI: (typeName: string, id?: string) => string;
-  propertyNameToIRI: StringToIRIFn;
-  propertyIRIToPropertyName: IRIToStringFn;
-  jsonLDConfig: JSONLDConfig;
-  normDataMapping: {
-    [authorityIRI: string]: NormDataMapping;
-  };
-  schema: JSONSchema7;
-  makeStubSchema?: (schema: JSONSchema7) => JSONSchema7;
-  uiSchemaDefaultRegistry?: JsonFormsUISchemaRegistryEntry[];
-  rendererRegistry?: JsonFormsRendererRegistryEntry[];
-  primaryFieldRendererRegistry?: (
-    typeIRI: string,
-  ) => JsonFormsRendererRegistryEntry[];
-  cellRendererRegistry?: JsonFormsCellRendererRegistryEntry[];
-  uischemata?: Record<string, any>;
+export type NodePropertyItem = {
+  value: string;
+  term: Term;
+  termType: string;
+  properties?: NodePropertyTree;
 };
-
-export type AvailableFlatMappings = Record<
-  string,
-  { mapping: DeclarativeMatchBasedFlatMappings; typeName: string }
->;
-
-export type AvailableMappings = Record<
-  string,
-  { mapping: DeclarativeMapping; typeName: string }
->;

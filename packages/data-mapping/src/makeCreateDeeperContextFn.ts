@@ -11,7 +11,9 @@ import { StrategyContext } from "./mappingStrategies";
 export const createLogger = (path: string[], disableLogging: boolean) => ({
   log: (message: string) => {
     if (!disableLogging) {
+      // eslint-disable-next-line no-console
       console.log(path.join("/"));
+      // eslint-disable-next-line no-console
       console.log(`\t${message}`);
     }
   },

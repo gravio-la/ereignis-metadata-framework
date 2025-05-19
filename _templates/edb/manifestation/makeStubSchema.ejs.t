@@ -6,7 +6,7 @@ import {
   GeneratePropertiesFunction,
   prepareStubbedSchema,
   SchemaExpander,
-} from "@slub/json-schema-utils";
+} from "@graviola/json-schema-utils";
 
 export const schemaExpander: SchemaExpander = {
   additionalProperties: {
@@ -52,7 +52,7 @@ const genSlubJSONLDSemanticProperties = makeGenSlubJSONLDSemanticProperties(
   "http://ontologies.slub-dresden.de/<%= h.changeCase.paramCase(name) %>/entity/",
 );
 const genSlubRequiredProperties = (_modelName: string) => {
-  return ["@type", "@id"];
+  return ["@id"];
 };
 export const makeStubSchema: (schema: JSONSchema7) => JSONSchema7 = (
   schema,

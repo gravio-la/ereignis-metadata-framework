@@ -1,10 +1,10 @@
-import df from "@rdfjs/data-model";
-import { SELECT } from "@tpluscode/sparql-builder";
 import {
   IRIToStringFn,
   PrimaryFieldExtractDeclaration,
   QueryBuilderOptions,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
+import df from "@rdfjs/data-model";
+import { SELECT } from "@tpluscode/sparql-builder";
 
 type OwnOptions = {
   typeIRItoTypeName: IRIToStringFn;

@@ -1,3 +1,4 @@
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
 import {
   ArrowDownward as IconChevronDown,
   ArrowUpward as IconChevronUp,
@@ -16,7 +17,6 @@ import { useEffect, useState } from "react";
 
 import { NavItem } from "./NavItem";
 import { MenuCollapse } from "./types";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
 
 type NavCollapseProps = {
   menu: MenuCollapse;
@@ -24,7 +24,7 @@ type NavCollapseProps = {
 };
 export const NavCollapse = ({ menu, level }) => {
   const theme = useTheme();
-  const { push: navigate, pathname } = useModifiedRouter();
+  const { pathname } = useModifiedRouter();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);

@@ -21,8 +21,8 @@ to: packages/<%= name.split("/")[1] %>/package.json
   "dependencies": {
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*"
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*"
   }
 }
 

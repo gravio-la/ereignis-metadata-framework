@@ -1,4 +1,6 @@
-import { QueryClient, QueryClientProvider } from "@slub/edb-state-hooks";
+import { QueryClient, QueryClientProvider } from "@graviola/edb-state-hooks";
+import { useExtendedSchema } from "@graviola/edb-state-hooks";
+import { SemanticJsonForm } from "@graviola/semantic-json-form";
 import { JSONSchema7 } from "json-schema";
 import { useMemo, useState } from "react";
 
@@ -8,15 +10,13 @@ import {
   sladb,
   slent,
 } from "../config/formConfigs";
-import NewSemanticJsonForm from "./SemanticJsonFormOperational";
-import { useExtendedSchema } from "@slub/edb-state-hooks";
 import { uischemata } from "../config/uischemata";
 
 const queryClient = new QueryClient();
 
 const classIRI = sladb.Exhibition.value;
 const exampleData = {
-  "@id": slent["Exhibition#s-12"].value,
+  "@id": slent["4d7bfa16-83fe-3997-b710-68942aab7abb"].value,
   "@type": classIRI,
   title: "Otto Dix Ausstellung",
 };
@@ -28,7 +28,7 @@ const SemanticJsonFormOneShot = () => {
   const uischema = useMemo(() => uischemata?.[typeName], [typeName]);
 
   return (
-    <NewSemanticJsonForm
+    <SemanticJsonForm
       data={data}
       onChange={setData}
       entityIRI={data["@id"]}
@@ -60,5 +60,5 @@ export const SemanticJsonFormExhibition = () => {
 };
 export default {
   title: "ui/form/EditExhibitionJSONForm",
-  component: NewSemanticJsonForm,
+  component: SemanticJsonFormExhibition,
 };

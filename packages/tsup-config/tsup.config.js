@@ -4,11 +4,14 @@ const config = defineConfig({
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
   external: [
-    "react",
-    "react-dom",
-    "cross-fetch",
-    "@mui/material",
-    "@tanstack/react-query",
+    // Always exclude node_modules and core packages
+    /^node:.*/,
+    /^react($|\/)/,
+    /^@tanstack\/react-query/,
+    /^@mui\/.*/,
+
+    // Bun-proofing: Prevent nested node_modules bundling
+    /^.*\/node_modules\/.*/,
   ], // Specify which modules are external
   splitting: false, // Set to true if you want code splitting in your ESM bundle
   sourcemap: true, // Generates source maps
@@ -20,6 +23,7 @@ export const makeConfigWithExternals = (pkg) => {
   return {
     ...config,
     external: [
+      ...(config.external || []),
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
     ],

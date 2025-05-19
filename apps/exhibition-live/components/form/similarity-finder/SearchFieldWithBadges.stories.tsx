@@ -1,5 +1,6 @@
-import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+
 import { SearchFieldWithBadges } from "./SearchFieldWithBadges";
 import { KnowledgeBaseDescription } from "./types";
 

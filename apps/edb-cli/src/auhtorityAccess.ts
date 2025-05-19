@@ -1,6 +1,6 @@
-import { findEntityWithinLobidByIRI } from "@slub/edb-authorities";
-import { AuthorityConfiguration } from "@slub/edb-data-mapping";
-import { getEntityFromWikidataByIRI } from "@slub/edb-ui-utils";
+import { findEntityWithinLobidByIRI } from "@graviola/edb-authorities";
+import { AuthorityConfiguration } from "@graviola/edb-data-mapping";
+import { getEntityFromWikidataByIRI } from "@graviola/edb-ui-utils";
 
 export const authorityAccess: Record<string, AuthorityConfiguration> = {
   "http://d-nb.info/gnd": {

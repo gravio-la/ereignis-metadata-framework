@@ -1,4 +1,22 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+  useModalRegistry,
+  useModifiedRouter,
+} from "@graviola/edb-state-hooks";
+import {
+  useExtendedSchema,
+  useTypeIRIFromEntity,
+} from "@graviola/edb-state-hooks";
+import { EntityDetailModalProps } from "@graviola/semantic-jsonform-types";
+import { Close as CloseIcon, Edit } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -7,19 +25,15 @@ import {
   DialogActions,
   DialogContent,
   IconButton,
+  Theme,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import { useCallback, useMemo, useState } from "react";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { EntityDetailCard } from "./EntityDetailCard";
-import { useTypeIRIFromEntity, useExtendedSchema } from "@slub/edb-state-hooks";
 import { useTranslation } from "next-i18next";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { PrimaryField, PrimaryFieldResults } from "@slub/edb-core-types";
-import { EntityDetailModalProps } from "@slub/edb-global-types";
+import { useCallback, useMemo, useState } from "react";
+
+import { EntityDetailCard } from "./EntityDetailCard";
 
 export const EntityDetailModal = NiceModal.create(
   ({
@@ -33,10 +47,16 @@ export const EntityDetailModal = NiceModal.create(
     const {
       queryBuildOptions: { primaryFields },
       typeIRIToTypeName,
+      components: { EditEntityModal },
     } = useAdbContext();
     const modal = useModal();
-    const typeIRIs = useTypeIRIFromEntity(entityIRI);
-    const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+
+    const handleClose = useCallback(() => {
+      modal.reject();
+      modal.remove();
+    }, [modal]);
+
+    const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
     const typeName = useMemo(
       () => typeIRIToTypeName(classIRI),
       [classIRI, typeIRIToTypeName],
@@ -56,7 +76,36 @@ export const EntityDetailModal = NiceModal.create(
       loadQueryKey: "show",
     });
     const { t } = useTranslation();
+
     const data = rawData?.document || defaultData;
+
+    const { push } = useModifiedRouter();
+    const { registerModal } = useModalRegistry(NiceModal);
+    const handleEdit = useCallback(() => {
+      if (!disableInlineEditing) {
+        const modalID = `edit-${typeIRI}-${entityIRI}`;
+        registerModal(modalID, EditEntityModal);
+        NiceModal.show(modalID, {
+          entityIRI: entityIRI,
+          typeIRI: typeIRI,
+          data,
+          disableLoad: true,
+        });
+      } else {
+        const typeName = typeIRIToTypeName(typeIRI);
+        push(`/create/${typeName}?encID=${encodeIRI(entityIRI)}`);
+      }
+    }, [
+      typeIRI,
+      entityIRI,
+      disableInlineEditing,
+      typeIRIToTypeName,
+      registerModal,
+      data,
+      EditEntityModal,
+      push,
+    ]);
+
     const cardInfo = useMemo<PrimaryFieldResults<string>>(() => {
       const fieldDecl = primaryFields[typeName];
       if (data && fieldDecl)
@@ -68,13 +117,6 @@ export const EntityDetailModal = NiceModal.create(
       };
     }, [typeName, data, primaryFields]);
 
-    const [aboutToRemove, setAboutToRemove] = useState(false);
-    const removeSlowly = useCallback(() => {
-      if (aboutToRemove) return;
-      setAboutToRemove(true);
-      setTimeout(() => modal.remove(), 500);
-    }, [modal, setAboutToRemove, aboutToRemove]);
-
     const fieldDeclaration = useMemo(
       () => primaryFields[typeName] as PrimaryField,
       [typeName, primaryFields],
@@ -83,22 +125,25 @@ export const EntityDetailModal = NiceModal.create(
       () => filterUndefOrNull(Object.values(fieldDeclaration || {})),
       [fieldDeclaration],
     );
-
+    const xsDown = useMediaQuery((theme: Theme) =>
+      theme.breakpoints.down("sm"),
+    );
     return (
       <Dialog
         open={modal.visible}
-        onClose={() => modal.remove()}
+        onClose={handleClose}
         scroll={"paper"}
         disableScrollLock={false}
         maxWidth={false}
+        fullScreen={xsDown}
         sx={{
-          transition: "opacity 0.5s",
-          opacity: aboutToRemove ? 0 : 1,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <AppBar position="static">
           <Toolbar variant="dense">
-            <Typography variant="h6" color="inherit" component="div">
+            <Typography variant="h4" color="inherit" component="div">
               {cardInfo.label}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
@@ -106,7 +151,7 @@ export const EntityDetailModal = NiceModal.create(
               <IconButton
                 size="large"
                 aria-label={t("close")}
-                onClick={() => modal.remove()}
+                onClick={handleClose}
                 color="inherit"
               >
                 <CloseIcon />
@@ -114,21 +159,70 @@ export const EntityDetailModal = NiceModal.create(
             </Box>
           </Toolbar>
         </AppBar>
-        <DialogContent>
-          <EntityDetailCard
-            typeIRI={classIRI}
-            entityIRI={entityIRI}
-            data={data}
-            cardInfo={cardInfo}
-            disableInlineEditing={disableInlineEditing}
-            readonly={readonly}
-            onEditClicked={removeSlowly}
-            tableProps={{ disabledProperties }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => modal.remove()}>{t("cancel")}</Button>
-        </DialogActions>
+        <Box sx={{ flexGrow: 1, display: "flex" }}>
+          {cardInfo.image && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" },
+                minWidth: "200px",
+                borderRight: "1px solid",
+                borderColor: "divider",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                component="img"
+                src={cardInfo.image}
+                alt={cardInfo.label || ""}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
+          )}
+          <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+            <DialogContent
+              sx={{
+                p: 0,
+                position: "relative",
+              }}
+            >
+              <Box
+                sx={{
+                  height: "100%",
+                  overflow: "auto",
+                  p: 2,
+                }}
+              >
+                <EntityDetailCard
+                  typeIRI={classIRI}
+                  entityIRI={entityIRI}
+                  data={data}
+                  cardInfo={cardInfo}
+                  readonly={readonly}
+                  tableProps={{ disabledProperties }}
+                  cardProps={{ elevation: 0 }}
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              {!readonly && (
+                <Button
+                  variant="outlined"
+                  onClick={handleEdit}
+                  startIcon={<Edit />}
+                >
+                  {!disableInlineEditing ? t("edit inline") : t("edit")}
+                </Button>
+              )}
+              <Button onClick={handleClose} color="primary" variant="contained">
+                {t("close")}
+              </Button>
+            </DialogActions>
+          </Box>
+        </Box>
       </Dialog>
     );
   },

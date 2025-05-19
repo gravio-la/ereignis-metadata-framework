@@ -1,6 +1,6 @@
-import { StorybookConfig } from "@storybook/nextjs";
+/*import { StorybookConfig } from "@storybook/nextjs";*/
 
-const config: StorybookConfig = {
+const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
@@ -29,7 +29,7 @@ const config: StorybookConfig = {
     autodocs: true,
   },
   webpackFinal: async (config) => {
-    config.module.rules.push({
+    config.module?.rules?.push({
       test: /\.(nq|ttl)$/i,
       use: [
         {

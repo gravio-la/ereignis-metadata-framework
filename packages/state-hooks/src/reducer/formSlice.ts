@@ -30,10 +30,6 @@ const formSlice = createSlice({
     // Action to set form data with an optional cause
     setFormData: (state, action: PayloadAction<SetFormDataPayload>) => {
       state.formData = action.payload.formData;
-      // Optionally, you might want to log the cause or handle it differently
-      if (action.payload.cause) {
-        console.log(`Data updated due to: ${action.payload.cause}`);
-      }
     },
     // Action to update form data with an updater function and optional cause
     updateFormData: (
@@ -49,9 +45,6 @@ const formSlice = createSlice({
         typeof updater === "function"
           ? updater(state.formData[propertyPath])
           : updater;
-      if (cause) {
-        console.log(`Data updated due to: ${cause}`);
-      }
     },
   },
 });

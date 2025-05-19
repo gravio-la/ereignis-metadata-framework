@@ -1,3 +1,7 @@
+import { irisToData, makeFormsPath } from "@graviola/edb-core-utils";
+import { useAdbContext } from "@graviola/edb-state-hooks";
+import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import {
   ArrayLayoutProps,
   composePaths,
@@ -7,27 +11,20 @@ import {
   JsonSchema7,
   Resolve,
 } from "@jsonforms/core";
-import merge from "lodash/merge";
+import { useJsonForms } from "@jsonforms/react";
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Grid, IconButton, Stack } from "@mui/material";
+import { JSONSchema7 } from "json-schema";
+import { orderBy, uniqBy } from "lodash-es";
+import merge from "lodash-es/merge";
+import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ArrayLayoutToolbar } from "./ArrayToolbar";
-import { useJsonForms } from "@jsonforms/react";
-import { uniqBy, orderBy } from "lodash";
-import { SemanticFormsModal } from "./SemanticFormsModal";
-import { irisToData, makeFormsPath } from "@slub/edb-ui-utils";
-import { JSONSchema7 } from "json-schema";
-import { Box, Grid, IconButton, Stack } from "@mui/material";
 import { SemanticFormsInline } from "./SemanticFormsInline";
-import AddIcon from "@mui/icons-material/Add";
-import { useAdbContext } from "@slub/edb-state-hooks";
-import { useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import { useSnackbar } from "notistack";
+import { SemanticFormsModal } from "./SemanticFormsModal";
 import { SimpleChipRenderer } from "./SimpleChipRenderer";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
 
-type OwnProps = {
-  removeItems(path: string, toDelete: number[]): () => void;
-};
 const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
   const innerCreateDefaultValue = useCallback(
     () => createDefaultValue(props.schema, props.rootSchema),
@@ -40,6 +37,7 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
     schema,
     errors,
     addItem,
+    enabled,
     label,
     required,
     rootSchema,
@@ -51,14 +49,16 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
     hideRequiredAsterisk,
     additionalKnowledgeSources,
     elementLabelTemplate,
-    elementLabelProp = "label",
+    elementLabelProp,
+    dropdown,
+    context,
   } = useMemo(
     () => merge({}, config, props.uischema.options),
     [config, props.uischema.options],
   );
-  const { readonly, core } = useJsonForms();
+  const { core } = useJsonForms();
   const realData = Resolve.data(core.data, path);
-  const typeIRI = schema.properties?.["@type"]?.const;
+  const typeIRI = context?.typeIRI ?? schema.properties?.["@type"]?.const;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const typeName = useMemo(
     () => typeIRIToTypeName(typeIRI),
@@ -126,11 +126,7 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
   }, [formsPath, typeIRI, typeName, setFormData]);
 
   return (
-    <Box
-      sx={(theme) => ({
-        marginBottom: theme.spacing(2),
-      })}
-    >
+    <Box>
       <ArrayLayoutToolbar
         label={computeLabel(
           label,
@@ -143,7 +139,8 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
         addItem={addItem}
         onCreate={handleCreateNew}
         createDefault={innerCreateDefaultValue}
-        readonly={readonly}
+        enabled={enabled}
+        dropdown={dropdown}
         isReifiedStatement={Boolean(isReifiedStatement)}
         formsPath={makeFormsPath(config?.formsPath, path)}
         additionalKnowledgeSources={additionalKnowledgeSources}
@@ -192,7 +189,12 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
           </Grid>
         </Grid>
       )}
-      <Stack spacing={1} direction="row" flexWrap={"wrap"}>
+      <Stack
+        spacing={1}
+        direction="row"
+        flexWrap={"wrap"}
+        sx={{ marginBottom: 1 }}
+      >
         {data > 0
           ? orderBy(
               uniqBy(
@@ -204,16 +206,17 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
                 "id",
               ),
               "id",
-            ).map(({ id: expandID, childData, index }: any, count) => {
+            ).map(({ id, childData, index }: any, count) => {
               const childPath = composePaths(path, `${index}`);
               return (
-                <Box key={expandID}>
+                <Box key={id}>
                   <SimpleChipRenderer
+                    typeIRI={typeIRI}
                     onRemove={removeItems(path, [index])}
                     schema={schema}
                     onChange={() => {}}
                     rootSchema={rootSchema}
-                    entityIRI={expandID}
+                    entityIRI={id}
                     data={childData}
                     index={index}
                     count={count}
@@ -221,9 +224,6 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
                     childLabelTemplate={elementLabelTemplate}
                     elementLabelProp={elementLabelProp}
                     formsPath={makeFormsPath(config?.formsPath, childPath)}
-                    sx={{
-                      margin: 0.5,
-                    }}
                   />
                 </Box>
               );

@@ -1,13 +1,14 @@
 import {
+  DeclarativeFlatMappings,
+  DeclarativeMatchBasedFlatMappings,
+} from "@graviola/edb-data-mapping";
+
+import { OwnColumnDesc } from "../google/types";
+import { spreadSheetMapping_Hamburg } from "./spreadSheetMapping_Hamburg";
+import {
   matchBasedSpreadsheetMappings_NewYork,
   spreadSheetMappings_NewYork,
 } from "./spreadSheetMappings_NewYork";
-import { spreadSheetMapping_Hamburg } from "./spreadSheetMapping_Hamburg";
-import { OwnColumnDesc } from "../google/types";
-import {
-  DeclarativeFlatMappings,
-  DeclarativeMatchBasedFlatMappings,
-} from "@slub/edb-data-mapping";
 
 export type ConcreteSpreadSheetMapping = {
   raw?: DeclarativeMatchBasedFlatMappings;

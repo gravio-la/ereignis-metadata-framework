@@ -1,4 +1,3 @@
-import { gndBaseIRI } from "../gnd";
 import fetch from "cross-fetch";
 
 /**
@@ -89,7 +88,6 @@ export const findEntityWithinLobidWithCertainProperty: (
 };
 
 export const findEntityWithinLobidByID = async (id: string) => {
-  console.log("fetching", `${lobidURL}${id}.json`);
   const res = await fetch(`${lobidURL}${id}.json`);
   try {
     const result = await res.json();

@@ -1,5 +1,5 @@
 {
-  "extends": "@slub/edb-tsconfig/node-application.json",
+  "extends": "@graviola/edb-tsconfig/node-application.json",
   "include": ["./src"],
   "compilerOptions": {
     "baseUrl": ".",

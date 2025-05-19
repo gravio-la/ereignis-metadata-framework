@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Components, Virtuoso } from "react-virtuoso";
-import { withEllipsis } from "@slub/edb-ui-utils";
+import { withEllipsis } from "@graviola/edb-ui-utils";
 import React, { CSSProperties, forwardRef, ReactNode } from "react";
 
 export type GenericListItem = {

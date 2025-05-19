@@ -1,6 +1,7 @@
 import MuiDrawer from "@mui/material/Drawer";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
+import { CSSObject, styled, Theme } from "@mui/material/styles";
 import React, { ForwardedRef, useMemo } from "react";
+
 import { leftDrawerWidth } from "../MainLayout";
 
 const openedMixin = (theme: Theme): CSSObject => ({

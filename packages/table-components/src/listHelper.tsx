@@ -1,21 +1,26 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { MRT_ColumnDef } from "material-react-table";
-import { OverflowContainer } from "@slub/edb-basic-components";
+import NiceModal from "@ebay/nice-modal-react";
+import { OverflowContainer } from "@graviola/edb-basic-components";
+import type {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { applyToEachField } from "@graviola/edb-data-mapping";
+import { useAdbContext } from "@graviola/edb-state-hooks";
+import { isJSONSchema } from "@graviola/json-schema-utils";
+import { JsonSchema, RankedTester, TesterContext } from "@jsonforms/core";
 import { Avatar, Box, Link } from "@mui/material";
+import { TFunction } from "i18next";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import maxBy from "lodash-es/maxBy";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { applyToEachField } from "@slub/edb-data-mapping";
+import type { MRT_ColumnDef } from "material-react-table";
 import * as React from "react";
 import { MouseEvent, useCallback, useMemo } from "react";
-import { TFunction } from "i18next";
-import NiceModal from "@ebay/nice-modal-react";
-import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { JsonSchema, RankedTester, TesterContext } from "@jsonforms/core";
-import { isJSONSchema } from "@slub/json-schema-utils";
-import { useAdbContext } from "@slub/edb-state-hooks";
+
 import { cellConfigRegistry } from "./cellConfigRegistry";
 import {
   extractSingleFieldIfString,
+  mkAccessor,
   pathToString,
   urlSuffix,
 } from "./tableRegistryHelper";
@@ -181,7 +186,10 @@ export const computeColumns: (
         {
           id: pathToString([...path, "IRI"]),
           header: pathToString([...path, "IRI"]),
-          accessorKey: `${pathToString([...path, "entity"])}.value`,
+          accessorFn: mkAccessor(
+            `${pathToString([...path, "entity"])}.value`,
+            "",
+          ),
           Cell: ({ cell }) => (
             <OverflowContainer tooltip={cell.getValue()}>
               {urlSuffix(cell.getValue() ?? "")}

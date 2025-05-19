@@ -1,22 +1,12 @@
-import {
-  useAdbContext,
-  useDataStore,
-  useGlobalCRUDOptions,
-} from "@slub/edb-state-hooks";
+import { useAdbContext, useDataStore } from "@graviola/edb-state-hooks";
 import { useMemo } from "react";
-import { KBMainDatabase, Wikidata, GND, K10Plus } from "./provider";
+
+import { GND, K10Plus, KBMainDatabase, Wikidata } from "./provider";
 import { KnowledgeBaseDescription } from "./types";
 
 export const useKnowledgeBases = () => {
-  const { schema, typeNameToTypeIRI, queryBuildOptions, jsonLDConfig } =
-    useAdbContext();
-  const { crudOptions } = useGlobalCRUDOptions();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
+  const { queryBuildOptions, jsonLDConfig } = useAdbContext();
+  const { dataStore, ready } = useDataStore();
   const kbs: KnowledgeBaseDescription[] = useMemo(
     () => [
       KBMainDatabase(dataStore, queryBuildOptions.primaryFields),

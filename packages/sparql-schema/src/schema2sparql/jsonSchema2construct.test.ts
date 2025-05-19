@@ -1,17 +1,13 @@
+import { Prefixes } from "@graviola/edb-core-types";
 import { describe, expect, test } from "@jest/globals";
 import { CONSTRUCT } from "@tpluscode/sparql-builder";
 import { JSONSchema7 } from "json-schema";
 
 import { jsonSchema2construct } from "./jsonSchema2construct";
-import { Prefixes } from "@slub/edb-core-types";
 
 const BASE_IRI = "http://ontologies.slub-dresden.de/exhibition#";
-export const testPrefixes: Prefixes = {
-  sladb: "http://ontologies.slub-dresden.de/exhibition#",
-  slent: "http://ontologies.slub-dresden.de/exhibition/entity#",
-  slsrc: "http://ontologies.slub-dresden.de/source#",
-  slmeta: "http://ontologies.slub-dresden.de/meta#",
-  slperson: "http://ontologies.slub-dresden.de/person#",
+const testPrefixes: Prefixes = {
+  exmpl: "http://example.com/test#",
 };
 const schema: JSONSchema7 = {
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -86,12 +82,9 @@ describe("make construct query", () => {
     const constructQuery = buildConstructQuery(subject, schema)
       .build({
         base: BASE_IRI,
-        prefixes: {
-          ...testPrefixes,
-        },
+        prefixes: testPrefixes,
       })
       .toString();
-    console.log(constructQuery);
     expect(constructQuery).toMatch(/CONSTRUCT {.*/);
   });
 

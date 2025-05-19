@@ -1,5 +1,5 @@
 {
-  "name": "@slub/edb-tsup-config",
+  "name": "@graviola/edb-tsup-config",
   "version": "1.1.0",
   "description": "Tsup configuration for EDB",
   "type": "module",

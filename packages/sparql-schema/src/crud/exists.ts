@@ -1,5 +1,6 @@
-import { makeSPARQLWherePart } from "./makeSPARQLWherePart";
 import { ASK } from "@tpluscode/sparql-builder";
+
+import { makeSPARQLWherePart } from "@/crud/makeSPARQLWherePart";
 
 export const exists = async (
   entityIRI: string,

@@ -1,5 +1,12 @@
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
+import { Entity } from "@graviola/edb-core-types";
+import {
+  useAdbContext,
+  useDataStore,
+  useQueryClient,
+} from "@graviola/edb-state-hooks";
 import { List } from "@mui/material";
-import React, {
+import {
   FunctionComponent,
   useCallback,
   useEffect,
@@ -7,58 +14,58 @@ import React, {
   useState,
 } from "react";
 
-import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
-import { findEntityByClass } from "@slub/sparql-schema";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
-import { EntityDetailElement } from "@slub/edb-advanced-components";
+import { EntityDetailElement } from "../show";
 
 export type DiscoverSearchTableProps = {
   searchString: string;
   typeName?: string;
   onAcceptItem?: (id: string | undefined, data: any) => void;
   selectedIndex?: number;
+  limit?: number;
 };
 
 export const DiscoverSearchTable: FunctionComponent<
   DiscoverSearchTableProps
-> = ({ searchString, typeName = "Person", onAcceptItem, selectedIndex }) => {
+> = ({
+  searchString,
+  typeName = "Person",
+  onAcceptItem,
+  selectedIndex,
+  limit,
+}) => {
   const [resultTable, setResultTable] = useState<any | undefined>();
-  const {
-    typeNameToTypeIRI,
-    jsonLDConfig: { defaultPrefix },
-    queryBuildOptions,
-  } = useAdbContext();
-  const { crudOptions } = useGlobalCRUDOptions();
+  const { typeNameToTypeIRI } = useAdbContext();
+  const queryClient = useQueryClient();
   const typeIRI = useMemo(
     () => typeNameToTypeIRI(typeName),
     [typeName, typeNameToTypeIRI],
   );
 
+  const { dataStore, ready } = useDataStore();
+
   const fetchData = useCallback(async () => {
-    console.log("fetch data");
-    if (!searchString || searchString.length < 1 || !crudOptions || !typeIRI)
-      return;
+    if (!searchString || searchString.length < 1 || !typeIRI || !ready) return;
+    const result = await queryClient.fetchQuery<Entity[]>({
+      queryKey: ["type", typeIRI, "search", searchString],
+      queryFn: () =>
+        dataStore?.findEntityByTypeName(typeName, searchString, limit),
+    });
     setResultTable(
-      (
-        await findEntityByClass(
-          searchString,
-          typeIRI,
-          crudOptions.selectFetch,
-          { defaultPrefix, queryBuildOptions },
-        )
-      ).map(({ name = "", value }: { name: string; value: any }) => {
+      result.map(({ label = "", entityIRI, description, image }) => {
         return {
-          label: name,
-          id: value as string,
+          label,
+          id: entityIRI,
+          secondary: description,
+          avatar: image,
         };
       }),
     );
-  }, [searchString, typeIRI, crudOptions, defaultPrefix, queryBuildOptions]);
+  }, [searchString, typeIRI, ready, dataStore, queryClient, typeName, limit]);
 
   const handleSelect = useCallback(
     (id: string | undefined) => {
       const data = id && resultTable?.find((entry) => entry.id === id);
-      onAcceptItem && data && onAcceptItem(id, data);
+      if (data) onAcceptItem?.(id, data);
     },
     [resultTable, onAcceptItem],
   );

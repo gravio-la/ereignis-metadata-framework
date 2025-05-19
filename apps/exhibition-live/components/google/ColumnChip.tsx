@@ -1,17 +1,18 @@
-import { useTranslation } from "next-i18next";
-import React, { useCallback, useMemo } from "react";
+import NiceModal from "@ebay/nice-modal-react";
 import {
   DeclarativeFlatMapping,
   DeclarativeFlatMappings,
   DeclarativeMatchBasedFlatMapping,
   DeclarativeMatchBasedFlatMappings,
-} from "@slub/edb-data-mapping";
-import NiceModal from "@ebay/nice-modal-react";
-import { SpreadSheetTable } from "./SpreadSheetTable";
+} from "@graviola/edb-data-mapping";
 import { Chip, Divider, Menu, MenuItem } from "@mui/material";
+import { useTranslation } from "next-i18next";
+import React, { useCallback, useMemo } from "react";
+
+import { NiceMappingConfigurationDialog } from "./NiceMappingConfigurationDialog";
+import { SpreadSheetTable } from "./SpreadSheetTable";
 import { OwnColumnDesc } from "./types";
 import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
-import { NiceMappingConfigurationDialog } from "./NiceMappingConfigurationDialog";
 
 export type ColumnChipProps<CellType extends CellTypeLike> = {
   columnIndex: number;

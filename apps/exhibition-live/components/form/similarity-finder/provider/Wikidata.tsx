@@ -1,19 +1,16 @@
-import { KnowledgeBaseDescription } from "../types";
-import { Img } from "../../../basic";
+import { ClassicResultListItem } from "@graviola/edb-basic-components";
 import {
   CommonPropertyValues,
-  getCommonPropsFromWikidata,
   getEntityFromWikidataByIRI,
   WikidataRESTResult,
-} from "@slub/edb-ui-utils";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { ClassicResultListItem } from "@slub/edb-basic-components";
-import { IconButton, Stack } from "@mui/material";
+} from "@graviola/edb-wikidata-utils";
 import { Check } from "@mui/icons-material";
-import { WikidataAllPropTable } from "@slub/edb-advanced-components";
+import { IconButton, Stack } from "@mui/material";
 import { wikidataTypeMap } from "@slub/exhibition-schema";
-import { use } from "chai";
-import { useCallback } from "react";
+
+import { Img } from "../../../basic";
+import { WikidataAllPropTable } from "../../wikidata/WikidataAllPropTable";
+import { KnowledgeBaseDescription } from "../types";
 
 const stripWikidataPrefixFromProps = (allProps: CommonPropertyValues) => {
   return Object.fromEntries(

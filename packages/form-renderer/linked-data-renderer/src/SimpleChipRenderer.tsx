@@ -1,5 +1,19 @@
+import NiceModal from "@ebay/nice-modal-react";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JsonSchema, update } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
 import { Avatar, Chip, ChipProps, Tooltip } from "@mui/material";
+import dot from "dot";
+import { JSONSchema7 } from "json-schema";
+import get from "lodash-es/get";
 import React, {
   MouseEvent,
   useCallback,
@@ -7,15 +21,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { JSONSchema7 } from "json-schema";
-import { useJsonForms } from "@jsonforms/react";
-import dot from "dot";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import get from "lodash/get";
-import NiceModal from "@ebay/nice-modal-react";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
 
 type SimpleChipRendererProps = {
   data: any;
@@ -30,7 +35,13 @@ type SimpleChipRendererProps = {
   childLabelTemplate?: string;
   elementLabelProp?: string;
   formsPath?: string;
+  typeIRI?: string;
 };
+
+const hasRealData = ({ ["@id"]: _1, ["@type"]: _2, ...rest }: any) => {
+  return Object.keys(rest).length > 0;
+};
+
 export const SimpleChipRenderer = (
   props: SimpleChipRendererProps & ChipProps,
 ) => {
@@ -39,6 +50,7 @@ export const SimpleChipRenderer = (
     data,
     index,
     entityIRI,
+    typeIRI,
     schema,
     rootSchema,
     onRemove,
@@ -48,10 +60,9 @@ export const SimpleChipRenderer = (
     formsPath,
     ...chipProps
   } = props;
-  const typeIRI = schema.properties?.["@type"]?.const;
   const {
     typeIRIToTypeName,
-    queryBuildOptions: { primaryFieldExtracts },
+    queryBuildOptions: { primaryFields },
     components: { EntityDetailModal },
   } = useAdbContext();
   const typeName = useMemo(
@@ -64,15 +75,11 @@ export const SimpleChipRenderer = (
   // @ts-ignore
   const { label, description, image } = useMemo(() => {
     if (!typeName) return {};
-    const fieldDecl = primaryFieldExtracts[typeName];
+    const fieldDecl = primaryFields[typeName];
     if (data && fieldDecl)
       return applyToEachField(data, fieldDecl, extractFieldIfString);
     return {};
-  }, [data, typeName, entityIRI]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const handleToggle = useCallback(() => {
-    setModalIsOpen(!modalIsOpen);
-  }, [setModalIsOpen, modalIsOpen]);
+  }, [data, typeName, entityIRI, primaryFields]);
   const subSchema = useMemo(
     () =>
       bringDefinitionToTop(rootSchema as JSONSchema7, typeName) as JSONSchema7,
@@ -93,18 +100,19 @@ export const SimpleChipRenderer = (
     return label || data?.__label;
   }, [childLabelTemplate, elementLabelProp, data, label]);
 
-  const { loadQuery } = useCRUDWithQueryClient({
+  const queryEnabled = useMemo(() => !hasRealData(data), [data]);
+  const {
+    loadQuery: { data: loadedData },
+  } = useCRUDWithQueryClient({
     entityIRI,
     typeIRI,
     schema: subSchema,
     queryOptions: {
-      enabled: !data?.__draft && !data?.__label,
-      initialData: data,
+      enabled: queryEnabled,
+      initialData: data ? { document: data } : undefined,
       refetchOnWindowFocus: true,
     },
   });
-  //const draft = data?.__draft && !saveMutation.isSuccess;
-  const { data: loadedData } = loadQuery;
   useEffect(() => {
     if (loadedData?.document) {
       onData(loadedData.document);
@@ -117,11 +125,14 @@ export const SimpleChipRenderer = (
     (e: MouseEvent) => {
       e.preventDefault();
       NiceModal.show(EntityDetailModal, {
+        typeIRI,
         entityIRI,
-        data: {},
+        data: Object.fromEntries(
+          Object.entries(data).filter(([key]) => !key.startsWith("__")),
+        ),
       });
     },
-    [entityIRI],
+    [entityIRI, typeIRI, data],
   );
   const handleShouldShow = useCallback(
     (e: MouseEvent<Element>) => {

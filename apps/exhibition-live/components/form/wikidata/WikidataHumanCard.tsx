@@ -1,3 +1,6 @@
+import { wikidataPrefixes } from "@graviola/edb-wikidata-utils";
+import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
+import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
 import {
   Button,
   Card,
@@ -23,10 +26,7 @@ import React, {
   useState,
 } from "react";
 
-import { wikidataPrefixes } from "@slub/edb-ui-utils";
-import { sparqlSelectViaFieldMappings } from "@slub/sparql-schema";
-import { remoteSparqlQuery } from "@slub/remote-query-implementations";
-import { WikidataAllPropTable } from "@slub/edb-advanced-components";
+import { WikidataAllPropTable } from "./WikidataAllPropTable";
 
 interface OwnProps {
   personIRI?: string | null;

@@ -2,7 +2,7 @@
 to: manifestation/<%= name %>/package.json
 ---
 {
-  "name": "@slub/<%= h.changeCase.paramCase(name) %>-schema",
+  "name": "@graviola/<%= h.changeCase.paramCase(name) %>-schema",
   "version": "1.0.0",
   "description": "Schema for the <%= name %> database",
   "type": "module",
@@ -27,10 +27,10 @@ to: manifestation/<%= name %>/package.json
   },
   "devDependencies": {
     "@types/rdfjs__namespace": "^2.0.8",
-    "@slub/json-schema-prisma-utils": "workspace:*",
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-data-mapping": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
+    "@graviola/json-schema-prisma-utils": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-data-mapping": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
     "json-schema": "^0.4.0",
     "@adobe/jsonschema2md": "^7.1.5",
     "schema2typebox": "^1.7.5"

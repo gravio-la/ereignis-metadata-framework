@@ -1,9 +1,13 @@
-import { makeSPARQLWherePart, withDefaultPrefix } from "./makeSPARQLWherePart";
-import { JSONSchema7 } from "json-schema";
-import { SPARQLCRUDOptions } from "@slub/edb-core-types";
-import { jsonSchema2construct } from "..";
-import { CONSTRUCT } from "@tpluscode/sparql-builder";
+import { SPARQLCRUDOptions } from "@graviola/edb-core-types";
 import df from "@rdfjs/data-model";
+import { CONSTRUCT } from "@tpluscode/sparql-builder";
+import { JSONSchema7 } from "json-schema";
+
+import {
+  makeSPARQLWherePart,
+  withDefaultPrefix,
+} from "@/crud/makeSPARQLWherePart";
+import { jsonSchema2construct } from "@/schema2sparql/jsonSchema2construct";
 
 export const makeSPARQLConstructQuery = (
   entityIRI: string,

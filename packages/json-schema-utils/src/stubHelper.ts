@@ -1,5 +1,6 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import isObject from "lodash/isObject";
+import isObject from "lodash-es/isObject";
+
 import { defs, getDefintitionKey } from "./jsonSchema";
 
 export type GenRequiredPropertiesFunction = (modelName: string) => string[];

@@ -1,6 +1,6 @@
 {
   "name": "@slub/exhibition-schema",
-  "version": "1.3.0",
+  "version": "1.3.3",
   "description": "Schema for the exhibition database",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -8,31 +8,33 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "schema:export": "bun ./schemas/exportSchema.ts > ./schemas/jsonschema/Exhibition.schema.json",
-    "build:prisma": "bun ./src/createPrismaSchemal.ts > ../../prisma/exhibition.prisma",
+    "build:prisma": "bun ./src/createPrismaSchema.ts > ../../prisma/exhibition.prisma",
     "build:doc": "mkdir -p docs/reference && jsonschema2md -o docs/reference -d schemas/jsonschema",
     "build:typebox": "mkdir -p typebox && schema2typebox --input schemas/jsonschema/Exhibition.schema.json --output typebox/generated-typebox.ts"
   },
   "devDependencies": {
     "@types/rdfjs__namespace": "^2.0.8",
-    "@slub/json-schema-prisma-utils": "workspace:*",
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-data-mapping": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
+    "@graviola/json-schema-prisma-utils": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-data-mapping": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
     "json-schema": "^0.4.0",
     "@adobe/jsonschema2md": "^7.1.5",
     "schema2typebox": "^1.7.5"
   },
   "dependencies": {
-    "@rdfjs/namespace": "^2.0.0"
+    "@rdfjs/namespace": "^2.0.0",
+    "@graviola/edb-wikidata-utils": "workspace:*",
+    "@graviola/edb-authorities": "workspace:*"
   }
 }

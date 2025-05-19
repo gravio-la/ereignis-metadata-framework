@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "./formStore";
+
 import { selectFormData } from "./formSelectors";
+import { AppDispatch, RootState } from "./formStore";
 
 type UseFormDataStoreType = {
   entityIRI: string;

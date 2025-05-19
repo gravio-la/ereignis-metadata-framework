@@ -1,13 +1,14 @@
-import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
-import React, { useEffect, useMemo, useState } from "react";
+import { index2letter } from "@graviola/edb-core-utils";
+import { Box, Skeleton } from "@mui/material";
 import {
   MaterialReactTable,
   MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
+import React, { useEffect, useMemo, useState } from "react";
+
 import { OwnColumnDesc } from "./types";
-import { Box, Skeleton } from "@mui/material";
-import { index2letter } from "@slub/edb-core-utils";
+import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
 
 export type SpreadSheetTableProps<CellType extends CellTypeLike> = {
   workSheet: CachedWorkSheet<CellType>;

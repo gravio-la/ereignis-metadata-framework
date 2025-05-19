@@ -1,11 +1,12 @@
-import { makeColumnDesc } from "@slub/edb-core-utils";
+import { makeColumnDesc } from "@graviola/edb-core-utils";
+
+import { mapByConfigFlat } from "./mapByConfigFlat";
+import { DeclarativeFlatMappings, StrategyContext } from "./mappingStrategies";
 import {
   DeclarativeMatchBasedFlatMappings,
   matchBased2DeclarativeFlatMappings,
 } from "./matchBased2DeclarativeFlatMapping";
-import { DeclarativeFlatMappings, StrategyContext } from "./mappingStrategies";
 import { ProcessFlatResourceFn } from "./types";
-import { mapByConfigFlat } from "./mapByConfigFlat";
 
 /**
  * Map data from a flat resource (e.g. CSV) to entities.

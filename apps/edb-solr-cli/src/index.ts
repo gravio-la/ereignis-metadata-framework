@@ -1,5 +1,5 @@
-import { AbstractDatastore, QueryType } from "@slub/edb-global-types";
-import { LoadResult } from "@slub/sparql-schema";
+import { AbstractDatastore, QueryType } from "@graviola/edb-global-types";
+import { LoadResult } from "@graviola/sparql-schema";
 import fetch from "node-fetch";
 import { toJSONLD } from "./toJSONLD";
 

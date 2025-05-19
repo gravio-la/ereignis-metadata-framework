@@ -1,5 +1,9 @@
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { ClearSharp } from "@mui/icons-material";
 import {
   CircularProgress,
+  InputAdornment,
   InputLabel,
   ListItemIcon,
   ListItemText,
@@ -7,18 +11,8 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import React, {
-  FunctionComponent,
-  use,
-  useCallback,
-  useId,
-  useMemo,
-} from "react";
-
-import { useQuery } from "@slub/edb-state-hooks";
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
-import { ClearSharp } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
+import React, { FunctionComponent, useCallback, useId, useMemo } from "react";
 
 export type PreloadedOptionSelect = {
   title: string;
@@ -29,38 +23,33 @@ export type PreloadedOptionSelect = {
     e: React.SyntheticEvent,
     value: AutocompleteSuggestion | null,
   ) => void;
-  readOnly?: boolean;
+  disabled?: boolean;
 };
 
-const emptySuggestions: AutocompleteSuggestion[] = [
-  {
-    label: "",
-    value: null,
-  },
-];
 export const PreloadedOptionSelect: FunctionComponent<
   PreloadedOptionSelect
-> = ({ load, title, readOnly, value, typeIRI, onChange }) => {
-  const { data: suggestions, isLoading } = useQuery(
-    ["suggestions", typeIRI],
-    () => {
+> = ({ load, title, value, typeIRI, onChange, disabled }) => {
+  const { data: suggestions, isLoading } = useQuery({
+    queryKey: ["type", typeIRI, "suggestions"],
+    queryFn: () => {
       return load();
     },
-    { enabled: true },
-  );
+    enabled: !disabled,
+    refetchOnWindowFocus: true,
+  });
 
   const handleOnChange = useCallback(
     (e: SelectChangeEvent<string>): void => {
       const value = e.target.value;
       if (value === null) {
-        onChange && onChange(e as React.SyntheticEvent, null);
+        onChange?.(e as React.SyntheticEvent, null);
         return;
       }
       const selected = suggestions?.find(
         (suggestion) => suggestion.value === value,
       );
       if (selected) {
-        onChange && onChange(e as React.SyntheticEvent, selected);
+        onChange?.(e as React.SyntheticEvent, selected);
       }
     },
     [onChange, suggestions],
@@ -69,23 +58,40 @@ export const PreloadedOptionSelect: FunctionComponent<
   const selectID = useId();
   const { t } = useTranslation();
   const v = useMemo(() => value?.value ?? null, [value]);
+  const invalidValue = useMemo(
+    () => v && !suggestions?.find((s) => s.value === v),
+    [v, suggestions],
+  );
 
   return (
     <>
-      {isLoading && <CircularProgress size={"1em"} />}
       <InputLabel id={selectID}>{title}</InputLabel>
       <Select
         labelId={selectID}
-        value={v}
+        endAdornment={isLoading ? <CircularProgress size={"2em"} /> : undefined}
+        value={v || ""}
         label={title}
-        disabled={readOnly}
+        disabled={disabled}
         onChange={handleOnChange}
+        inputProps={{
+          disabled: disabled,
+        }}
       >
         {(suggestions || []).map((suggestion) => (
           <MenuItem key={suggestion.value} value={suggestion.value}>
             {suggestion.label}
           </MenuItem>
         ))}
+        {invalidValue && (
+          <MenuItem
+            disabled={true}
+            key="invalid"
+            value={value?.value}
+            sx={{ fontStyle: "italic", color: "error.main" }}
+          >
+            {t("invalid value")} {value?.label || value?.value}
+          </MenuItem>
+        )}
         <MenuItem
           disabled={!v}
           key="empty"

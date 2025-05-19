@@ -1,7 +1,7 @@
 import type Yasgui from "@triply/yasgui";
 import React, { FunctionComponent, useEffect, useState } from "react";
 
-import { Prefixes } from "@slub/edb-core-types";
+import { Prefixes } from "@graviola/edb-core-types";
 import { YasguiSPARQLEditorProps } from "./YasguiSPARQLEditorProps";
 
 const withPrefixes = (yg: Yasgui, prefixes?: Prefixes) => {

@@ -3,13 +3,13 @@ import cloneDeep from "lodash-es/cloneDeep";
 import get from "lodash-es/get";
 import isNil from "lodash-es/isNil";
 import set from "lodash-es/set";
-import jsonpath from "jsonpath";
 
 import {
   DeclarativeMappings,
   StrategyContext,
   strategyFunctionMap,
 } from "./mappingStrategies";
+import jsonpath from "jsonpath";
 
 /**
  * Get value from sourceData via a sourcePath which can be either a string or an array of strings
@@ -55,11 +55,11 @@ export const mapByConfig = async (
   strategyContext: StrategyContext,
 ): Promise<any> => {
   const newData = cloneDeep(seedData); //clone targetData to not mutate it accidentally
+  const { logger } = strategyContext;
   const ajv = new Ajv();
   for (const { source, target, mapping } of mappingConfig) {
     const { path: sourcePath, expectedSchema } = source;
     const { path: targetPath } = target;
-    const { logger } = strategyContext;
     const hasSourcePath = source?.path && source.path.length > 0;
     logger.log(
       `Mapping ${sourcePath} to ${targetPath} using ${mapping?.strategy?.id || "default strategy"}`,

@@ -13,12 +13,12 @@ import {
   subcommands,
 } from "cmd-ts";
 import { prismaStore } from "./prismaStore";
-import { defs } from "@slub/json-schema-utils";
+import { defs } from "@graviola/json-schema-utils";
 import { JSONSchema7 } from "json-schema";
 import { dataStore as sparqlStore } from "./dataStore";
 import { extendSchema } from "./extendSchema";
 import { PrismaClient } from "@prisma/edb-exhibition-client";
-import { filterJSONLD } from "@slub/edb-core-utils";
+import { filterJSONLD } from "@graviola/edb-core-utils";
 
 const importStore = sparqlStore;
 const prisma = new PrismaClient();

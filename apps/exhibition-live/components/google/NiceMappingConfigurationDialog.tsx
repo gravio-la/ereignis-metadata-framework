@@ -1,5 +1,12 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
+  DeclarativeMatchBasedFlatMapping,
+  matchBased2DeclarativeFlatMapping,
+} from "@graviola/edb-data-mapping";
+import { DeclarativeFlatMapping } from "@graviola/edb-data-mapping";
+import { parseJSONObject } from "@graviola/edb-ui-utils";
+import { Close as CloseIcon } from "@mui/icons-material";
+import {
   AppBar,
   Box,
   Button,
@@ -12,16 +19,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
-import {
-  DeclarativeMatchBasedFlatMapping,
-  matchBased2DeclarativeFlatMapping,
-} from "@slub/edb-data-mapping";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { JsonView } from "react-json-view-lite";
-import { DeclarativeFlatMapping } from "@slub/edb-data-mapping";
-import { parseJSONObject } from "@slub/edb-ui-utils";
+
 import { OwnColumnDesc } from "./types";
 import { CachedWorkSheet } from "./useCachedWorkSheet";
 
@@ -127,7 +128,7 @@ export const NiceMappingConfigurationDialog = NiceModal.create(
                 <Grid item flex={1}>
                   <JsonView
                     data={newMapping}
-                    shouldInitiallyExpand={(lvl) => lvl < 4}
+                    shouldExpandNode={(lvl) => lvl < 4}
                   />
                 </Grid>
               </Grid>

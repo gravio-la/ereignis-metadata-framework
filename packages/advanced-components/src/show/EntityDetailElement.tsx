@@ -1,11 +1,21 @@
+import { PrimaryField, PrimaryFieldResults } from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import {
+  useExtendedSchema,
+  useTypeIRIFromEntity,
+} from "@graviola/edb-state-hooks";
 import { Box, BoxProps } from "@mui/material";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
 import { useMemo } from "react";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
+
 import { EntityDetailCard } from "./EntityDetailCard";
-import { useTypeIRIFromEntity, useExtendedSchema } from "@slub/edb-state-hooks";
-import { PrimaryField, PrimaryFieldResults } from "@slub/edb-core-types";
-import { filterUndefOrNull } from "@slub/edb-ui-utils";
 
 export type EntityDetailElementProps = {
   typeIRI: string | undefined;
@@ -14,6 +24,7 @@ export type EntityDetailElementProps = {
   cardActionChildren?: React.ReactNode;
   disableInlineEditing?: boolean;
   readonly?: boolean;
+  disableLoad?: boolean;
 };
 
 export const EntityDetailElement = ({
@@ -23,14 +34,14 @@ export const EntityDetailElement = ({
   cardActionChildren,
   disableInlineEditing,
   readonly,
+  disableLoad,
   ...rest
 }: EntityDetailElementProps & Partial<BoxProps>) => {
   const {
     queryBuildOptions: { primaryFields },
     typeIRIToTypeName,
   } = useAdbContext();
-  const typeIRIs = useTypeIRIFromEntity(entityIRI);
-  const classIRI: string | undefined = typeIRI || typeIRIs?.[0];
+  const classIRI = useTypeIRIFromEntity(entityIRI, typeIRI, disableLoad);
   const typeName = useMemo(
     () => typeIRIToTypeName(classIRI),
     [classIRI, typeIRIToTypeName],
@@ -45,7 +56,7 @@ export const EntityDetailElement = ({
     queryOptions: {
       enabled: true,
       refetchOnWindowFocus: true,
-      initialData: initialData,
+      initialData: initialData ? { document: initialData } : undefined,
     },
     loadQueryKey: "show",
   });
@@ -65,7 +76,10 @@ export const EntityDetailElement = ({
   }, [fieldDeclaration, data]);
 
   const disabledProperties = useMemo(
-    () => filterUndefOrNull(Object.values(fieldDeclaration)),
+    () =>
+      fieldDeclaration
+        ? filterUndefOrNull(Object.values(fieldDeclaration))
+        : [],
     [fieldDeclaration],
   );
 
@@ -77,7 +91,6 @@ export const EntityDetailElement = ({
         data={data}
         cardInfo={cardInfo}
         cardActionChildren={cardActionChildren}
-        disableInlineEditing={disableInlineEditing}
         readonly={readonly}
         tableProps={{ disabledProperties }}
       />

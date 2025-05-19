@@ -1,4 +1,26 @@
+import {
+  findEntityWithinLobid,
+  findEntityWithinLobidByIRI,
+} from "@graviola/edb-authorities";
+import {
+  ClassicEntityCard,
+  ClassicResultListItem,
+} from "@graviola/edb-basic-components";
+import {
+  BasicThingInformation,
+  PrimaryFieldExtract,
+  PrimaryFieldExtractDeclaration,
+} from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { useQuery } from "@graviola/edb-state-hooks";
 import { Button, List, useControlled } from "@mui/material";
+import { lobidTypemap } from "@slub/exhibition-schema";
+import Ajv from "ajv";
+import { useTranslation } from "next-i18next";
 import React, {
   FunctionComponent,
   useCallback,
@@ -6,30 +28,9 @@ import React, {
   useState,
 } from "react";
 
-import { filterUndefOrNull } from "@slub/edb-ui-utils";
-import { useQuery } from "@slub/edb-state-hooks";
 import { typeIRItoTypeName } from "../../config";
-import Ajv from "ajv";
-import { useTranslation } from "next-i18next";
-import {
-  BasicThingInformation,
-  PrimaryFieldExtract,
-  PrimaryFieldExtractDeclaration,
-} from "@slub/edb-core-types";
-import {
-  ClassicEntityCard,
-  ClassicResultListItem,
-} from "@slub/edb-basic-components";
-import {
-  LobidAllPropTable,
-  WikidataAllPropTable,
-} from "@slub/edb-advanced-components";
-import {
-  findEntityWithinLobid,
-  findEntityWithinLobidByIRI,
-} from "@slub/edb-authorities";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { lobidTypemap } from "@slub/exhibition-schema";
+import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
+import { LobidAllPropTable } from "./LobidAllPropTable";
 
 type Props = {
   searchString: string;
@@ -188,11 +189,11 @@ const LobidSearchTable: FunctionComponent<Props> = ({
     );
   }, [searchString, typeIRI]);
 
-  const { data: rawEntry } = useQuery(
-    ["lobid", selectedId],
-    () => findEntityWithinLobidByIRI(selectedId),
-    { enabled: !!selectedId },
-  );
+  const { data: rawEntry } = useQuery({
+    queryKey: ["lobid", selectedId],
+    queryFn: () => findEntityWithinLobidByIRI(selectedId),
+    enabled: !!selectedId,
+  });
 
   useEffect(() => {
     if (rawEntry) {

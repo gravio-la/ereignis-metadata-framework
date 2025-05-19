@@ -1,11 +1,14 @@
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import {
   QueryObserverOptions,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-import { CRUDFunctions, SparqlBuildOptions } from "@slub/edb-core-types";
-import { WalkerOptions } from "@slub/edb-graph-traversal";
+import {
+  CRUDFunctions,
+  SparqlBuildOptions,
+  WalkerOptions,
+} from "@graviola/edb-core-types";
 
 export type CRUDOptions = CRUDFunctions & {
   defaultPrefix: string;
@@ -24,7 +27,7 @@ export type UseCRUDWithQueryClientOptions = {
   entityIRI?: string | undefined;
   typeIRI?: string | undefined;
   schema: JSONSchema7;
-  queryOptions?: QueryObserverOptions<any, Error>;
+  queryOptions?: Omit<QueryObserverOptions<any, Error>, "queryKey" | "queryFn">;
   loadQueryKey?: string;
   crudOptionsPartial?: Partial<CRUDOptions>;
   allowUnsafeSourceIRIs?: boolean;

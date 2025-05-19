@@ -1,18 +1,18 @@
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-
-import { mapByConfig } from "./mapByConfig";
-import isNil from "lodash-es/isNil";
-import set from "lodash-es/set";
-import get from "lodash-es/get";
-import { getPaddedDate, makeSpecialDate } from "@slub/edb-core-utils";
 import {
   IRIToStringFn,
   NormDataMappings,
   PrimaryFieldDeclaration,
-} from "@slub/edb-core-types";
-import { JSONSchema7 } from "json-schema";
+} from "@graviola/edb-core-types";
+import { getPaddedDate, makeSpecialDate } from "@graviola/edb-core-utils";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import type { JSONSchema7 } from "json-schema";
 import { isNaN } from "lodash-es";
+import get from "lodash-es/get";
+import isNil from "lodash-es/isNil";
+import set from "lodash-es/set";
+
+import { mapByConfig } from "./mapByConfig";
 
 dayjs.extend(customParseFormat);
 
@@ -59,7 +59,7 @@ export type StrategyContext = {
   currentMapping?: DeclarativeMappings;
   primaryFields: PrimaryFieldDeclaration;
   typeIRItoTypeName: IRIToStringFn;
-  normDataMappings: NormDataMappings;
+  normDataMappings: NormDataMappings<DeclarativeMapping>;
   path: string[];
   logger: Logger;
   createDeeperContext: CreateDeeperContextFn;
@@ -388,8 +388,7 @@ export const createEntityWithAuthoritativeLink = async (
       const newEntity = onNewDocument
         ? await onNewDocument(targetData)
         : targetData;
-
-      newDataElements.push(newEntity);
+      if (newEntity) newDataElements.push(newEntity);
     }
 
     if (single) return newDataElements[0];
@@ -556,6 +555,7 @@ export const createEntityFromString = async (
     typeIRItoTypeName,
     primaryFields,
     onNewDocument,
+    logger,
   } = context;
   const isArray = Array.isArray(sourceData);
   const sourceDataArray = isArray ? sourceData : [sourceData];
@@ -582,9 +582,10 @@ export const createEntityFromString = async (
         [labelField]: trimmedSourceDataElement,
         __draft: true,
       };
-      newDataElements.push(
-        onNewDocument ? await onNewDocument(targetData) : targetData,
-      );
+      const newEntity = onNewDocument
+        ? await onNewDocument(targetData)
+        : targetData;
+      if (newEntity) newDataElements.push(newEntity);
     } else {
       newDataElements.push({
         "@id": primaryIRI,
@@ -991,6 +992,11 @@ export type DeclarativeMapping = { [key: string]: DeclarativeMappings };
 export type DeclarativeFinalFlatMapping = {
   [key: string]: DeclarativeFlatMappings;
 };
+
+export type AvailableMappings = Record<
+  string,
+  { mapping: DeclarativeMapping; typeName: string }
+>;
 
 export const strategyFunctionMap: { [strategyId: string]: StrategyFunction } = {
   concatenate,

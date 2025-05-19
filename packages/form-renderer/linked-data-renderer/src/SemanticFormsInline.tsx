@@ -1,11 +1,10 @@
+import { useAdbContext } from "@graviola/edb-state-hooks";
+import { SemanticJsonFormProps } from "@graviola/semantic-jsonform-types";
 import { JsonSchema } from "@jsonforms/core";
-import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useMemo } from "react";
-
 import { useControlled } from "@mui/material";
 import { ErrorObject } from "ajv";
-import { SemanticJsonFormProps } from "@slub/edb-global-types";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { JSONSchema7 } from "json-schema";
+import React, { useCallback, useMemo } from "react";
 
 type SemanticFormsInlineProps = {
   label?: string;
@@ -18,6 +17,7 @@ type SemanticFormsInlineProps = {
   formData?: any;
   onFormDataChange?: (data: any) => void;
   formsPath?: string;
+  enabled?: boolean;
 };
 export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
   const {
@@ -31,6 +31,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
     formData: formDataProp,
     onFormDataChange,
     formsPath,
+    enabled,
   } = props;
   const [formData, setFormData] = useControlled({
     name: "FormData",
@@ -51,7 +52,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
   const handleDataChange = useCallback(
     (data_: any) => {
       setFormData(data_);
-      onFormDataChange && onFormDataChange(data_);
+      onFormDataChange?.(data_);
     },
     [setFormData, onFormDataChange],
   );
@@ -61,6 +62,7 @@ export const SemanticFormsInline = (props: SemanticFormsInlineProps) => {
       {schema && (
         <SemanticJsonForm
           {...semanticJsonFormsProps}
+          disabled={!enabled}
           data={formData}
           forceEditMode={true}
           onChange={handleDataChange}

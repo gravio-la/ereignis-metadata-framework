@@ -1,13 +1,11 @@
-import {
+import type {
   AbstractDatastore,
   CountAndIterable,
   InitDatastoreFunction,
-} from "@slub/edb-global-types";
-import { SPARQLDataStoreConfig } from "./SPARQLDataStoreConfig";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { JSONSchema7 } from "json-schema";
+} from "@graviola/edb-global-types";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { cleanJSONLD } from "@graviola/jsonld-utils";
 import {
-  cleanJSONLD,
   exists,
   findEntityByAuthorityIRI,
   findEntityByClass,
@@ -18,11 +16,14 @@ import {
   save,
   searchEntityByLabel,
   withDefaultPrefix,
-} from "@slub/sparql-schema";
+} from "@graviola/sparql-schema";
+import type { JSONSchema7 } from "json-schema";
 
-export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
+import type { SPARQLDataStoreConfig } from "./SPARQLDataStoreConfig";
+
+export const initSPARQLStore = <S extends AbstractDatastore>(
   dataStoreConfig,
-) => {
+): S => {
   const {
     defaultPrefix,
     jsonldContext,
@@ -67,8 +68,8 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       limit || defaultLimit,
     );
     const results: any[] = [];
-    for (const { value } of items) {
-      const doc = await loadDocument(typeName, value);
+    for (const { entityIRI } of items) {
+      const doc = await loadDocument(typeName, entityIRI);
       if (cb) {
         results.push(await cb(doc));
       } else {
@@ -100,9 +101,9 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         if (currentIndex >= items.length) {
           return Promise.resolve({ done: true, value: null });
         }
-        const value = items[currentIndex].value;
+        const entityIRI = items[currentIndex].entityIRI;
         currentIndex++;
-        return loadDocument(typeName, value).then((doc) => {
+        return loadDocument(typeName, entityIRI).then((doc) => {
           return { done: false, value: doc };
         });
       },
@@ -181,6 +182,19 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
       );
       return ids;
     },
+    findEntityByTypeName: async (typeName, searchString, limit) => {
+      const typeIRI = typeNameToTypeIRI(typeName);
+      return await findEntityByClass(
+        searchString,
+        typeIRI,
+        selectFetch,
+        {
+          defaultPrefix,
+          queryBuildOptions,
+        },
+        limit,
+      );
+    },
     findDocumentsByAuthorityIRI: async (
       typeName,
       authorityIRI,
@@ -203,13 +217,14 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
       const typeIRI = typeNameToTypeIRI(typeName);
       const loadedSchema = bringDefinitionToTop(rootSchema, typeName);
-      const { sorting } = query;
+      const { sorting, pagination, fields } = query;
       const queryString = withDefaultPrefix(
         defaultPrefix,
         jsonSchema2Select(
           loadedSchema,
           typeIRI,
           [],
+          fields,
           {
             primaryFields: queryBuildOptions.primaryFields,
             ...(sorting && sorting.length > 0
@@ -221,6 +236,12 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
                 }
               : {}),
             limit: limit || defaultLimit,
+            ...(pagination
+              ? {
+                  offset: pagination.pageIndex * pagination.pageSize,
+                  limit: pagination.pageSize,
+                }
+              : {}),
           },
           undefined,
           queryBuildOptions.sparqlFlavour,
@@ -230,6 +251,34 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         withHeaders: true,
       });
       return res;
+    },
+    countDocuments: async (typeName, query) => {
+      const typeIRI = typeNameToTypeIRI(typeName);
+      const loadedSchema = bringDefinitionToTop(rootSchema, typeName);
+      const queryString = withDefaultPrefix(
+        defaultPrefix,
+        jsonSchema2Select(
+          loadedSchema,
+          typeIRI,
+          [],
+          [],
+          undefined,
+          true,
+          queryBuildOptions.sparqlFlavour,
+        ),
+      );
+      const res = await selectFetch(queryString, {
+        withHeaders: true,
+      });
+      const literalValue = res.results?.bindings[0]?.entity_count?.value;
+      if (!literalValue) {
+        throw new Error("Cannot find entity_count in query result");
+      }
+      const amount = parseInt(literalValue);
+      if (isNaN(amount)) {
+        throw new Error("Invalid count");
+      }
+      return amount;
     },
     getClasses: (entityIRI) => {
       return getClasses(entityIRI, selectFetch, {
@@ -245,5 +294,5 @@ export const initSPARQLStore: InitDatastoreFunction<SPARQLDataStoreConfig> = (
         return findDocumentsIterable(typeName, limit, query.search);
       },
     },
-  } as AbstractDatastore;
+  } as unknown as S;
 };

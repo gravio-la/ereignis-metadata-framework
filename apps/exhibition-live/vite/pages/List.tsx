@@ -1,8 +1,8 @@
 import { MainLayout } from "../../components/layout/main-layout";
 import React from "react";
 import NiceModal from "@ebay/nice-modal-react";
-import { useModifiedRouter } from "@slub/edb-state-hooks";
-import { SemanticTable } from "@slub/edb-table-components";
+import { useModifiedRouter } from "@graviola/edb-state-hooks";
+import { SemanticTable } from "@graviola/edb-table-components";
 import { tableConfig } from "../../components/config/tableConfig";
 
 export const ListPage = () => {

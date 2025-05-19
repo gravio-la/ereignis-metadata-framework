@@ -1,3 +1,8 @@
+import { BarReChart } from "@graviola/edb-charts";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { fixSparqlOrder } from "@graviola/sparql-schema";
+import { TrendingDown, TrendingUp } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -8,18 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import { TrendingDown, TrendingUp } from "@mui/icons-material";
-import { useQuery } from "@slub/edb-state-hooks";
-import { useAdbContext, useGlobalCRUDOptions } from "@slub/edb-state-hooks";
-import { SELECT } from "@tpluscode/sparql-builder";
-import { orderBy } from "lodash";
-import { useMemo } from "react";
-import { SearchBar } from "./Search";
-import { ParentSize } from "@visx/responsive";
 import df from "@rdfjs/data-model";
+import { SELECT } from "@tpluscode/sparql-builder";
+import { ParentSize } from "@visx/responsive";
+import { orderBy } from "lodash-es";
 import { useTranslation } from "next-i18next";
-import { fixSparqlOrder } from "@slub/sparql-schema";
-import { BarReChart } from "@slub/edb-charts";
+import { useMemo } from "react";
+
+import { SearchBar } from "./Search";
 
 export const HeaderTitle = styled(Typography)(({ theme }) => ({
   fontFamily: "'Play', sans-serif",
@@ -112,9 +113,9 @@ export const Dashboard = (props) => {
   const { t } = useTranslation();
   const { crudOptions } = useGlobalCRUDOptions();
   const { selectFetch } = crudOptions || {};
-  const { data: typeCountData } = useQuery(
-    ["typeCount"],
-    () => {
+  const { data: typeCountData } = useQuery({
+    queryKey: ["typeCount"],
+    queryFn: () => {
       const countV = df.variable("count");
       const query = fixSparqlOrder(
         SELECT`
@@ -128,8 +129,9 @@ export const Dashboard = (props) => {
       );
       return selectFetch(query);
     },
-    { enabled: !!selectFetch, refetchInterval: 1000 * 10 },
-  );
+    enabled: !!selectFetch,
+    refetchInterval: 1000 * 10,
+  });
 
   const scoreCount = useMemo(
     () =>

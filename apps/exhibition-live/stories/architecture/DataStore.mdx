@@ -63,27 +63,27 @@ Another example would be Prisma in combination with Postgres:
 
 ## SPARQL Data Store
 
-The package `@slub/sparql-db-implementation` provides a SPARQL based data store implementation. The data store is
+The package `@graviola/sparql-db-implementation` provides a SPARQL based data store implementation. The data store is
 using SPARQL 1.1  Update, Select and Construct queries to interact with the data store. By using the JSON schema
 provided.
 
 ## RESTful Data Store
 
-The package `@slub/restful-fetch-db-implementation` provides a RESTful based data store implementation. It will store and query
+The package `@graviola/restful-fetch-db-implementation` provides a RESTful based data store implementation. It will store and query
 the data via fetch requests. A reference REST API implementation can be found under `./apps/edb-api`. The REST API itself can
 use any kind of data store.
 
-The package `@slub/restful-fetch-db-implementation`
+The package `@graviola/restful-fetch-db-implementation`
 
 The API is documented using the OpenAPI 3.0 specification, thus the API can be explored using Swagger UI.
 
-Within the package `@slub/edb-state-hooks`, this implementation will be used by the hook `useDataStore` if the `provider` of the endpoint-configuration
+Within the package `@graviola/edb-state-hooks`, this implementation will be used by the hook `useDataStore` if the `provider` of the endpoint-configuration
 is set to `rest`.
 
 A Restful Data Store can be initialized with the following configuration:
 
 ```typescript
-import { initRestfullStore } from "@slub/restfull-fetch-db-impl";
+import { initRestfullStore } from "@graviola/restfull-fetch-db-impl";
 const schema = {...}
 
 initRestfullStore({
@@ -98,7 +98,7 @@ initRestfullStore({
 ## Prisma Data Store
 
 
-The package `@slub/prisma-db-implementation` provides a Prisma based data store implementation. It will store and query
+The package `@graviola/prisma-db-implementation` provides a Prisma based data store implementation. It will store and query
 the data via Prisma ORM, which itself supports a wide range of databases, like MariaDB, PostgreSQL, SQLite, MongoDB.
 For a complete list of supported databases, see [Prisma Database Support](https://www.prisma.io/docs/orm/reference/supported-databases)
 

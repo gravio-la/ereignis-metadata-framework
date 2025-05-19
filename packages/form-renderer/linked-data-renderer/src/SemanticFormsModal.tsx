@@ -1,14 +1,16 @@
-import { JsonSchema } from "@jsonforms/core";
-import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-
-import { useControlled } from "@mui/material";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import { useSnackbar } from "notistack";
 import NiceModal from "@ebay/nice-modal-react";
-import { irisToData } from "@slub/edb-ui-utils";
-import { SemanticJsonFormProps } from "@slub/edb-global-types";
-import { GenericModal, MuiEditDialog } from "@slub/edb-basic-components";
+import { GenericModal, MuiEditDialog } from "@graviola/edb-basic-components";
+import { irisToData } from "@graviola/edb-core-utils";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import type { SemanticJsonFormProps } from "@graviola/semantic-jsonform-types";
+import { JsonSchema } from "@jsonforms/core";
+import { useControlled } from "@mui/material";
+import { JSONSchema7 } from "json-schema";
+import { useSnackbar } from "notistack";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 type SemanticFormsModalProps = {
   label?: string;
@@ -72,7 +74,7 @@ export const SemanticFormsModal = (props: SemanticFormsModalProps) => {
       const data = remoteData.document;
       if (!data || !data["@id"] || !data["@type"]) return;
       setFormData(data);
-      onFormDataChange && onFormDataChange(data);
+      onFormDataChange?.(data);
     }
   }, [remoteData, setFormData, onFormDataChange]);
 
@@ -82,7 +84,9 @@ export const SemanticFormsModal = (props: SemanticFormsModalProps) => {
       .mutateAsync(formData)
       .then(async (skipLoading?: boolean) => {
         enqueueSnackbar("Saved", { variant: "success" });
-        !skipLoading && (await loadQuery.refetch());
+        if (!skipLoading) {
+          await loadQuery.refetch();
+        }
         askClose();
       })
       .catch((e) => {
@@ -113,7 +117,7 @@ export const SemanticFormsModal = (props: SemanticFormsModalProps) => {
   const handleDataChange = useCallback(
     (data_: any) => {
       setFormData(data_);
-      onFormDataChange && onFormDataChange(data_);
+      onFormDataChange?.(data_);
     },
     [setFormData, onFormDataChange],
   );

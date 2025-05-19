@@ -1,10 +1,11 @@
-import { useGoogleToken } from "./useGoogleToken";
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@graviola/edb-state-hooks";
 import {
   GoogleSpreadsheet,
   GoogleSpreadsheetWorksheet,
 } from "google-spreadsheet";
-import { useQuery } from "@slub/edb-state-hooks";
+import { useEffect, useMemo, useState } from "react";
+
+import { useGoogleToken } from "./useGoogleToken";
 
 export const useGoogleSpreadSheet: (sheetId: string) => {
   loaded: boolean;
@@ -21,9 +22,9 @@ export const useGoogleSpreadSheet: (sheetId: string) => {
     return doc;
   }, [sheetId, credentials.access_token]);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const { data: sheetsData, isLoading: sheetsByIndexLoading } = useQuery(
-    ["sheetsByIndex", spreadSheet.spreadsheetId],
-    async () => {
+  const { data: sheetsData, isLoading: sheetsByIndexLoading } = useQuery({
+    queryKey: ["sheetsByIndex", spreadSheet.spreadsheetId],
+    queryFn: async () => {
       try {
         await spreadSheet.loadInfo();
       } catch (e) {
@@ -34,8 +35,8 @@ export const useGoogleSpreadSheet: (sheetId: string) => {
       setLoaded(true);
       return spreadSheet;
     },
-    { refetchOnWindowFocus: true },
-  );
+    refetchOnWindowFocus: true,
+  });
 
   const [title, setTitle] = useState("");
   useEffect(() => {

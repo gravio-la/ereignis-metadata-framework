@@ -1,5 +1,9 @@
 import "react-json-view-lite/dist/index.css";
 
+import { WalkerOptions } from "@graviola/edb-core-types";
+import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { Grid, Typography } from "@mui/material";
 import datasetFactory from "@rdfjs/dataset";
 import N3Parser from "@rdfjs/parser-n3";
 import { Dataset } from "@rdfjs/types";
@@ -8,16 +12,10 @@ import dsExt from "rdf-dataset-ext";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { JsonView } from "react-json-view-lite";
 import stringToStream from "string-to-stream";
-import {
-  traverseGraphExtractBySchema,
-  WalkerOptions,
-} from "@slub/edb-graph-traversal";
-
-import { addressSchema } from "../../../fixtures/schema";
 // @ts-ignore
 import tbbt from "tbbt-ld/dist/tbbt.nq";
-import { Grid, Typography } from "@mui/material";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
+
+import { addressSchema } from "../../../fixtures/schema";
 
 type EntityIRIs =
   | "http://localhost:8080/data/person/leonard-hofstadter"
@@ -103,7 +101,7 @@ const DeepGraphToJSONShowcase: FunctionComponent<Props> = ({
     <Grid container direction={"row"} wrap={"nowrap"} justifyContent={"center"}>
       <Grid item flex={1} sx={{ maxHeight: "70vh", overflow: "auto" }}>
         <Typography variant={"h5"}>Schema</Typography>
-        <JsonView data={schema} shouldInitiallyExpand={(lvl) => lvl < 5} />
+        <JsonView data={schema} shouldExpandNode={(lvl) => lvl < 5} />
       </Grid>
       <Grid item flex={1} sx={{ maxHeight: "70vh", overflow: "auto" }}>
         <Typography variant={"h5"}>Dataset</Typography>
@@ -113,10 +111,7 @@ const DeepGraphToJSONShowcase: FunctionComponent<Props> = ({
       </Grid>
       <Grid item flex={1} sx={{ maxHeight: "70vh", overflow: "auto" }}>
         <Typography variant={"h5"}>extracted JSON</Typography>
-        <JsonView
-          data={jsonFromGraph}
-          shouldInitiallyExpand={(lvl) => lvl < 10}
-        />
+        <JsonView data={jsonFromGraph} shouldExpandNode={(lvl) => lvl < 10} />
       </Grid>
     </Grid>
   );

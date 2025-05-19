@@ -17,12 +17,12 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { FunctionComponent, useCallback, useState } from "react";
 
-import { useLocalSettings } from "@slub/edb-state-hooks";
+import { useLocalSettings } from "../../state";
 import AuthorityConfigForm from "./AuthorityConfigForm";
 import EndpointChooser from "./EndpointChooser";
 import FeatureForm from "./FeatureForm";
-import OpenAISettingsForm from "./OpenAISettingsForm";
 import GoogleDriveSettingsForm from "./GoogleDriveSettingsForm";
+import OpenAISettingsForm from "./OpenAISettingsForm";
 
 interface OwnProps {}
 

@@ -1,7 +1,7 @@
 import { useState, MouseEvent, useCallback } from "react";
 import { Chip, Tooltip } from "@mui/material";
 import NiceModal from "@ebay/nice-modal-react";
-import { useAdbContext } from "@slub/edb-state-hooks";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 
 export type OverflowChipProps = {
   label: React.ReactNode;

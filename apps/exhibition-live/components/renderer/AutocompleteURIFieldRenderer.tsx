@@ -4,7 +4,7 @@ import { FormControl, FormLabel, Grid, Hidden } from "@mui/material";
 import merge from "lodash/merge";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { AutocompleteSuggestion } from "@slub/edb-core-types";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
 import WikidataAutocompleteInput from "../form/wikidata/WikidataAutocompleteInput";
 
 const AutocompleteURIFieldRenderer = (props: ControlProps) => {
@@ -43,36 +43,38 @@ const AutocompleteURIFieldRenderer = (props: ControlProps) => {
     );
   }, [selected, handleChange_]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        fullWidth={!appliedUiSchemaOptions.trim}
-        id={id}
-        variant={"standard"}
-        sx={(theme) => ({ marginBottom: theme.spacing(2) })}
-        hiddenLabel={true}
-      >
-        <Grid container alignItems="baseline">
-          <Grid item>
-            <FormLabel
-              error={!isValid}
-              required={showAsRequired(
-                !!required,
-                appliedUiSchemaOptions.hideRequiredAsterisk,
-              )}
-            >
-              Wikidata
-            </FormLabel>
-          </Grid>{" "}
-          <Grid item>{data}</Grid>
-        </Grid>
-        <WikidataAutocompleteInput
-          selected={selected}
-          onSelectionChange={setSelected}
-          typeOf={classType}
-        />
-      </FormControl>
-    </Hidden>
+    <FormControl
+      fullWidth={!appliedUiSchemaOptions.trim}
+      id={id}
+      variant={"standard"}
+      sx={(theme) => ({ marginBottom: theme.spacing(2) })}
+      hiddenLabel={true}
+    >
+      <Grid container alignItems="baseline">
+        <Grid item>
+          <FormLabel
+            error={!isValid}
+            required={showAsRequired(
+              !!required,
+              appliedUiSchemaOptions.hideRequiredAsterisk,
+            )}
+          >
+            Wikidata
+          </FormLabel>
+        </Grid>{" "}
+        <Grid item>{data}</Grid>
+      </Grid>
+      <WikidataAutocompleteInput
+        selected={selected}
+        onSelectionChange={setSelected}
+        typeOf={classType}
+      />
+    </FormControl>
   );
 };
 

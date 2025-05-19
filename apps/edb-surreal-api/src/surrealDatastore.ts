@@ -1,4 +1,4 @@
-import { AbstractDatastore } from "@slub/edb-global-types";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import { JSONSchema7 } from "json-schema";
 import Surreal from "surrealdb.ts/dist/src";
 

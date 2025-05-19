@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "monorepo of the Ereignisdatenbank project",
   "main": "index.js",
-  "repository": "git@github.com:slub/exhibition-live",
   "author": "Sebastian Tilsch <sebastian.tilsch@slub-dresden.de>",
   "keywords": [
     "jsonforms",
@@ -26,8 +25,9 @@
   "private": true,
   "scripts": {
     "start": "turbo run demo",
+    "storybook": "cd ./apps/exhibition-live && bun run storybook",
     "build": "turbo run build",
-    "build:packages": "turbo run build --filter=@slub/* --filter=@slub/edb-kxp-components --continue",
+    "build:packages": "turbo run build --filter='./packages/*' --continue",
     "build:manifestations": "turbo run build --filter='./manifestation/*' --continue",
     "build:pages": "turbo run build:pages",
     "cli": "bun ./apps/edb-cli/src/index.ts",
@@ -40,15 +40,19 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,md}\"",
-    "precommit": "bun run lint-staged",
     "prepare": "husky install",
+    "precommit": "lint-staged",
     "changeset:init": "changeset init",
     "changeset": "changeset",
+    "publish": "turbo run publish-clean --continue --concurrency 2; bun run restore",
     "helper:deps": "bun ./packages/build-helper/get-dependencies.js",
     "build:prisma": "turbo run build:prisma && sed -i \"s/env(\\\"DATABASE_PROVIDER\\\")/\\\"${DATABASE_PROVIDER:-sqlite}\\\"/g\" ./prisma/*.prisma",
     "prisma:exhibition:generate": "prisma generate --schema ./prisma/exhibition.prisma",
     "prisma:exhibition:migrate": "prisma migrate dev --schema ./prisma/exhibition.prisma",
-    "purge": "rm -rf node_modules && find -maxdepth 3 -name node_modules | xargs rm -rf"
+    "purge": "rm -rf node_modules && find -maxdepth 3 -name node_modules | xargs rm -rf",
+    "syncpack:mismatches": "syncpack list-mismatches --types prod",
+    "depcheck": "turbo run depcheck --filter='./packages/*' --continue",
+    "restore": "find -maxdepth 4 -name '*.json.backup' -execdir bunx clean-package restore \\;"
   },
   "workspaces": [
     "packages/*",
@@ -58,21 +62,23 @@
     "apps/*"
   ],
   "devDependencies": {
-    "@turbo/gen": "^1.13.0",
-    "hygen": "^6.2.11",
-    "eslint": "^8.57.0",
+    "@changesets/cli": "^2.27.12",
+    "@turbo/gen": "^2.4.0",
+    "clean-package": "^2.2.0",
+    "depcheck": "^1.4.7",
+    "dependency-cruiser": "^16.10.0",
+    "eslint": "^8.57.1",
     "husky": "^8.0.0",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
-    "tsup": "^8.0.2",
-    "turbo": "^1.13.0",
-    "@changesets/cli": "^2.27.1",
-    "typescript": "^5",
-    "prisma": "^5.17.0"
+    "hygen": "^6.2.11",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "prisma": "^5.22.0",
+    "syncpack": "^13.0.2",
+    "tsup": "^8.3.6",
+    "turbo": "^2.4.0",
+    "typescript": "^5.8.2"
   },
-  "overrides": {
-    "@typescript-eslint/typescript-estree": "^7.4.0"
-  },
+  "packageManager": "bun@1.2.2",
   "lint-staged": {
     "*.{js,ts,jsx,tsx,md}": [
       "prettier --write --ignore-unknown"

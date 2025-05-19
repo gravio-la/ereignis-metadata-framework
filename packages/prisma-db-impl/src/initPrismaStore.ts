@@ -1,32 +1,17 @@
+import type { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import type { AbstractDatastore, QueryType } from "@graviola/edb-global-types";
 import {
   jsonSchema2PrismaFlatSelect,
   jsonSchema2PrismaSelect,
-} from "@slub/json-schema-prisma-utils";
-import { JSONSchema7 } from "json-schema";
+} from "@graviola/json-schema-prisma-utils";
+import { defs } from "@graviola/json-schema-utils";
+import type { JSONSchema7 } from "json-schema";
+
 import { toJSONLD } from "./helper";
-import { AbstractDatastore } from "@slub/edb-global-types";
-import { importAllDocuments, importSingleDocument } from "./import";
-import {
-  IRIToStringFn,
-  PrimaryFieldDeclaration,
-  StringToIRIFn,
-} from "@slub/edb-core-types";
-import {
-  bringDefinitionToTop,
-  defs,
-  prepareStubbedSchema,
-} from "@slub/json-schema-utils";
-import { cleanJSONLD } from "@slub/sparql-schema";
-import { save } from "./save";
 import { bindings2RDFResultSet } from "./helper/bindings2RDFResultSet";
-
-export type PrismaStoreOptions = {
-  jsonldContext: any;
-  defaultPrefix: string;
-  typeNameToTypeIRI: StringToIRIFn;
-  typeIRItoTypeName: IRIToStringFn;
-};
-
+import { importAllDocuments, importSingleDocument } from "./import";
+import type { PrismaStoreOptions } from "./types";
+import { upsert } from "./upsert";
 /**
  * Initialize a prisma store with the given prisma client
  *
@@ -39,9 +24,14 @@ export type PrismaStoreOptions = {
  * @param rootSchema The root schema of the data
  * @param primaryFields The primary fields of the data (labels, descriptions, etc.)
  * @param jsonldContext The jsonld context to be used
- * @param defaultPrefix The default prefix to be used
- * @param typeNameToTypeIRI A function to convert a type name to a type IRI
- * @param typeIRItoTypeName A function to convert a type IRI to a type name
+ * @param options The options to be used
+ * @param options.defaultPrefix The default prefix to be used
+ * @param options.typeNameToTypeIRI A function to convert a type name to a type IRI
+ * @param options.typeIRItoTypeName A function to convert a type IRI to a type name
+ * @param options.idToIRI A function to convert an id to an IRI (if empty it is assumed that the id is already an IRI)
+ * @param options.IRItoId A function to convert an IRI to an id (if empty it is assumed that the id is already an id)
+ * @param options.allowUnknownNestedElementCreation Whether to allow unknown nested elements to be created
+ * @param options.isAllowedNestedElement A function to check if a nested element is allowed to be created
  */
 export const initPrismaStore: (
   prisma: any,
@@ -52,8 +42,25 @@ export const initPrismaStore: (
   prisma,
   rootSchema,
   primaryFields,
-  { jsonldContext, defaultPrefix, typeNameToTypeIRI, typeIRItoTypeName },
+  {
+    jsonldContext,
+    defaultPrefix,
+    typeNameToTypeIRI,
+    typeIRItoTypeName,
+    idToIRI,
+    IRItoId,
+    typeIsNotIRI,
+    allowUnknownNestedElementCreation,
+    isAllowedNestedElement,
+    debug,
+  },
 ) => {
+  const toJSONLDWithOptions = (entry: any) => {
+    return toJSONLD(entry, new WeakSet(), {
+      idToIRI,
+      ...(typeIsNotIRI ? { typeNameToTypeIRI } : {}),
+    });
+  };
   const load = async (typeName: string, entityIRI: string) => {
     const select = jsonSchema2PrismaSelect(typeName, rootSchema, {
       maxRecursion: 4,
@@ -64,7 +71,7 @@ export const initPrismaStore: (
       },
       select,
     });
-    return toJSONLD(entry);
+    return toJSONLDWithOptions(entry);
   };
 
   const loadMany = async (typeName: string, limit?: number) => {
@@ -75,11 +82,12 @@ export const initPrismaStore: (
       take: limit,
       select,
     });
-    return entries.map((entry: any) => toJSONLD(entry));
+    return entries.map(toJSONLDWithOptions);
   };
 
   const loadManyFlat = async (
     typeName: string,
+    queryOptions: QueryType,
     limit?: number,
     innerLimit?: number,
   ) => {
@@ -90,7 +98,11 @@ export const initPrismaStore: (
       { takeLimit: innerLimit ?? limit ?? 0 },
     );
     const entries = await prisma[typeName].findMany({
-      take: limit,
+      take: queryOptions.pagination?.pageSize ?? limit,
+      skip: queryOptions.pagination?.pageIndex
+        ? queryOptions.pagination.pageIndex *
+          (queryOptions.pagination.pageSize ?? limit ?? 0)
+        : 0,
       ...query,
     });
     return entries;
@@ -117,17 +129,25 @@ export const initPrismaStore: (
       take: limit,
       select,
     });
-    return entries.map((entry: any) => toJSONLD(entry));
+    return entries.map(toJSONLDWithOptions);
   };
   const dataStore: AbstractDatastore = {
     typeNameToTypeIRI: typeNameToTypeIRI,
     typeIRItoTypeName: typeIRItoTypeName,
     importDocument: (typeName, entityIRI, importStore) =>
-      importSingleDocument(typeName, entityIRI, importStore, prisma),
+      importSingleDocument(typeName, entityIRI, importStore, prisma, {
+        IRItoId,
+        typeNameToTypeIRI,
+        typeIsNotIRI,
+      }),
     importDocuments: (typeName, importStore, limit) =>
-      importAllDocuments(typeName, importStore, prisma, limit),
+      importAllDocuments(typeName, importStore, prisma, limit, {
+        IRItoId,
+        typeNameToTypeIRI,
+        typeIsNotIRI,
+      }),
     loadDocument: async (typeName: string, entityIRI: string) => {
-      return load(typeName, entityIRI);
+      return load(typeName, IRItoId ? IRItoId(entityIRI) : entityIRI);
     },
     findDocuments: async (typeName, query, limit, cb) => {
       const entries =
@@ -144,7 +164,7 @@ export const initPrismaStore: (
     existsDocument: async (typeName: string, entityIRI: string) => {
       const entry = await prisma[typeName].findUnique({
         where: {
-          id: entityIRI,
+          id: IRItoId ? IRItoId(entityIRI) : entityIRI,
         },
         select: {
           id: true,
@@ -155,36 +175,29 @@ export const initPrismaStore: (
     removeDocument: async (typeName: string, entityIRI: string) => {
       return await prisma[typeName].delete({
         where: {
-          id: entityIRI,
+          id: IRItoId ? IRItoId(entityIRI) : entityIRI,
         },
       });
     },
     upsertDocument: async (typeName: string, entityIRI, document: any) => {
-      const schema = bringDefinitionToTop(
-        prepareStubbedSchema(rootSchema),
-        typeName,
-      );
       const doc = {
         ...document,
         "@id": entityIRI,
         "@type": typeNameToTypeIRI(typeName),
       };
-      const cleanData = await cleanJSONLD(doc, schema, {
+      return await upsert(typeName, doc, {
+        prisma,
+        schema: rootSchema,
         jsonldContext,
         defaultPrefix,
         keepContext: false,
+        allowUnknownNestedElementCreation,
+        isAllowedNestedElement,
+        idToIRI,
+        typeNameToTypeIRI,
+        typeIRItoTypeName,
+        typeIsNotIRI,
       });
-
-      const error = new Set<string>();
-
-      const result = await save(typeName, cleanData, prisma, error);
-      if (error.size > 0) {
-        throw new Error("Error while saving data");
-      }
-      return {
-        "@context": jsonldContext,
-        ...cleanData,
-      };
     },
     listDocuments: async (typeName: string, limit: number = 10, cb) => {
       const entries = await loadMany(typeName, limit);
@@ -196,7 +209,7 @@ export const initPrismaStore: (
       return entries;
     },
     findDocumentsAsFlatResultSet: async (typeName, query, limit) => {
-      const bindings = await loadManyFlat(typeName, limit, 2);
+      const bindings = await loadManyFlat(typeName, query, limit, 2);
       return bindings2RDFResultSet(bindings);
     },
     findDocumentsByAuthorityIRI: async (
@@ -218,7 +231,7 @@ export const initPrismaStore: (
       return entries.map((e) => e.id);
     },
     findDocumentsByLabel: async (typeName, label, limit) => {
-      const primaryFieldDeclaration = primaryFields[typeName];
+      const primaryFieldDeclaration = (primaryFields as any)?.[typeName];
       if (!primaryFieldDeclaration?.label) {
         throw new Error("No primary field found for type " + typeName);
       }
@@ -242,7 +255,7 @@ export const initPrismaStore: (
         try {
           const entry = await prisma[typeName].findUnique({
             where: {
-              id: entityIRI,
+              id: IRItoId ? IRItoId(entityIRI) : entityIRI,
             },
             select: {
               id: true,
@@ -252,10 +265,33 @@ export const initPrismaStore: (
             classes.push(typeNameToTypeIRI(typeName));
           }
         } catch (e) {
-          console.error("Error while trying to get class for", e);
+          if (debug) {
+            console.error("Error while trying to get class for", e);
+          }
         }
       }
       return classes;
+    },
+    countDocuments: async (
+      typeName: string,
+      query: { search?: string } = {},
+    ) => {
+      const prim = primaryFields[typeName];
+      if (!prim) {
+        throw new Error("No primary field found for type " + typeName);
+      }
+
+      if (query.search && query.search.length > 0) {
+        return await prisma[typeName].count({
+          where: {
+            [prim.label]: {
+              contains: query.search,
+            },
+          },
+        });
+      }
+
+      return await prisma[typeName].count();
     },
   };
 

@@ -1,17 +1,15 @@
-import { JsonSchema, resolveSchema } from "@jsonforms/core";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-
-import {
-  isJSONSchema,
-  isJSONSchemaDefinition,
-  isPrimitive,
-} from "@slub/json-schema-utils";
-
 import {
   PrimaryField,
   PrimaryFieldDeclaration,
   SPARQLFlavour,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
+import {
+  isJSONSchema,
+  isJSONSchemaDefinition,
+  isPrimitive,
+  resolveSchema,
+} from "@graviola/json-schema-utils";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 const makeWherePart = (queryClause: string, required: boolean) =>
   required ? queryClause : ` OPTIONAL { ${queryClause} } `;
@@ -25,6 +23,7 @@ const propertiesToSPARQLSelectPatterns = (
   rootSchema: JSONSchema7,
   currentVariable: string,
   excludedProperties?: string[],
+  includedProperties?: string[],
   path?: string[],
   level: number = 0,
   primaryFields?: PrimaryFieldDeclaration,
@@ -39,7 +38,11 @@ const propertiesToSPARQLSelectPatterns = (
 
   Object.entries(properties).forEach(
     ([property, subSchema]: [string, JSONSchema7]) => {
-      if (excludedProperties?.includes(property) || property.startsWith("@"))
+      if (
+        excludedProperties?.includes(property) ||
+        property.startsWith("@") ||
+        (includedProperties && !includedProperties.includes(property))
+      )
         return;
       const subPath = [...path, property],
         isRequired = Boolean(schema.required?.includes(property)),
@@ -56,9 +59,9 @@ const propertiesToSPARQLSelectPatterns = (
             const fieldDecl = primaryFields[typeName];
             if (fieldDecl.label) {
               const subSubSchema = resolveSchema(
-                subSchema.items as JsonSchema,
+                subSchema.items as JSONSchema7,
                 "",
-                rootSchema as JsonSchema,
+                rootSchema as JSONSchema7,
               );
               if (
                 subSubSchema &&
@@ -66,6 +69,7 @@ const propertiesToSPARQLSelectPatterns = (
                 isJSONSchema(subSubSchema as JSONSchema7)
               ) {
                 if (
+                  //@ts-ignore
                   subSubSchema?.properties?.[fieldDecl.label]?.type === "string"
                 ) {
                   const lableVariable = makeVariable([...subPath, "label"]);
@@ -115,6 +119,7 @@ const propertiesToSPARQLSelectPatterns = (
             rootSchema,
             variable,
             excludedProperties,
+            includedProperties,
             subPath,
             level + 1,
             primaryFields,
@@ -128,9 +133,9 @@ const propertiesToSPARQLSelectPatterns = (
         select += subSelect;
       } else if (subSchema.$ref && !minimal) {
         const subSubSchema = resolveSchema(
-          subSchema as JsonSchema,
+          subSchema as JSONSchema7,
           "",
-          rootSchema as JsonSchema,
+          rootSchema as JSONSchema7,
         );
         if (subSubSchema && subSubSchema.properties) {
           const { where: subWhere, select: subSelect } =
@@ -139,6 +144,7 @@ const propertiesToSPARQLSelectPatterns = (
               rootSchema,
               variable,
               excludedProperties,
+              includedProperties,
               subPath,
               level + 1,
               primaryFields,
@@ -241,6 +247,7 @@ export const jsonSchema2Select = (
   rootSchema: JSONSchema7,
   typeIRI?: string,
   excludeProperties?: string[],
+  includedProperties?: string[],
   sparqlSelectOptions?: SPARQLSelectOptions,
   countResults?: boolean,
   flavour?: SPARQLFlavour,
@@ -253,6 +260,7 @@ export const jsonSchema2Select = (
     rootSchema,
     variable,
     excludeProperties,
+    includedProperties,
     [],
     0,
     sparqlSelectOptions?.primaryFields,
@@ -260,14 +268,17 @@ export const jsonSchema2Select = (
     minimal,
   );
   const matchType = typeIRI ? `?entity a <${typeIRI}> .` : "";
-  const sparqlFinish = sparqlSelectOptions
-    ? sparqlPartFromOptions(sparqlSelectOptions)
-    : "";
-  const query = `SELECT DISTINCT ${variable} ${select} WHERE {
+  const sparqlFinish =
+    sparqlSelectOptions && !countResults
+      ? `GROUP BY ${variable} \n ${sparqlPartFromOptions(sparqlSelectOptions)}`
+      : "";
+  const finalSelect = countResults
+    ? `(COUNT(DISTINCT ${variable}) AS ?entity_count)`
+    : `DISTINCT ${variable} ${select}`;
+  const query = `SELECT ${finalSelect} WHERE {
     ${matchType}
     ${where}
 }
-GROUP BY ${variable}
 ${sparqlFinish}`;
 
   return query;

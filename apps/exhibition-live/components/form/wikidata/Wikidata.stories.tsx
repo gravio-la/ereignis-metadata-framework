@@ -1,8 +1,8 @@
 import React from "react";
-import { WikidataAllPropTable } from "@slub/edb-advanced-components";
 
-import WikidataThingCard from "./WikidataThingCard";
+import { WikidataAllPropTable } from "./WikidataAllPropTable";
 import WikidataHumanCard from "./WikidataHumanCard";
+import WikidataThingCard from "./WikidataThingCard";
 
 export default {
   title: "ui/view/WikidataCard",

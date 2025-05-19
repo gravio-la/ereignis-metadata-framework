@@ -1,6 +1,5 @@
-import { JSONSchema7 } from "json-schema";
-import { jsonSchema2Prisma, n2MTable } from "./jsonSchema2Prisma";
-import { PrimaryFieldDeclaration } from "@slub/edb-core-types";
+import type { JSONSchema7 } from "json-schema";
+import type { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
 import { jsonSchema2PrismaFlatSelect } from "./jsonSchema2PrismaFlatSelect";
 
 const schema: JSONSchema7 = {

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import NiceModal from "@ebay/nice-modal-react";
+import { GenericModal } from "@graviola/edb-basic-components";
+import { encodeIRI, filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   useAdbContext,
   useDataStore,
@@ -9,8 +9,19 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  useSettings,
-} from "@slub/edb-state-hooks";
+} from "@graviola/edb-state-hooks";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
+import { moveToTrash } from "@graviola/sparql-schema";
+import {
+  CloudDone,
+  CloudSync,
+  Delete,
+  DeleteForever,
+  Edit,
+  FileDownload,
+  NoteAdd,
+  OpenInNew,
+} from "@mui/icons-material";
 import {
   Backdrop,
   Box,
@@ -19,7 +30,12 @@ import {
   ListItemIcon,
   MenuItem,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
+import Button from "@mui/material/Button";
+import { PaginationState } from "@tanstack/table-core";
+import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
+import type { JSONSchema7 } from "json-schema";
 import {
   MaterialReactTable,
   MRT_ColumnDef,
@@ -32,31 +48,19 @@ import {
   MRT_VisibilityState,
   useMaterialReactTable,
 } from "material-react-table";
-import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_DE } from "material-react-table/locales/de";
-
-import { JSONSchema7 } from "json-schema";
-import {
-  Delete,
-  DeleteForever,
-  Edit,
-  FileDownload,
-  NoteAdd,
-  OpenInNew,
-} from "@mui/icons-material";
-import NiceModal from "@ebay/nice-modal-react";
-import { useSnackbar } from "notistack";
-import Button from "@mui/material/Button";
-import { ConfigOptions, download, generateCsv, mkConfig } from "export-to-csv";
+import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { useTranslation } from "next-i18next";
-import { moveToTrash } from "@slub/sparql-schema";
-import { computeColumns } from "./listHelper";
-import { encodeIRI, filterUndefOrNull } from "@slub/edb-ui-utils";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { GenericModal } from "@slub/edb-basic-components";
+import { useSnackbar } from "notistack";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { ExportMenuButton } from "./ExportMenuButton";
+import { computeColumns } from "./listHelper";
 import { TableConfigRegistry } from "./types";
-import { typeIRItoTypeName } from "adb-next/components/config";
+
+const defaultLimit = 25;
+const upperLimit = 10000;
 
 export type SemanticTableProps = {
   typeName: string;
@@ -79,6 +83,7 @@ export const SemanticTable = ({
     queryBuildOptions,
     jsonLDConfig: { defaultPrefix },
     typeNameToTypeIRI,
+    typeIRIToTypeName,
     createEntityIRI,
     schema,
     components: { EntityDetailModal },
@@ -89,6 +94,12 @@ export const SemanticTable = ({
     [csvOptions],
   );
 
+  const [loadAllAtOnce, setLoadAllAtOnce] = useState(false);
+
+  const handleToggleLoadAll = useCallback(() => {
+    setLoadAllAtOnce(!loadAllAtOnce);
+  }, [loadAllAtOnce, setLoadAllAtOnce]);
+
   const typeIRI = useMemo(() => {
     return typeNameToTypeIRI(typeName);
   }, [typeName, typeNameToTypeIRI]);
@@ -98,14 +109,10 @@ export const SemanticTable = ({
 
   const loadedSchema = useMemo(
     () => bringDefinitionToTop(schema as JSONSchema7, typeName),
-    [typeName],
+    [typeName, schema],
   );
 
-  const { activeEndpoint } = useSettings();
-
-  const [sorting, setSorting] = useState<MRT_SortingState>([
-    { id: "IRI", desc: false },
-  ]);
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const handleColumnOrderChange = useCallback(
     (s: MRT_SortingState) => {
@@ -115,34 +122,67 @@ export const SemanticTable = ({
   );
 
   const { crudOptions } = useGlobalCRUDOptions();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial: crudOptions,
-    typeNameToTypeIRI,
-    queryBuildOptions,
+  const { dataStore, ready } = useDataStore();
+
+  const { data: countData, isLoading: countLoading } = useQuery({
+    queryKey: ["type", typeIRI, "count"],
+    queryFn: async () => {
+      const typeName = typeIRIToTypeName(typeIRI);
+      if (dataStore.countDocuments) {
+        try {
+          const amount = await dataStore.countDocuments(typeName);
+          return amount;
+        } catch (e) {
+          console.error(e);
+          return null;
+        }
+      }
+      return null;
+    },
   });
 
-  const { data: resultListData, isLoading } = useQuery(
-    ["allEntries", typeIRI, sorting],
-    () => {
-      const typeName = typeIRItoTypeName(typeIRI);
+  const manualPagination = useMemo(() => {
+    return Boolean(countData && countData > defaultLimit && !loadAllAtOnce);
+  }, [countData, loadAllAtOnce]);
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: defaultLimit,
+  });
+
+  const handlePaginationChange = useCallback(
+    (pagination: PaginationState) => {
+      setPagination(pagination);
+    },
+    [setPagination],
+  );
+
+  const { data: resultListData, isLoading } = useQuery({
+    queryKey: [
+      "type",
+      typeIRI,
+      "list",
+      sorting,
+      loadAllAtOnce ? undefined : pagination,
+    ],
+    queryFn: () => {
+      const typeName = typeIRIToTypeName(typeIRI);
+
       return dataStore.findDocumentsAsFlatResultSet(
         typeName,
         {
           sorting,
+          pagination: loadAllAtOnce ? undefined : pagination,
         },
-        4000,
+        loadAllAtOnce ? upperLimit : defaultLimit,
       );
     },
-    { enabled: ready },
-  );
+    enabled: ready && !countLoading,
+    placeholderData: (previousData) => previousData,
+  });
 
   const resultList = useMemo(
     () => resultListData?.results?.bindings ?? [],
-    [resultListData],
-  );
-  const headerVars = useMemo(
-    () => resultListData?.head?.vars,
     [resultListData],
   );
 
@@ -174,17 +214,17 @@ export const SemanticTable = ({
     [displayColumns],
   );
 
-  const router = useModifiedRouter();
-  const locale = (router.query.locale || "en") as string;
+  const { push, query } = useModifiedRouter();
+  const locale = (query.locale || "en") as string;
   const localization = useMemo(
     () => (locale === "de" ? MRT_Localization_DE : MRT_Localization_EN),
     [locale],
   );
   const editEntry = useCallback(
     (id: string) => {
-      router.push(`/create/${typeName}?encID=${encodeIRI(id)}`);
+      push(`/create/${typeName}?encID=${encodeIRI(id)}`);
     },
-    [router, typeName],
+    [push, typeName],
   );
   const showEntry = useCallback(
     (id: string) => {
@@ -197,10 +237,10 @@ export const SemanticTable = ({
     [typeIRI, EntityDetailModal],
   );
   const queryClient = useQueryClient();
-  const { mutateAsync: moveToTrashAsync, isLoading: aboutToMoveToTrash } =
-    useMutation(
-      ["moveToTrash", (id: string | string[]) => id],
-      async (id: string | string[]) => {
+  const { mutateAsync: moveToTrashAsync, isPending: aboutToMoveToTrash } =
+    useMutation({
+      mutationKey: ["moveToTrash", (id: string | string[]) => id],
+      mutationFn: async (id: string | string[]) => {
         if (!id || !crudOptions.updateFetch)
           throw new Error("entityIRI or updateFetch is not defined");
         return moveToTrash(id, typeIRI, loadedSchema, crudOptions.updateFetch, {
@@ -208,33 +248,21 @@ export const SemanticTable = ({
           queryBuildOptions,
         });
       },
-      {
-        onSuccess: async () => {
-          console.log("invalidateQueries");
-          queryClient.invalidateQueries(["list"]);
-          queryClient.invalidateQueries(
-            filterUndefOrNull(["allEntries", typeIRI || undefined]),
-          );
-        },
+      onSuccess: async () => {
+        queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
       },
-    );
-  const { mutateAsync: removeEntity, isLoading: aboutToRemove } = useMutation(
-    ["remove", (id: string) => id],
-    async (id: string) => {
+    });
+  const { mutateAsync: removeEntity, isPending: aboutToRemove } = useMutation({
+    mutationKey: ["remove", (id: string) => id],
+    mutationFn: async (id: string) => {
       if (!id || !dataStore.removeDocument)
         throw new Error("entityIRI or removeDocument is not defined");
       return dataStore.removeDocument(typeName, id);
     },
-    {
-      onSuccess: async () => {
-        console.log("invalidateQueries");
-        queryClient.invalidateQueries(["list"]);
-        queryClient.invalidateQueries(
-          filterUndefOrNull(["allEntries", typeIRI || undefined]),
-        );
-      },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
     },
-  );
+  });
   const { enqueueSnackbar } = useSnackbar();
   const handleRemove = useCallback(
     async (id: string) => {
@@ -411,17 +439,18 @@ export const SemanticTable = ({
     enableRowSelection: true,
     enableFacetedValues: true,
     onRowSelectionChange: handleRowSelectionChange,
-    manualPagination: false,
+    manualPagination,
     manualSorting: true,
+    onPaginationChange: handlePaginationChange,
     onSortingChange: handleColumnOrderChange,
     onColumnVisibilityChange: handleChangeColumnVisibility,
     columnFilterDisplayMode: "popover",
     initialState: {
       columnVisibility: conf.columnVisibility,
-      pagination: { pageIndex: 0, pageSize: 25 },
+      pagination: { pageIndex: 0, pageSize: defaultLimit },
     },
     localization,
-    rowCount: resultList.length,
+    rowCount: !loadAllAtOnce && countData ? countData : resultList.length,
     enableRowActions: true,
     renderTopToolbarCustomActions: ({ table }) => (
       <Box sx={{ display: "flex", gap: "1rem" }}>
@@ -485,6 +514,19 @@ export const SemanticTable = ({
             >
               <DeleteForever />
             </IconButton>
+            <Tooltip
+              title={
+                t("load all data into client") + ` (max ${upperLimit} entries)`
+              }
+            >
+              <IconButton
+                onClick={() => handleToggleLoadAll()}
+                color={loadAllAtOnce ? "success" : "default"}
+                aria-label={t("load all data into client")}
+              >
+                {loadAllAtOnce ? <CloudDone /> : <CloudSync />}
+              </IconButton>
+            </Tooltip>
           </>
         }
       </Box>
@@ -546,6 +588,7 @@ export const SemanticTable = ({
     enableColumnDragging: false,
     onColumnFiltersChange: handleColumnFilterChange,
     state: {
+      pagination,
       columnOrder,
       sorting,
       rowSelection,

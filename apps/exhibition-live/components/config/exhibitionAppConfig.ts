@@ -1,3 +1,14 @@
+import { DeclarativeMapping } from "@graviola/edb-data-mapping";
+import { GlobalAppConfig } from "@graviola/semantic-jsonform-types";
+import { materialCells } from "@jsonforms/material-renderers";
+import {
+  authorityAccess,
+  availableAuthorityMappings,
+  makeStubSchema,
+  schema,
+} from "@slub/exhibition-schema";
+import { JSONSchema7 } from "json-schema";
+
 import {
   createNewIRI,
   defaultJsonldContext,
@@ -5,23 +16,16 @@ import {
   defaultQueryBuilderOptions,
   sladb,
 } from "./formConfigs";
-import { BASE_IRI } from "./paths";
-import {
-  availableAuthorityMappings,
-  makeStubSchema,
-  schema,
-} from "@slub/exhibition-schema";
-import { JSONSchema7 } from "json-schema";
 import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
-import { rendererRegistry } from "./rendererRegistry";
-import { materialCells } from "@jsonforms/material-renderers";
+import { BASE_IRI } from "./paths";
 import { primaryFieldsRegistry } from "./primaryFieldsRegistry";
+import { rendererRegistry } from "./rendererRegistry";
 import { uischemata } from "./uischemata";
 
 const someNameToTypeIRI = (name: string) => sladb(name).value;
 const someIRIToTypeName = (iri: string) =>
   iri?.substring(BASE_IRI.length, iri.length);
-export const exhibitionConfig = {
+export const exhibitionConfig: GlobalAppConfig<DeclarativeMapping> = {
   queryBuildOptions: defaultQueryBuilderOptions,
   typeNameToTypeIRI: someNameToTypeIRI,
   propertyNameToIRI: someNameToTypeIRI,
@@ -34,6 +38,7 @@ export const exhibitionConfig = {
     allowUnsafeSourceIRIs: false,
   },
   normDataMapping: availableAuthorityMappings,
+  authorityAccess: authorityAccess,
   schema: schema as JSONSchema7,
   makeStubSchema: makeStubSchema,
   uiSchemaDefaultRegistry: makeDefaultUiSchemaForAllDefinitions(
@@ -41,7 +46,5 @@ export const exhibitionConfig = {
   ),
   rendererRegistry: rendererRegistry,
   cellRendererRegistry: materialCells,
-  primaryFieldRendererRegistry: (typeIRI: string) =>
-    primaryFieldsRegistry(typeIRI, someIRIToTypeName),
   uischemata: uischemata,
 };

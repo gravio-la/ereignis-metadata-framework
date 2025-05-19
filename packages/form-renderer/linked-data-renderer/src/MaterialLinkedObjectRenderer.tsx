@@ -1,4 +1,3 @@
-import isEmpty from "lodash/isEmpty";
 import {
   findUISchema,
   Generate,
@@ -9,6 +8,7 @@ import {
 } from "@jsonforms/core";
 import { JsonFormsDispatch, withJsonFormsDetailProps } from "@jsonforms/react";
 import { Hidden } from "@mui/material";
+import isEmpty from "lodash-es/isEmpty";
 import React, { useMemo } from "react";
 
 const MaterialLinkedObjectRendererComponent = ({
@@ -56,18 +56,19 @@ const MaterialLinkedObjectRendererComponent = ({
     ) as UISchemaElement;
   }, [uischemas, schema, uischema.scope, path, label, uischema, rootSchema]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <JsonFormsDispatch
-        visible={visible}
-        enabled={enabled}
-        schema={schema}
-        uischema={detailUiSchema}
-        path={path}
-        renderers={renderers}
-        cells={cells}
-      />
-    </Hidden>
+    <JsonFormsDispatch
+      enabled={enabled}
+      schema={schema}
+      uischema={detailUiSchema}
+      path={path}
+      renderers={renderers}
+      cells={cells}
+    />
   );
 };
 

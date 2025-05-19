@@ -1,8 +1,9 @@
-import { getI18nProps, mixinStaticPathsParams } from "../../../components/i18n";
-import { useTranslation } from "next-i18next";
-import { MainLayout } from "../../../components/layout/main-layout";
 import Head from "next/head";
+import { useTranslation } from "next-i18next";
+
+import { getI18nProps, mixinStaticPathsParams } from "../../../components/i18n";
 import { ImportPage } from "../../../components/importExport/ImportPage";
+import { MainLayout } from "../../../components/layout/main-layout";
 
 export async function getStaticPaths() {
   const paths = mixinStaticPathsParams([

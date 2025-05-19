@@ -1,17 +1,18 @@
-import ds from "@rdfjs/data-model";
-import namespace from "@rdfjs/namespace";
-import { Dataset } from "@rdfjs/types";
-import { rdf } from "@tpluscode/rdf-ns-builders";
-import clownface from "clownface";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { WalkerOptions } from "@graviola/edb-core-types";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   isJSONSchema,
   isJSONSchemaDefinition,
   resolveSchema,
-} from "@slub/json-schema-utils";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
-import { JsonSchema, WalkerOptions } from "./types";
-import DatasetCore from "@rdfjs/dataset/DatasetCore";
+} from "@graviola/json-schema-utils";
+import ds from "@rdfjs/data-model";
+import namespace from "@rdfjs/namespace";
+import type { Dataset, DatasetCore } from "@rdfjs/types";
+import { rdf } from "@tpluscode/rdf-ns-builders";
+import clownface from "clownface";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+
+import type { JsonSchema } from "./types";
 
 const isNil = (val: any) => val === undefined || val === null;
 

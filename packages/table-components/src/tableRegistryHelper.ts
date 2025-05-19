@@ -1,10 +1,10 @@
-import get from "lodash-es/get";
+import { FieldExtractDeclaration } from "@graviola/edb-core-types";
+import { isPrimitive } from "@graviola/json-schema-utils";
 import { isControl, Tester } from "@jsonforms/core";
-import { isPrimitive } from "@slub/json-schema-utils";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import { FieldExtractDeclaration } from "@slub/edb-core-types";
 import { TFunction } from "i18next";
-import { MRT_ColumnDef } from "material-react-table";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import get from "lodash-es/get";
+import type { MRT_ColumnDef } from "material-react-table";
 
 export const pathToString = (path: string[]) => path.join("_");
 
@@ -22,7 +22,7 @@ export const mkAccessor =
   };
 export const urlSuffix = (uri: string) => {
   return uri.substring(
-    (uri.includes("#") ? uri.lastIndexOf("#") : uri.lastIndexOf("/")) + 1 ?? 0,
+    (uri.includes("#") ? uri.lastIndexOf("#") : uri.lastIndexOf("/")) + 1,
     uri.length,
   );
 };

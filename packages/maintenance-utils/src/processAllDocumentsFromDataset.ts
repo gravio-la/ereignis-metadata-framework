@@ -1,13 +1,14 @@
-import { Dataset, DatasetCore } from "@rdfjs/types";
-import { JSONSchema7 } from "json-schema";
-import { bringDefinitionToTop, defs } from "@slub/json-schema-utils";
+import type { Dataset, DatasetCore } from "@rdfjs/types";
+import type { JSONSchema7 } from "json-schema";
+import { bringDefinitionToTop, defs } from "@graviola/json-schema-utils";
 import { rdf } from "@tpluscode/rdf-ns-builders";
 import df from "@rdfjs/data-model";
+import { traverseGraphExtractBySchema } from "@graviola/edb-graph-traversal";
 import {
-  traverseGraphExtractBySchema,
+  IRIToStringFn,
+  SPARQLCRUDOptions,
   WalkerOptions,
-} from "@slub/edb-graph-traversal";
-import { IRIToStringFn, SPARQLCRUDOptions } from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
 import type { JsonLdContext } from "jsonld-context-parser";
 
 export type DSProcessingOptions = SPARQLCRUDOptions & {

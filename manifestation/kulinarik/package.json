@@ -8,10 +8,10 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
@@ -24,10 +24,10 @@
   },
   "devDependencies": {
     "@types/rdfjs__namespace": "^2.0.8",
-    "@slub/json-schema-prisma-utils": "workspace:*",
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-data-mapping": "workspace:*",
-    "@slub/edb-core-types": "workspace:*",
+    "@graviola/json-schema-prisma-utils": "workspace:*",
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-data-mapping": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
     "json-schema": "^0.4.0",
     "@adobe/jsonschema2md": "^7.1.5",
     "schema2typebox": "^1.7.5"

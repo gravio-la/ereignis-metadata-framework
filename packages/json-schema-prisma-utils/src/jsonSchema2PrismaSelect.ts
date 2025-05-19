@@ -1,12 +1,16 @@
-import { JSONSchema4, JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type {
+  JSONSchema4,
+  JSONSchema7,
+  JSONSchema7Definition,
+} from "json-schema";
 import {
   defs,
   isJSONSchema,
   isJSONSchemaDefinition,
   isPrimitive,
   resolveSchema,
-} from "@slub/json-schema-utils";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+} from "@graviola/json-schema-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 type JsonSchema2PrismaSelectOptions = {
   exclude?: string[];

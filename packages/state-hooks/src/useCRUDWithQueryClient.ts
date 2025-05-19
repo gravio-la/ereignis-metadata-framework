@@ -1,11 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cleanJSONLD, jsonld2DataSet, LoadResult } from "@slub/sparql-schema";
 import { useDataStore } from "./useDataStore";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { useAdbContext } from "./provider";
-import { UseCRUDHook } from "./useCrudHook";
+import type { UseCRUDHook } from "./useCrudHook";
 import { useCallback } from "react";
-import { NamedAndTypedEntity } from "@slub/edb-core-types";
+import type { NamedAndTypedEntity } from "@graviola/edb-core-types";
+import { jsonld2DataSet, cleanJSONLD } from "@graviola/jsonld-utils";
+
+type LoadResult = {
+  subjects: string[];
+  document: any;
+};
 
 const getAllSubjectsFromResult = (result: any) => {
   const ds = jsonld2DataSet(result);
@@ -39,120 +44,97 @@ export const useCRUDWithQueryClient: UseCRUDHook<
   typeIRI,
   schema,
   queryOptions,
-  loadQueryKey,
-  crudOptionsPartial,
+  loadQueryKey: presetLoadQueryKey,
   allowUnsafeSourceIRIs,
 }) => {
-  const { queryBuildOptions, typeNameToTypeIRI, jsonLDConfig } =
-    useAdbContext();
-  const { dataStore, ready } = useDataStore({
-    schema,
-    crudOptionsPartial,
-    typeNameToTypeIRI,
-    queryBuildOptions,
-  });
-
+  const { jsonLDConfig, createEntityIRI } = useAdbContext();
+  const { dataStore, ready } = useDataStore();
+  const loadQueryKey = presetLoadQueryKey || "load";
   const { defaultPrefix, jsonldContext } = jsonLDConfig;
   //const { resolveSourceIRIs } = useQueryKeyResolver();
   const { enabled, ...queryOptionsRest } = queryOptions || {};
   const queryClient = useQueryClient();
 
-  const loadQuery = useQuery<LoadResult | null>(
-    [loadQueryKey, entityIRI],
-    async () => {
+  const loadQuery = useQuery({
+    queryKey: ["entity", entityIRI, typeIRI, loadQueryKey],
+    queryFn: async () => {
       if (!entityIRI || !ready) return null;
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       const result = await dataStore.loadDocument(typeName, entityIRI);
       return resultWithSubjects(result);
     },
-    {
-      enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
-      refetchOnWindowFocus: false,
-      ...queryOptionsRest,
-    },
-  );
+    enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
+    refetchOnWindowFocus: false,
+    ...queryOptionsRest,
+  });
 
-  const removeMutation = useMutation(
-    ["remove", entityIRI],
-    async () => {
+  const removeMutation = useMutation({
+    mutationKey: ["remove", entityIRI],
+    mutationFn: async () => {
       if (!entityIRI || !ready) {
         throw new Error("entityIRI or updateFetch is not defined");
       }
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       return await dataStore.removeDocument(typeName, entityIRI);
     },
-    {
-      onSuccess: async () => {
-        console.log("invalidateQueries");
-        queryClient.invalidateQueries(["list"]);
-        queryClient.invalidateQueries(
-          filterUndefOrNull(["allEntries", typeIRI || undefined]),
-        );
-      },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["type", typeIRI] });
     },
-  );
+  });
 
-  const saveMutation = useMutation(
-    ["save", entityIRI],
-    async (data: Record<string, any>) => {
+  const saveMutation = useMutation({
+    mutationKey: ["save", typeIRI, entityIRI || "create"],
+    mutationFn: async (data: Record<string, any>) => {
       if (!Boolean(allowUnsafeSourceIRIs)) {
-        if (!entityIRI || !typeIRI || !ready)
-          throw new Error(
-            "entryIRI or typeIRI not defined, will continue anyway",
-          );
+        if (!typeIRI || !ready) throw new Error("typeIRI not defined");
       }
-      const dataWithId: NamedAndTypedEntity = {
+      const typeName = dataStore.typeIRItoTypeName(typeIRI);
+      const _entityIRI = entityIRI || createEntityIRI(typeName);
+      const dataWithType: NamedAndTypedEntity = {
         ...data,
-        ...(entityIRI ? { "@id": entityIRI } : {}),
+        "@id": _entityIRI,
         ...(typeIRI ? { "@type": typeIRI } : {}),
       } as NamedAndTypedEntity;
-      const { "@id": _entityIRI, "@type": _typeIRI } = dataWithId;
-      const cleanData = await cleanJSONLD(dataWithId, schema, {
+      const cleanData = await cleanJSONLD(dataWithType, schema, {
         jsonldContext,
         defaultPrefix,
         keepContext: true,
       });
-      const typeName = dataStore.typeIRItoTypeName(_typeIRI);
-      await dataStore.upsertDocument(typeName, _entityIRI, cleanData);
-      const { "@context": context, ...cleanDataWithoutContext } = cleanData;
+      const result = await dataStore.upsertDocument(
+        typeName,
+        _entityIRI,
+        cleanData,
+      );
+      const { "@context": context, ...cleanDataWithoutContext } = result;
       return cleanDataWithoutContext;
     },
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["load", entityIRI]);
-        await queryClient.invalidateQueries(["show", entityIRI]);
-        /*for (const sourceIRI of resolveSourceIRIs(entityIRI)) {
-        console.log('invalidateQueries', sourceIRI)
-        await queryClient.invalidateQueries(["load", sourceIRI]);
-      }*/
-      },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["entity", entityIRI] });
     },
-  );
+  });
 
-  const existsQuery = useQuery<boolean | null>(
-    ["exists", entityIRI],
-    async () => {
+  const existsQuery = useQuery({
+    queryKey: ["entity", entityIRI, "exists"],
+    queryFn: async () => {
       if (!entityIRI || !typeIRI || !ready) return null;
       const typeName = dataStore.typeIRItoTypeName(typeIRI);
       return await dataStore.existsDocument(typeName, entityIRI);
     },
-    {
-      enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
-      refetchOnWindowFocus: false,
-      ...queryOptionsRest,
-    },
-  );
+    enabled: Boolean(entityIRI && typeIRI && ready) && enabled,
+    refetchOnWindowFocus: false,
+    ...queryOptionsRest,
+  });
 
   const loadEntity = useCallback(
     async (entityIRI: string, typeIRI: string) => {
-      return queryClient.fetchQuery(
-        [loadQueryKey, typeIRI, entityIRI],
-        async () => {
+      return queryClient.fetchQuery({
+        queryKey: ["entity", entityIRI, typeIRI, loadQueryKey],
+        queryFn: async () => {
           const typeName = dataStore.typeIRItoTypeName(typeIRI);
           const result = await dataStore.loadDocument(typeName, entityIRI);
           return resultWithSubjects(result);
         },
-      );
+      });
     },
     [loadQueryKey, dataStore.loadDocument, queryClient],
   );

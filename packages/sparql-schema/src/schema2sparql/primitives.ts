@@ -1,8 +1,8 @@
 import { rdf, xsd } from "@tpluscode/rdf-ns-builders";
-import * as RDF from "rdf-js";
+import type { Literal } from "@rdfjs/types";
 
 export function rdfLiteralToNative(
-  literal: RDF.Literal,
+  literal: Literal,
 ): string | number | boolean | Date {
   if (!literal.datatype) return literal.value;
   switch (literal.datatype.value) {

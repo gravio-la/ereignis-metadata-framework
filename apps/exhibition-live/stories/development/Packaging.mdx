@@ -35,7 +35,7 @@ Let's assume we want to integrate some third party library like [sparnatural](ht
 hygen edb frontend-package
 ```
 
-We will call it `@slub/edb-sparnatural`. This will generate a new package in the `packages` directory.
+We will call it `@graviola/edb-sparnatural`. This will generate a new package in the `packages` directory.
 
 2. Examine the package within the Storybook
 
@@ -48,7 +48,7 @@ The generated `package.json` should look like that:
 
 ```json
 {
-  "name": "@slub/edb-sparnatural",
+  "name": "@graviola/edb-sparnatural",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -76,9 +76,9 @@ The generated `package.json` should look like that:
   "dependencies": {
   },
   "devDependencies": {
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*"
+    "@graviola/edb-build-helper": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*"
   }
 }
 ```

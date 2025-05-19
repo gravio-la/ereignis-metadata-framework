@@ -1,4 +1,18 @@
+import NiceModal from "@ebay/nice-modal-react";
+import { PrimaryFieldDeclaration } from "@graviola/edb-core-types";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useCRUDWithQueryClient,
+} from "@graviola/edb-state-hooks";
+import { specialDate2LocalDate, withEllipsis } from "@graviola/edb-ui-utils";
+import { bringDefinitionToTop } from "@graviola/json-schema-utils";
 import { JsonSchema, update } from "@jsonforms/core";
+import { useJsonForms } from "@jsonforms/react";
+import { Clear, Save } from "@mui/icons-material";
 import {
   Avatar,
   IconButton,
@@ -8,21 +22,11 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
-import React, { useCallback, useEffect, useMemo } from "react";
-
-import { Clear, Save } from "@mui/icons-material";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { JSONSchema7 } from "json-schema";
-import { useJsonForms } from "@jsonforms/react";
 import dot from "dot";
-import { useAdbContext, useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import get from "lodash/get";
-import NiceModal from "@ebay/nice-modal-react";
-import { withEllipsis } from "@slub/edb-ui-utils";
-import { specialDate2LocalDate } from "@slub/edb-ui-utils";
+import { JSONSchema7 } from "json-schema";
+import get from "lodash-es/get";
 import { useTranslation } from "next-i18next";
-import { bringDefinitionToTop } from "@slub/json-schema-utils";
-import { PrimaryFieldDeclaration } from "@slub/edb-core-types";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 type SimpleExpandPanelRendererProps = {
   data: any;
@@ -42,6 +46,7 @@ type SimpleExpandPanelRendererProps = {
   imagePath?: string;
   formsPath?: string;
   primaryFields: PrimaryFieldDeclaration;
+  mapData?: (data: any) => any;
 };
 export const SimpleExpandPanelRenderer = (
   props: SimpleExpandPanelRendererProps,
@@ -61,34 +66,14 @@ export const SimpleExpandPanelRenderer = (
     typeIRI,
     typeName,
     primaryFields,
+    mapData,
   } = props;
   const onData = useCallback((_data) => {
-    dispatch(update(props.path, () => _data));
-  }, []);
+    dispatch(update(props.path, () => mapData ? mapData(_data) : _data));
+  }, [mapData]);
   const {
     components: { EntityDetailModal },
   } = useAdbContext();
-  // @ts-ignore
-  const { label, description, image } = useMemo(() => {
-    let imageUrl = null;
-    if (imagePath) {
-      imageUrl = get(data, imagePath);
-    }
-    if (!typeName) return {};
-    const fieldDecl = primaryFields[typeName];
-    if (data && fieldDecl) {
-      const extratedInfo = applyToEachField(
-        data,
-        fieldDecl,
-        extractFieldIfString,
-      );
-      return {
-        image: imageUrl || extratedInfo.image,
-        ...extratedInfo,
-      };
-    }
-    return { image: imageUrl };
-  }, [data, typeName, entityIRI]);
 
   const {
     i18n: { language: locale },
@@ -99,6 +84,52 @@ export const SimpleExpandPanelRenderer = (
       bringDefinitionToTop(rootSchema as JSONSchema7, typeName) as JSONSchema7,
     [rootSchema, typeName],
   );
+
+  const elementDetailItem = useMemo(
+    () => (elementDetailItemPath ? get(data, elementDetailItemPath) : null),
+    [elementDetailItemPath, data],
+  );
+
+  const { loadQuery, saveMutation } = useCRUDWithQueryClient({
+    entityIRI,
+    typeIRI,
+    schema: subSchema,
+    queryOptions: {
+      enabled: !data?.__draft && !data?.__label,
+      refetchOnWindowFocus: true,
+    },
+  });
+  const draft = data?.__draft && !saveMutation.isSuccess;
+  const { data: loadedData } = loadQuery;
+  useEffect(() => {
+    if (loadedData?.document) {
+      onData(loadedData.document);
+    }
+  }, [loadedData, onData]);
+
+  // @ts-ignore
+  const { label, description, image } = useMemo(() => {
+    const _data = loadedData?.document || data
+    let imageUrl = null;
+    if (imagePath) {
+      imageUrl = get(_data, imagePath);
+    }
+    if (!typeName) return {};
+    const fieldDecl = primaryFields[typeName];
+    if (data && fieldDecl) {
+      const extratedInfo = applyToEachField(
+        _data,
+        fieldDecl,
+        extractFieldIfString,
+      );
+      return {
+        image: imageUrl || extratedInfo.image,
+        ...extratedInfo,
+      };
+    }
+    return { image: imageUrl };
+  }, [data, loadedData?.document, typeName, entityIRI]);
+
   const realLabel = useMemo(() => {
     if (childLabelTemplate) {
       try {
@@ -125,30 +156,6 @@ export const SimpleExpandPanelRenderer = (
     }
     return label || data?.__label;
   }, [childLabelTemplate, elementLabelProp, data, label, locale]);
-
-  const elementDetailItem = useMemo(
-    () => (elementDetailItemPath ? get(data, elementDetailItemPath) : null),
-    [elementDetailItemPath, data],
-  );
-
-  const { loadQuery, saveMutation } = useCRUDWithQueryClient({
-    entityIRI,
-    typeIRI,
-    schema: subSchema,
-    queryOptions: {
-      enabled: !data?.__draft && !data?.__label,
-      initialData: data,
-      refetchOnWindowFocus: true,
-    },
-  });
-  const draft = data?.__draft && !saveMutation.isSuccess;
-  const { data: loadedData } = loadQuery;
-  useEffect(() => {
-    if (loadedData?.document) {
-      onData(loadedData.document);
-    }
-  }, [loadedData, onData]);
-
   const handleSave = useCallback(async () => {
     if (!saveMutation) return;
     saveMutation.mutate(data);

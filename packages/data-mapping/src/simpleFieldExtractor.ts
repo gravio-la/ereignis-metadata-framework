@@ -1,9 +1,9 @@
-import get from "lodash-es/get";
 import {
   FieldExtractDeclaration,
   PrimaryFieldExtract,
   PrimaryFieldResults,
-} from "@slub/edb-core-types";
+} from "@graviola/edb-core-types";
+import get from "lodash-es/get";
 
 export const extractFieldAny = (
   entry: any | null,

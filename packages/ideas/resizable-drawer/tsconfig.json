@@ -1,5 +1,5 @@
 {
-  "extends": "@slub/edb-tsconfig/react-library.json",
+  "extends": "@graviola/edb-tsconfig/react-library.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {

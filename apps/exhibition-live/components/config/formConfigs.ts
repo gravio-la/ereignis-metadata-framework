@@ -1,12 +1,13 @@
+import { SparqlBuildOptions } from "@graviola/edb-core-types";
 import namespace from "@rdfjs/namespace";
-import { SparqlBuildOptions } from "@slub/edb-core-types";
-import { v4 as uuidv4 } from "uuid";
-import { typeIRItoTypeName } from "./index";
 import { primaryFieldExtracts, primaryFields } from "@slub/exhibition-schema";
+import { v4 as uuidv4 } from "uuid";
+
+import { typeIRItoTypeName } from "./index";
 
 export const sladb = namespace("http://ontologies.slub-dresden.de/exhibition#");
 export const slent = namespace(
-  "http://ontologies.slub-dresden.de/exhibition/entity/",
+  "http://ontologies.slub-dresden.de/exhibition/entity#",
 );
 export const defaultPrefix = sladb[""].value;
 export const defaultJsonldContext = {

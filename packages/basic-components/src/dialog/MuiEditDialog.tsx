@@ -15,7 +15,6 @@ import {
   Backdrop,
   Badge,
   Box,
-  Hidden,
   IconButton,
   styled,
   Toolbar,
@@ -27,8 +26,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import * as React from "react";
-import { useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,9 +54,9 @@ export type MuiEditDialogProps = {
   editMode?: boolean;
   open?: boolean;
   title?: string;
-  search?: React.ReactNode;
-  children?: React.ReactNode;
-  actions?: React.ReactNode;
+  search?: ReactNode;
+  children?: ReactNode;
+  actions?: ReactNode;
 };
 export const MuiEditDialog = ({
   children,
@@ -106,16 +104,14 @@ export const MuiEditDialog = ({
           <Typography variant="h6" color="inherit" component="div">
             {title || "Bearbeiten oder Erstellen"}
           </Typography>
-          <Hidden mdUp={true}>
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
             <IconButton onClick={toggleSearch} color="inherit">
               {showSearch ? <SearchOff /> : <SearchIcon />}
             </IconButton>
-          </Hidden>
-          <Hidden mdDown={true}>
-            <Box sx={{ flexGrow: 3 }}>
-              <Search>{search}</Search>
-            </Box>
-          </Hidden>
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "block" }, flexGrow: 3 }}>
+            <Search>{search}</Search>
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: "flex" }}>
             {editMode && (
@@ -157,7 +153,7 @@ export const MuiEditDialog = ({
                 <ReloadIcon />
               </IconButton>
             )}
-            <Hidden mdDown={true}>
+            <Box sx={{ display: { xs: "none", md: "block" } }}>
               <IconButton
                 size="large"
                 aria-label="close without saving"
@@ -166,7 +162,7 @@ export const MuiEditDialog = ({
               >
                 <FullscreenIcon />
               </IconButton>
-            </Hidden>
+            </Box>
             <IconButton
               size="large"
               aria-label="close without saving"
@@ -180,17 +176,17 @@ export const MuiEditDialog = ({
           </Box>
         </Toolbar>
         {showSearch && (
-          <Hidden mdUp={showSearch}>
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
             <Toolbar variant="dense">
               <Box sx={{ flexGrow: 3 }}>
                 <Search>{search}</Search>
               </Box>
             </Toolbar>
-          </Hidden>
+          </Box>
         )}
       </AppBar>
       <DialogContent>{children}</DialogContent>
-      <Hidden mdDown={true}>
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
         <DialogActions>
           {actions || (
             <>
@@ -207,7 +203,7 @@ export const MuiEditDialog = ({
             </>
           )}
         </DialogActions>
-      </Hidden>
+      </Box>
     </Dialog>
   );
 };

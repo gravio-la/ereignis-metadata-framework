@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { JSONSchema7 } from "json-schema";
+import type { JSONSchema7 } from "json-schema";
 import {
   bringDefinitionToTop,
   prepareStubbedSchema,
-} from "@slub/json-schema-utils";
-import { StringToIRIFn } from "@slub/edb-core-types";
+} from "@graviola/json-schema-utils";
+import type { StringToIRIFn } from "@graviola/edb-core-types";
 import { useAdbContext } from "./provider";
 
 type UseExtendedSchemaProps = {
@@ -25,7 +25,7 @@ const defaultMakeStubSchema = (
         type: "string",
       },
     }),
-    () => ["@type", "@id"],
+    () => ["@id"],
   );
 };
 

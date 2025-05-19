@@ -1,10 +1,17 @@
-import { KnowledgeBaseDescription } from "../types";
+import { KBListItemRenderer } from "@graviola/edb-advanced-components";
+import {
+  PrimaryField,
+  PrimaryFieldDeclaration,
+} from "@graviola/edb-core-types";
+import {
+  applyToEachField,
+  extractFieldIfString,
+} from "@graviola/edb-data-mapping";
+import { AbstractDatastore } from "@graviola/edb-global-types";
 import { Storage as KnowledgebaseIcon } from "@mui/icons-material";
-import { applyToEachField, extractFieldIfString } from "@slub/edb-data-mapping";
-import { PrimaryField, PrimaryFieldDeclaration } from "@slub/edb-core-types";
-import { KBListItemRenderer } from "../KBListItemRenderer";
-import { AbstractDatastore } from "@slub/edb-global-types";
+
 import { typeIRItoTypeName } from "../../../config";
+import { KnowledgeBaseDescription } from "../types";
 
 export const KBMainDatabase: (
   dataStore: AbstractDatastore,

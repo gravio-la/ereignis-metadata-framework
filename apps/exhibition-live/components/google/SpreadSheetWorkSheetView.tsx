@@ -1,29 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
+import { NormDataMappings } from "@graviola/edb-core-types";
+import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
+import {
+  DeclarativeFlatMappings,
+  DeclarativeMapping,
+  DeclarativeMatchBasedFlatMappings,
+  mapByConfigFlat,
+} from "@graviola/edb-data-mapping";
 import {
   useAdbContext,
   useCRUDWithQueryClient,
+  useDataStore,
   useExtendedSchema,
   useGlobalCRUDOptions,
   useModifiedRouter,
-} from "@slub/edb-state-hooks";
-import {
-  CellTypeLike,
-  LoadableWorkSheet,
-  useCashedWorkSheet,
-} from "./useCachedWorkSheet";
-import {
-  MaterialReactTable,
-  MRT_ColumnDef,
-  useMaterialReactTable,
-} from "material-react-table";
-import { OwnColumnDesc } from "./types";
-import {
-  DeclarativeFlatMappings,
-  DeclarativeMatchBasedFlatMappings,
-  mapByConfigFlat,
-} from "@slub/edb-data-mapping";
-import { spreadSheetMappings } from "../config/spreadSheetMappings";
-import { MappedItem } from "./MappedItem";
+} from "@graviola/edb-state-hooks";
 import {
   Box,
   Button,
@@ -37,9 +28,22 @@ import {
   Typography,
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import {
+  MaterialReactTable,
+  MRT_ColumnDef,
+  useMaterialReactTable,
+} from "material-react-table";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+import { spreadSheetMappings } from "../config/spreadSheetMappings";
 import { ColumnChip } from "./ColumnChip";
-import { filterUndefOrNull, index2letter } from "@slub/edb-core-utils";
-import { makeDefaultMappingStrategyContext } from "@slub/edb-ui-utils";
+import { MappedItem } from "./MappedItem";
+import { OwnColumnDesc } from "./types";
+import {
+  CellTypeLike,
+  LoadableWorkSheet,
+  useCashedWorkSheet,
+} from "./useCachedWorkSheet";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,
@@ -61,7 +65,8 @@ export const SpreadSheetWorkSheetView = <
     typeIRIToTypeName,
     createEntityIRI,
     jsonLDConfig: { defaultPrefix },
-    normDataMapping,
+    normDataMapping = {},
+    authorityAccess,
   } = useAdbContext();
   const workSheet = useCashedWorkSheet<CellType, RemoteWorksheet>({
     workSheet: workSheetOriginal,
@@ -241,6 +246,7 @@ export const SpreadSheetWorkSheetView = <
     loadQueryKey: "importsave",
     allowUnsafeSourceIRIs: true,
   });
+  const { dataStore } = useDataStore();
   const handleMapAndImport = useCallback(async () => {
     const rows = [...Array(pagination.pageSize)].map(
       (_, index) => index + pagination.pageIndex * pagination.pageSize + 1,
@@ -263,15 +269,12 @@ export const SpreadSheetWorkSheetView = <
           targetData,
           spreadSheetMapping.mapping,
           makeDefaultMappingStrategyContext(
-            crudOptions?.selectFetch,
-            {
-              defaultPrefix,
-              prefixes,
-            },
+            dataStore,
             createEntityIRI,
             typeIRIToTypeName,
             primaryFields,
-            normDataMapping,
+            normDataMapping as NormDataMappings<DeclarativeMapping>,
+            authorityAccess,
           ),
         );
       } catch (e) {
@@ -362,15 +365,12 @@ export const SpreadSheetWorkSheetView = <
             targetData,
             spreadSheetMapping.mapping,
             makeDefaultMappingStrategyContext(
-              crudOptions?.selectFetch,
-              {
-                defaultPrefix,
-                prefixes,
-              },
+              dataStore,
               createEntityIRI,
               typeNameToTypeIRI,
               primaryFields,
-              normDataMapping,
+              normDataMapping as NormDataMappings<DeclarativeMapping>,
+              authorityAccess,
             ),
           );
           allMappedData.push(mappedData);
@@ -394,6 +394,7 @@ export const SpreadSheetWorkSheetView = <
     prefixes,
     primaryFields,
     normDataMapping,
+    authorityAccess,
   ]);
 
   return loaded ? (

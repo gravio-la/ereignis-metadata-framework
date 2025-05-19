@@ -1,8 +1,8 @@
 import { XMLParser } from "fast-xml-parser";
 
 import { marcRecord2RootNode } from "./marcRecord2RootNode";
-import { MarcResponseTypes } from "@slub/edb-marc-to-rdf";
-import { RootNode } from "@slub/edb-graph-traversal";
+import { MarcResponseTypes } from "@graviola/edb-marc-to-rdf";
+import type { RootNode } from "@graviola/edb-global-types";
 
 export const findEntityWithinK10Plus = async (
   searchString: string,

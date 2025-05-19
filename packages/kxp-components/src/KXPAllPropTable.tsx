@@ -1,4 +1,3 @@
-import { RootNode } from "@slub/edb-graph-traversal";
 import {
   Container,
   Table,
@@ -10,6 +9,7 @@ import {
 import { LabledLink } from "./LabledLink";
 import { LabeledBNode } from "./LabeledBNode";
 import { BlankNode } from "@rdfjs/types";
+import type { RootNode } from "@graviola/edb-global-types";
 
 export const KXPAllPropTable = ({ entry }: { entry: RootNode }) => {
   return (
@@ -19,7 +19,7 @@ export const KXPAllPropTable = ({ entry }: { entry: RootNode }) => {
           {Object.entries(entry.properties).map(([key, value]) => {
             return (
               <TableRow key={key}>
-                <TableCell style={{ width: 100 }} component="th" scope="row">
+                <TableCell style={{ width: 100 }} scope="row">
                   <LabledLink uri={key} />
                 </TableCell>
                 <TableCell align="right">

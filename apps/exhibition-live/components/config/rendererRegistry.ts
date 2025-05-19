@@ -1,7 +1,25 @@
 import {
-  MaterialBooleanControl,
-  materialRenderers,
-} from "@jsonforms/material-renderers";
+  adbSpecialDateControlTester,
+  AdbSpecialDateRenderer,
+  AutoIdentifierRenderer,
+  ImageRenderer,
+  materialBooleanControlTester,
+  TypeOfRenderer,
+} from "@graviola/edb-basic-renderer";
+import {
+  materialCustomAnyOfControlTester,
+  MaterialCustomAnyOfRenderer,
+} from "@graviola/edb-layout-renderer";
+import {
+  InlineCondensedSemanticFormsRenderer,
+  InlineDropdownRenderer,
+  materialArrayChipsLayoutTester,
+  MaterialArrayOfLinkedItemChipsRenderer,
+  MaterialArrayOfLinkedItemRenderer,
+  materialLinkedObjectControlTester,
+  MaterialLinkedObjectRenderer,
+} from "@graviola/edb-linked-data-renderer";
+import { MarkdownTextFieldRenderer } from "@graviola/edb-markdown-renderer";
 import {
   and,
   isObjectArray,
@@ -12,30 +30,12 @@ import {
   scopeEndsWith,
   UISchemaElement,
 } from "@jsonforms/core";
+import {
+  MaterialBooleanControl,
+  materialRenderers,
+} from "@jsonforms/material-renderers";
 import { JSONSchema7 } from "json-schema";
-import { isEmpty } from "lodash";
-import { MarkdownTextFieldRenderer } from "@slub/edb-markdown-renderer";
-import {
-  materialCustomAnyOfControlTester,
-  MaterialCustomAnyOfRenderer,
-} from "@slub/edb-layout-renderer";
-import {
-  adbSpecialDateControlTester,
-  AdbSpecialDateRenderer,
-  AutoIdentifierRenderer,
-  ImageRenderer,
-  materialBooleanControlTester,
-  TypeOfRenderer,
-} from "@slub/edb-basic-renderer";
-import {
-  InlineCondensedSemanticFormsRenderer,
-  InlineDropdownRenderer,
-  materialArrayChipsLayoutTester,
-  MaterialArrayOfLinkedItemChipsRenderer,
-  MaterialArrayOfLinkedItemRenderer,
-  materialLinkedObjectControlTester,
-  MaterialLinkedObjectRenderer,
-} from "@slub/edb-linked-data-renderer";
+import { isEmpty } from "lodash-es";
 
 export const rendererRegistry: JsonFormsRendererRegistryEntry[] = [
   ...materialRenderers,

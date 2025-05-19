@@ -1,21 +1,21 @@
-import { Box, Grid } from "@mui/material";
-import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useMemo, useState } from "react";
-
+import { EntityDetailElement } from "@graviola/edb-advanced-components";
+import { encodeIRI } from "@graviola/edb-core-utils";
+import { materialCategorizationStepperLayoutWithPortal } from "@graviola/edb-layout-renderer";
 import {
   useAdbContext,
   useFormEditor,
   useGlobalSearch,
   useModifiedRouter,
   useRightDrawerState,
-  useSettings,
-} from "@slub/edb-state-hooks";
-import { encodeIRI } from "@slub/edb-ui-utils";
-import NewSemanticJsonForm from "../../form/SemanticJsonFormOperational";
-import { useFormDataStore, useExtendedSchema } from "@slub/edb-state-hooks";
-import { useCRUDWithQueryClient } from "@slub/edb-state-hooks";
-import { EntityDetailElement } from "@slub/edb-advanced-components";
-import { materialCategorizationStepperLayoutWithPortal } from "@slub/edb-layout-renderer";
+} from "@graviola/edb-state-hooks";
+import { useExtendedSchema, useFormDataStore } from "@graviola/edb-state-hooks";
+import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
+import { SemanticJsonForm } from "@graviola/semantic-json-form";
+import { Alert, Box, Button, Container, Grid } from "@mui/material";
+import { JSONSchema7 } from "json-schema";
+import React, { useCallback, useMemo } from "react";
+
+import { useLocalSettings, useSettings } from "../../state";
 
 type Props = {
   children: React.ReactChild;
@@ -132,11 +132,54 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
 
   const uischema = useMemo(() => uischemata?.[typeName], [typeName]);
 
+  const {
+    activeEndpoint,
+    features: { enableDebug },
+  } = useSettings();
+  const { openSettings } = useLocalSettings();
+
+  const jsonFormsPropsFinal = useMemo(
+    () => ({
+      uischema,
+      renderers: mainFormRenderers,
+      config: {
+        useCRUDHook: useCRUDWithQueryClient,
+        debug: enableDebug,
+      },
+    }),
+    [uischema, mainFormRenderers, enableDebug],
+  );
+
+  if (!activeEndpoint) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <Alert
+          severity="warning"
+          action={
+            <Button color="inherit" size="small" onClick={openSettings}>
+              Open Settings
+            </Button>
+          }
+        >
+          No active endpoint configured. Please configure an endpoint in
+          settings.
+        </Alert>
+      </Box>
+    );
+  }
+
   return (
     <WithPreviewForm data={data} classIRI={classIRI} entityIRI={entityIRI}>
       {loadedSchema && (
-        <Box sx={{ p: 2, display: "flex" }}>
-          <NewSemanticJsonForm
+        <Container sx={{ p: 2, display: "flex" }}>
+          <SemanticJsonForm
             defaultEditMode={true}
             data={data}
             entityIRI={entityIRI}
@@ -148,18 +191,12 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
             defaultPrefix={defaultPrefix}
             jsonldContext={jsonldContext}
             schema={loadedSchema as JSONSchema7}
-            jsonFormsProps={{
-              uischema,
-              renderers: mainFormRenderers,
-              config: {
-                useCRUDHook: useCRUDWithQueryClient,
-              },
-            }}
+            jsonFormsProps={jsonFormsPropsFinal}
             enableSidebar={false}
             disableSimilarityFinder={true}
             wrapWithinCard={true}
           />
-        </Box>
+        </Container>
       )}
     </WithPreviewForm>
   );

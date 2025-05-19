@@ -1,5 +1,6 @@
-import { isPrimitive, filterForPrimitiveProperties } from "./jsonSchema";
 import { JSONSchema7 } from "json-schema";
+
+import { filterForPrimitiveProperties, isPrimitive } from "./jsonSchema";
 
 describe("JSON Schema Utility Functions", () => {
   describe("isPrimitive", () => {

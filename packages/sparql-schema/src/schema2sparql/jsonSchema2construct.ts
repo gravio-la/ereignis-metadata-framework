@@ -1,8 +1,10 @@
-import { JsonSchema, resolveSchema } from "@jsonforms/core";
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
-
-import { isJSONSchema, isJSONSchemaDefinition } from "@slub/json-schema-utils";
+import {
+  isJSONSchema,
+  isJSONSchemaDefinition,
+  resolveSchema,
+} from "@graviola/json-schema-utils";
 import { Variable } from "@rdfjs/types";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 const propertiesContainStopSymbol = (
   properties: object,
@@ -17,7 +19,6 @@ const propertiesContainStopSymbol = (
 
 const MAX_RECURSION = 4;
 const makePrefixed = (key: string) => (key.includes(":") ? key : `:${key}`);
-const doNotFollowItemsRefs = false;
 const mkSubject = (subjectURI: string) =>
   subjectURI.startsWith("?") ? subjectURI : `<${subjectURI}>`;
 export const jsonSchema2construct: (
@@ -70,9 +71,9 @@ export const jsonSchema2construct: (
         construct += `${sP} ${p} ${o} .\n`;
         if (schema.$ref) {
           const subSchema = resolveSchema(
-            schema as JsonSchema,
+            schema as JSONSchema7,
             "",
-            rootSchema as JsonSchema,
+            rootSchema as JSONSchema7,
           );
           if (
             subSchema &&
@@ -96,16 +97,15 @@ export const jsonSchema2construct: (
             propertiesToSPARQLPatterns(o, schema.items, level + 1);
           }
           if (
-            !doNotFollowItemsRefs &&
             isJSONSchemaDefinition(schema.items) &&
             isJSONSchema(schema.items) &&
             schema.items.$ref
           ) {
             //const ref = schema.items.$ref
             const subSchema = resolveSchema(
-              schema.items as JsonSchema,
+              schema.items as JSONSchema7,
               "",
-              rootSchema as JsonSchema,
+              rootSchema as JSONSchema7,
             );
             if (
               subSchema &&

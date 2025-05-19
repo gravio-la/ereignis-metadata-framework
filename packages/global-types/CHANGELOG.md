@@ -1,5 +1,11 @@
 # @slub/edb-global-types
 
+## 1.1.1
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+
 ## 1.1.0
 
 ### Minor Changes

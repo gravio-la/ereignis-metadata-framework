@@ -1,6 +1,6 @@
 {
-  "name": "@slub/edb-resizable-drawer",
-  "version": "0.1.0",
+  "name": "@graviola/edb-resizable-drawer",
+  "version": "0.2.3",
   "description": "A mouse and touch resizable drawer",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -8,13 +8,14 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
     "lint": "eslint \"**/*.ts*\"",
@@ -25,12 +26,12 @@
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@slub/edb-core-types": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
+    "@graviola/edb-core-types": "workspace:*",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
     "@types/jest": "^29.5.12",
     "eslint-config-edb": "workspace:*",
-    "typescript": "^5.3.3",
+    "typescript": "^5.8.2",
     "react": ">=18"
   },
   "peerDependencies": {

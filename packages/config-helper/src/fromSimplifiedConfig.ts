@@ -1,4 +1,4 @@
-import { EdbConfRaw, SimplifiedEndpointConfig } from "@slub/edb-global-types";
+import { EdbConfRaw, SimplifiedEndpointConfig } from "@graviola/edb-global-types";
 
 export const fromSimplifiedEndpointConfig = ({
   baseIRI,

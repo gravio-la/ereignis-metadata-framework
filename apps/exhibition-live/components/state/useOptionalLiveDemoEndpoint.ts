@@ -1,6 +1,7 @@
+import { SparqlEndpoint } from "@graviola/edb-core-types";
 import { useEffect } from "react";
-import { SparqlEndpoint } from "@slub/edb-core-types";
-import { useSettings } from "@slub/edb-state-hooks";
+
+import { useSettings } from "../state";
 
 /**
  * This hook adds a demo endpoint to the list of endpoints if the app is not running on the test server.

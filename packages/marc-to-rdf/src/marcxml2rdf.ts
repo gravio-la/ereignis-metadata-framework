@@ -1,6 +1,6 @@
 import df from "@rdfjs/data-model";
 import namespace from "@rdfjs/namespace";
-import { NamedNode, Quad } from "@rdfjs/types";
+import type { NamedNode, Quad } from "@rdfjs/types";
 import { rdf, xsd } from "@tpluscode/rdf-ns-builders";
 import { isArray, toLower } from "lodash-es";
 
@@ -8,9 +8,9 @@ import {
   mappingSkeleton,
   marcMappingPrefixes,
 } from "./marc2rdfMappingDeclaration";
-import { Prefixes } from "@slub/edb-core-types";
-import { Datafield, SubfieldElement } from "./marcResponseTypes";
-import { filterUndefOrNull } from "@slub/edb-core-utils";
+import type { Prefixes } from "@graviola/edb-core-types";
+import type { Datafield, SubfieldElement } from "./marcResponseTypes";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 
 const findMappingForSubfield: (tag: string) => any | null = (tag: string) => {
   const tagMappingKey: string | undefined = Object.keys(

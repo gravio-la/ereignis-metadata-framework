@@ -1,58 +1,54 @@
 {
-  "name": "@slub/edb-kxp-utils",
-  "version": "1.0.0",
+  "name": "@graviola/edb-kxp-utils",
+  "version": "1.1.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "description": "",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
   "scripts": {
+    "depcheck": "depcheck",
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint \"**/*.ts*\"",
-    "lint-fix": "eslint --fix \"**/*.ts*\"",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "pack-clean": "bun run clean-package && (bun pm pack || true) ; bun run clean-package restore",
+    "publish-clean": "bun run clean-package && npm publish --access public && bun run clean-package restore",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --color",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "docs": "typedoc --out docs"
   },
   "devDependencies": {
-    "@jest/globals": "^29.3.1",
-    "@rdfjs/dataset": "^2.0.1",
-    "@rdfjs/parser-n3": "^2.0.1",
-    "@slub/edb-build-helper": "workspace:*",
-    "@slub/edb-tsconfig": "workspace:*",
-    "@slub/edb-tsup-config": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "@types/json-schema": "^7.0.14",
-    "@types/lodash": "^4.14.200",
-    "@types/rdf-dataset-ext": "^1.0.3",
-    "@types/rdfjs__data-model": "^2.0.8",
-    "@types/rdfjs__dataset": "^2.0.0",
-    "@types/rdfjs__namespace": "^2.0.8",
-    "@types/rdfjs__parser-jsonld": "^1.2.5",
-    "@types/rdfjs__parser-n3": "^1.1.5",
+    "@graviola/edb-tsconfig": "workspace:*",
+    "@graviola/edb-tsup-config": "workspace:*",
+    "@graviola/edb-global-types": "workspace:*",
     "eslint-config-edb": "workspace:*",
-    "jest": "^29.7.0",
-    "rdf-dataset-ext": "^1.0.1",
-    "ts-jest": "^29.1.2",
-    "ts-jest-mock-import-meta": "^1.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.2",
+    "tsup": "^8.0.0"
+  },
+  "peerDependencies": {
+    "@rdfjs/dataset": "^2.0.2"
   },
   "dependencies": {
-    "@rdfjs/dataset": "^2.0.2",
     "@rdfjs/data-model": "^2.0.2",
     "@rdfjs/namespace": "^2.0.0",
-    "@rdfjs/types": "^1.1.0",
-    "@slub/edb-marc-to-rdf": "workspace:*"
+    "@graviola/edb-marc-to-rdf": "workspace:*",
+    "@graviola/edb-graph-traversal": "workspace:*",
+    "clownface": "2.0.2",
+    "fast-xml-parser": "^4.2.7"
   },
   "keywords": [
     "RDF",
@@ -60,5 +56,14 @@
     "KXP",
     "K10Plus"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "clean-package": {
+    "extends": "../../../clean-package.config.cjs"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint-config-edb"
+    ]
+  }
 }

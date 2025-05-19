@@ -1,4 +1,5 @@
 import { JSONSchema7 } from "json-schema";
+
 import { defs, isJSONSchema } from "./jsonSchema";
 
 const propertyExists = (

@@ -1,21 +1,15 @@
 import { createContext, useContext } from "react";
-import { JsonLdContext } from "jsonld-context-parser";
-import {
+import type {
   EditEntityModalProps,
   EntityDetailModalProps,
+  EntityFinderProps,
   GlobalAppConfig,
   ModRouter,
   SemanticJsonFormNoOpsProps,
-  SimilarityFinderProps,
-} from "@slub/edb-global-types";
+  SnackbarFacade,
+} from "@graviola/semantic-jsonform-types";
 import { NiceModalHocProps } from "@ebay/nice-modal-react";
-import { SparqlEndpoint } from "@slub/edb-core-types";
-
-export type JSONLDConfig = {
-  defaultPrefix: string;
-  jsonldContext?: JsonLdContext;
-  allowUnsafeSourceIRIs?: boolean;
-};
+import { SparqlEndpoint } from "@graviola/edb-core-types";
 
 /**
  * Context for the ADB
@@ -25,29 +19,54 @@ export type JSONLDConfig = {
  * @param lockedSPARQLEndpoint Optional locked SPARQL endpoint
  * @param useRouterHook Pass the hook needed for your framework specific routing (next router, react-router-dom,...)
  */
-type AdbContextValue = GlobalAppConfig & {
-  lockedSPARQLEndpoint?: SparqlEndpoint;
-  env: {
-    publicBasePath: string;
-    baseIRI: string;
+export type AdbContextValue<DeclarativeMappingType> =
+  GlobalAppConfig<DeclarativeMappingType> & {
+    lockedSPARQLEndpoint?: SparqlEndpoint;
+    env: {
+      publicBasePath: string;
+      baseIRI: string;
+    };
+    components: {
+      EditEntityModal: React.FC<EditEntityModalProps & NiceModalHocProps>;
+      EntityDetailModal: React.FC<EntityDetailModalProps & NiceModalHocProps>;
+      SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
+      SimilarityFinder: React.FC<EntityFinderProps>;
+    };
+    useSnackbar: () => SnackbarFacade;
+    useRouterHook: () => ModRouter;
   };
-  components: {
-    EditEntityModal: React.FC<EditEntityModalProps & NiceModalHocProps>;
-    EntityDetailModal: React.FC<EntityDetailModalProps & NiceModalHocProps>;
-    SemanticJsonForm: React.FC<SemanticJsonFormNoOpsProps>;
-    SimilarityFinder: React.FC<SimilarityFinderProps>;
-  };
-  useRouterHook: () => ModRouter;
-};
 
-type EdbGlobalContextProps = AdbContextValue & {
+export type EdbGlobalContextProps<DeclarativeMappingType> = Omit<
+  AdbContextValue<DeclarativeMappingType>,
+  "useSnackbar"
+> & {
   children: React.ReactNode;
+  useSnackbar?: () => SnackbarFacade;
 };
 
-export const AdbContext = createContext<AdbContextValue>(null);
+export const AdbContext = createContext<AdbContextValue<any>>(null);
 
-export const AdbProvider = ({ children, ...rest }: EdbGlobalContextProps) => {
-  return <AdbContext.Provider value={rest}>{children}</AdbContext.Provider>;
+const useSnackbarFallback: () => SnackbarFacade = () => {
+  return {
+    enqueueSnackbar: (_1, _2) => {
+      return null;
+    },
+    closeSnackbar: (_) => {},
+  };
 };
 
-export const useAdbContext = () => useContext(AdbContext);
+export const AdbProvider = <DeclarativeMappingType,>({
+  children,
+  ...rest
+}: EdbGlobalContextProps<DeclarativeMappingType>) => {
+  return (
+    <AdbContext.Provider
+      value={{ ...rest, useSnackbar: rest.useSnackbar ?? useSnackbarFallback }}
+    >
+      {children}
+    </AdbContext.Provider>
+  );
+};
+
+export const useAdbContext = <DeclarativeMappingType,>() =>
+  useContext(AdbContext) as AdbContextValue<DeclarativeMappingType>;
