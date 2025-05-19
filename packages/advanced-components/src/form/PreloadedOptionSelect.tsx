@@ -58,6 +58,10 @@ export const PreloadedOptionSelect: FunctionComponent<
   const selectID = useId();
   const { t } = useTranslation();
   const v = useMemo(() => value?.value ?? null, [value]);
+  const invalidValue = useMemo(
+    () => v && !suggestions?.find((s) => s.value === v),
+    [v, suggestions],
+  );
 
   return (
     <>
@@ -78,6 +82,16 @@ export const PreloadedOptionSelect: FunctionComponent<
             {suggestion.label}
           </MenuItem>
         ))}
+        {invalidValue && (
+          <MenuItem
+            disabled={true}
+            key="invalid"
+            value={value?.value}
+            sx={{ fontStyle: "italic", color: "error.main" }}
+          >
+            {t("invalid value")} {value?.label || value?.value}
+          </MenuItem>
+        )}
         <MenuItem
           disabled={!v}
           key="empty"
