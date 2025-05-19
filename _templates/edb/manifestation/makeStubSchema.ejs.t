@@ -52,7 +52,7 @@ const genSlubJSONLDSemanticProperties = makeGenSlubJSONLDSemanticProperties(
   "http://ontologies.slub-dresden.de/<%= h.changeCase.paramCase(name) %>/entity/",
 );
 const genSlubRequiredProperties = (_modelName: string) => {
-  return ["@type", "@id"];
+  return ["@id"];
 };
 export const makeStubSchema: (schema: JSONSchema7) => JSONSchema7 = (
   schema,
