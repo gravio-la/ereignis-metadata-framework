@@ -48,7 +48,6 @@ const makeGenSlubJSONLDSemanticProperties: (
       type: "string",
     },
     "@id": {
-      title: entityBaseIRI,
       type: "string",
     },
   });
@@ -58,7 +57,7 @@ const genSlubJSONLDSemanticProperties = makeGenSlubJSONLDSemanticProperties(
   "http://ontologies.slub-dresden.de/exhibition/entity/",
 );
 const genSlubRequiredProperties = (_modelName: string) => {
-  return ["@type", "@id"];
+  return ["@id"];
 };
 export const makeStubSchema: (schema: JSONSchema7) => JSONSchema7 = (
   schema,
