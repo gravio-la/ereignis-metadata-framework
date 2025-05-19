@@ -43,36 +43,38 @@ const AutocompleteURIFieldRenderer = (props: ControlProps) => {
     );
   }, [selected, handleChange_]);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <Hidden xsUp={!visible}>
-      <FormControl
-        fullWidth={!appliedUiSchemaOptions.trim}
-        id={id}
-        variant={"standard"}
-        sx={(theme) => ({ marginBottom: theme.spacing(2) })}
-        hiddenLabel={true}
-      >
-        <Grid container alignItems="baseline">
-          <Grid item>
-            <FormLabel
-              error={!isValid}
-              required={showAsRequired(
-                !!required,
-                appliedUiSchemaOptions.hideRequiredAsterisk,
-              )}
-            >
-              Wikidata
-            </FormLabel>
-          </Grid>{" "}
-          <Grid item>{data}</Grid>
-        </Grid>
-        <WikidataAutocompleteInput
-          selected={selected}
-          onSelectionChange={setSelected}
-          typeOf={classType}
-        />
-      </FormControl>
-    </Hidden>
+    <FormControl
+      fullWidth={!appliedUiSchemaOptions.trim}
+      id={id}
+      variant={"standard"}
+      sx={(theme) => ({ marginBottom: theme.spacing(2) })}
+      hiddenLabel={true}
+    >
+      <Grid container alignItems="baseline">
+        <Grid item>
+          <FormLabel
+            error={!isValid}
+            required={showAsRequired(
+              !!required,
+              appliedUiSchemaOptions.hideRequiredAsterisk,
+            )}
+          >
+            Wikidata
+          </FormLabel>
+        </Grid>{" "}
+        <Grid item>{data}</Grid>
+      </Grid>
+      <WikidataAutocompleteInput
+        selected={selected}
+        onSelectionChange={setSelected}
+        typeOf={classType}
+      />
+    </FormControl>
   );
 };
 

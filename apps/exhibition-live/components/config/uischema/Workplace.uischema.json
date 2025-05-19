@@ -1,5 +1,5 @@
 {
-  "type": "VerticalLayout",
+  "type": "HorizontalLayout",
   "elements": [
     {
       "type": "Control",
@@ -12,12 +12,18 @@
         {
           "type": "Control",
           "label": "Von",
-          "scope": "#/properties/fromDate"
+          "scope": "#/properties/fromDate",
+          "options": {
+            "labelPlacement": "left"
+          } 
         },
         {
           "type": "Control",
           "label": "Bis",
-          "scope": "#/properties/toDate"
+          "scope": "#/properties/toDate",
+          "options": {
+            "labelPlacement": "left"
+          }
         }
       ]
     }

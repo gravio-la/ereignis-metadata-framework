@@ -1,10 +1,11 @@
+import { useDeclarativeMapper } from "@graviola/data-mapping-hooks";
+import { Grid, Paper } from "@mui/material";
+import React, { useCallback, useMemo, useState } from "react";
+import { JsonView } from "react-json-view-lite";
+
+import { exhibitionConfig } from "../../config/exhibitionAppConfig";
 import { SimilarityFinder } from "./SimilarityFinder";
 import { useKnowledgeBases } from "./useKnowledgeBases";
-import React, { useCallback, useMemo, useState } from "react";
-import { Grid, Paper } from "@mui/material";
-import { exhibitionConfig } from "../../config/exhibitionAppConfig";
-import { JsonView } from "react-json-view-lite";
-import { useDeclarativeMapper } from "@graviola/data-mapping-hooks";
 
 type MappingTestComponentProps = {
   typeName:
@@ -93,20 +94,14 @@ export const MappingTestComponent: React.FC<MappingTestComponentProps> = ({
         <Paper sx={{ height: "100%", overflow: "auto", p: 2 }}>
           {/* Content for the second column */}
           <h2>Original Data</h2>
-          <JsonView
-            data={originalData}
-            shouldInitiallyExpand={(lvl) => lvl < 3}
-          />
+          <JsonView data={originalData} shouldExpandNode={(lvl) => lvl < 3} />
         </Paper>
       </Grid>
       <Grid item xs={4} sx={{ height: "100%" }}>
         <Paper sx={{ height: "100%", overflow: "auto", p: 2 }}>
           {/* Content for the third column */}
           <h2>Mapped Data</h2>
-          <JsonView
-            data={mappedData}
-            shouldInitiallyExpand={(lvl) => lvl < 3}
-          />
+          <JsonView data={mappedData} shouldExpandNode={(lvl) => lvl < 3} />
         </Paper>
       </Grid>
     </Grid>

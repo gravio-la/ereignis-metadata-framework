@@ -1,3 +1,6 @@
+import { wikidataPrefixes } from "@graviola/edb-wikidata-utils";
+import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
+import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
 import {
   Button,
   Card,
@@ -15,10 +18,7 @@ import React, {
   useState,
 } from "react";
 
-import { wikidataPrefixes } from "@graviola/edb-ui-utils";
-import { sparqlSelectViaFieldMappings } from "@graviola/sparql-schema";
-import { remoteSparqlQuery } from "@graviola/remote-query-implementations";
-import { WikidataAllPropTable } from "@graviola/edb-advanced-components";
+import { WikidataAllPropTable } from "./WikidataAllPropTable";
 
 interface OwnProps {
   thingIRI?: string | null;

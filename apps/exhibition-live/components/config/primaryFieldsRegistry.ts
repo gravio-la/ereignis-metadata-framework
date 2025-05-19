@@ -1,10 +1,11 @@
-import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
 import { IRIToStringFn } from "@graviola/edb-core-types";
+import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
+import { primaryFields } from "@slub/exhibition-schema";
+
 import {
   primaryTextFieldControlTester,
   PrimaryTextFieldRenderer,
 } from "../renderer";
-import { primaryFields } from "@slub/exhibition-schema";
 
 export const primaryFieldsRegistry: (
   typeIRI: string,

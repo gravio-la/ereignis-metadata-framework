@@ -1,6 +1,7 @@
+import { Permission } from "@graviola/edb-core-types";
 import { fullPermission, noPermission } from "@graviola/edb-core-utils";
 import { create } from "zustand";
-import { Permission } from "@graviola/edb-core-types";
+
 import { editorPermissions } from "../config";
 
 export enum RoleType {

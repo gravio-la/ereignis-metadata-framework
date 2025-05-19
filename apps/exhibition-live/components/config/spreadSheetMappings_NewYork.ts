@@ -1,12 +1,13 @@
-import { sladb } from "./formConfigs";
-import { OwnColumnDesc } from "../google/types";
-import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import { gndBaseIRI } from "@graviola/edb-authorities";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
 import {
   DeclarativeFlatMappings,
   DeclarativeMatchBasedFlatMappings,
   matchBased2DeclarativeFlatMapping,
 } from "@graviola/edb-data-mapping";
+
+import { OwnColumnDesc } from "../google/types";
+import { sladb } from "./formConfigs";
 
 /*
 B:Name Kiste

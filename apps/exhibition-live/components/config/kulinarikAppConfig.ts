@@ -1,21 +1,22 @@
+import { IRIToStringFn, SparqlBuildOptions } from "@graviola/edb-core-types";
+import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
+import { materialCells } from "@jsonforms/material-renderers";
+import namespace from "@rdfjs/namespace";
 import {
   makeStubSchema,
-  primaryFields,
   primaryFieldExtracts,
+  primaryFields,
   schema,
 } from "@slub/kulinarik-schema";
 import { JSONSchema7 } from "json-schema";
-import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
-import { rendererRegistry } from "./rendererRegistry";
-import { materialCells } from "@jsonforms/material-renderers";
-import { IRIToStringFn, SparqlBuildOptions } from "@graviola/edb-core-types";
-import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   primaryTextFieldControlTester,
   PrimaryTextFieldRenderer,
 } from "../renderer";
-import namespace from "@rdfjs/namespace";
-import { v4 as uuidv4 } from "uuid";
+import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
+import { rendererRegistry } from "./rendererRegistry";
 
 const BASE_IRI = "http://ontologies.slub-dresden.de/kulinarik#";
 const sladb = namespace(BASE_IRI);
@@ -86,7 +87,5 @@ export const kulinarikAppConfig = {
   ),
   rendererRegistry: rendererRegistry,
   cellRendererRegistry: materialCells,
-  primaryFieldRendererRegistry: (typeIRI: string) =>
-    primaryFieldsRegistry(typeIRI, someIRIToTypeName),
   uischemata: undefined,
 };

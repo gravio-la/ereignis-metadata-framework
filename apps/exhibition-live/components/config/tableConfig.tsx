@@ -1,10 +1,10 @@
-import { MRT_ColumnDef } from "material-react-table";
-import { TFunction } from "i18next";
-import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
 import {
   mkAccessor,
   TableConfigRegistry,
 } from "@graviola/edb-table-components";
+import { specialDate2LocalDate } from "@graviola/edb-ui-utils";
+import { TFunction } from "i18next";
+import { MRT_ColumnDef } from "material-react-table";
 const p = (path: string[]) => path.join("_");
 const dateColDef: (
   key: string,

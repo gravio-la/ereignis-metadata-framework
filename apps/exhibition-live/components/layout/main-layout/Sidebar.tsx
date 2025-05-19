@@ -1,18 +1,19 @@
+import {
+  MenuGroup,
+  NavGroup,
+  NavItem,
+} from "@graviola/edb-advanced-components";
+import { useAdbContext, useModifiedRouter } from "@graviola/edb-state-hooks";
 import { ImportExport, Settings } from "@mui/icons-material";
-import { useMediaQuery, useTheme, List, Divider, Toolbar } from "@mui/material";
+import { Divider, List, Toolbar, useMediaQuery, useTheme } from "@mui/material";
+import { useTranslation } from "next-i18next";
 import React, { useCallback, useMemo } from "react";
 
 import SettingsModal from "../../content/settings/SettingsModal";
-import {
-  useAdbContext,
-  useModifiedRouter,
-} from "@graviola/edb-state-hooks";
-import { Drawer } from "./menu";
-import { useTranslation } from "next-i18next";
+import { useLocalSettings } from "../../state";
 import { useGlobalAuth } from "../../state/useGlobalAuth";
 import { createMenuListFromSchema } from "./createMenuListFromSchema";
-import { MenuGroup, NavGroup, NavItem } from "@graviola/edb-advanced-components";
-import { useLocalSettings } from "../../state";
+import { Drawer } from "./menu";
 
 type SidebarProps = {
   open?: boolean;

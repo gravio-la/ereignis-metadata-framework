@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { EntityDetailCard } from "@graviola/edb-advanced-components";
+import { Meta, StoryObj } from "@storybook/react";
 
 export default {
   title: "ui/view/EntityDetailCard",

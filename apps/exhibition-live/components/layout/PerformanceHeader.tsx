@@ -3,8 +3,8 @@ import { Button, Grid } from "@mui/material";
 import React, { FunctionComponent } from "react";
 
 import SettingsModal from "../content/settings/SettingsModal";
-import { Logo } from "./main-layout";
 import { useLocalSettings } from "../state";
+import { Logo } from "./main-layout";
 
 interface OwnProps {}
 

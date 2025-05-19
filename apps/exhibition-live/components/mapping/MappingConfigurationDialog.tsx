@@ -1,3 +1,4 @@
+import type { DeclarativeSimpleMapping } from "@graviola/edb-data-mapping";
 import { Close as CloseIcon } from "@mui/icons-material";
 import {
   Button,
@@ -10,7 +11,6 @@ import {
 } from "@mui/material";
 import { useCallback } from "react";
 
-import type { DeclarativeSimpleMapping } from "@graviola/edb-data-mapping";
 import { MappingConfiguration } from "./MappingConfiguration";
 
 type MappingConfigurationDialogProps = {

@@ -1,11 +1,6 @@
-import {
-  createNewIRI,
-  defaultJsonldContext,
-  defaultPrefix,
-  defaultQueryBuilderOptions,
-  sladb,
-} from "./formConfigs";
-import { BASE_IRI } from "./paths";
+import { DeclarativeMapping } from "@graviola/edb-data-mapping";
+import { GlobalAppConfig } from "@graviola/semantic-jsonform-types";
+import { materialCells } from "@jsonforms/material-renderers";
 import {
   authorityAccess,
   availableAuthorityMappings,
@@ -13,13 +8,19 @@ import {
   schema,
 } from "@slub/exhibition-schema";
 import { JSONSchema7 } from "json-schema";
+
+import {
+  createNewIRI,
+  defaultJsonldContext,
+  defaultPrefix,
+  defaultQueryBuilderOptions,
+  sladb,
+} from "./formConfigs";
 import { makeDefaultUiSchemaForAllDefinitions } from "./makeDefaultUiSchemaForAllDefinitions";
-import { rendererRegistry } from "./rendererRegistry";
-import { materialCells } from "@jsonforms/material-renderers";
+import { BASE_IRI } from "./paths";
 import { primaryFieldsRegistry } from "./primaryFieldsRegistry";
+import { rendererRegistry } from "./rendererRegistry";
 import { uischemata } from "./uischemata";
-import { DeclarativeMapping } from "@graviola/edb-data-mapping";
-import { GlobalAppConfig } from "@graviola/semantic-jsonform-types";
 
 const someNameToTypeIRI = (name: string) => sladb(name).value;
 const someIRIToTypeName = (iri: string) =>
@@ -45,7 +46,5 @@ export const exhibitionConfig: GlobalAppConfig<DeclarativeMapping> = {
   ),
   rendererRegistry: rendererRegistry,
   cellRendererRegistry: materialCells,
-  primaryFieldRendererRegistry: (typeIRI: string) =>
-    primaryFieldsRegistry(typeIRI, someIRIToTypeName),
   uischemata: uischemata,
 };

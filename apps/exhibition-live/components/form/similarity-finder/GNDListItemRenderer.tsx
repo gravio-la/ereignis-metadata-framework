@@ -1,22 +1,23 @@
-import { useTranslation } from "next-i18next";
+import {
+  ClassicEntityCard,
+  ClassicResultListItem,
+} from "@graviola/edb-basic-components";
+import { BasicThingInformation } from "@graviola/edb-core-types";
 import {
   useQuery,
   useQueryClient,
   useSimilarityFinderState,
 } from "@graviola/edb-state-hooks";
-import { BasicThingInformation } from "@graviola/edb-core-types";
-import { fetchBasicInformationFromGND } from "./fetchBasicInformationFromGND";
+import { Check } from "@mui/icons-material";
+import { Button, IconButton, Stack } from "@mui/material";
+import { useTranslation } from "next-i18next";
 import * as React from "react";
 import { useCallback, useEffect } from "react";
-import {
-  ClassicEntityCard,
-  ClassicResultListItem,
-} from "@graviola/edb-basic-components";
-import { Button, IconButton, Stack } from "@mui/material";
-import { Check } from "@mui/icons-material";
-import { ListItemRendererProps } from "./types";
-import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
+
 import { LobidAllPropTable } from "../lobid/LobidAllPropTable";
+import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
+import { fetchBasicInformationFromGND } from "./fetchBasicInformationFromGND";
+import { ListItemRendererProps } from "./types";
 
 export const GNDListItemRenderer = ({
   data: initialData,

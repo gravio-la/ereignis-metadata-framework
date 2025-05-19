@@ -1,8 +1,9 @@
-import namespace from "@rdfjs/namespace";
 import { SparqlBuildOptions } from "@graviola/edb-core-types";
-import { v4 as uuidv4 } from "uuid";
-import { typeIRItoTypeName } from "./index";
+import namespace from "@rdfjs/namespace";
 import { primaryFieldExtracts, primaryFields } from "@slub/exhibition-schema";
+import { v4 as uuidv4 } from "uuid";
+
+import { typeIRItoTypeName } from "./index";
 
 export const sladb = namespace("http://ontologies.slub-dresden.de/exhibition#");
 export const slent = namespace(

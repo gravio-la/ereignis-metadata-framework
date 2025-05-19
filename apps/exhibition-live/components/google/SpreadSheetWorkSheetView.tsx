@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
+import { NormDataMappings } from "@graviola/edb-core-types";
+import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
+import {
+  DeclarativeFlatMappings,
+  DeclarativeMapping,
+  DeclarativeMatchBasedFlatMappings,
+  mapByConfigFlat,
+} from "@graviola/edb-data-mapping";
 import {
   useAdbContext,
   useCRUDWithQueryClient,
@@ -7,25 +15,6 @@ import {
   useGlobalCRUDOptions,
   useModifiedRouter,
 } from "@graviola/edb-state-hooks";
-import {
-  CellTypeLike,
-  LoadableWorkSheet,
-  useCashedWorkSheet,
-} from "./useCachedWorkSheet";
-import {
-  MaterialReactTable,
-  MRT_ColumnDef,
-  useMaterialReactTable,
-} from "material-react-table";
-import { OwnColumnDesc } from "./types";
-import {
-  DeclarativeFlatMappings,
-  DeclarativeMapping,
-  DeclarativeMatchBasedFlatMappings,
-  mapByConfigFlat,
-} from "@graviola/edb-data-mapping";
-import { spreadSheetMappings } from "../config/spreadSheetMappings";
-import { MappedItem } from "./MappedItem";
 import {
   Box,
   Button,
@@ -39,10 +28,22 @@ import {
   Typography,
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import {
+  MaterialReactTable,
+  MRT_ColumnDef,
+  useMaterialReactTable,
+} from "material-react-table";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+import { spreadSheetMappings } from "../config/spreadSheetMappings";
 import { ColumnChip } from "./ColumnChip";
-import { filterUndefOrNull, index2letter } from "@graviola/edb-core-utils";
-import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
-import { NormDataMappings } from "@graviola/edb-core-types";
+import { MappedItem } from "./MappedItem";
+import { OwnColumnDesc } from "./types";
+import {
+  CellTypeLike,
+  LoadableWorkSheet,
+  useCashedWorkSheet,
+} from "./useCachedWorkSheet";
 
 export type SpreadSheetWorkSheetViewProps<
   CellType extends CellTypeLike,

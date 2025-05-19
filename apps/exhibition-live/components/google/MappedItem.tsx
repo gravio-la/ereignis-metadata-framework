@@ -1,13 +1,21 @@
-import { mapByConfigFlat } from "@graviola/edb-data-mapping";
-import type { DeclarativeFlatMappings } from "@graviola/edb-data-mapping";
-import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
-import { CRUDFunctions } from "@graviola/edb-core-types";
-import { useAdbContext, useDataStore, useQuery } from "@graviola/edb-state-hooks";
-import React, { useCallback } from "react";
-import { useTranslation } from "next-i18next";
-import { CircularProgress, List } from "@mui/material";
-import { TypedListItem } from "@graviola/edb-advanced-components";
 import { makeDefaultMappingStrategyContext } from "@graviola/data-mapping-hooks";
+import { TypedListItem } from "@graviola/edb-advanced-components";
+import { CRUDFunctions, NormDataMappings } from "@graviola/edb-core-types";
+import type {
+  DeclarativeFlatMappings,
+  DeclarativeMapping,
+} from "@graviola/edb-data-mapping";
+import { mapByConfigFlat } from "@graviola/edb-data-mapping";
+import {
+  useAdbContext,
+  useDataStore,
+  useQuery,
+} from "@graviola/edb-state-hooks";
+import { CircularProgress, List } from "@mui/material";
+import { useTranslation } from "next-i18next";
+import React, { useCallback } from "react";
+
+import { CachedWorkSheet, CellTypeLike } from "./useCachedWorkSheet";
 
 export type MappedItemProps<CellType extends CellTypeLike> = {
   path: string;
@@ -53,7 +61,7 @@ export const MappedItem = <CellType extends CellTypeLike>({
           createEntityIRI,
           typeIRIToTypeName,
           primaryFields,
-          normDataMapping,
+          normDataMapping as unknown as NormDataMappings<DeclarativeMapping>,
           authorityAccess,
         ),
       );

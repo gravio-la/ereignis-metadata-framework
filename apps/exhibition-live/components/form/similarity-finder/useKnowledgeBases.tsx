@@ -1,6 +1,7 @@
 import { useAdbContext, useDataStore } from "@graviola/edb-state-hooks";
 import { useMemo } from "react";
-import { KBMainDatabase, Wikidata, GND, K10Plus } from "./provider";
+
+import { GND, K10Plus, KBMainDatabase, Wikidata } from "./provider";
 import { KnowledgeBaseDescription } from "./types";
 
 export const useKnowledgeBases = () => {

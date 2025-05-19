@@ -1,20 +1,17 @@
+import { decodeIRI } from "@graviola/edb-core-utils";
+import { useAdbContext, useFormEditor } from "@graviola/edb-state-hooks";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Button, Hidden } from "@mui/material";
+import { schema } from "@slub/exhibition-schema";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
+import { useTranslation } from "next-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 
 import TypedForm from "../../../components/content/main/TypedForm";
-import { MainLayout } from "../../../components/layout/main-layout";
-import { useTranslation } from "next-i18next";
 import { getI18nProps, mixinStaticPathsParams } from "../../../components/i18n";
-import { Button, Hidden } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { decodeIRI } from "@graviola/edb-core-utils";
-import {
-  useAdbContext,
-  useFormEditor,
-  useSettings,
-} from "@graviola/edb-state-hooks";
-import { schema } from "@slub/exhibition-schema";
+import { MainLayout } from "../../../components/layout/main-layout";
+import { useSettings } from "../../../components/state";
 
 type Props = {
   typeName: string;

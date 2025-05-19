@@ -1,4 +1,8 @@
 import {
+  AllPropTable,
+  AllPropTableProps,
+} from "@graviola/edb-advanced-components";
+import {
   findEntityWithinLobidByIRI,
   gndBaseIRI,
 } from "@graviola/edb-authorities";
@@ -12,11 +16,10 @@ import {
 import React, { FunctionComponent, useMemo } from "react";
 
 import { WikidataAllPropTable } from "../wikidata/WikidataAllPropTable";
-import { AllPropTable, AllPropTableProps } from "@graviola/edb-advanced-components";
 
 export type LobidAllPropTableProps = AllPropTableProps & {
   disableLoad?: boolean;
-}
+};
 
 type Props = LobidAllPropTableProps;
 
@@ -37,13 +40,12 @@ export const LobidAllPropTable: FunctionComponent<Props> = ({
     enabled: !!gndIRI && !disableLoad,
   });
 
-
   return (
     <>
-      <AllPropTable 
-        allProps={allProps} 
-        disableContextMenu={disableContextMenu}  
-        disabledProperties={disabledProperties} 
+      <AllPropTable
+        allProps={allProps}
+        disableContextMenu={disableContextMenu}
+        disabledProperties={disabledProperties}
       />
       {rawEntry && (
         <>

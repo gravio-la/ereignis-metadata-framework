@@ -1,14 +1,13 @@
+import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
+import { findEntityWithinLobid } from "@graviola/edb-authorities";
+import { AutocompleteSuggestion } from "@graviola/edb-core-types";
+import { lobidTypemap } from "@slub/exhibition-schema";
 import React, {
   FunctionComponent,
   useCallback,
   useMemo,
   useState,
 } from "react";
-
-import { DebouncedAutocomplete } from "@graviola/edb-advanced-components";
-import { AutocompleteSuggestion } from "@graviola/edb-core-types";
-import { findEntityWithinLobid } from "@graviola/edb-authorities";
-import { lobidTypemap } from "@slub/exhibition-schema";
 
 interface OwnProps {
   selected?: AutocompleteSuggestion | null;

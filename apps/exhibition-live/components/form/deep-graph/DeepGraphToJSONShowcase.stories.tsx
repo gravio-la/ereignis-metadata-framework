@@ -1,5 +1,6 @@
-import DeepGraphToJSONShowcase from "./DeepGraphToJSONShowcase";
 import { Meta, StoryObj } from "@storybook/react";
+
+import DeepGraphToJSONShowcase from "./DeepGraphToJSONShowcase";
 
 export default {
   title: "architecture/graph-data/DeepGraphToJSONShowcase",

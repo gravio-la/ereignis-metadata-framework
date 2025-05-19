@@ -1,5 +1,6 @@
-import { useEffect } from "react";
 import { SparqlEndpoint } from "@graviola/edb-core-types";
+import { useEffect } from "react";
+
 import { useSettings } from "../state";
 
 /**

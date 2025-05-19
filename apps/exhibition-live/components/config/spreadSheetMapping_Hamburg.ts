@@ -1,6 +1,7 @@
-import { sladb } from "./formConfigs";
-import { OwnColumnDesc } from "../google/types";
 import { DeclarativeFlatMappings } from "@graviola/edb-data-mapping";
+
+import { OwnColumnDesc } from "../google/types";
+import { sladb } from "./formConfigs";
 
 export const indexFromLetter = (
   letter: string,

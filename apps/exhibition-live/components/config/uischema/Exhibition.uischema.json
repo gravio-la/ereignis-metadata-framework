@@ -160,13 +160,16 @@
                           "type": "Control",
                           "scope": "#/properties/startDate/properties/dateModifier",
                           "options": {
-                            "trim": true
+                            "fullWidth": true
                           }
                         },
                         {
                           "type": "Control",
                           "label": "",
-                          "scope": "#/properties/startDate/properties/dateValue"
+                          "scope": "#/properties/startDate/properties/dateValue",
+                          "options": {
+                            "fullWidth": true
+                          }
                         }
                       ]
                     },
@@ -178,13 +181,16 @@
                           "type": "Control",
                           "scope": "#/properties/endDate/properties/dateModifier",
                           "options": {
-                            "trim": true
+                            "fullWidth": true
                           }
                         },
                         {
                           "type": "Control",
                           "label": "",
-                          "scope": "#/properties/endDate/properties/dateValue"
+                          "scope": "#/properties/endDate/properties/dateValue",
+                          "options": {
+                            "fullWidth": true
+                          }
                         }
                       ]
                     }
@@ -201,18 +207,27 @@
                   "elements": [
                     {
                       "type": "Control",
-                      "scope": "#/properties/vernissage",
-                      "label": "Vernissage"
+                      "scope": "#/properties/vernissage/properties/dateValue",
+                      "label": "Vernissage",
+                      "options": {
+                        "fullWidth": true
+                      } 
                     },
                     {
                       "type": "Control",
-                      "scope": "#/properties/midissage",
-                      "label": "Midissage"
+                      "scope": "#/properties/midissage/properties/dateValue",
+                      "label": "Midissage",
+                      "options": {
+                        "fullWidth": true
+                      }
                     },
                     {
                       "type": "Control",
-                      "scope": "#/properties/finissage",
-                      "label": "Finissage"
+                      "scope": "#/properties/finissage/properties/dateValue",
+                      "label": "Finissage",
+                      "options": {
+                        "fullWidth": true
+                      }
                     }
                   ]
                 }

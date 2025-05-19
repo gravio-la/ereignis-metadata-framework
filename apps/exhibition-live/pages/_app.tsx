@@ -9,24 +9,16 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@triply/yasgui/build/yasgui.min.css";
 import "leaflet/dist/leaflet.css";
 import "react-json-view-lite/dist/index.css";
-
-import type { AppProps } from "next/app";
-
-import NiceModal from "@ebay/nice-modal-react";
-import { SnackbarProvider, useSnackbar } from "notistack";
-import { appWithTranslation, UserConfig, useTranslation } from "next-i18next";
-import nextI18NextConfig from "../next-i18next.config";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
-import { useEffect } from "react";
-import { Provider } from "react-redux";
-import { OptionalLiveDemoEndpoint } from "../components/state";
-import getConfig from "next/config";
-import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
+
+import NiceModal from "@ebay/nice-modal-react";
+import {
+  EditEntityModal,
+  EntityDetailModal,
+} from "@graviola/edb-advanced-components";
+import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
+import { ThemeComponent } from "@graviola/edb-default-theme";
 import {
   AdbProvider,
   EdbGlobalContextProps,
@@ -34,16 +26,28 @@ import {
   QueryClientProvider,
   store,
 } from "@graviola/edb-state-hooks";
-import { useRouter } from "next/router";
-import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
-import { envToSparqlEndpoint } from "@graviola/edb-core-utils";
-import { EditEntityModal, EntityDetailModal } from "@graviola/edb-advanced-components";
-import { SimilarityFinder } from "../components/form/similarity-finder";
-import { useSearchParams } from "next/navigation";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeComponent } from "@graviola/edb-default-theme";
-import { ModRouter } from "@graviola/semantic-jsonform-types";
 import { SemanticJsonFormNoOps } from "@graviola/semantic-json-form";
+import { ModRouter } from "@graviola/semantic-jsonform-types";
+import { SparqlStoreProvider } from "@graviola/sparql-store-provider";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import dayjs from "dayjs";
+import type { AppProps } from "next/app";
+import getConfig from "next/config";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import { appWithTranslation, UserConfig, useTranslation } from "next-i18next";
+import { SnackbarProvider, useSnackbar } from "notistack";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
+
+import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
+import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
+import { SimilarityFinder } from "../components/form/similarity-finder";
+import { OptionalLiveDemoEndpoint } from "../components/state";
+import nextI18NextConfig from "../next-i18next.config";
 
 export const queryClient = new QueryClient();
 const QueryClientProviderWrapper = ({
@@ -94,11 +98,16 @@ function App({ Component, pageProps }: AppProps) {
                 <GoogleOAuthProvider
                   clientId={process.env.NEXT_PUBLIC_GAPI_OAUTH_CLIENT_ID}
                 >
-                  <NiceModal.Provider>
-                    <OptionalLiveDemoEndpoint>
-                      {<Component {...pageProps} />}
-                    </OptionalLiveDemoEndpoint>
-                  </NiceModal.Provider>
+                  <SparqlStoreProvider
+                    endpoint={sparqlEndpoint}
+                    defaultLimit={100}
+                  >
+                    <NiceModal.Provider>
+                      <OptionalLiveDemoEndpoint>
+                        {<Component {...pageProps} />}
+                      </OptionalLiveDemoEndpoint>
+                    </NiceModal.Provider>
+                  </SparqlStoreProvider>
                 </GoogleOAuthProvider>
               </AdbProvider>
             </SnackbarProvider>

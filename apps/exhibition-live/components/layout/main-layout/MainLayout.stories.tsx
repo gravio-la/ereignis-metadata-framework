@@ -1,10 +1,10 @@
+import { QueryClient, QueryClientProvider } from "@graviola/edb-state-hooks";
 import { Meta } from "@storybook/react";
 import React, { useMemo } from "react";
 
-import { MainLayout } from "./MainLayout";
-import TypedForm from "../../content/main/TypedFormNoSSR";
 import { sladb, slent } from "../../config/formConfigs";
-import { QueryClientProvider, QueryClient } from "@graviola/edb-state-hooks";
+import TypedForm from "../../content/main/TypedFormNoSSR";
+import { MainLayout } from "./MainLayout";
 
 export default {
   title: "ui/layout/MainLayout",

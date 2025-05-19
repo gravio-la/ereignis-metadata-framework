@@ -1,7 +1,6 @@
-import { Alert, Box, Button, Grid } from "@mui/material";
-import { JSONSchema7 } from "json-schema";
-import React, { useCallback, useMemo } from "react";
-
+import { EntityDetailElement } from "@graviola/edb-advanced-components";
+import { encodeIRI } from "@graviola/edb-core-utils";
+import { materialCategorizationStepperLayoutWithPortal } from "@graviola/edb-layout-renderer";
 import {
   useAdbContext,
   useFormEditor,
@@ -9,12 +8,13 @@ import {
   useModifiedRouter,
   useRightDrawerState,
 } from "@graviola/edb-state-hooks";
-import { encodeIRI } from "@graviola/edb-core-utils";
-import { useFormDataStore, useExtendedSchema } from "@graviola/edb-state-hooks";
+import { useExtendedSchema, useFormDataStore } from "@graviola/edb-state-hooks";
 import { useCRUDWithQueryClient } from "@graviola/edb-state-hooks";
-import { EntityDetailElement } from "@graviola/edb-advanced-components";
-import { materialCategorizationStepperLayoutWithPortal } from "@graviola/edb-layout-renderer";
 import { SemanticJsonForm } from "@graviola/semantic-json-form";
+import { Alert, Box, Button, Container, Grid } from "@mui/material";
+import { JSONSchema7 } from "json-schema";
+import React, { useCallback, useMemo } from "react";
+
 import { useLocalSettings, useSettings } from "../../state";
 
 type Props = {
@@ -132,8 +132,23 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
 
   const uischema = useMemo(() => uischemata?.[typeName], [typeName]);
 
-  const { activeEndpoint } = useSettings();
+  const {
+    activeEndpoint,
+    features: { enableDebug },
+  } = useSettings();
   const { openSettings } = useLocalSettings();
+
+  const jsonFormsPropsFinal = useMemo(
+    () => ({
+      uischema,
+      renderers: mainFormRenderers,
+      config: {
+        useCRUDHook: useCRUDWithQueryClient,
+        debug: enableDebug,
+      },
+    }),
+    [uischema, mainFormRenderers, enableDebug],
+  );
 
   if (!activeEndpoint) {
     return (
@@ -160,21 +175,10 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
     );
   }
 
-  const jsonFormsPropsFinal = useMemo(
-    () => ({
-      uischema,
-      renderers: mainFormRenderers,
-      config: {
-        useCRUDHook: useCRUDWithQueryClient,
-      },
-    }),
-    [uischema, mainFormRenderers],
-  );
-
   return (
     <WithPreviewForm data={data} classIRI={classIRI} entityIRI={entityIRI}>
       {loadedSchema && (
-        <Box sx={{ p: 2, display: "flex" }}>
+        <Container sx={{ p: 2, display: "flex" }}>
           <SemanticJsonForm
             defaultEditMode={true}
             data={data}
@@ -192,7 +196,7 @@ const TypedForm = ({ typeName, entityIRI, classIRI }: MainFormProps) => {
             disableSimilarityFinder={true}
             wrapWithinCard={true}
           />
-        </Box>
+        </Container>
       )}
     </WithPreviewForm>
   );

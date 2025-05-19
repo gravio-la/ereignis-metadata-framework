@@ -1,3 +1,8 @@
+import { BarReChart } from "@graviola/edb-charts";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
+import { fixSparqlOrder } from "@graviola/sparql-schema";
+import { TrendingDown, TrendingUp } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -8,18 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import { TrendingDown, TrendingUp } from "@mui/icons-material";
-import { useQuery } from "@graviola/edb-state-hooks";
-import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
-import { SELECT } from "@tpluscode/sparql-builder";
-import { orderBy } from "lodash-es";
-import { useMemo } from "react";
-import { SearchBar } from "./Search";
-import { ParentSize } from "@visx/responsive";
 import df from "@rdfjs/data-model";
+import { SELECT } from "@tpluscode/sparql-builder";
+import { ParentSize } from "@visx/responsive";
+import { orderBy } from "lodash-es";
 import { useTranslation } from "next-i18next";
-import { fixSparqlOrder } from "@graviola/sparql-schema";
-import { BarReChart } from "@graviola/edb-charts";
+import { useMemo } from "react";
+
+import { SearchBar } from "./Search";
 
 export const HeaderTitle = styled(Typography)(({ theme }) => ({
   fontFamily: "'Play', sans-serif",

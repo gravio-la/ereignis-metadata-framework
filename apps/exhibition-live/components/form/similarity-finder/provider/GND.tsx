@@ -1,10 +1,11 @@
-import { KnowledgeBaseDescription } from "../types";
-import { Img } from "../../../basic";
 import { findEntityWithinLobid } from "@graviola/edb-authorities";
 import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { lobidTypemap } from "@slub/exhibition-schema";
+
+import { Img } from "../../../basic";
 import { gndEntryFromSuggestion } from "../../lobid/LobidSearchTable";
 import { GNDListItemRenderer } from "../GNDListItemRenderer";
-import { lobidTypemap } from "@slub/exhibition-schema";
+import { KnowledgeBaseDescription } from "../types";
 
 export const GND: KnowledgeBaseDescription = {
   id: "gnd",

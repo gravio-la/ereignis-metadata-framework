@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
+import { create } from "zustand";
 
 // Custom fonts bundled (i.e. no external requests), see <https://nextjs.org/docs/pages/building-your-application/optimizing/fonts>
 

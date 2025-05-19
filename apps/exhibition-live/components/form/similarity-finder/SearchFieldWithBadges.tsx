@@ -1,6 +1,4 @@
-import { KnowledgeBaseDescription } from "./types";
-import * as React from "react";
-import { useMemo } from "react";
+import { useAdbContext } from "@graviola/edb-state-hooks";
 import {
   Badge,
   Box,
@@ -9,8 +7,11 @@ import {
   TextField,
   TextFieldProps,
 } from "@mui/material";
-import { useAdbContext } from "@graviola/edb-state-hooks";
 import { useTranslation } from "next-i18next";
+import * as React from "react";
+import { useMemo } from "react";
+
+import { KnowledgeBaseDescription } from "./types";
 
 export const SearchFieldWithBadges = ({
   searchString,

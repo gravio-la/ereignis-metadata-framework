@@ -2,40 +2,45 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Group",
-      "label": "Allgemeine Daten zum Ort",
+      "type": "HorizontalLayout",
       "elements": [
         {
-          "type": "HorizontalLayout",
+          "type": "Group",
+          "label": "Allgemeine Daten zum Ort",
           "elements": [
             {
-              "type": "Control",
-              "scope": "#/properties/title",
-              "label": "Bezeichnung",
-              "options": {
-                "focus": true
-              }
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/title",
+                  "label": "Bezeichnung",
+                  "options": {
+                    "focus": true
+                  }
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/titleVariants",
+                  "label": "Weitere Bezeichnungen"
+                }
+              ]
             },
             {
               "type": "Control",
-              "scope": "#/properties/titleVariants",
-              "label": "Weitere Bezeichnungen"
+              "scope": "#/properties/description",
+              "options": {
+                "multi": true
+              },
+              "label": "Beschreibung"
             }
           ]
         },
         {
           "type": "Control",
-          "scope": "#/properties/description",
-          "options": {
-            "multi": true
-          },
-          "label": "Beschreibung"
+          "scope": "#/properties/image"
         }
       ]
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/image"
     },
     {
       "type": "Group",

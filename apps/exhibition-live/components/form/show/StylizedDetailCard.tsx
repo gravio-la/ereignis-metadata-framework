@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { EntityDetailCardProps } from "@graviola/edb-advanced-components";
+import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { Box, Fab, styled, Typography } from "@mui/material";
 import ColorThief from "color-thief-ts";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
 import MarkdownContent from "./MarkdownContentNoSSR";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import { EntityDetailCardProps } from "@graviola/edb-advanced-components";
 
 type ColorArray = [number, number, number];
 

@@ -1,33 +1,33 @@
-import * as React from "react";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import { ParentSize } from "@visx/responsive";
-import { useCallback, useMemo, useState } from "react";
-import { useQuery } from "@graviola/edb-state-hooks";
-import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
-import { SELECT } from "@tpluscode/sparql-builder";
-import df from "@rdfjs/data-model";
-import { isString, orderBy, uniq } from "lodash-es";
-import { Box, Chip, Grid, Skeleton, Tab, Tabs } from "@mui/material";
-import { filterUndefOrNull } from "@graviola/edb-core-utils";
-import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
-import { TimelineItem } from "vis-timeline/types";
-import get from "lodash/get";
-import { ListAlt, Polyline, Timeline } from "@mui/icons-material";
-import { useTranslation } from "next-i18next";
 import NiceModal from "@ebay/nice-modal-react";
-import { fixSparqlOrder, withDefaultPrefix } from "@graviola/sparql-schema";
 import {
   IRIToStringFn,
   PrimaryFieldDeclaration,
 } from "@graviola/edb-core-types";
-import { VisTimelineWrapper } from "@graviola/edb-vis-timeline";
+import { filterUndefOrNull } from "@graviola/edb-core-utils";
+import { useQuery } from "@graviola/edb-state-hooks";
+import { useAdbContext, useGlobalCRUDOptions } from "@graviola/edb-state-hooks";
 import {
   GenericListItem,
   GenericVirtualizedList,
 } from "@graviola/edb-virtualized-components";
+import { VisTimelineWrapper } from "@graviola/edb-vis-timeline";
+import { fixSparqlOrder, withDefaultPrefix } from "@graviola/sparql-schema";
+import { ListAlt, Polyline, Timeline } from "@mui/icons-material";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, Chip, Grid, Skeleton, Tab, Tabs } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import Paper from "@mui/material/Paper";
+import df from "@rdfjs/data-model";
+import { SELECT } from "@tpluscode/sparql-builder";
+import { ParentSize } from "@visx/responsive";
+import get from "lodash/get";
+import { isString, orderBy, uniq } from "lodash-es";
+import { useTranslation } from "next-i18next";
+import * as React from "react";
+import { useCallback, useMemo, useState } from "react";
+import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { TimelineItem } from "vis-timeline/types";
 
 const makeFilterUNION2 = (searchString: string, length: number) => {
   const filterUNION = [];

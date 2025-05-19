@@ -1,5 +1,6 @@
-import { MappingTestComponent } from "./MappingTestComponent";
 import { Meta, StoryObj } from "@storybook/react";
+
+import { MappingTestComponent } from "./MappingTestComponent";
 
 const meta: Meta<typeof MappingTestComponent> = {
   title: "mapping/MappingTestComponent",

@@ -1,5 +1,3 @@
-import { SetStateAction, useCallback, useMemo } from "react";
-import { create } from "zustand";
 import {
   ExternalAuthorityConfig,
   Features,
@@ -9,8 +7,11 @@ import {
   SparqlEndpoint,
   UseLocalSettings,
 } from "@graviola/edb-core-types";
-import { useLocalStorage } from "./useLocalStorage";
 import { useAdbContext } from "@graviola/edb-state-hooks";
+import { SetStateAction, useCallback, useMemo } from "react";
+import { create } from "zustand";
+
+import { useLocalStorage } from "./useLocalStorage";
 
 const defaultSparqlEndpoints: SparqlEndpoint[] = [
   {
