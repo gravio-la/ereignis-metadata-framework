@@ -7,7 +7,10 @@
   "rules": {
     "react-refresh/only-export-components": "warn",
     "react/display-name": "off",
-    "import/no-anonymous-default-export": "off"
+    "import/no-anonymous-default-export": "off",
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "no-unused-expressions": "off"
   },
   "overrides": [
     {

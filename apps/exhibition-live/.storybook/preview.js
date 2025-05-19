@@ -7,8 +7,10 @@ import {
 
 import { BASE_IRI, PUBLIC_BASE_PATH } from "../components/config";
 import { AdbProvider, store } from "@graviola/edb-state-hooks";
-import { EditEntityModal } from "../components/form/edit/EditEntityModal";
-import { EntityDetailModal } from "@graviola/edb-advanced-components";
+import {
+  EntityDetailModal,
+  EditEntityModal,
+} from "@graviola/edb-advanced-components";
 import { Provider } from "react-redux";
 import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { exhibitionConfig } from "../components/config/exhibitionAppConfig";
@@ -46,7 +48,7 @@ const LocalStoreWithExampleDataProvider = ({ children }) => {
         basePath + "/ontology/exhibition-info.owl.ttl",
       ).then((res) => res.text());
       return [data, ontology];
-    }
+    },
   });
   return (
     <LocalOxigraphStoreProvider
