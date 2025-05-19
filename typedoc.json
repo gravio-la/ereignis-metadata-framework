@@ -1,6 +1,6 @@
 {
   "entryPoints": ["packages/*"],
-  "name": "SLUB Ereignisdatenbank",
+  "name": "Graviola CRUD",
   "entryPointStrategy": "packages",
   "includeVersion": false,
   "logLevel": "Verbose"
