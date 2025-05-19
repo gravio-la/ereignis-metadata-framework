@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.bun }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.bun }}-bun-
-      - run: bun i --frozen-lockfile
+      - run: bun i
       - run: bun build:packages
 
   publish-npm:
