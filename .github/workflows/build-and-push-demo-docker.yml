@@ -2,9 +2,7 @@
 name: Create and publish a Development Demo Docker image
 
 on:
-  push:
-    branches: ['demo']
-
+  workflow_dispatch:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-development-demo
