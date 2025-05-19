@@ -1,5 +1,31 @@
 # @slub/edb-prisma-cli
 
+## 1.2.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @graviola/edb-core-utils@1.3.0
+  - @graviola/edb-graph-traversal@1.2.5
+  - @graviola/json-schema-prisma-utils@1.2.5
+  - @graviola/sparql-schema@1.2.6
+  - @slub/exhibition-schema@1.3.4
+  - @graviola/remote-query-implementations@1.2.4
+
+## 1.2.4
+
+### Patch Changes
+
+- make workspace depenedncies peer depenedncies
+- Updated dependencies
+  - @graviola/json-schema-prisma-utils@1.2.4
+  - @graviola/json-schema-utils@1.2.4
+  - @slub/exhibition-schema@1.3.3
+  - @graviola/edb-graph-traversal@1.2.4
+  - @graviola/sparql-schema@1.2.5
+  - @graviola/remote-query-implementations@1.2.4
+  - @graviola/edb-core-utils@1.2.3
+
 ## 1.2.3
 
 ### Patch Changes
