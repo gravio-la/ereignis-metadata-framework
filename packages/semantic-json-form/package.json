@@ -36,11 +36,12 @@
     "lodash-es": "^4.17.21",
     "next-i18next": "^15.0.0",
     "react": "^18 | ^19",
-    "react-json-view-lite": "^2.3.0"
+    "react-json-view-lite": "^2.4.1"
   },
   "dependencies": {
     "@graviola/edb-state-hooks": "workspace:*",
     "@graviola/json-schema-utils": "workspace:*",
+    "@graviola/jsonld-utils": "workspace:*",
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/edb-basic-components": "workspace:*",
     "@graviola/edb-advanced-components": "workspace:*",

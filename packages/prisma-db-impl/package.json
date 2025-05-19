@@ -1,6 +1,6 @@
 {
   "name": "@graviola/prisma-db-impl",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A set of store specific implementations of PRISMA query builders",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -8,10 +8,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": {
-        "import": "./dist/index.d.ts",
-        "require": "./dist/index.d.cts"
-      },
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
