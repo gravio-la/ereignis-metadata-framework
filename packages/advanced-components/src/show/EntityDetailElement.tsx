@@ -56,7 +56,7 @@ export const EntityDetailElement = ({
     queryOptions: {
       enabled: true,
       refetchOnWindowFocus: true,
-      initialData: initialData,
+      initialData: initialData ? { document: initialData } : undefined,
     },
     loadQueryKey: "show",
   });

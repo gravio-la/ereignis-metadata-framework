@@ -45,7 +45,11 @@ export const EntityChip = ({
     entityIRI,
     typeIRI: classIRI,
     schema: loadedSchema,
-    queryOptions: { enabled: !disableLoad, refetchOnWindowFocus: true },
+    queryOptions: {
+      enabled: !disableLoad && !defaultData,
+      refetchOnWindowFocus: true,
+      initialData: defaultData,
+    },
     loadQueryKey: "show",
   });
 
@@ -75,13 +79,14 @@ export const EntityChip = ({
   const showDetailModal = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
+      console.log("showDetailModal", entityIRI, classIRI);
       NiceModal.show(EntityDetailModal, {
         entityIRI,
         typeIRI: classIRI,
-        data: {},
+        data,
       });
     },
-    [entityIRI, classIRI, EntityDetailModal],
+    [entityIRI, classIRI, EntityDetailModal, data],
   );
   const handleShouldShow = useCallback(
     (e: MouseEvent<Element>) => {

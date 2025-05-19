@@ -47,7 +47,7 @@ export const EditEntityModal = NiceModal.create(
       queryOptions: {
         enabled: !disableLoad,
         refetchOnWindowFocus: true,
-        initialData: defaultData,
+        initialData: defaultData ? { document: defaultData } : undefined,
       },
       loadQueryKey: "show",
     });
