@@ -4,6 +4,13 @@ import { SELECT } from "@tpluscode/sparql-builder";
 
 export type FindEntityByClassOptions = QueryOptions;
 
+/**
+ * This function will ensure that GROUP BY is always before ORDER BY
+ * unfortunatly the SPARQL builder does not ensure this, but it might be fixed upstream
+ * in the future
+ * @param sparqlQuery - The SPARQL query to fix
+ * @returns The fixed SPARQL query
+ */
 export const fixSparqlOrder: (sparqlQuery: string) => string = (
   sparqlQuery,
 ) => {
@@ -11,6 +18,12 @@ export const fixSparqlOrder: (sparqlQuery: string) => string = (
   return sparqlQuery.replace(regex, "GROUP BY $3 $2\n$1");
 };
 
+/**
+ * This function will convert a field name to a predicate
+ * and ensure it only contains alphanumeric, dashes and underscores
+ * @param field - The field name to convert
+ * @returns The converted predicate
+ */
 const toPredicate = (field: string) => {
   //only allow alphanumeric, dashes and underscores
   const cleanField = field.replace(/[^a-zA-Z0-9_-]/g, "");
