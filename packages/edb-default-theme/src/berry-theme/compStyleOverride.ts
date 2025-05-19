@@ -83,7 +83,10 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
       styleOverrides: {
         root: {
           color: theme.colors?.textDark,
-          padding: "0",
+          paddingTop: 0,
+          paddingBottom: (theme) => theme.spacing(1),
+          paddingLeft: 0,
+          paddingRight: 0,
         },
         title: {
           fontSize: "1rem",
@@ -95,7 +98,10 @@ export default function componentStyleOverrides(theme: ThemeExtended) {
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: "0",
+          paddingTop: (theme) => theme.spacing(1),
+          paddingBottom: (theme) => theme.spacing(1),
+          paddingLeft: 0,
+          paddingRight: 0,
           "&:last-child": {
             paddingBottom: "0",
           },
