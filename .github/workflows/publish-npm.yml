@@ -2,7 +2,7 @@ name: Graviola - Publish NPM packages
 
 on:
   release:
-    types: [created]
+    types: [created, published]
   # Trigger via 'Actions' on GitHub
   workflow_dispatch:
 
@@ -24,7 +24,14 @@ jobs:
             ${{ runner.os }}-${{ matrix.bun }}-bun-
       - run: bun i
       - run: bun build:packages
-
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            node_modules/
+            packages/**/dist/
+            packages/**/node_modules/
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
@@ -35,6 +42,11 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
       - run: bun run publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
