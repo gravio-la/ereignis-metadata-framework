@@ -13,3 +13,4 @@ export * from "./materialLinkedObjectControlTester";
 export * from "./materialArrayOfLinkedItemTester";
 export * from "./inlineDropdownTester";
 export * from "./inlineCondensedSemanticFormsTester";
+export * from "./formHelper";
