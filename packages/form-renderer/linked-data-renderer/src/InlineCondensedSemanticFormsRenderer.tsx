@@ -20,6 +20,7 @@ import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
 import {
   Box,
   FormControl,
+  FormHelperText,
   Hidden,
   List,
   TextField,
@@ -30,6 +31,7 @@ import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
 import isEqual from "lodash-es/isEqual";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useFormHelper } from "./formHelper";
 
 const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
   const {
@@ -38,6 +40,7 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     schema,
     uischema,
     visible,
+    description,
     config,
     data,
     handleChange,
@@ -162,7 +165,7 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     searchString,
     handleSearchStringChange,
     handleMappedData,
-    handleFocus,
+    handleFocus: handleFocusGlobal,
   } = useGlobalSearchWithHelper(
     typeName,
     typeIRI,
@@ -198,6 +201,30 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
     };
   }, [selected, labelKey]);
 
+  const {
+    isValid,
+    firstFormHelperText,
+    secondFormHelperText,
+    showDescription,
+    onFocus,
+    onBlur,
+  } = useFormHelper({
+    errors: Array.isArray(errors) ? errors : [errors],
+    config,
+    uischema,
+    visible,
+    description,
+  });
+
+  const handleFocus = useCallback(() => {
+    onFocus();
+    handleFocusGlobal();
+  }, [onFocus, handleFocusGlobal]);
+
+  const handleBlur = useCallback(() => {
+    onBlur();
+  }, [onBlur]);
+
   if (!visible) {
     return null;
   }
@@ -229,9 +256,16 @@ const InlineCondensedSemanticFormsRendererComponent = (props: ControlProps) => {
               label={label}
               inputProps={{
                 onFocus: handleFocus,
+                onBlur: handleBlur,
                 onKeyUp: handleKeyUp,
               }}
             />
+            <FormHelperText error={!isValid && !showDescription}>
+              {firstFormHelperText}
+            </FormHelperText>
+            <FormHelperText error={!isValid}>
+              {secondFormHelperText}
+            </FormHelperText>
           </FormControl>
         ) : (
           <List sx={{ marginTop: (theme) => theme.spacing(1) }} dense>

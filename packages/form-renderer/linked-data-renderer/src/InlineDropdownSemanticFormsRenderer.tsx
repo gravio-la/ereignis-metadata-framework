@@ -22,10 +22,18 @@ import {
   resolveSchema,
 } from "@jsonforms/core";
 import { useJsonForms, withJsonFormsControlProps } from "@jsonforms/react";
-import { Box, FormControl, List, Theme, Typography } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  List,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { JSONSchema7 } from "json-schema";
 import merge from "lodash-es/merge";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useFormHelper } from "./formHelper";
 
 const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
   const {
@@ -41,6 +49,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     rootSchema,
     label,
     enabled,
+    description,
   } = props;
   const {
     typeIRIToTypeName,
@@ -155,7 +164,7 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     searchString,
     handleSearchStringChange,
     handleMappedData,
-    handleFocus,
+    handleFocus: handleFocusGlobal,
     isActive,
   } = useGlobalSearchWithHelper(
     typeName,
@@ -239,10 +248,36 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
     };
   }, [selected, labelKey]);
 
+  const {
+    isValid,
+    firstFormHelperText,
+    secondFormHelperText,
+    showDescription,
+    onFocus,
+    onBlur,
+  } = useFormHelper({
+    errors: Array.isArray(errors) ? errors : [errors],
+    config,
+    uischema,
+    visible,
+    description,
+  });
+
+  const handleBlur = useCallback(() => {
+    onBlur();
+  }, [onBlur]);
+
+  const handleFocus = useCallback(() => {
+    onFocus();
+    handleFocusGlobal();
+  }, [onFocus, handleFocusGlobal]);
+
+  if (!visible) return null;
+
   return (
     <Box
       sx={{
-        ...hidden(visible, "flex"),
+        display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
@@ -275,9 +310,16 @@ const InlineDropdownSemanticFormsRendererComponent = (props: ControlProps) => {
             searchString={searchString || ""}
             inputProps={{
               onFocus: handleFocus,
+              onBlur: handleBlur,
               ...(showAsFocused && { focused: true }),
             }}
           />
+          <FormHelperText error={!isValid && !showDescription}>
+            {firstFormHelperText}
+          </FormHelperText>
+          <FormHelperText error={!isValid}>
+            {secondFormHelperText}
+          </FormHelperText>
         </FormControl>
       ) : (
         <List sx={{ marginTop: "1em" }} dense>

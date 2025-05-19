@@ -189,7 +189,12 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
           </Grid>
         </Grid>
       )}
-      <Stack spacing={1} direction="row" flexWrap={"wrap"}>
+      <Stack
+        spacing={1}
+        direction="row"
+        flexWrap={"wrap"}
+        sx={{ marginBottom: 1 }}
+      >
         {data > 0
           ? orderBy(
               uniqBy(
@@ -201,17 +206,17 @@ const MaterialArrayChipsLayoutComponent = (props: ArrayLayoutProps & {}) => {
                 "id",
               ),
               "id",
-            ).map(({ id: expandID, childData, index }: any, count) => {
+            ).map(({ id, childData, index }: any, count) => {
               const childPath = composePaths(path, `${index}`);
               return (
-                <Box key={expandID}>
+                <Box key={id}>
                   <SimpleChipRenderer
                     typeIRI={typeIRI}
                     onRemove={removeItems(path, [index])}
                     schema={schema}
                     onChange={() => {}}
                     rootSchema={rootSchema}
-                    entityIRI={expandID}
+                    entityIRI={id}
                     data={childData}
                     index={index}
                     count={count}

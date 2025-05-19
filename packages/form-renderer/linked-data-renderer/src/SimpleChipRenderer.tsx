@@ -109,7 +109,7 @@ export const SimpleChipRenderer = (
     schema: subSchema,
     queryOptions: {
       enabled: queryEnabled,
-      initialData: data,
+      initialData: data ? { document: data } : undefined,
       refetchOnWindowFocus: true,
     },
   });
