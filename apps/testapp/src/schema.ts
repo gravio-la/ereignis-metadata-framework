@@ -1,113 +1,136 @@
 export const schema = {
-  type: 'object',
+  type: "object",
   definitions: {
-    "Category": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
+    Category: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
         },
-        "description": {
-          "type": "string"
+        description: {
+          type: "string",
         },
-        "basePrice": {
-          "type": "number",
-          "multipleOf": 0.01
-        }
+        basePrice: {
+          type: "number",
+          multipleOf: 0.01,
+        },
       },
-      "required": ["name"]
+      required: ["name"],
     },
     Item: {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
         },
-        "description": {
-          "type": "string"
+        description: {
+          type: "string",
         },
-        "photos": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uri"
-          }
+        parent: {
+          $ref: "#/definitions/Item",
         },
-        "condition": {
-          "type": "string"
+        photos: {
+          type: "array",
+          items: {
+            type: "string",
+            format: "uri",
+          },
         },
-        "category": {
-          "$ref": "#/definitions/Category"
+        condition: {
+          type: "string",
         },
-        "basePrice": {
-          "type": "number",
-          "multipleOf": 0.01
+        category: {
+          $ref: "#/definitions/Category",
         },
-        "isAvailable": {
-          "type": "boolean",
-          "default": true
-        }
+        tags: {
+          type: "array",
+          items: {
+            $ref: "#/definitions/Tag",
+          },
+        },
+        basePrice: {
+          type: "number",
+          multipleOf: 0.01,
+        },
+        isAvailable: {
+          type: "boolean",
+          default: true,
+        },
+      },
+    },
+    Tag: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+        },
+        description: {
+          type: "string",
+        },
+        image: {
+          type: "string",
+        },
       },
     },
     Profession: {
-      type: 'object',
+      type: "object",
       properties: {
         id: {
-          type: 'string'
+          type: "string",
         },
         title: {
-          type: 'string',
-          title: 'Job Title'
+          type: "string",
+          title: "Job Title",
         },
         field: {
-          type: 'string',
-          title: 'Field',
-          enum: ['Technology', 'Healthcare', 'Education', 'Finance', 'Other']
+          type: "string",
+          title: "Field",
+          enum: ["Technology", "Healthcare", "Education", "Finance", "Other"],
         },
         description: {
-          type: 'string'
+          type: "string",
         },
         yearsExperience: {
-          type: 'integer',
+          type: "integer",
           minimum: 0,
-          title: 'Years of Experience'
-        }
+          title: "Years of Experience",
+        },
       },
-      required: ['title', 'field']
+      required: ["title", "field"],
     },
     Person: {
       properties: {
         name: {
-          type: 'string',
-          minLength: 3
+          type: "string",
+          minLength: 3,
         },
         email: {
-          type: 'string',
-          format: 'email'
+          type: "string",
+          format: "email",
         },
         age: {
-          type: 'integer',
-          minimum: 0
+          type: "integer",
+          minimum: 0,
         },
         comment: {
-          type: 'string'
+          type: "string",
         },
         hasItem: {
-          "$ref": "#/definitions/Item"
+          $ref: "#/definitions/Item",
         },
         hasItems: {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
               },
-            }
-          }
-        }
+            },
+          },
+        },
       },
-      required: ['name', 'email']
-    }
-  }
-}
+      required: ["name", "email"],
+    },
+  },
+};

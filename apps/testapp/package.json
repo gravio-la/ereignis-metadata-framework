@@ -1,7 +1,7 @@
 {
   "name": "testapp",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,7 +22,7 @@
     "@graviola/entity-finder": "workspace:*",
     "@graviola/json-schema-utils": "workspace:*",
     "@graviola/jsonld-utils": "workspace:*",
-    "@graviola/rest-store-provider": "workspace:*",
+    "@graviola/sparql-store-provider": "workspace:*",
     "@graviola/semantic-jsonform-types": "workspace:*",
     "@graviola/semantic-json-form": "workspace:*",
     "@jsonforms/core": "^3.5.1",

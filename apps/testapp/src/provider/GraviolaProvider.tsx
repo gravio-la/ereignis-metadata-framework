@@ -1,33 +1,81 @@
-'use client';
+"use client";
 
-import React, { useCallback, useMemo } from 'react'
-import { AdbProvider, store } from '@graviola/edb-state-hooks'
-import { PrimaryFieldDeclaration, SparqlEndpoint } from '@graviola/edb-core-types';
-import NiceModal from '@ebay/nice-modal-react';
-import { RestStoreProvider } from '@graviola/rest-store-provider';
-import { Provider } from "react-redux"
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { EditEntityModal, EntityDetailModal } from '@graviola/edb-advanced-components';
-import { createSemanticConfig, SemanticJsonFormNoOps, SimilarityFinder, createUISchemata, createStubSchema } from '@graviola/semantic-json-form';
-import { GlobalSemanticConfig, ModRouter } from '@graviola/semantic-jsonform-types';
-import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
-import { JSONSchema7 } from 'json-schema';
-import { allRenderers } from './config';
-
+import React, { useCallback, useMemo } from "react";
+import {
+  AdbProvider,
+  store,
+  useAdbContext,
+  useDataStore,
+} from "@graviola/edb-state-hooks";
+import {
+  PrimaryFieldDeclaration,
+  SparqlEndpoint,
+} from "@graviola/edb-core-types";
+import NiceModal from "@ebay/nice-modal-react";
+import { SparqlStoreProvider } from "@graviola/sparql-store-provider";
+import { Provider } from "react-redux";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  EditEntityModal,
+  EntityDetailModal,
+  KBMainDatabase,
+} from "@graviola/edb-advanced-components";
+import { EntityFinder } from "@graviola/entity-finder";
+import {
+  createSemanticConfig,
+  SemanticJsonFormNoOps,
+  createUISchemata,
+  createStubSchema,
+} from "@graviola/semantic-json-form";
+import {
+  EntityFinderProps,
+  FinderKnowledgeBaseDescription,
+  GlobalSemanticConfig,
+  ModRouter,
+} from "@graviola/semantic-jsonform-types";
+import {
+  JsonFormsRendererRegistryEntry,
+  UISchemaElement,
+} from "@jsonforms/core";
+import { JSONSchema7 } from "json-schema";
+import { allRenderers } from "./config";
 
 type GraviolaProviderProps = {
-  apiBaseUrl: string,
-  baseIRI: string,
-  entityBaseIRI: string,
-  children: React.ReactNode,
-  schema: JSONSchema7,
-  renderers?: JsonFormsRendererRegistryEntry[],
-  authBearerToken?: string,
-  typeNameLabelMap: Record<string, string>,
-  typeNameUiSchemaOptionsMap: Record<string, any>,
-  primaryFields: PrimaryFieldDeclaration
-}
+  apiBaseUrl: string;
+  baseIRI: string;
+  entityBaseIRI: string;
+  children: React.ReactNode;
+  schema: JSONSchema7;
+  renderers?: JsonFormsRendererRegistryEntry[];
+  authBearerToken?: string;
+  typeNameLabelMap: Record<string, string>;
+  typeNameUiSchemaOptionsMap: Record<string, any>;
+  primaryFields: PrimaryFieldDeclaration;
+  uischemata?: Record<string, UISchemaElement>;
+};
 
+const SimilarityFinder = (props: EntityFinderProps) => {
+  const { queryBuildOptions } = useAdbContext();
+  const { dataStore } = useDataStore();
+  const allKnowledgeBases = useMemo<FinderKnowledgeBaseDescription<any>[]>(
+    () =>
+      dataStore
+        ? [
+            KBMainDatabase(
+              dataStore,
+              queryBuildOptions.primaryFields,
+              queryBuildOptions.typeIRItoTypeName,
+            ),
+          ]
+        : [],
+    [
+      dataStore,
+      queryBuildOptions.primaryFields,
+      queryBuildOptions.typeIRItoTypeName,
+    ],
+  );
+  return <EntityFinder {...props} allKnowledgeBases={allKnowledgeBases} />;
+};
 
 export const useRouterMock = () => {
   return {
@@ -49,6 +97,7 @@ export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({
   baseIRI,
   entityBaseIRI,
   schema,
+  uischemata,
   primaryFields,
   renderers,
   apiBaseUrl,
@@ -56,82 +105,87 @@ export const GraviolaProvider: React.FC<GraviolaProviderProps> = ({
   typeNameLabelMap,
   typeNameUiSchemaOptionsMap,
 }: GraviolaProviderProps) => {
-
   const endpoint: SparqlEndpoint = useMemo(() => {
     return {
       endpoint: `${apiBaseUrl}`,
-      label: "REST service",
-      provider: "rest",
-      active: true
-    }
-  }, [apiBaseUrl, authBearerToken])
+      label: "SPARQL service",
+      provider: "oxigraph",
+      active: true,
+    };
+  }, [apiBaseUrl, authBearerToken]);
 
-  const definitionToTypeIRI = (definitionName: string) => `${baseIRI}${definitionName}`;
+  const definitionToTypeIRI = (definitionName: string) =>
+    `${baseIRI}${definitionName}`;
 
-  const { registry } = useMemo(() => createUISchemata(schema as JSONSchema7, {
-    typeNameLabelMap,
-    typeNameUiSchemaOptionsMap,
-    definitionToTypeIRI,
-  }), [schema, typeNameLabelMap, typeNameUiSchemaOptionsMap, definitionToTypeIRI]);
+  const { registry } = useMemo(
+    () =>
+      createUISchemata(schema as JSONSchema7, {
+        typeNameLabelMap,
+        typeNameUiSchemaOptionsMap,
+        definitionToTypeIRI,
+      }),
+    [schema, typeNameLabelMap, typeNameUiSchemaOptionsMap, definitionToTypeIRI],
+  );
 
+  console.log(registry);
 
   const config = useMemo<GlobalSemanticConfig>(() => {
-    const c = createSemanticConfig({ baseIRI })
-    return ({
+    const c = createSemanticConfig({ baseIRI });
+    return {
       ...c,
       queryBuildOptions: {
         ...c.queryBuildOptions,
-        primaryFields
-      }
-    });
-  }, [baseIRI, entityBaseIRI, primaryFields])
+        primaryFields,
+      },
+    };
+  }, [baseIRI, entityBaseIRI, primaryFields]);
 
+  const makeStubSchema = useCallback(
+    (schema: JSONSchema7) => {
+      const stubSchema = createStubSchema(schema, {
+        entityBaseIRI,
+        definitionToTypeIRI,
+      });
 
-  const makeStubSchema = useCallback((schema: JSONSchema7) => createStubSchema(schema, {
-    entityBaseIRI,
-    definitionToTypeIRI,
-  }), [definitionToTypeIRI, entityBaseIRI]);
+      console.log({ stubSchema });
 
-  const rendererRegistry = useMemo(() => [
-    ...allRenderers,
-    ...(renderers || [])
-  ], [renderers])
+      return stubSchema;
+    },
+    [definitionToTypeIRI, entityBaseIRI],
+  );
+
+  const rendererRegistry = useMemo(
+    () => [...allRenderers, ...(renderers || [])],
+    [renderers],
+  );
 
   // @ts-ignore
-  return <Provider store={store}>
-    <AdbProvider
-      {...config}
-      env={{
-        publicBasePath: '',
-        baseIRI,
-      }}
-      components={{
-        EditEntityModal: EditEntityModal,
-        EntityDetailModal: EntityDetailModal,
-        SemanticJsonForm: SemanticJsonFormNoOps,
-        SimilarityFinder: SimilarityFinder,
-      }}
-      useRouterHook={useRouterMock}
-      schema={schema}
-      makeStubSchema={makeStubSchema}
-      uiSchemaDefaultRegistry={registry}
-      rendererRegistry={rendererRegistry}
-    >
-      <RestStoreProvider
-        endpoint={endpoint}
-        defaultLimit={20}
-        requestOptions={authBearerToken ? {
-          headers: {
-            Authorization: `Bearer ${authBearerToken}`
-          }
-        } : undefined}
+  return (
+    <Provider store={store}>
+      <AdbProvider
+        {...config}
+        env={{
+          publicBasePath: "",
+          baseIRI,
+        }}
+        components={{
+          EditEntityModal: EditEntityModal,
+          EntityDetailModal: EntityDetailModal,
+          SemanticJsonForm: SemanticJsonFormNoOps,
+          SimilarityFinder: SimilarityFinder,
+        }}
+        useRouterHook={useRouterMock}
+        schema={schema}
+        makeStubSchema={makeStubSchema}
+        uiSchemaDefaultRegistry={registry}
+        rendererRegistry={rendererRegistry}
+        uischemata={uischemata}
       >
-        <NiceModal.Provider>
-          {children}
-        </NiceModal.Provider>
-      </RestStoreProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
-    </AdbProvider>
-
-  </Provider>
-}
+        <SparqlStoreProvider endpoint={endpoint} defaultLimit={20}>
+          <NiceModal.Provider>{children}</NiceModal.Provider>
+        </SparqlStoreProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </AdbProvider>
+    </Provider>
+  );
+};
