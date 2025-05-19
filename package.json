@@ -1,9 +1,9 @@
 {
-  "name": "edb-next",
+  "name": "@graviola/edb-crud",
   "version": "0.1.0",
-  "description": "monorepo of the Ereignisdatenbank project",
+  "description": "monorepo of the Graviola CRUD project",
   "main": "index.js",
-  "author": "Sebastian Tilsch <sebastian.tilsch@slub-dresden.de>",
+  "author": "Sebastian Tilsch <graviola@sebastian-tilsch.de>",
   "keywords": [
     "jsonforms",
     "form",
@@ -40,7 +40,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,md}\"",
-    "prepare": "husky install",
+    "prepare": "[ \"$CI\" != \"true\" ] && husky install || echo \"Skipping husky install in CI environment\"",
     "precommit": "lint-staged",
     "changeset:init": "changeset init",
     "changeset": "changeset",

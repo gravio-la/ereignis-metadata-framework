@@ -1,5 +1,5 @@
 {
-  "name": "adb-next",
+  "name": "@slub/exhibition-app",
   "version": "0.2.6",
   "private": true,
   "scripts": {
@@ -27,8 +27,7 @@
     "lint:fix": "next lint --fix && eslint --fix ./components ./pages",
     "lint:check": "next lint && eslint ./components ./pages",
     "docker:build": "docker build -t adb-next .",
-    "docker:run": "docker run -p 3000:3000 adb-next",
-    "prepare": "husky install"
+    "docker:run": "docker run -p 3000:3000 adb-next"
   },
   "dependencies": {
     "@comunica/query-sparql": "^2.5.2",
