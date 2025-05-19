@@ -32,11 +32,9 @@
     "eslint-config-edb": "workspace:*"
   },
   "dependencies": {
+    "@graviola/sparql-schema": "workspace:*",
     "@comunica/query-sparql": "^2.10.2",
     "lodash-es": "^4.17.21"
-  },
-  "peerDependencies": {
-    "@graviola/sparql-schema": "workspace:*"
   },
   "clean-package": {
     "extends": "../../../clean-package.config.cjs"
