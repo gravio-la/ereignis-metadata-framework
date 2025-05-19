@@ -25,22 +25,22 @@ packageFiles.forEach(packagePath => {
 
 const replaceWorkspaceReferences = (dependencies) => {
   if (!dependencies) return dependencies;
-  
+
   const result = { ...dependencies };
   for (const [dep, version] of Object.entries(result)) {
     if (version === 'workspace:*' && packageVersions.has(dep)) {
       result[dep] = `^${packageVersions.get(dep)}`;
     } else {
-      if(version === 'workspace:*') {
+      if (version === 'workspace:*') {
         console.warn(`${dep} is a workspace dependency but no version is set`);
       }
     }
   }
-  
+
   return result;
 };
 
-
+const excludeWorkspaceAsPeerDepPackages = ["@graviola/json-schema2prisma-schema"]
 
 module.exports = {
   remove: [
@@ -55,34 +55,36 @@ module.exports = {
   ],
   onClean: () => {
     const pckg = JSON.parse(fs.readFileSync('./package.json'));
-    
-    // Move workspace dependencies from dependencies to peerDependencies
-    if (pckg.dependencies) {
-      const workspaceDeps = {};
-      const nonWorkspaceDeps = {};
-      
-      for (const [dep, version] of Object.entries(pckg.dependencies)) {
-        if (version === 'workspace:*') {
-          workspaceDeps[dep] = version;
-        } else {
-          nonWorkspaceDeps[dep] = version;
+
+      // Move workspace dependencies from dependencies to peerDependencies
+      if (pckg.dependencies) {
+        const workspaceDeps = {};
+        const nonWorkspaceDeps = {};
+
+        for (const [dep, version] of Object.entries(pckg.dependencies)) {
+          if (version === 'workspace:*') {
+            workspaceDeps[dep] = version;
+          } else {
+            nonWorkspaceDeps[dep] = version;
+          }
         }
+
+    if (!excludeWorkspaceAsPeerDepPackages.includes(pckg.name)) {
+        // Update dependencies with only non-workspace deps
+        pckg.dependencies = nonWorkspaceDeps;
+
+        // Add workspace deps to peerDependencies
+        if (!pckg.peerDependencies) {
+          pckg.peerDependencies = {};
+        }
+        Object.assign(pckg.peerDependencies, workspaceDeps);
       }
-      
-      // Update dependencies with only non-workspace deps
-      pckg.dependencies = nonWorkspaceDeps;
-      
-      // Add workspace deps to peerDependencies
-      if (!pckg.peerDependencies) {
-        pckg.peerDependencies = {};
-      }
-      Object.assign(pckg.peerDependencies, workspaceDeps);
     }
 
-    if(pckg.peerDependencies) {
+    if (pckg.peerDependencies) {
       pckg.peerDependencies = replaceWorkspaceReferences(pckg.peerDependencies);
     }
-    if(pckg.dependencies) {
+    if (pckg.dependencies) {
       pckg.dependencies = replaceWorkspaceReferences(pckg.dependencies);
     }
     fs.writeFileSync('./package.json', JSON.stringify(pckg, null, 2));

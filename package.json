@@ -27,7 +27,7 @@
     "start": "turbo run demo",
     "storybook": "cd ./apps/exhibition-live && bun run storybook",
     "build": "turbo run build",
-    "build:packages": "turbo run build --filter='./packages/*' --continue",
+    "build:packages": "turbo run build --filter='./packages/**/*' --continue",
     "build:manifestations": "turbo run build --filter='./manifestation/*' --continue",
     "build:pages": "turbo run build:pages",
     "cli": "bun ./apps/edb-cli/src/index.ts",
