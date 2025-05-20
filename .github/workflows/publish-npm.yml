@@ -25,10 +25,6 @@ jobs:
             ${{ runner.os }}-${{ matrix.bun }}-bun-
       - run: bun i
       - run: bun build:packages
-      - name: Configure npm authentication
-        run: |
-          echo "@graviola:registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
       - name: Publish packages
         run: bun run publish
         env:
