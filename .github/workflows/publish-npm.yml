@@ -24,6 +24,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.bun }}-bun-
       - run: bun i
+      - name: Configure npm authentication
+        run: |
+          echo "@graviola:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: bun build:packages
       - name: Publish packages
         run: bun run publish
